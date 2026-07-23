@@ -2,9 +2,9 @@
 /**
  * freestack CLI — claim checklist + tools lookup via API
  *
- *   npx @kuyacarlo/freestack claim --student --commercial
- *   npx @kuyacarlo/freestack tools --category ai --commercial yes
- *   npx @kuyacarlo/freestack tool neon
+ *   pnpm dlx @kuyacarlo/freestack claim --student --commercial
+ *   pnpm dlx @kuyacarlo/freestack tools --category ai --commercial yes
+ *   pnpm dlx @kuyacarlo/freestack tool neon
  */
 
 const DEFAULT_API = process.env.FREESTACK_API ?? "https://freestack.kuyacarlo.dev";
