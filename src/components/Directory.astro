@@ -21,159 +21,211 @@ const commercialLabel: Record<Tool["commercial"], string> = {
   check: "check ToS",
 };
 
-const defaultCategory = CATEGORIES[0]?.id ?? "databases";
-
-// Allow /?hint=ai or /?hint=startup deep-links from guides
+// /?hint=ai or /?hint=startup deep-links from guides → pre-select that category filter
 const hint = Astro.url.searchParams.get("hint");
-const initialCategory =
-  hint && CATEGORIES.some((c) => c.id === hint) ? hint : defaultCategory;
-const initialIndex = Math.max(
-  0,
-  CATEGORIES.findIndex((c) => c.id === initialCategory),
-);
+const hintCategory =
+  hint && CATEGORIES.some((c) => c.id === hint) ? hint : null;
 ---
 
 <section id="directory" class="pb-24">
-  <div class="ds-wrap">
-    <div
-      id="filters"
-      class="sticky top-[var(--nav-h)] z-40 -mx-[clamp(1.25rem,4vw,4.5rem)] border-b border-b1 bg-[#0d0c0bf2] px-[clamp(1.25rem,4vw,4.5rem)] py-4 backdrop-blur-md"
-    >
-      <div class="mb-1 flex items-center justify-between gap-3">
-        <p class="font-mono text-[0.68rem] tracking-wide text-ink-3 uppercase">
-          Category
-        </p>
-        <p id="count" class="font-mono text-[0.72rem] text-ink-3">
-          {tools.filter((t) => t.category === initialCategory).length} tools
-        </p>
-      </div>
+  <div
+    id="filters"
+    class="sticky top-[var(--nav-h)] z-40 border-b border-b1 bg-[#0d0c0bf2] py-3 backdrop-blur-md supports-[backdrop-filter]:bg-[#0d0c0be8]"
+  >
+    <div class="ds-wrap">
+      <div class="flex flex-col gap-3">
+        <div class="relative flex min-w-0 items-center gap-2">
+          <label class="relative block min-w-0 flex-1">
+            <span class="sr-only">Search tools</span>
+            <input
+              id="q"
+              type="search"
+              placeholder="Search tools…"
+              class="ds-input"
+            />
+          </label>
 
-      <!-- single-select category switch -->
-      <div
-        class="ds-switch"
-        data-variant="tabs"
-        role="tablist"
-        aria-label="Tool category"
-        id="category-switch"
-      >
-        {
-          CATEGORIES.map((cat, i) => (
+          <button
+            type="button"
+            id="filters-toggle"
+            class="ds-chip shrink-0"
+            aria-expanded="false"
+            aria-controls="filters-popover"
+            title="Open filters"
+          >
+            filters
+            <span id="filters-active-mark" class="hidden text-sand">·</span>
+          </button>
+
+          <div
+            id="filters-popover"
+            class="filter-popover absolute top-[calc(100%+8px)] right-0 left-0 z-50 sm:left-auto sm:w-[22rem] rounded-[var(--radius)] border border-b2 bg-s2 p-4 shadow-[0_12px_40px_rgba(0,0,0,0.45)]"
+            role="group"
+            aria-label="Directory filters"
+          >
+            <div class="mb-3 flex items-center justify-between gap-3">
+              <p class="font-mono text-[0.68rem] tracking-wide text-ink-3 uppercase">
+                Categories
+              </p>
+              <button
+                type="button"
+                id="categories-clear"
+                class="font-mono text-[0.68rem] text-ink-3 underline-offset-2 hover:text-ink-2 hover:underline"
+              >
+                show all
+              </button>
+            </div>
+            <div
+              class="ds-switch max-h-40 overflow-y-auto"
+              data-category-group
+              role="group"
+              aria-label="Categories"
+            >
+              {
+                CATEGORIES.map((cat) => (
+                  <button
+                    type="button"
+                    class:list={[
+                      "ds-chip",
+                      hintCategory === cat.id && "is-active",
+                    ]}
+                    data-category={cat.id}
+                    aria-pressed={hintCategory === cat.id ? "true" : "false"}
+                  >
+                    {cat.label}
+                  </button>
+                ))
+              }
+            </div>
+
+            <p
+              class="mt-4 mb-2 font-mono text-[0.68rem] tracking-wide text-ink-3 uppercase"
+            >
+              Cost
+            </p>
+            <div class="ds-switch" data-filter-group="cost" role="radiogroup" aria-label="Cost">
+              <button type="button" role="radio" aria-checked="true" data-value="all" class="ds-chip is-active"
+                >all</button
+              >
+              <button type="button" role="radio" aria-checked="false" data-value="free" class="ds-chip"
+                >free</button
+              >
+              <button type="button" role="radio" aria-checked="false" data-value="credits" class="ds-chip"
+                >credits</button
+              >
+              <button type="button" role="radio" aria-checked="false" data-value="student_free" class="ds-chip"
+                >student free</button
+              >
+              <button type="button" role="radio" aria-checked="false" data-value="discount" class="ds-chip"
+                >discount</button
+              >
+            </div>
+
+            <p
+              class="mt-4 mb-2 font-mono text-[0.68rem] tracking-wide text-ink-3 uppercase"
+            >
+              Eligibility
+            </p>
+            <div
+              class="ds-switch"
+              data-filter-group="student"
+              role="radiogroup"
+              aria-label="Eligibility"
+            >
+              <button type="button" role="radio" aria-checked="true" data-value="all" class="ds-chip is-active"
+                >all</button
+              >
+              <button type="button" role="radio" aria-checked="false" data-value="no" class="ds-chip"
+                >anyone</button
+              >
+              <button type="button" role="radio" aria-checked="false" data-value="required" class="ds-chip"
+                >student required</button
+              >
+              <button type="button" role="radio" aria-checked="false" data-value="helps" class="ds-chip"
+                >student helps</button
+              >
+            </div>
+
+            <p
+              class="mt-4 mb-2 font-mono text-[0.68rem] tracking-wide text-ink-3 uppercase"
+            >
+              Commercial
+            </p>
+            <div
+              class="ds-switch"
+              data-filter-group="commercial"
+              role="radiogroup"
+              aria-label="Commercial use"
+            >
+              <button type="button" role="radio" aria-checked="true" data-value="all" class="ds-chip is-active"
+                >all</button
+              >
+              <button type="button" role="radio" aria-checked="false" data-value="yes" class="ds-chip"
+                >commercial ok</button
+              >
+              <button type="button" role="radio" aria-checked="false" data-value="hobby" class="ds-chip"
+                >hobby only</button
+              >
+              <button type="button" role="radio" aria-checked="false" data-value="edu" class="ds-chip"
+                >edu only</button
+              >
+            </div>
+          </div>
+        </div>
+
+        <div class="flex flex-wrap items-center gap-2">
+          <div
+            class="ds-switch"
+            data-preset-group
+            role="group"
+            aria-label="Presets"
+          >
             <button
               type="button"
-              role="tab"
-              class:list={["ds-tab", i === initialIndex && "is-active"]}
-              aria-selected={i === initialIndex ? "true" : "false"}
-              data-category={cat.id}
-              id={`tab-${cat.id}`}
+              class="ds-chip"
+              data-preset="student"
+              aria-pressed="false"
+              title="Student unlocks path">student</button
             >
-              {cat.label}
-            </button>
-          ))
-        }
-      </div>
+            <button
+              type="button"
+              class="ds-chip"
+              data-preset="startup"
+              aria-pressed="false"
+              title="Commercial OK + free forever">startup</button
+            >
+            <button
+              type="button"
+              class="ds-chip"
+              data-preset="hobby"
+              aria-pressed="false"
+              title="Hobby-only free tiers">hobby</button
+            >
+          </div>
 
-      <div class="mt-4 flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
-        <label class="relative block min-w-0 flex-1 lg:max-w-md">
-          <span class="sr-only">Search tools</span>
-          <input
-            id="q"
-            type="search"
-            placeholder="Search within category…"
-            class="ds-input"
-          />
-        </label>
-        <button
-          type="button"
-          id="preset-commercial-free"
-          class="ds-chip shrink-0"
-          title="Commercial OK + free forever"
-        >
-          preset · commercial free
-        </button>
-      </div>
-
-      <div
-        class="ds-switch mt-3"
-        data-filter-group="cost"
-        role="radiogroup"
-        aria-label="Cost"
-      >
-        <button type="button" role="radio" aria-checked="true" data-value="all" class="ds-chip is-active"
-          >all costs</button
-        >
-        <button type="button" role="radio" aria-checked="false" data-value="free" class="ds-chip"
-          >free forever</button
-        >
-        <button type="button" role="radio" aria-checked="false" data-value="credits" class="ds-chip"
-          >credits</button
-        >
-        <button
-          type="button"
-          role="radio"
-          aria-checked="false"
-          data-value="student_free"
-          class="ds-chip">student free</button
-        >
-        <button type="button" role="radio" aria-checked="false" data-value="discount" class="ds-chip"
-          >discount</button
-        >
-      </div>
-      <div
-        class="ds-switch mt-2"
-        data-filter-group="student"
-        role="radiogroup"
-        aria-label="Eligibility"
-      >
-        <button type="button" role="radio" aria-checked="true" data-value="all" class="ds-chip is-active"
-          >anyone + student</button
-        >
-        <button type="button" role="radio" aria-checked="false" data-value="no" class="ds-chip"
-          >anyone</button
-        >
-        <button type="button" role="radio" aria-checked="false" data-value="required" class="ds-chip"
-          >student required</button
-        >
-        <button type="button" role="radio" aria-checked="false" data-value="helps" class="ds-chip"
-          >student helps</button
-        >
-      </div>
-      <div
-        class="ds-switch mt-2"
-        data-filter-group="commercial"
-        role="radiogroup"
-        aria-label="Commercial use"
-      >
-        <button type="button" role="radio" aria-checked="true" data-value="all" class="ds-chip is-active"
-          >all use</button
-        >
-        <button type="button" role="radio" aria-checked="false" data-value="yes" class="ds-chip"
-          >commercial ok</button
-        >
-        <button type="button" role="radio" aria-checked="false" data-value="hobby" class="ds-chip"
-          >hobby only</button
-        >
-        <button type="button" role="radio" aria-checked="false" data-value="edu" class="ds-chip"
-          >edu only</button
-        >
+          <p id="count" class="font-mono text-[0.72rem] text-ink-3">
+            {tools.length} tools
+          </p>
+        </div>
       </div>
     </div>
+  </div>
 
+  <div class="ds-wrap">
     <div id="empty" class="mt-16 hidden text-center">
-      <p class="text-ink-2">Nothing in this category matches. Loosen a filter.</p>
+      <p class="text-ink-2">Nothing matches. Loosen a filter.</p>
     </div>
 
     {
-      CATEGORIES.map((cat, i) => {
+      CATEGORIES.map((cat) => {
         const items = tools.filter((t) => t.category === cat.id);
         if (!items.length) return null;
-        const active = cat.id === initialCategory;
+        const startHidden = Boolean(hintCategory) && cat.id !== hintCategory;
         return (
           <section
-            class:list={["cat-panel mt-12", !active && "is-hidden"]}
+            class:list={["cat-panel mt-12", startHidden && "is-hidden"]}
             data-category={cat.id}
-            role="tabpanel"
-            aria-labelledby={`tab-${cat.id}`}
-            hidden={!active}
+            hidden={startHidden}
           >
             <div class="ds-section-label !mb-6">
               <span class="ds-section-num">{cat.num}</span>
@@ -236,92 +288,204 @@ const initialIndex = Math.max(
   .cat-panel[hidden] {
     display: none;
   }
+  .filter-popover:not(.is-open) {
+    display: none;
+  }
+  .filter-popover.is-open {
+    display: block;
+  }
 </style>
 
 <script>
   const state = {
-    category: document.querySelector<HTMLElement>(".ds-tab.is-active")?.dataset.category ?? "databases",
+    categories: new Set<string>(
+      (() => {
+        const active = document.querySelector<HTMLElement>(
+          "[data-category-group] .ds-chip.is-active",
+        );
+        return active?.dataset.category ? [active.dataset.category] : [];
+      })(),
+    ),
     q: "",
     cost: "all",
     student: "all",
     commercial: "all",
+    preset: null as null | "student" | "startup" | "hobby",
   };
 
   const rows = [...document.querySelectorAll<HTMLElement>(".tool-row")];
   const panels = [...document.querySelectorAll<HTMLElement>(".cat-panel")];
-  const tabs = [...document.querySelectorAll<HTMLButtonElement>(".ds-tab")];
   const countEl = document.getElementById("count");
   const emptyEl = document.getElementById("empty");
   const qInput = document.getElementById("q") as HTMLInputElement | null;
+  const popover = document.getElementById("filters-popover");
+  const toggle = document.getElementById("filters-toggle");
+  const activeMark = document.getElementById("filters-active-mark");
+  const categoryChips = [
+    ...document.querySelectorAll<HTMLButtonElement>("[data-category-group] .ds-chip"),
+  ];
+  const presetChips = [
+    ...document.querySelectorAll<HTMLButtonElement>("[data-preset-group] .ds-chip"),
+  ];
+
+  function setGroup(key: "cost" | "student" | "commercial", value: string) {
+    const group = document.querySelector<HTMLElement>(`[data-filter-group="${key}"]`);
+    if (!group) return;
+    group.querySelectorAll<HTMLButtonElement>(".ds-chip").forEach((c) => {
+      const on = c.dataset.value === value;
+      c.classList.toggle("is-active", on);
+      c.setAttribute("aria-checked", on ? "true" : "false");
+    });
+    state[key] = value;
+  }
+
+  function syncCategoryChips() {
+    categoryChips.forEach((chip) => {
+      const id = chip.dataset.category ?? "";
+      const on = state.categories.has(id);
+      chip.classList.toggle("is-active", on);
+      chip.setAttribute("aria-pressed", on ? "true" : "false");
+    });
+  }
+
+  function syncPresetChips() {
+    presetChips.forEach((chip) => {
+      const on = chip.dataset.preset === state.preset;
+      chip.classList.toggle("is-active", on);
+      chip.setAttribute("aria-pressed", on ? "true" : "false");
+    });
+  }
+
+  function filtersDirty() {
+    return (
+      state.categories.size > 0 ||
+      state.cost !== "all" ||
+      state.student !== "all" ||
+      state.commercial !== "all"
+    );
+  }
 
   function apply() {
-    // show only active category panel
-    for (const panel of panels) {
-      const active = panel.dataset.category === state.category;
-      panel.classList.toggle("is-hidden", !active);
-      panel.hidden = !active;
-    }
-
+    const catFilter = state.categories.size > 0;
     let visible = 0;
-    for (const row of rows) {
-      const inCat = row.dataset.category === state.category;
-      const okCost = state.cost === "all" || row.dataset.cost === state.cost;
-      const okStudent =
-        state.student === "all" || row.dataset.student === state.student;
-      const okCommercial =
-        state.commercial === "all" ||
-        row.dataset.commercial === state.commercial;
-      const hay = `${row.dataset.name} ${row.dataset.blurb} ${row.dataset.limits} ${row.dataset.tags}`;
-      const okQ = !state.q || hay.includes(state.q);
-      const show = inCat && okCost && okStudent && okCommercial && okQ;
-      row.classList.toggle("is-hidden", !show);
-      if (show) visible++;
-    }
 
-    const activePanel = panels.find((p) => p.dataset.category === state.category);
-    const c = activePanel?.querySelector(".cat-count");
-    if (c) c.textContent = String(visible);
+    for (const panel of panels) {
+      const cat = panel.dataset.category ?? "";
+      const panelOn = !catFilter || state.categories.has(cat);
+      panel.classList.toggle("is-hidden", !panelOn);
+      panel.hidden = !panelOn;
+
+      let panelVisible = 0;
+      const panelRows = rows.filter((r) => r.dataset.category === cat);
+      for (const row of panelRows) {
+        const okCost = state.cost === "all" || row.dataset.cost === state.cost;
+        const okStudent =
+          state.student === "all" || row.dataset.student === state.student;
+        const okCommercial =
+          state.commercial === "all" ||
+          row.dataset.commercial === state.commercial;
+        const hay = `${row.dataset.name} ${row.dataset.blurb} ${row.dataset.limits} ${row.dataset.tags}`;
+        const okQ = !state.q || hay.includes(state.q);
+        const show = panelOn && okCost && okStudent && okCommercial && okQ;
+        row.classList.toggle("is-hidden", !show);
+        if (show) {
+          visible++;
+          panelVisible++;
+        }
+      }
+      const c = panel.querySelector(".cat-count");
+      if (c) c.textContent = String(panelVisible);
+    }
 
     if (countEl) countEl.textContent = `${visible} tool${visible === 1 ? "" : "s"}`;
     emptyEl?.classList.toggle("hidden", visible !== 0);
+    activeMark?.classList.toggle("hidden", !filtersDirty());
   }
 
-  tabs.forEach((tab) => {
-    tab.addEventListener("click", () => {
-      tabs.forEach((t) => {
-        t.classList.remove("is-active");
-        t.setAttribute("aria-selected", "false");
-      });
-      tab.classList.add("is-active");
-      tab.setAttribute("aria-selected", "true");
-      state.category = tab.dataset.category ?? state.category;
-      state.q = "";
-      if (qInput) qInput.value = "";
+  function applyPreset(name: "student" | "startup" | "hobby" | null) {
+    if (state.preset === name || name === null) {
+      state.preset = null;
+      state.categories.clear();
+      setGroup("cost", "all");
+      setGroup("student", "all");
+      setGroup("commercial", "all");
+    } else {
+      state.preset = name;
+      state.categories.clear();
+      if (name === "student") {
+        state.categories.add("student");
+        setGroup("cost", "all");
+        setGroup("student", "required");
+        setGroup("commercial", "all");
+      } else if (name === "startup") {
+        setGroup("cost", "free");
+        setGroup("student", "all");
+        setGroup("commercial", "yes");
+      } else if (name === "hobby") {
+        setGroup("cost", "free");
+        setGroup("student", "all");
+        setGroup("commercial", "hobby");
+      }
+    }
+    syncCategoryChips();
+    syncPresetChips();
+    apply();
+  }
+
+  function setPopover(open: boolean) {
+    popover?.classList.toggle("is-open", open);
+    toggle?.setAttribute("aria-expanded", open ? "true" : "false");
+  }
+
+  toggle?.addEventListener("click", (e) => {
+    e.stopPropagation();
+    setPopover(!popover?.classList.contains("is-open"));
+  });
+
+  document.addEventListener("click", (e) => {
+    if (!popover?.classList.contains("is-open")) return;
+    const t = e.target as Node;
+    if (popover.contains(t) || toggle?.contains(t)) return;
+    setPopover(false);
+  });
+
+  document.addEventListener("keydown", (e) => {
+    if (e.key !== "Escape") return;
+    if (!popover?.classList.contains("is-open")) return;
+    setPopover(false);
+  });
+
+  categoryChips.forEach((chip) => {
+    chip.addEventListener("click", () => {
+      const id = chip.dataset.category;
+      if (!id) return;
+      if (state.categories.has(id)) state.categories.delete(id);
+      else state.categories.add(id);
+      state.preset = null;
+      syncCategoryChips();
+      syncPresetChips();
       apply();
-      tab.scrollIntoView({ inline: "nearest", block: "nearest", behavior: "smooth" });
+    });
+  });
+
+  document.getElementById("categories-clear")?.addEventListener("click", () => {
+    state.categories.clear();
+    state.preset = null;
+    syncCategoryChips();
+    syncPresetChips();
+    apply();
+  });
+
+  presetChips.forEach((chip) => {
+    chip.addEventListener("click", () => {
+      const name = chip.dataset.preset as "student" | "startup" | "hobby" | undefined;
+      if (!name) return;
+      applyPreset(name);
     });
   });
 
   qInput?.addEventListener("input", () => {
     state.q = qInput.value.trim().toLowerCase();
-    apply();
-  });
-
-  document.getElementById("preset-commercial-free")?.addEventListener("click", () => {
-    // exclusive chip groups → free + commercial yes
-    const setGroup = (key: "cost" | "student" | "commercial", value: string) => {
-      const group = document.querySelector<HTMLElement>(`[data-filter-group="${key}"]`);
-      if (!group) return;
-      group.querySelectorAll<HTMLButtonElement>(".ds-chip").forEach((c) => {
-        const on = c.dataset.value === value;
-        c.classList.toggle("is-active", on);
-        c.setAttribute("aria-checked", on ? "true" : "false");
-      });
-      state[key] = value;
-    };
-    setGroup("cost", "free");
-    setGroup("commercial", "yes");
-    setGroup("student", "all");
     apply();
   });
 
@@ -336,31 +500,12 @@ const initialIndex = Math.max(
         btn.classList.add("is-active");
         btn.setAttribute("aria-checked", "true");
         state[key] = btn.dataset.value ?? "all";
+        state.preset = null;
+        syncPresetChips();
         apply();
       });
     });
   });
 
   apply();
-
-  // Trackpad/wheel on category tabs → sideways, not page vertical bounce
-  const catSwitch = document.getElementById("category-switch");
-  catSwitch?.addEventListener(
-    "wheel",
-    (e) => {
-      const el = catSwitch;
-      if (!el) return;
-      const dx = Math.abs(e.deltaX);
-      const dy = Math.abs(e.deltaY);
-      const delta = dx > dy ? e.deltaX : e.deltaY;
-      if (delta === 0) return;
-      const max = el.scrollWidth - el.clientWidth;
-      if (max <= 0) return;
-      const next = Math.min(max, Math.max(0, el.scrollLeft + delta));
-      if (next === el.scrollLeft) return;
-      e.preventDefault();
-      el.scrollLeft = next;
-    },
-    { passive: false },
-  );
 </script>
