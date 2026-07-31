@@ -69,12 +69,14 @@ Alternate claim directories (community scholarships, CSR learning, campus clubs)
 Package: [`packages/cli`](packages/cli) → `@kuyacarlo/freestack`
 
 ```bash
-npx @kuyacarlo/freestack claim --student --commercial
-npx @kuyacarlo/freestack tools --category ai --commercial yes
-npx @kuyacarlo/freestack tool neon
+pnpm dlx @kuyacarlo/freestack claim --student --commercial
+pnpm dlx @kuyacarlo/freestack tools --category ai --commercial yes
+pnpm dlx @kuyacarlo/freestack tool neon
+# from this repo:
+pnpm cli claim --commercial
 ```
 
-Override API base with `FREESTACK_API` (default production site).
+Override API base with `FREESTACK_API` (default production site). Prefer **pnpm** (`pnpm dlx` / `pnpm cli`) over npm/npx.
 
 ## Talks
 
