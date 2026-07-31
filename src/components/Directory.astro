@@ -372,8 +372,6 @@ const hintCategory =
     for (const panel of panels) {
       const cat = panel.dataset.category ?? "";
       const panelOn = !catFilter || state.categories.has(cat);
-      panel.classList.toggle("is-hidden", !panelOn);
-      panel.hidden = !panelOn;
 
       let panelVisible = 0;
       const panelRows = rows.filter((r) => r.dataset.category === cat);
@@ -393,6 +391,10 @@ const hintCategory =
           panelVisible++;
         }
       }
+      // Hide the entire category panel if no rows are visible
+      const showPanel = panelOn && panelVisible > 0;
+      panel.classList.toggle("is-hidden", !showPanel);
+      panel.hidden = !showPanel;
       const c = panel.querySelector(".cat-count");
       if (c) c.textContent = String(panelVisible);
     }
@@ -423,8 +425,8 @@ const hintCategory =
         setGroup("commercial", "yes");
       } else if (name === "hobby") {
         setGroup("cost", "free");
-        setGroup("student", "all");
-        setGroup("commercial", "hobby");
+        setGroup("student", "no");
+        setGroup("commercial", "all");
       }
     }
     syncCategoryChips();
