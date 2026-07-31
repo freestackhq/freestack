@@ -46,7 +46,7 @@ const readme = `# Awesome Freestack [![Awesome](https://awesome.re/badge.svg)](h
 
 Curated free developer tools, student unlocks, startup-lean / AI / security / PH campus options — with **limits**, who can claim them, and commercial notes.
 
-Companion site: [freestac.kuyacarlo.dev](https://freestac.kuyacarlo.dev) · repo [\`freestack\`](https://github.com/kuyacarlo/freestack). Offers rotate; re-check vendor pages.
+Companion site: [freestack.kuyacarlo.dev](https://freestack.kuyacarlo.dev) · repo [\`freestack\`](https://github.com/kuyacarlo/freestack). Offers rotate; re-check vendor pages.
 
 ## Contents
 

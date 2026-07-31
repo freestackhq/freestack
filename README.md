@@ -82,7 +82,17 @@ Marp workshop decks live in [`talks/`](talks/) (SaaS free-tier stack + student p
 
 ## Sibling list
 
-Markdown mirror (awesome.re style): [`awesome-freestack`](../awesome-freestack). Site `tools.ts` is source of truth for the directory UI.
+Markdown mirror (awesome.re style): [`kuyacarlo/awesome-freestack`](https://github.com/kuyacarlo/awesome-freestack). Site `tools.ts` is source of truth for the directory UI.
+
+```bash
+pnpm sync:awesome   # writes ../awesome-freestack/README.md
+```
+
+Live site: [freestack.kuyacarlo.dev](https://freestack.kuyacarlo.dev)
+
+## Workflow
+
+PRs against `master` for catalog/UI changes. Don't push straight to `master` for feature work.
 
 ## Notes
 
