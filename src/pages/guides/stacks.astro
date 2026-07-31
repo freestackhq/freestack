@@ -3,6 +3,8 @@ import Layout from "../../layouts/Layout.astro";
 
 const stacks = [
   {
+    id: "student",
+    short: "Student",
     num: "01",
     title: "Student · $0 learning",
     blurb: "Schoolwork and side projects. Mix Pack unlocks with forever-free SaaS.",
@@ -19,6 +21,8 @@ const stacks = [
     ],
   },
   {
+    id: "alumni",
+    short: "Alumni",
     num: "02",
     title: "Not a student / alumni · $0–low",
     blurb: "No school email. Lean on forever free tiers and Always Free VMs.",
@@ -35,6 +39,8 @@ const stacks = [
     ],
   },
   {
+    id: "shipping",
+    short: "Shipping",
     num: "03",
     title: "Student shipping a real product",
     blurb: "Commercial-OK free tiers for prod. Edu licenses stay on coursework.",
@@ -50,6 +56,8 @@ const stacks = [
     ],
   },
   {
+    id: "startup",
+    short: "Startup",
     num: "04",
     title: "Startup / tech-adjacent lean",
     blurb: "Company or serious side-revenue. Meter AI. Claim Activate when real.",
@@ -83,29 +91,55 @@ const stacks = [
       Pick a lane.<br />
       <span class="text-ink-3">Don’t mix edu licenses into prod.</span>
     </h1>
-    <p class="mb-16 max-w-xl text-ink-2">
-      Three opinionated defaults. Swap pieces freely — just watch the commercial chip on
-      each tool.
+    <p class="mb-8 max-w-xl text-ink-2">
+      Four opinionated defaults. Swipe to compare on phone — two lanes visible from
+      tablet width. Swap pieces freely; watch the commercial chip on each tool.
     </p>
 
-    <div class="space-y-16">
+    <nav
+      class="ds-switch mb-8"
+      aria-label="Jump to lane"
+    >
       {
         stacks.map((s) => (
-          <section>
-            <div class="ds-section-label !mb-6">
-              <span class="ds-section-num">{s.num}</span>
-              <h2 class="text-xl font-semibold tracking-tight text-ink">{s.title}</h2>
-              <span class="ds-hairline flex-1" />
+          <a class="ds-chip" href={`#stack-${s.id}`}>
+            {s.short}
+          </a>
+        ))
+      }
+    </nav>
+
+    {/*
+      Side padding on an overflow scroller can't scroll away, so snap leaves a
+      permanent left gap before 01 (04 at max scroll looks fine). Bleed the track
+      flush to the window; inset text inside each lane to match .ds-wrap.
+    */}
+    <div
+      class="stack-lanes -mx-[clamp(1.25rem,4vw,4.5rem)] flex snap-x snap-mandatory gap-4 overflow-x-auto overscroll-x-contain pb-3 [scrollbar-color:var(--color-b1)_transparent] [scrollbar-width:thin] sm:gap-5 lg:mx-0 lg:grid lg:grid-cols-2 lg:gap-10 lg:overflow-visible lg:pb-0 lg:snap-none"
+    >
+      {
+        stacks.map((s) => (
+          <section
+            id={`stack-${s.id}`}
+            class="stack-lane w-[min(88vw,22rem)] shrink-0 snap-start scroll-mt-[calc(var(--nav-h)+1rem)] sm:w-[min(46vw,22rem)] lg:w-auto lg:min-w-0"
+          >
+            <div class="px-[clamp(1.25rem,4vw,4.5rem)] lg:px-0">
+              <div class="mb-4 flex items-baseline gap-3">
+                <span class="font-mono text-[0.72rem] text-ink-2">{s.num}</span>
+                <h2 class="text-lg font-semibold tracking-tight text-ink sm:text-xl">
+                  {s.title}
+                </h2>
+              </div>
+              <p class="mb-5 text-[0.92rem] leading-relaxed text-ink-2">{s.blurb}</p>
+              <dl class="divide-y divide-b1 border-y border-b1">
+                {s.rows.map(([k, v]) => (
+                  <div class="py-2.5">
+                    <dt class="font-mono text-[0.75rem] text-ink-2">{k}</dt>
+                    <dd class="mt-0.5 text-[0.92rem] leading-snug text-ink">{v}</dd>
+                  </div>
+                ))}
+              </dl>
             </div>
-            <p class="mb-6 max-w-xl text-ink-2">{s.blurb}</p>
-            <dl class="divide-y divide-b1 border-y border-b1">
-              {s.rows.map(([k, v]) => (
-                <div class="grid gap-1 py-3.5 sm:grid-cols-[10rem_1fr] sm:gap-6">
-                  <dt class="font-mono text-[0.72rem] text-ink-3">{k}</dt>
-                  <dd class="text-[0.95rem] text-ink">{v}</dd>
-                </div>
-              ))}
-            </dl>
           </section>
         ))
       }

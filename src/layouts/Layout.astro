@@ -39,10 +39,7 @@ const path = Astro.url.pathname;
       class="fixed inset-x-0 top-0 z-50 h-[var(--nav-h)] border-b border-transparent transition-[background,border-color] duration-200"
     >
       <div class="ds-wrap flex h-full items-center justify-between">
-        <a href="/" class="font-mono text-[0.82rem] font-medium tracking-tight text-ink">
-          freestack<em class="not-italic text-ink-3">.</em>
-        </a>
-        <div class="hidden items-center gap-1.5 sm:flex">
+        <div class="ml-auto hidden items-center gap-1.5 sm:flex">
           <a
             href="/"
             class:list={[
@@ -77,27 +74,11 @@ const path = Astro.url.pathname;
                 : "text-ink-2 hover:bg-s1 hover:text-ink",
             ]}>startup</a
           >
-          <a
-            href="/docs"
-            class:list={[
-              "rounded-md px-2.5 py-1 text-[0.8rem] transition-colors",
-              path.startsWith("/docs")
-                ? "text-ink"
-                : "text-ink-2 hover:bg-s1 hover:text-ink",
-            ]}>api</a
-          >
-          <a
-            href="https://github.com/kuyacarlo/awesome-freestack"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="ds-btn ds-btn-outline ml-2 !px-3.5 !py-1 text-[0.8rem]"
-            >awesome list ↗</a
-          >
         </div>
         <button
           id="nav-toggle"
           type="button"
-          class="flex flex-col gap-1 p-1 sm:hidden"
+          class="ml-auto flex flex-col gap-1 p-1 sm:hidden"
           aria-label="Menu"
         >
           <span class="block h-[1.5px] w-[18px] rounded bg-ink-2"></span>
@@ -123,9 +104,10 @@ const path = Astro.url.pathname;
       >
       <a href="/guides/stacks" class="text-2xl font-semibold text-ink-2">stacks</a>
       <a href="/guides/startup" class="text-2xl font-semibold text-ink-2">startup</a>
-      <a href="/docs" class="text-2xl font-semibold text-ink-2">api</a>
       <a
         href="https://github.com/kuyacarlo/awesome-freestack"
+        target="_blank"
+        rel="noopener noreferrer"
         class="text-2xl font-semibold text-ink-2">awesome list</a
       >
     </div>
@@ -148,9 +130,28 @@ const path = Astro.url.pathname;
             {" "}— thanks for funding the tooling that shipped this.
           </p>
         </div>
-        <p class="font-mono shrink-0">
-          freestack<em class="not-italic">.</em> · not affiliated with any vendor
-        </p>
+        <div class="shrink-0 space-y-2 sm:text-right">
+          <p class="font-mono">
+            freestack<em class="not-italic">.</em> · not affiliated with any vendor
+          </p>
+          <p class="font-mono">
+            <a
+              href="/docs"
+              class:list={[
+                "underline-offset-2 hover:underline",
+                path.startsWith("/docs") ? "text-ink" : "text-ink-2 hover:text-ink",
+              ]}>api</a
+            >
+            {" "}·{" "}
+            <a
+              href="https://github.com/kuyacarlo/awesome-freestack"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="text-ink-2 underline-offset-2 hover:text-ink hover:underline"
+              >awesome list ↗</a
+            >
+          </p>
+        </div>
       </div>
     </footer>
 

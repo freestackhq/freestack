@@ -11,5 +11,13 @@ export function json(
 }
 
 export function options(): Response {
-  return json({}, { status: 204 });
+  // 204 must not include a body — Vercel/runtime rejects Response(body, { status: 204 }).
+  return new Response(null, {
+    status: 204,
+    headers: {
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
+      "Access-Control-Allow-Headers": "Content-Type",
+    },
+  });
 }
