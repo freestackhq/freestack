@@ -7,6 +7,7 @@ Not a landing page full of vibes. Numbers first.
 ## Stack
 
 - [Astro](https://astro.build) + [Tailwind CSS v4](https://tailwindcss.com)
+- Deployed to [Cloudflare Workers](https://workers.cloudflare.com) via `@astrojs/cloudflare` (Astro 6+ removed Pages support)
 - Design system (in-repo): [`src/design-system/`](src/design-system/) — see its README
 - Data: [`src/data/tools.ts`](src/data/tools.ts)
 
@@ -14,13 +15,25 @@ Not a landing page full of vibes. Numbers first.
 
 ```bash
 pnpm install
-pnpm dev
+pnpm dev            # workerd runtime locally
 ```
 
 ```bash
-pnpm build
-pnpm preview
+pnpm build          # static + worker bundle to dist/
+pnpm preview        # local workerd preview of the build
 ```
+
+## Deploy
+
+```bash
+pnpm deploy:cf      # pnpm build && wrangler deploy
+```
+
+First-time setup / domain (`freestack.kuyacarlo.dev`):
+
+1. `pnpm exec wrangler login`
+2. Dashboard → Workers & Pages → freestack → Settings → **Domains & Routes** → Add custom domain (the `kuyacarlo.dev` zone lives outside the wrangler OAuth account, so it can't auto-provision)
+3. `pnpm dns:freestack` to check resolution
 
 ## Add a tool
 

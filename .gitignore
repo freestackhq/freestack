@@ -24,5 +24,8 @@ pnpm-debug.log*
 .idea/
 .vercel
 
+# cloudflare workerd local state
+.wrangler/
+
 # local agent scratch
 tmp/
