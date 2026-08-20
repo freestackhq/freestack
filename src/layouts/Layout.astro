@@ -48,6 +48,15 @@ const path = Astro.url.pathname;
             ]}>directory</a
           >
           <a
+            href="/catalogs"
+            class:list={[
+              "rounded-md px-2.5 py-1 text-[0.8rem] transition-colors",
+              path.startsWith("/catalogs")
+                ? "text-ink"
+                : "text-ink-2 hover:bg-s1 hover:text-ink",
+            ]}>catalogs</a
+          >
+          <a
             href="/guides/claim-order"
             class:list={[
               "rounded-md px-2.5 py-1 text-[0.8rem] transition-colors",
@@ -179,12 +188,20 @@ const path = Astro.url.pathname;
       };
 
       const onScroll = () => {
-        const scrolled = window.scrollY > 8;
-        dockSearch(scrolled);
+        const navH = nav?.offsetHeight ?? 0;
+        const filtersStuck = filtersBar
+          ? filtersBar.getBoundingClientRect().top <= navH + 1
+          : false;
+        dockSearch(filtersStuck);
         if (!nav) return;
+        const isHome = window.location.pathname === "/";
+        const scrolled = window.scrollY > 8;
         if (scrolled) {
-          nav.classList.add("border-b1", "bg-[#0d0c0be0]", "backdrop-blur-[14px]");
-          nav.classList.remove("border-transparent");
+          if (!isHome) {
+            nav.classList.add("border-b1");
+            nav.classList.remove("border-transparent");
+          }
+          nav.classList.add("bg-[#0d0c0be0]", "backdrop-blur-[14px]");
         } else {
           nav.classList.remove("border-b1", "bg-[#0d0c0be0]", "backdrop-blur-[14px]");
           nav.classList.add("border-transparent");

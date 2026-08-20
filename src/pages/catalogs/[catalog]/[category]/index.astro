@@ -1,0 +1,106 @@
+---
+import Layout from "../../../../layouts/Layout.astro";
+import { CATALOGS, slugify } from "../../../../lib/catalog";
+
+export function getStaticPaths() {
+  return CATALOGS.flatMap((c) =>
+    c.categories.map((cat) => ({
+      params: { catalog: c.id, category: cat.id },
+      props: { catalog: c, category: cat },
+    })),
+  );
+}
+
+const { catalog, category } = Astro.props;
+---
+
+<Layout
+  title={`${category.label} · ${catalog.label} · freestack.`}
+  description={category.description}
+>
+  <section class="ds-wrap pb-24 pt-[88px] sm:pt-[120px]">
+    <p class="font-mono text-[0.75rem] text-ink-3">
+      <a href="/catalogs" class="hover:text-ink-2">catalogs</a> /{" "}
+      <a href={`/catalogs/${catalog.id}`} class="hover:text-ink-2">{catalog.label}</a> /{" "}
+      {category.id}
+    </p>
+    <h1 class="mt-3 text-[clamp(2.2rem,5.5vw,4rem)] leading-[1.05] font-bold tracking-[-0.04em] text-ink">
+      {category.label}<span class="text-ink-3">.</span>
+    </h1>
+    <p class="mt-4 max-w-2xl text-[0.95rem] leading-[1.75] text-ink-2">{category.description}</p>
+
+    {
+      category.matrix.length > 0 && (
+        <div class="mt-10 overflow-x-auto rounded-[var(--radius)] border border-b1">
+          <table class="w-full border-collapse text-left">
+            <thead>
+              <tr class="border-b border-b1 bg-s1">
+                <th class="px-4 py-3 font-mono text-[0.7rem] font-medium tracking-wide text-ink-3 uppercase">
+                  Service
+                </th>
+                {Object.keys(category.matrix[0].cells).map((k) => (
+                  <th
+                    class="px-4 py-3 font-mono text-[0.7rem] font-medium tracking-wide text-ink-3 uppercase"
+                    key={k}
+                  >
+                    {k}
+                  </th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {category.matrix.map((row) => (
+                <tr class="border-b border-b1 last:border-b-0 hover:bg-s1" key={row.service}>
+                  <td class="px-4 py-3">
+                    <a href={`/catalogs/${catalog.id}/${category.id}/${slugify(row.service)}`} class="text-ink hover:text-sand">
+                      {row.service}
+                    </a>
+                  </td>
+                  {Object.keys(category.matrix[0].cells).map((k) => (
+                    <td class="px-4 py-3 font-mono text-[0.72rem] text-ink-2" key={k}>
+                      {row.cells[k] ?? ""}
+                    </td>
+                  ))}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )
+    }
+
+    <h2 class="ds-section-label mt-14 mb-6">
+      <span class="ds-section-name">Entries</span>
+      <span class="ds-hairline flex-1" />
+      <span class="font-mono text-[0.72rem] text-ink-3">{category.entries.length}</span>
+    </h2>
+
+    <ul class="divide-y divide-b1 border-y border-b1" role="list">
+      {
+        category.entries.map((e) => (
+          <li class="group" key={e.slug}>
+            <a
+              href={`/catalogs/${catalog.id}/${category.id}/${e.slug}`}
+              class="block px-2 py-4 sm:px-4"
+            >
+              <div class="flex flex-wrap items-baseline gap-x-2 gap-y-1">
+                <span class="ds-tool-name">{e.name}</span>
+                <span class="font-mono text-[0.68rem] text-ink-3">↗</span>
+              </div>
+              <p class="mt-1 text-[0.92rem] leading-relaxed text-ink-2">
+                {e.pick || e.prose[0] || ""}
+              </p>
+              <div class="mt-2 flex flex-wrap gap-1.5">
+                {(catalog.filters ?? []).map((f) => (
+                  <span class="ds-badge" key={f.key}>
+                    {e.fields[f.key] ?? e.fields[f.key.toLowerCase()] ?? ""}
+                  </span>
+                ))}
+              </div>
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </section>
+</Layout>

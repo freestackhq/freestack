@@ -1,31 +1,46 @@
 ---
-import { CATEGORIES, tools, type Tool } from "../data/tools";
+import { CATALOGS, filterOptions } from "../lib/catalog";
 
-const costLabel: Record<Tool["cost"], string> = {
-  free: "free forever",
-  credits: "credits",
-  student_free: "student free",
-  discount: "discount",
-};
+/**
+ * Generic multi-catalog directory. Renders every catalog's categories and
+ * entries from the generated snapshot. Catalog tabs switch the active
+ * catalog; category + field filters and search operate on the active one.
+ */
 
-const whoLabel: Record<Tool["student"], string> = {
-  no: "anyone",
-  required: "student",
-  helps: "student helps",
-};
+interface Props {
+  defaultCatalog?: string;
+}
 
-const commercialLabel: Record<Tool["commercial"], string> = {
-  yes: "commercial ok",
-  hobby: "hobby only",
-  edu: "edu only",
-  check: "check ToS",
-};
+const { defaultCatalog } = Astro.props;
 
-// /?hint=ai or /?hint=startup deep-links from guides → pre-select that category filter
+const catalogConfig = CATALOGS.map((c) => ({
+  id: c.id,
+  label: c.label,
+  description: c.description,
+  categories: c.categories.map((cat) => ({
+    id: cat.id,
+    label: cat.label,
+    count: cat.entries.length,
+  })),
+  filters: (c.filters ?? []).map((f) => ({
+    key: f.key,
+    label: f.label,
+    kind: f.kind,
+    options: filterOptions(c, f.key, f.kind),
+  })),
+}));
+
+const initialCatalogId =
+  catalogConfig.some((c) => c.id === (Astro.url.searchParams.get("catalog") ?? ""))
+    ? (Astro.url.searchParams.get("catalog") as string)
+    : (defaultCatalog ?? catalogConfig[0].id);
+
 const hint = Astro.url.searchParams.get("hint");
 const hintCategory =
-  hint && CATEGORIES.some((c) => c.id === hint) ? hint : null;
+  hint && catalogConfig[0].categories.some((c) => c.id === hint) ? hint : null;
 ---
+
+<script type="application/json" id="catalog-config-data" set:html={JSON.stringify(catalogConfig)}></script>
 
 <section id="directory" class="pb-24">
   <div
@@ -34,13 +49,33 @@ const hintCategory =
   >
     <div class="ds-wrap">
       <div class="flex flex-col gap-3">
+        <div class="flex flex-wrap items-center gap-2">
+          <div class="ds-switch" data-catalog-group role="group" aria-label="Catalog">
+            {
+              catalogConfig.map((c) => (
+                <button
+                  type="button"
+                  class:list={["ds-chip", c.id === initialCatalogId && "is-active"]}
+                  data-catalog-tab={c.id}
+                  aria-pressed={c.id === initialCatalogId ? "true" : "false"}
+                >
+                  {c.label}
+                </button>
+              ))
+            }
+          </div>
+          <p class="font-mono text-[0.72rem] text-ink-3">
+            <span data-catalog-desc>{catalogConfig.find((c) => c.id === initialCatalogId)?.description}</span>
+          </p>
+        </div>
+
         <div class="relative flex min-w-0 items-center gap-2">
           <label class="relative block min-w-0 flex-1">
-            <span class="sr-only">Search tools</span>
+            <span class="sr-only">Search entries</span>
             <input
               id="q"
               type="search"
-              placeholder="Search tools…"
+              placeholder="Search entries…"
               class="ds-input"
             />
           </label>
@@ -82,14 +117,14 @@ const hintCategory =
               aria-label="Categories"
             >
               {
-                CATEGORIES.map((cat) => (
+                catalogConfig.find((c) => c.id === initialCatalogId)?.categories.map((cat) => (
                   <button
                     type="button"
                     class:list={[
                       "ds-chip",
                       hintCategory === cat.id && "is-active",
                     ]}
-                    data-category={cat.id}
+                    data-category-chip={cat.id}
                     aria-pressed={hintCategory === cat.id ? "true" : "false"}
                   >
                     {cat.label}
@@ -98,113 +133,42 @@ const hintCategory =
               }
             </div>
 
-            <p
-              class="mt-4 mb-2 font-mono text-[0.68rem] tracking-wide text-ink-3 uppercase"
-            >
-              Cost
-            </p>
-            <div class="ds-switch" data-filter-group="cost" role="radiogroup" aria-label="Cost">
-              <button type="button" role="radio" aria-checked="true" data-value="all" class="ds-chip is-active"
-                >all</button
-              >
-              <button type="button" role="radio" aria-checked="false" data-value="free" class="ds-chip"
-                >free</button
-              >
-              <button type="button" role="radio" aria-checked="false" data-value="credits" class="ds-chip"
-                >credits</button
-              >
-              <button type="button" role="radio" aria-checked="false" data-value="student_free" class="ds-chip"
-                >student free</button
-              >
-              <button type="button" role="radio" aria-checked="false" data-value="discount" class="ds-chip"
-                >discount</button
-              >
-            </div>
-
-            <p
-              class="mt-4 mb-2 font-mono text-[0.68rem] tracking-wide text-ink-3 uppercase"
-            >
-              Eligibility
-            </p>
-            <div
-              class="ds-switch"
-              data-filter-group="student"
-              role="radiogroup"
-              aria-label="Eligibility"
-            >
-              <button type="button" role="radio" aria-checked="true" data-value="all" class="ds-chip is-active"
-                >all</button
-              >
-              <button type="button" role="radio" aria-checked="false" data-value="no" class="ds-chip"
-                >anyone</button
-              >
-              <button type="button" role="radio" aria-checked="false" data-value="required" class="ds-chip"
-                >student required</button
-              >
-              <button type="button" role="radio" aria-checked="false" data-value="helps" class="ds-chip"
-                >student helps</button
-              >
-            </div>
-
-            <p
-              class="mt-4 mb-2 font-mono text-[0.68rem] tracking-wide text-ink-3 uppercase"
-            >
-              Commercial
-            </p>
-            <div
-              class="ds-switch"
-              data-filter-group="commercial"
-              role="radiogroup"
-              aria-label="Commercial use"
-            >
-              <button type="button" role="radio" aria-checked="true" data-value="all" class="ds-chip is-active"
-                >all</button
-              >
-              <button type="button" role="radio" aria-checked="false" data-value="yes" class="ds-chip"
-                >commercial ok</button
-              >
-              <button type="button" role="radio" aria-checked="false" data-value="hobby" class="ds-chip"
-                >hobby only</button
-              >
-              <button type="button" role="radio" aria-checked="false" data-value="edu" class="ds-chip"
-                >edu only</button
-              >
-            </div>
+            {
+              catalogConfig.find((c) => c.id === initialCatalogId)?.filters.map((f) => (
+                <div key={f.key} data-filter-block={f.key} class="filter-block">
+                  <p class="mt-4 mb-2 font-mono text-[0.68rem] tracking-wide text-ink-3 uppercase">
+                    {f.label}
+                  </p>
+                  <div
+                    class="ds-switch"
+                    data-filter-group={f.key}
+                    role="group"
+                    aria-label={f.label}
+                  >
+                    {f.options.map((opt) => (
+                      <button
+                        type="button"
+                        class="ds-chip"
+                        data-value={opt}
+                        aria-pressed="false"
+                      >
+                        {opt}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              ))
+            }
           </div>
         </div>
 
         <div class="flex flex-wrap items-center gap-2">
-          <div
-            class="ds-switch"
-            data-preset-group
-            role="group"
-            aria-label="Presets"
-          >
-            <button
-              type="button"
-              class="ds-chip"
-              data-preset="student"
-              aria-pressed="false"
-              title="Student unlocks path">student</button
-            >
-            <button
-              type="button"
-              class="ds-chip"
-              data-preset="startup"
-              aria-pressed="false"
-              title="Commercial OK + free forever">startup</button
-            >
-            <button
-              type="button"
-              class="ds-chip"
-              data-preset="hobby"
-              aria-pressed="false"
-              title="Hobby-only free tiers">hobby</button
-            >
-          </div>
-
           <p id="count" class="font-mono text-[0.72rem] text-ink-3">
-            {tools.length} tools
+            {catalogConfig.find((c) => c.id === initialCatalogId)?.categories.reduce(
+              (n, cat) => n + cat.count,
+              0,
+            )}{" "}
+            entries
           </p>
         </div>
       </div>
@@ -217,75 +181,96 @@ const hintCategory =
     </div>
 
     {
-      CATEGORIES.map((cat) => {
-        const items = tools.filter((t) => t.category === cat.id);
-        if (!items.length) return null;
-        const startHidden = Boolean(hintCategory) && cat.id !== hintCategory;
-        return (
-          <section
-            class:list={["cat-panel mt-12", startHidden && "is-hidden"]}
-            data-category={cat.id}
-            hidden={startHidden}
-          >
-            <div class="ds-section-label !mb-6">
-              <span class="ds-section-num">{cat.num}</span>
-              <span class="ds-section-name">{cat.label}</span>
-              <span class="ds-hairline flex-1" />
-              <span class="font-mono text-[0.72rem] text-ink-3 cat-count">{items.length}</span>
-            </div>
-            <ul class="divide-y divide-b1 border-y border-b1" role="list">
-              {items.map((t) => (
-                <li
-                  class="ds-tool-row tool-row group"
-                  data-name={t.name.toLowerCase()}
-                  data-blurb={t.blurb.toLowerCase()}
-                  data-limits={t.limits.toLowerCase()}
-                  data-tags={(t.tags ?? []).join(" ").toLowerCase()}
-                  data-cost={t.cost}
-                  data-student={t.student}
-                  data-commercial={t.commercial}
-                  data-category={t.category}
-                >
-                  <a href={t.url} target="_blank" rel="noopener noreferrer">
-                    <div class="min-w-0">
-                      <div class="flex flex-wrap items-baseline gap-x-2 gap-y-1">
-                        <span class="ds-tool-name">{t.name}</span>
-                        <span class="font-mono text-[0.68rem] text-ink-3">↗</span>
-                      </div>
-                      <p class="mt-1 text-[0.92rem] leading-relaxed text-ink-2">{t.blurb}</p>
-                    </div>
-                    <div class="font-mono text-[0.72rem] leading-relaxed text-ink-2">
-                      <span class="text-ink-3">limits · </span>
-                      {t.limits}
-                      {t.verified && (
-                        <>
-                          <br />
-                          <span class="text-ink-3">verified · {t.verified}</span>
-                        </>
-                      )}
-                    </div>
-                    <div class="flex flex-wrap gap-1.5 sm:justify-end">
-                      <span class="ds-badge">{costLabel[t.cost]}</span>
-                      <span class="ds-badge">{whoLabel[t.student]}</span>
-                      <span class="ds-badge">{commercialLabel[t.commercial]}</span>
-                    </div>
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </section>
-        );
-      })
+      CATALOGS.map((c) => (
+        <div
+          class:list={["catalog-panels", c.id === initialCatalogId ? "" : "is-hidden"]}
+          data-catalog-panels={c.id}
+          hidden={c.id !== initialCatalogId}
+        >
+          {c.categories.map((cat) => {
+            const items = cat.entries;
+            if (!items.length) return null;
+            const startHidden = Boolean(hintCategory) && cat.id !== hintCategory;
+            const f = catalogConfig.find((x) => x.id === c.id)?.filters ?? [];
+            return (
+              <section
+                class:list={["cat-panel mt-12", startHidden && "is-hidden"]}
+                data-category={cat.id}
+                hidden={startHidden}
+              >
+                <div class="ds-section-label !mb-6">
+                  <span class="ds-section-name">{cat.label}</span>
+                  <span class="ds-hairline flex-1" />
+                  <span class="font-mono text-[0.72rem] text-ink-3 cat-count">{items.length}</span>
+                </div>
+                <ul class="divide-y divide-b1 border-y border-b1" role="list">
+                  {items.map((e) => {
+                    const haystack = [
+                      e.name,
+                      ...Object.values(e.fields),
+                      ...e.prose,
+                      ...e.alternatives.map((a) => `${a.name} ${a.text}`),
+                    ]
+                      .join(" ")
+                      .toLowerCase();
+                    return (
+                      <li
+                        class="entry-row group"
+                        data-entry
+                        data-haystack={haystack}
+                        data-category={cat.id}
+                        {...Object.fromEntries(
+                          f.map((x) => [
+                            `data-f-${x.key}`,
+                            (e.fields[x.key] ?? e.fields[x.key.toLowerCase()] ?? "")
+                              .toLowerCase(),
+                          ]),
+                        )}
+                      >
+                        <a
+                          href={`/catalogs/${c.id}/${cat.id}/${e.slug}`}
+                          class="block px-2 py-4 sm:px-4"
+                        >
+                          <div class="min-w-0">
+                            <div class="flex flex-wrap items-baseline gap-x-2 gap-y-1">
+                              <span class="ds-tool-name">{e.name}</span>
+                              <span class="font-mono text-[0.68rem] text-ink-3">↗</span>
+                            </div>
+                            <p class="mt-1 text-[0.92rem] leading-relaxed text-ink-2">
+                              {e.pick || e.prose[0] || ""}
+                            </p>
+                          </div>
+                          <div class="mt-2 flex flex-wrap gap-1.5 sm:justify-end">
+                            {f.map((x) => (
+                              <span class="ds-badge" key={x.key}>
+                                {e.fields[x.key] ?? e.fields[x.key.toLowerCase()] ?? ""}
+                              </span>
+                            ))}
+                          </div>
+                        </a>
+                      </li>
+                    );
+                  })}
+                </ul>
+              </section>
+            );
+          })}
+        </div>
+      ))
     }
   </div>
 </section>
 
 <style>
-  .tool-row.is-hidden {
+  .entry-row.is-hidden {
     display: none;
   }
   .cat-panel.is-hidden,
   .cat-panel[hidden] {
+    display: none;
+  }
+  .catalog-panels.is-hidden,
+  .catalog-panels[hidden] {
     display: none;
   }
   .filter-popover:not(.is-open) {
@@ -297,72 +282,142 @@ const hintCategory =
 </style>
 
 <script>
+  const CATALOG_CONFIG = JSON.parse(
+    document.getElementById("catalog-config-data")?.textContent ?? "[]",
+  );
+
   const state = {
-    categories: new Set<string>(
-      (() => {
-        const active = document.querySelector<HTMLElement>(
-          "[data-category-group] .ds-chip.is-active",
-        );
-        return active?.dataset.category ? [active.dataset.category] : [];
-      })(),
-    ),
+    catalog: document.querySelector("[data-catalog-tab].is-active")?.dataset.catalogTab ?? "",
+    categories: new Set<string>(),
     q: "",
-    cost: "all",
-    student: "all",
-    commercial: "all",
-    preset: null as null | "student" | "startup" | "hobby",
+    filters: {} as Record<string, Set<string>>,
   };
 
-  const rows = [...document.querySelectorAll<HTMLElement>(".tool-row")];
+  const rows = [...document.querySelectorAll<HTMLElement>(".entry-row")];
   const panels = [...document.querySelectorAll<HTMLElement>(".cat-panel")];
+  const catalogPanels = [...document.querySelectorAll<HTMLElement>("[data-catalog-panels]")];
   const countEl = document.getElementById("count");
   const emptyEl = document.getElementById("empty");
   const qInput = document.getElementById("q") as HTMLInputElement | null;
   const popover = document.getElementById("filters-popover");
   const toggle = document.getElementById("filters-toggle");
   const activeMark = document.getElementById("filters-active-mark");
-  const categoryChips = [
-    ...document.querySelectorAll<HTMLButtonElement>("[data-category-group] .ds-chip"),
-  ];
-  const presetChips = [
-    ...document.querySelectorAll<HTMLButtonElement>("[data-preset-group] .ds-chip"),
+  const catalogDesc = document.querySelector("[data-catalog-desc]");
+  const catalogTabs = [
+    ...document.querySelectorAll<HTMLButtonElement>("[data-catalog-tab]"),
   ];
 
-  function setGroup(key: "cost" | "student" | "commercial", value: string) {
-    const group = document.querySelector<HTMLElement>(`[data-filter-group="${key}"]`);
-    if (!group) return;
-    group.querySelectorAll<HTMLButtonElement>(".ds-chip").forEach((c) => {
-      const on = c.dataset.value === value;
-      c.classList.toggle("is-active", on);
-      c.setAttribute("aria-checked", on ? "true" : "false");
-    });
-    state[key] = value;
+  function catalogConfigFor(id: string) {
+    return CATALOG_CONFIG.find((c: any) => c.id === id) ?? CATALOG_CONFIG[0];
+  }
+
+  function bindChips() {
+    document
+      .querySelectorAll<HTMLButtonElement>("[data-category-chip]")
+      .forEach((chip) => {
+        chip.onclick = () => {
+          const id = chip.dataset.categoryChip ?? "";
+          toggleCategory(id);
+        };
+      });
+    document
+      .querySelectorAll<HTMLButtonElement>("[data-filter-group] .ds-chip")
+      .forEach((chip) => {
+        chip.onclick = () => {
+          const key = chip.closest("[data-filter-group]")?.getAttribute("data-filter-group") ?? "";
+          const value = chip.dataset.value ?? "";
+          toggleFilter(key, value);
+        };
+      });
+  }
+
+  function rebuildFiltersUI() {
+    const cfg = catalogConfigFor(state.catalog);
+    // Category chips
+    const catGroup = document.querySelector("[data-category-group]");
+    if (catGroup) {
+      catGroup.innerHTML = "";
+      for (const cat of cfg.categories) {
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = "ds-chip";
+        btn.dataset.categoryChip = cat.id;
+        btn.setAttribute("aria-pressed", "false");
+        btn.textContent = cat.label;
+        catGroup.appendChild(btn);
+      }
+    }
+    // Filter groups
+    document.querySelectorAll(".filter-block").forEach((el) => el.remove());
+    const popoverRoot = popover;
+    if (popoverRoot) {
+      for (const f of cfg.filters) {
+        const block = document.createElement("div");
+        block.className = "filter-block";
+        block.dataset.filterBlock = f.key;
+        const label = document.createElement("p");
+        label.className = "mt-4 mb-2 font-mono text-[0.68rem] tracking-wide text-ink-3 uppercase";
+        label.textContent = f.label;
+        const group = document.createElement("div");
+        group.className = "ds-switch";
+        group.dataset.filterGroup = f.key;
+        group.setAttribute("role", "group");
+        group.setAttribute("aria-label", f.label);
+        for (const opt of f.options) {
+          const btn = document.createElement("button");
+          btn.type = "button";
+          btn.className = "ds-chip";
+          btn.dataset.value = opt;
+          btn.setAttribute("aria-pressed", "false");
+          btn.textContent = opt;
+          group.appendChild(btn);
+        }
+        block.appendChild(label);
+        block.appendChild(group);
+        popoverRoot.appendChild(block);
+      }
+    }
+    if (catalogDesc) catalogDesc.textContent = cfg.description;
+    bindChips();
+  }
+
+  function toggleCategory(id: string) {
+    if (state.categories.has(id)) state.categories.delete(id);
+    else state.categories.add(id);
+    syncCategoryChips();
+    apply();
+  }
+
+  function toggleFilter(key: string, value: string) {
+    if (!state.filters[key]) state.filters[key] = new Set();
+    const s = state.filters[key];
+    if (s.has(value)) s.delete(value);
+    else s.add(value);
+    syncFilterChips();
+    apply();
   }
 
   function syncCategoryChips() {
-    categoryChips.forEach((chip) => {
-      const id = chip.dataset.category ?? "";
+    document.querySelectorAll<HTMLButtonElement>("[data-category-chip]").forEach((chip) => {
+      const id = chip.dataset.categoryChip ?? "";
       const on = state.categories.has(id);
       chip.classList.toggle("is-active", on);
       chip.setAttribute("aria-pressed", on ? "true" : "false");
     });
   }
 
-  function syncPresetChips() {
-    presetChips.forEach((chip) => {
-      const on = chip.dataset.preset === state.preset;
+  function syncFilterChips() {
+    document.querySelectorAll<HTMLButtonElement>("[data-filter-group] .ds-chip").forEach((chip) => {
+      const key = chip.closest("[data-filter-group]")?.getAttribute("data-filter-group") ?? "";
+      const value = chip.dataset.value ?? "";
+      const on = state.filters[key]?.has(value) ?? false;
       chip.classList.toggle("is-active", on);
       chip.setAttribute("aria-pressed", on ? "true" : "false");
     });
   }
 
   function filtersDirty() {
-    return (
-      state.categories.size > 0 ||
-      state.cost !== "all" ||
-      state.student !== "all" ||
-      state.commercial !== "all"
-    );
+    return state.categories.size > 0 || Object.values(state.filters).some((s) => s.size > 0);
   }
 
   function apply() {
@@ -371,27 +426,34 @@ const hintCategory =
 
     for (const panel of panels) {
       const cat = panel.dataset.category ?? "";
-      const panelOn = !catFilter || state.categories.has(cat);
+      const catalog = panel.closest("[data-catalog-panels]")?.getAttribute("data-catalog-panels") ?? "";
+      const catalogOn = catalog === state.catalog;
+      const panelOn = catalogOn && (!catFilter || state.categories.has(cat));
 
       let panelVisible = 0;
       const panelRows = rows.filter((r) => r.dataset.category === cat);
       for (const row of panelRows) {
-        const okCost = state.cost === "all" || row.dataset.cost === state.cost;
-        const okStudent =
-          state.student === "all" || row.dataset.student === state.student;
-        const okCommercial =
-          state.commercial === "all" ||
-          row.dataset.commercial === state.commercial;
-        const hay = `${row.dataset.name} ${row.dataset.blurb} ${row.dataset.limits} ${row.dataset.tags}`;
-        const okQ = !state.q || hay.includes(state.q);
-        const show = panelOn && okCost && okStudent && okCommercial && okQ;
-        row.classList.toggle("is-hidden", !show);
-        if (show) {
+        let ok = panelOn;
+        if (ok) {
+          for (const [key, set] of Object.entries(state.filters)) {
+            if (!set.size) continue;
+            const vals = (row.dataset[`f${key}`] ?? "").split(",").map((v) => v.trim());
+            if (![...set].some((w) => vals.includes(w.toLowerCase()))) {
+              ok = false;
+              break;
+            }
+          }
+        }
+        if (ok && state.q) {
+          const hay = row.dataset.haystack ?? "";
+          if (!hay.includes(state.q)) ok = false;
+        }
+        row.classList.toggle("is-hidden", !ok);
+        if (ok) {
           visible++;
           panelVisible++;
         }
       }
-      // Hide the entire category panel if no rows are visible
       const showPanel = panelOn && panelVisible > 0;
       panel.classList.toggle("is-hidden", !showPanel);
       panel.hidden = !showPanel;
@@ -399,45 +461,45 @@ const hintCategory =
       if (c) c.textContent = String(panelVisible);
     }
 
-    if (countEl) countEl.textContent = `${visible} tool${visible === 1 ? "" : "s"}`;
+    for (const cp of catalogPanels) {
+      const on = cp.getAttribute("data-catalog-panels") === state.catalog;
+      cp.classList.toggle("is-hidden", !on);
+      cp.hidden = !on;
+    }
+
+    if (countEl) countEl.textContent = `${visible} entr${visible === 1 ? "y" : "ies"}`;
     emptyEl?.classList.toggle("hidden", visible !== 0);
     activeMark?.classList.toggle("hidden", !filtersDirty());
   }
 
-  function applyPreset(name: "student" | "startup" | "hobby" | null) {
-    if (state.preset === name || name === null) {
-      state.preset = null;
-      state.categories.clear();
-      setGroup("cost", "all");
-      setGroup("student", "all");
-      setGroup("commercial", "all");
-    } else {
-      state.preset = name;
-      state.categories.clear();
-      if (name === "student") {
-        state.categories.add("student");
-        setGroup("cost", "all");
-        setGroup("student", "required");
-        setGroup("commercial", "all");
-      } else if (name === "startup") {
-        setGroup("cost", "free");
-        setGroup("student", "all");
-        setGroup("commercial", "yes");
-      } else if (name === "hobby") {
-        setGroup("cost", "free");
-        setGroup("student", "no");
-        setGroup("commercial", "all");
-      }
-    }
-    syncCategoryChips();
-    syncPresetChips();
+  function switchCatalog(id: string) {
+    if (state.catalog === id) return;
+    state.catalog = id;
+    state.categories.clear();
+    state.filters = {};
+    state.q = "";
+    if (qInput) qInput.value = "";
+    catalogTabs.forEach((tab) => {
+      const on = tab.dataset.catalogTab === id;
+      tab.classList.toggle("is-active", on);
+      tab.setAttribute("aria-pressed", on ? "true" : "false");
+    });
+    rebuildFiltersUI();
     apply();
+    history.replaceState(null, "", `?catalog=${id}`);
   }
 
   function setPopover(open: boolean) {
     popover?.classList.toggle("is-open", open);
     toggle?.setAttribute("aria-expanded", open ? "true" : "false");
   }
+
+  catalogTabs.forEach((tab) => {
+    tab.addEventListener("click", () => {
+      const id = tab.dataset.catalogTab ?? "";
+      switchCatalog(id);
+    });
+  });
 
   toggle?.addEventListener("click", (e) => {
     e.stopPropagation();
@@ -457,33 +519,12 @@ const hintCategory =
     setPopover(false);
   });
 
-  categoryChips.forEach((chip) => {
-    chip.addEventListener("click", () => {
-      const id = chip.dataset.category;
-      if (!id) return;
-      if (state.categories.has(id)) state.categories.delete(id);
-      else state.categories.add(id);
-      state.preset = null;
-      syncCategoryChips();
-      syncPresetChips();
-      apply();
-    });
-  });
-
   document.getElementById("categories-clear")?.addEventListener("click", () => {
     state.categories.clear();
-    state.preset = null;
+    state.filters = {};
     syncCategoryChips();
-    syncPresetChips();
+    syncFilterChips();
     apply();
-  });
-
-  presetChips.forEach((chip) => {
-    chip.addEventListener("click", () => {
-      const name = chip.dataset.preset as "student" | "startup" | "hobby" | undefined;
-      if (!name) return;
-      applyPreset(name);
-    });
   });
 
   qInput?.addEventListener("input", () => {
@@ -491,23 +532,6 @@ const hintCategory =
     apply();
   });
 
-  document.querySelectorAll<HTMLElement>("[data-filter-group]").forEach((group) => {
-    const key = group.dataset.filterGroup as "cost" | "student" | "commercial";
-    group.querySelectorAll<HTMLButtonElement>(".ds-chip").forEach((btn) => {
-      btn.addEventListener("click", () => {
-        group.querySelectorAll(".ds-chip").forEach((c) => {
-          c.classList.remove("is-active");
-          c.setAttribute("aria-checked", "false");
-        });
-        btn.classList.add("is-active");
-        btn.setAttribute("aria-checked", "true");
-        state[key] = btn.dataset.value ?? "all";
-        state.preset = null;
-        syncPresetChips();
-        apply();
-      });
-    });
-  });
-
+  bindChips();
   apply();
 </script>

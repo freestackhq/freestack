@@ -1,0 +1,113 @@
+---
+import Layout from "../../../../layouts/Layout.astro";
+import { CATALOGS, slugify } from "../../../../lib/catalog";
+
+export function getStaticPaths() {
+  return CATALOGS.flatMap((c) =>
+    c.categories.flatMap((cat) =>
+      cat.entries.map((e) => ({
+        params: { catalog: c.id, category: cat.id, entry: e.slug },
+        props: { catalog: c, category: cat, entry: e },
+      })),
+    ),
+  );
+}
+
+const { catalog, category, entry } = Astro.props;
+const fieldEntries = Object.entries(entry.fields);
+const primary =
+  entry.fields.URL ?? entry.fields.url ?? category.matrix.find((m) => m.service === entry.name)?.cells.url ?? "";
+---
+
+<Layout
+  title={`${entry.name} · ${category.label} · freestack.`}
+  description={entry.pick || entry.prose[0] || category.description}
+>
+  <section class="ds-wrap pb-24 pt-[88px] sm:pt-[120px]">
+    <p class="font-mono text-[0.75rem] text-ink-3">
+      <a href="/catalogs" class="hover:text-ink-2">catalogs</a> /{" "}
+      <a href={`/catalogs/${catalog.id}`} class="hover:text-ink-2">{catalog.label}</a> /{" "}
+      <a href={`/catalogs/${catalog.id}/${category.id}`} class="hover:text-ink-2">{category.label}</a>{" "}
+      / {entry.name}
+    </p>
+
+    <div class="mt-4 flex flex-wrap items-start justify-between gap-4">
+      <div>
+        <h1 class="text-[clamp(2.2rem,5.5vw,4rem)] leading-[1.05] font-bold tracking-[-0.04em] text-ink">
+          {entry.name}<span class="text-ink-3">.</span>
+        </h1>
+        {primary && (
+          <a
+            href={primary}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="mt-3 inline-block font-mono text-[0.8rem] text-ink-2 underline-offset-4 hover:text-sand hover:underline"
+          >
+            {primary} ↗
+          </a>
+        )}
+      </div>
+      <div class="flex flex-wrap gap-1.5">
+        {(catalog.filters ?? []).map((f) => (
+          <span class="ds-badge" key={f.key}>
+            {f.label}: {entry.fields[f.key] ?? entry.fields[f.key.toLowerCase()] ?? ""}
+          </span>
+        ))}
+      </div>
+    </div>
+
+    {entry.prose.length > 0 && (
+      <div class="mt-8 max-w-2xl space-y-4 text-[0.95rem] leading-[1.8] text-ink-2">
+        {entry.prose.map((p, i) => (
+          <p key={i}>{p}</p>
+        ))}
+      </div>
+    )}
+
+    {entry.pick && (
+      <div class="mt-8 max-w-2xl rounded-[var(--radius)] border border-b1 bg-s1 p-5">
+        <p class="font-mono text-[0.68rem] tracking-wide text-ink-3 uppercase">Pick this if</p>
+        <p class="mt-2 text-[0.95rem] leading-[1.7] text-ink">{entry.pick}</p>
+      </div>
+    )}
+
+    {entry.alternatives.length > 0 && (
+      <div class="mt-8 max-w-2xl">
+        <p class="mb-3 font-mono text-[0.68rem] tracking-wide text-ink-3 uppercase">
+          How it compares
+        </p>
+        <ul class="space-y-2">
+          {entry.alternatives.map((a) => (
+            <li class="rounded-[var(--radius)] border border-b2 bg-s1 px-4 py-3 text-[0.9rem] leading-relaxed text-ink-2">
+              <strong class="font-medium text-ink">{a.name}</strong> — {a.text}
+            </li>
+          ))}
+        </ul>
+      </div>
+    )}
+
+    {fieldEntries.length > 0 && (
+      <div class="mt-10 max-w-2xl overflow-hidden rounded-[var(--radius)] border border-b1">
+        <table class="w-full border-collapse text-left">
+          <tbody>
+            {fieldEntries.map(([k, v]) => (
+              <tr class="border-b border-b1 last:border-b-0" key={k}>
+                <th class="w-40 border-r border-b1 bg-s1 px-4 py-3 align-top font-mono text-[0.72rem] font-medium tracking-wide text-ink-3 uppercase">
+                  {k}
+                </th>
+                <td class="px-4 py-3 text-[0.9rem] leading-relaxed break-words text-ink-2">{v}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    )}
+
+    <div class="mt-10 flex flex-wrap gap-2">
+      <a href={`/catalogs/${catalog.id}/${category.id}`} class="ds-btn ds-btn-outline">
+        ← {category.label}
+      </a>
+      <a href="/" class="ds-btn ds-btn-outline">Directory →</a>
+    </div>
+  </section>
+</Layout>
