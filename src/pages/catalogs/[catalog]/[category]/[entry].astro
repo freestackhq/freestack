@@ -1,6 +1,6 @@
 ---
 import Layout from "../../../../layouts/Layout.astro";
-import { CATALOGS, slugify } from "../../../../lib/catalog";
+import { CATALOGS, entryField, slugify } from "../../../../lib/catalog";
 
 export function getStaticPaths() {
   return CATALOGS.flatMap((c) =>
@@ -50,7 +50,7 @@ const primary =
       <div class="flex flex-wrap gap-1.5">
         {(catalog.filters ?? []).map((f) => (
           <span class="ds-badge" key={f.key}>
-            {f.label}: {entry.fields[f.key] ?? entry.fields[f.key.toLowerCase()] ?? ""}
+            {f.label}: {entryField(entry, f.key)}
           </span>
         ))}
       </div>

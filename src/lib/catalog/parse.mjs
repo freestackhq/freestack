@@ -46,13 +46,13 @@ export function splitFrontmatter(md) {
 export function parseYaml(text) {
   const out = {};
   for (const line of text.split("\n")) {
-    const m = line.match(/^([A-Za-z0-9_-]+):\s*(.*)$/);
+    const m = line.match(/^"?([A-Za-z0-9_-]+)"?:\s*(.*)$/);
     if (m) out[m[1]] = m[2].trim().replace(/^["']|["']$/g, "");
   }
   return out;
 }
 
-/** Parse a markdown table into rows of cells. Returns [] on no table. */
+/** Parse a markdown table into rows of cells (data rows only; header + separator skipped). */
 export function parseTable(lines) {
   const rows = [];
   let inTable = false;
@@ -67,11 +67,10 @@ export function parseTable(lines) {
       .split("|")
       .map((c) => c.trim());
     if (cells.every((c) => /^:?-{2,}:?$/.test(c))) {
-      inTable = true; // separator row
+      inTable = true; // separator row — everything after it is data
       continue;
     }
     if (inTable) rows.push(cells);
-    else rows.push(cells);
   }
   return rows;
 }

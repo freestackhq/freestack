@@ -1,5 +1,5 @@
 ---
-import { CATALOGS, filterOptions } from "../lib/catalog";
+import { CATALOGS, entryField, filterOptions } from "../lib/catalog";
 
 /**
  * Generic multi-catalog directory. Renders every catalog's categories and
@@ -222,8 +222,7 @@ const hintCategory =
                         {...Object.fromEntries(
                           f.map((x) => [
                             `data-f-${x.key}`,
-                            (e.fields[x.key] ?? e.fields[x.key.toLowerCase()] ?? "")
-                              .toLowerCase(),
+                            entryField(e, x.key).toLowerCase(),
                           ]),
                         )}
                       >
@@ -243,7 +242,7 @@ const hintCategory =
                           <div class="mt-2 flex flex-wrap gap-1.5 sm:justify-end">
                             {f.map((x) => (
                               <span class="ds-badge" key={x.key}>
-                                {e.fields[x.key] ?? e.fields[x.key.toLowerCase()] ?? ""}
+                                {entryField(e, x.key)}
                               </span>
                             ))}
                           </div>

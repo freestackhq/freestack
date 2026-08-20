@@ -34,6 +34,13 @@ export function allEntries(): { catalog: Catalog; category: Category; entry: Ent
   );
 }
 
+/** Case-insensitive field lookup — snapshot field keys keep markdown table casing. */
+export function entryField(entry: Entry, key: string): string {
+  if (entry.fields[key] !== undefined) return entry.fields[key];
+  const found = Object.keys(entry.fields).find((k) => k.toLowerCase() === key.toLowerCase());
+  return found ? entry.fields[found] : "";
+}
+
 /** Distinct filter option values for a catalog filter, derived from its entries. */
 export function filterOptions(
   catalog: Catalog,
@@ -43,7 +50,7 @@ export function filterOptions(
   const values = new Set<string>();
   for (const cat of catalog.categories) {
     for (const e of cat.entries) {
-      const raw = e.fields[key] ?? e.fields[key.toLowerCase()];
+      const raw = entryField(e, key);
       if (!raw) continue;
       if (kind === "single") {
         values.add(raw.trim());
@@ -69,7 +76,7 @@ export type EntryQuery = {
 function matchesFilters(entry: Entry, filters: Record<string, string[]>): boolean {
   for (const [key, wanted] of Object.entries(filters)) {
     if (!wanted.length) continue;
-    const raw = (entry.fields[key] ?? entry.fields[key.toLowerCase()] ?? "").toLowerCase();
+    const raw = entryField(entry, key).toLowerCase();
     const tokens = raw.split(",").map((t) => t.trim());
     if (!wanted.some((w) => tokens.includes(w.toLowerCase()))) return false;
   }

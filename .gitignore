@@ -32,3 +32,9 @@ tmp/
 
 # scraped catalog repos (regenerate with pnpm catalog:fetch)
 .catalogs/
+
+# playwright
+test-results/
+playwright-report/
+blob-report/
+
