@@ -29,3 +29,6 @@ pnpm-debug.log*
 
 # local agent scratch
 tmp/
+
+# scraped catalog repos (regenerate with pnpm catalog:fetch)
+.catalogs/

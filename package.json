@@ -15,6 +15,11 @@
     "preview": "astro preview",
     "astro": "astro",
     "sync:awesome": "node scripts/sync-awesome.mjs",
+    "catalog:fetch": "node scripts/fetch-catalogs.mjs",
+    "catalog:generate": "node scripts/generate.mjs",
+    "catalog:update": "node scripts/fetch-catalogs.mjs && node scripts/generate.mjs",
+    "test": "vitest run",
+    "test:e2e": "playwright test",
     "dns:freestack": "bash scripts/dns-freestack.sh",
     "cli": "node packages/cli/bin/freestack.js"
   },
