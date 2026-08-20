@@ -104,6 +104,7 @@ export function parseCategoryFile(md, file) {
     id: slugify(file.replace(/\.md$/, "")),
     label: data.category || slugify(file.replace(/\.md$/, "")),
     description: data.description || "",
+    order: Number(data.order) || 0,
     file,
     matrix: [],
     entries: [],

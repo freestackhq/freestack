@@ -34,6 +34,7 @@ for (const c of catalogs) {
     const cat = parseCategoryFile(md, f);
     if (cat && cat.entries.length) categories.push(cat);
   }
+  categories.sort((a, b) => (a.order || 999) - (b.order || 999) || a.id.localeCompare(b.id));
 
   const entryCount = categories.reduce((n, c) => n + c.entries.length, 0);
   snapshot.catalogs.push({
