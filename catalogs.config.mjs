@@ -29,17 +29,45 @@ export const catalogs = [
     ],
   },
   {
-    id: "free-tools",
-    label: "Free tools",
+    id: "saas",
+    label: "SaaS",
     description:
-      "Free developer tools and student unlocks — hard limits, eligibility, commercial notes.",
+      "Free developer SaaS tools and student unlocks — hard limits, eligibility, commercial notes.",
     owner: "freestackhq",
-    repo: "free-tools",
+    repo: "saas",
     branch: "main",
     filters: [
       { key: "cost", label: "Cost", kind: "single" },
       { key: "student", label: "Eligibility", kind: "single" },
       { key: "commercial", label: "Commercial", kind: "single" },
+    ],
+  },
+  {
+    id: "apis",
+    label: "APIs",
+    description:
+      "Free APIs for weather, crypto, geo, news, finance, and reference data — with rate limits and auth details.",
+    owner: "freestackhq",
+    repo: "apis",
+    branch: "main",
+    filters: [
+      { key: "auth", label: "Auth", kind: "single" },
+      { key: "cors", label: "CORS", kind: "single" },
+      { key: "status", label: "Status", kind: "single" },
+    ],
+  },
+  {
+    id: "llm-ai",
+    label: "LLM & AI",
+    description:
+      "Free LLM inference, embeddings, local models, and AI developer tooling — models, limits, and compatibility.",
+    owner: "freestackhq",
+    repo: "llm-ai",
+    branch: "main",
+    filters: [
+      { key: "openai-compatible", label: "OpenAI-compatible", kind: "single" },
+      { key: "self-host", label: "Self-host", kind: "single" },
+      { key: "status", label: "Status", kind: "single" },
     ],
   },
 ];

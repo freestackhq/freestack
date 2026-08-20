@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-08-20T03:02:57.098Z",
+  "generatedAt": "2026-08-20T15:40:26.976Z",
   "catalogs": [
     {
       "id": "selfhosted",
@@ -6221,11 +6221,11 @@
       "_entryCount": 114
     },
     {
-      "id": "free-tools",
-      "label": "Free tools",
-      "description": "Free developer tools and student unlocks — hard limits, eligibility, commercial notes.",
+      "id": "saas",
+      "label": "SaaS",
+      "description": "Free developer SaaS tools and student unlocks — hard limits, eligibility, commercial notes.",
       "owner": "freestackhq",
-      "repo": "free-tools",
+      "repo": "saas",
       "branch": "main",
       "filters": [
         {

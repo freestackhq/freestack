@@ -14,7 +14,7 @@ import {
 describe("catalog data layer (snapshot)", () => {
   it("loads both catalogs from the generated snapshot", () => {
     expect(CATALOGS.length).toBe(2);
-    expect(CATALOGS.map((c) => c.id)).toEqual(["selfhosted", "free-tools"]);
+    expect(CATALOGS.map((c) => c.id)).toEqual(["selfhosted", "saas"]);
   });
 
   it("getCatalog resolves by id", () => {
@@ -31,8 +31,8 @@ describe("catalog data layer (snapshot)", () => {
     expect(db.entries.some((e) => e.slug === "postgresql")).toBe(true);
   });
 
-  it("free-tools catalog preserves original tool ids", () => {
-    const c = getCatalog("free-tools")!;
+  it("saas catalog preserves original tool ids", () => {
+    const c = getCatalog("saas")!;
     const total = c.categories.reduce((n, cat) => n + cat.entries.length, 0);
     expect(total).toBeGreaterThanOrEqual(150);
     const neon = c.categories.find((x) => x.id === "databases")?.entries.find((e) => e.slug === "neon");
@@ -45,20 +45,20 @@ describe("catalog data layer (snapshot)", () => {
   });
 
   it("entryId builds stable global ids", () => {
-    expect(entryId("free-tools", "databases", "neon")).toBe("free-tools/databases/neon");
+    expect(entryId("saas", "databases", "neon")).toBe("saas/databases/neon");
   });
 
   it("allEntries flattens with catalog+category context", () => {
     const rows = allEntries();
     expect(rows.length).toBeGreaterThanOrEqual(300);
-    const neon = rows.find((r) => r.entry.slug === "neon" && r.catalog.id === "free-tools");
+    const neon = rows.find((r) => r.entry.slug === "neon" && r.catalog.id === "saas");
     expect(neon?.category.id).toBe("databases");
   });
 });
 
 describe("filterOptions", () => {
   it("derives distinct single-select values", () => {
-    const c = getCatalog("free-tools")!;
+    const c = getCatalog("saas")!;
     const costs = filterOptions(c, "cost", "single");
     expect(costs).toEqual(["credits", "discount", "free forever", "student free"]);
   });
@@ -94,7 +94,7 @@ describe("queryEntries", () => {
 
   it("filters on field values (single-select)", () => {
     const r = queryEntries({
-      catalog: "free-tools",
+      catalog: "saas",
       filters: { cost: ["free forever"], commercial: ["commercial ok"] },
     });
     expect(r.count).toBeGreaterThan(0);
@@ -110,13 +110,13 @@ describe("queryEntries", () => {
   });
 
   it("applies a limit", () => {
-    const r = queryEntries({ catalog: "free-tools", limit: 3 });
+    const r = queryEntries({ catalog: "saas", limit: 3 });
     expect(r.entries).toHaveLength(3);
     expect(r.count).toBeGreaterThan(3);
   });
 
   it("combines query + filters", () => {
-    const r = queryEntries({ catalog: "free-tools", q: "neon", filters: { cost: ["free forever"] } });
+    const r = queryEntries({ catalog: "saas", q: "neon", filters: { cost: ["free forever"] } });
     expect(r.entries.some((e) => e.name === "Neon")).toBe(true);
   });
 
@@ -129,7 +129,7 @@ describe("queryEntries", () => {
 
 describe("queryCategories", () => {
   it("returns categories with entry counts", () => {
-    const cats = queryCategories("free-tools");
+    const cats = queryCategories("saas");
     expect(cats.length).toBe(17);
     expect(cats[0].label).toBe("Databases");
     expect(cats[0].entryCount).toBeGreaterThan(0);

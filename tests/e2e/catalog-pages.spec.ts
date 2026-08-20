@@ -4,7 +4,7 @@ test("catalogs index lists both catalogs with entry counts", async ({ page }) =>
   await page.goto("/catalogs");
   await test.expect(page.getByRole("heading", { name: "catalogs." })).toBeVisible();
   await test.expect(page.getByRole("heading", { name: "Self-hosted" })).toBeVisible();
-  await test.expect(page.getByRole("heading", { name: "Free tools" })).toBeVisible();
+  await test.expect(page.getByRole("heading", { name: "SaaS" })).toBeVisible();
   await test.expect(page.locator("text=/entries/").first()).toBeVisible();
 });
 
@@ -36,15 +36,15 @@ test("entry page renders fields, pick, and alternatives", async ({ page }) => {
   await test.expect(page.getByText("MariaDB", { exact: false }).first()).toBeVisible();
 });
 
-test("free-tools category renders from converted markdown", async ({ page }) => {
-  await page.goto("/catalogs/free-tools/databases");
+test("saas category renders from converted markdown", async ({ page }) => {
+  await page.goto("/catalogs/saas/databases");
   await test.expect(page.getByRole("heading", { name: /Databases\./ })).toBeVisible();
-  await test.expect(page.locator('a[href="/catalogs/free-tools/databases/neon"]').first()).toBeVisible();
-  await test.expect(page.locator('a[href="/catalogs/free-tools/databases/turso"]').first()).toBeVisible();
+  await test.expect(page.locator('a[href="/catalogs/saas/databases/neon"]').first()).toBeVisible();
+  await test.expect(page.locator('a[href="/catalogs/saas/databases/turso"]').first()).toBeVisible();
 });
 
-test("free-tools entry page shows limits field", async ({ page }) => {
-  await page.goto("/catalogs/free-tools/databases/neon");
+test("saas entry page shows limits field", async ({ page }) => {
+  await page.goto("/catalogs/saas/databases/neon");
   await test.expect(page.getByRole("heading", { name: /Neon\./ })).toBeVisible();
   await test.expect(page.locator("th", { hasText: "Limits" })).toBeVisible();
   await test.expect(page.getByText(/5 GB|read/i).first()).toBeVisible();

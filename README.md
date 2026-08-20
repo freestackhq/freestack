@@ -7,14 +7,13 @@ Not a landing page full of vibes. Numbers first.
 
 ## What this is
 
-This is a **template + generator**, not a hand-maintained site. The site scrapes
-Markdown catalog repos under [`github.com/freestackhq`](https://github.com/freestackhq),
-parses them into JSON, and auto-generates every page and API endpoint. Add a
-repo to `catalogs.config.mjs`, regenerate, done.
+This repository (`freestackhq/freestack`) is the **template + generator engine** for all catalog data repositories across [`github.com/freestackhq`](https://github.com/freestackhq). The generator ingests independent Markdown catalog repositories, parses them into JSON, and auto-generates the directory pages and API endpoints.
+
+Add any catalog repo to `catalogs.config.mjs`, regenerate, done.
 
 | Catalog repo | Contents | Format |
 | --- | --- | --- |
-| [`freestackhq/free-tools`](https://github.com/freestackhq/free-tools) | Free dev tools + student unlocks | Markdown, one file per category |
+| [`freestackhq/saas`](https://github.com/freestackhq/saas) | Free SaaS/cloud tools + student unlocks | Markdown, one file per category |
 | [`freestackhq/selfhosted`](https://github.com/freestackhq/selfhosted) | Self-hosted software comparison | Markdown, one file per category |
 
 ### Catalog pipeline
@@ -36,7 +35,7 @@ The markdown format is shared across catalogs (see the schema in each repo):
 
 ### Adding a catalog
 
-1. Create the repo under `freestackhq` in that markdown format (see `free-tools`
+1. Create the repo under `freestackhq` in that markdown format (see `saas`
    or `selfhosted` as the template).
 2. Add an entry to `catalogs.config.mjs` (`id`, `label`, `owner`, `repo`, `branch`, `filters`).
 3. `pnpm catalog:update` and rebuild.
@@ -85,7 +84,7 @@ First-time setup / domain (`freestack.kuyacarlo.dev`):
 
 **Edit the catalog repo, not this site.** Each catalog owns its entries.
 
-- **Free tools:** open a PR against [`freestackhq/free-tools`](https://github.com/freestackhq/free-tools) — add a `## <Tool>` section with `URL`, `Cost`, `Student`, `Commercial`, `Limits` fields. CI validates the schema.
+- **SaaS / Dev Tools:** open a PR against [`freestackhq/saas`](https://github.com/freestackhq/saas) — add a `## <Tool>` section with `URL`, `Cost`, `Student`, `Commercial`, `Limits` fields. CI validates the schema.
 - **Self-hosted:** open a PR against [`freestackhq/selfhosted`](https://github.com/freestackhq/selfhosted) with the standard field table.
 
 Then `pnpm catalog:update` here and rebuild. `scripts/convert-tools.mjs` is
@@ -110,7 +109,7 @@ Public JSON (CORS open). Base: `https://freestack.kuyacarlo.dev`
 Entries API example — field filters map to markdown table columns:
 
 ```bash
-curl -s 'https://freestack.kuyacarlo.dev/api/entries?catalog=free-tools&cost=free%20forever&commercial=commercial%20ok&q=neon'
+curl -s 'https://freestack.kuyacarlo.dev/api/entries?catalog=saas&cost=free%20forever&commercial=commercial%20ok&q=neon'
 curl -s 'https://freestack.kuyacarlo.dev/api/catalogs'
 ```
 
@@ -143,7 +142,7 @@ Marp workshop decks live in [`talks/`](talks/) (SaaS free-tier stack + student p
 
 The legacy free-tools markdown mirror lives at
 [`kuyacarlo/awesome-freestack`](https://github.com/kuyacarlo/awesome-freestack)
-(awesome.re style, CC0). It's superseded by `freestackhq/free-tools`; the
+(awesome.re style, CC0). It's superseded by `freestackhq/saas`; the
 `pnpm sync:awesome` script is retained for the old mirror. The new source of
 truth for the directory UI is the generated snapshot in
 `src/data/catalog.generated.json`.

@@ -1,5 +1,5 @@
 {
-  "name": "freestack",
+  "name": "@freestackhq/site",
   "type": "module",
   "version": "0.0.1",
   "private": true,
@@ -14,7 +14,6 @@
     "deploy:cf": "astro build && wrangler deploy",
     "preview": "astro preview",
     "astro": "astro",
-    "sync:awesome": "node scripts/sync-awesome.mjs",
     "catalog:fetch": "node scripts/fetch-catalogs.mjs",
     "catalog:generate": "node scripts/generate.mjs",
     "catalog:update": "node scripts/fetch-catalogs.mjs && node scripts/generate.mjs",
