@@ -115,15 +115,15 @@ const stacks = [
       flush to the window; inset text inside each lane to match .ds-wrap.
     */}
     <div
-      class="stack-lanes -mx-[clamp(1.25rem,4vw,4.5rem)] flex snap-x snap-mandatory gap-4 overflow-x-auto overscroll-x-contain pb-3 [scrollbar-color:var(--color-b1)_transparent] [scrollbar-width:thin] sm:gap-5 lg:mx-0 lg:grid lg:grid-cols-2 lg:gap-10 lg:overflow-visible lg:pb-0 lg:snap-none"
+      class="stack-lanes -mx-[clamp(1.25rem,4vw,4.5rem)] flex snap-x snap-mandatory gap-4 overflow-x-auto overscroll-x-contain pb-3 [scrollbar-color:var(--color-b1)_transparent] [scrollbar-width:thin] sm:gap-5"
     >
       {
         stacks.map((s) => (
           <section
             id={`stack-${s.id}`}
-            class="stack-lane w-[min(88vw,22rem)] shrink-0 snap-start scroll-mt-[calc(var(--nav-h)+1rem)] sm:w-[min(46vw,22rem)] lg:w-auto lg:min-w-0"
+            class="stack-lane w-[min(88vw,22rem)] shrink-0 snap-start scroll-mt-[calc(var(--nav-h)+1rem)] sm:w-[min(46vw,22rem)]"
           >
-            <div class="px-[clamp(1.25rem,4vw,4.5rem)] lg:px-0">
+            <div class="px-[clamp(1.25rem,4vw,4.5rem)]">
               <div class="mb-4 flex items-baseline gap-3">
                 <span class="font-mono text-[0.72rem] text-ink-2">{s.num}</span>
                 <h2 class="text-lg font-semibold tracking-tight text-ink sm:text-xl">
