@@ -15,20 +15,6 @@
 
 export const catalogs = [
   {
-    id: "selfhosted",
-    label: "Self-hosted",
-    description:
-      "Self-hosted software — deployment, resource, auth, and alternatives compared.",
-    owner: "freestackhq",
-    repo: "selfhosted",
-    branch: "main",
-    filters: [
-      { key: "deploy", label: "Deploy", kind: "multiselect" },
-      { key: "license", label: "License", kind: "multiselect" },
-      { key: "maintained", label: "Maintained", kind: "single" },
-    ],
-  },
-  {
     id: "saas",
     label: "SaaS",
     description:

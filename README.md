@@ -1,125 +1,71 @@
-# freestack.
+# freestack
 
-Directory of **free developer tools, student unlocks, and self-hosted software**
-— with limits, eligibility, and commercial notes.
+Directory of free developer tools, student unlocks, free public APIs, and AI models — with hard limits, eligibility, and commercial permissions. Numbers first.
 
-Not a landing page full of vibes. Numbers first.
+* **Live**: [freestack.kuyacarlo.dev](https://freestack.kuyacarlo.dev)
+* **Coverage**: 222 entries across 28 categories in 3 catalogs
+* **GEO & AI**: [`/llms.txt`](https://freestack.kuyacarlo.dev/llms.txt) · [`/llms-full.txt`](https://freestack.kuyacarlo.dev/llms-full.txt)
+* **Stack**: Astro, Tailwind CSS v4, Cloudflare Workers runtime
 
-## What this is
+---
 
-This repository (`freestackhq/freestack`) is the **template + generator engine** for all catalog data repositories across [`github.com/freestackhq`](https://github.com/freestackhq). The generator ingests independent Markdown catalog repositories, parses them into JSON, and auto-generates the directory pages and API endpoints.
-
-Add any catalog repo to `catalogs.config.mjs`, regenerate, done.
-
-| Catalog repo | Contents | Format |
-| --- | --- | --- |
-| [`freestackhq/saas`](https://github.com/freestackhq/saas) | Free SaaS/cloud tools + student unlocks | Markdown, one file per category |
-| [`freestackhq/selfhosted`](https://github.com/freestackhq/selfhosted) | Self-hosted software comparison | Markdown, one file per category |
-
-### Catalog pipeline
-
-```bash
-pnpm catalog:fetch      # git-clone catalog repos into .catalogs/ (gitignored)
-pnpm catalog:generate   # parse markdown → src/data/catalog.generated.json (committed)
-pnpm catalog:update     # fetch + generate
-```
-
-`src/data/catalog.generated.json` is **committed**, so `astro build` and tests
-work offline. Regenerate it whenever a catalog repo changes.
-
-The markdown format is shared across catalogs (see the schema in each repo):
-
-- YAML frontmatter: `category`, `description`, `order`
-- `## Comparison Matrix` table: quick-scan row per entry
-- `## <Entry>` sections: `| Field | Value |` table, prose, `**Pick this if**`, `**vs X**`
-
-### Adding a catalog
-
-1. Create the repo under `freestackhq` in that markdown format (see `saas`
-   or `selfhosted` as the template).
-2. Add an entry to `catalogs.config.mjs` (`id`, `label`, `owner`, `repo`, `branch`, `filters`).
-3. `pnpm catalog:update` and rebuild.
-
-## Stack
-
-- [Astro](https://astro.build) + [Tailwind CSS v4](https://tailwindcss.com)
-- Deployed to [Cloudflare Workers](https://workers.cloudflare.com) via `@astrojs/cloudflare` (Astro 6+ removed Pages support)
-- Design system (in-repo): [`src/design-system/`](src/design-system/) — see its README
-- Data: generated snapshot [`src/data/catalog.generated.json`](src/data/catalog.generated.json)
-
-## Develop
+## Quickstart
 
 ```bash
 pnpm install
-pnpm dev            # workerd runtime locally
+pnpm dev              # local workerd runtime
+pnpm test             # run unit test suite (Vitest)
+pnpm build            # build static assets + server bundle
+pnpm deploy:cf        # build and deploy to Cloudflare Workers
 ```
+
+---
+
+## Catalogs & Content
+
+Catalogs live directly in-repo under [`catalogs/`](catalogs/).
+
+| Catalog | Source | Scope | Entries |
+|---|---|---|---|
+| **SaaS** | [`catalogs/saas/`](catalogs/saas/) | Free developer SaaS tiers & student unlocks | 187 across 17 categories |
+| **APIs** | [`catalogs/apis/`](catalogs/apis/) | Free public APIs with auth & rate limits | 18 across 6 categories |
+| **LLM & AI** | [`catalogs/llm-ai/`](catalogs/llm-ai/) | Free inference, embeddings, local models | 17 across 5 categories |
+
+### Adding or Updating Entries
+
+1. Edit the category file in [`catalogs/<catalog>/`](catalogs/) or copy [`catalogs/_template.md`](catalogs/_template.md) for new categories.
+2. Ensure standard structure: YAML frontmatter, comparison table, entry fields (`URL`, `Cost`, `Limits`, `Commercial`), and `Pick this if` criteria.
+3. Run `pnpm catalog:update` to regenerate the committed snapshot.
+
+---
+
+## API & AI Endpoints
+
+Base URL: `https://freestack.kuyacarlo.dev` (CORS open).
+
+| Endpoint | Method | Purpose |
+|---|---|---|
+| `/llms.txt` | `GET` | Standard LLM navigation and catalog manifest |
+| `/llms-full.txt` | `GET` | Full plain-text digest of all 222 tools for AI ingestion |
+| `/api/health` | `GET` | Service status, version, and catalog counts |
+| `/api/catalogs` | `GET` | Catalog metadata, categories, and entry counts |
+| `/api/entries` | `GET, POST` | Filter and search entries (`catalog`, `category`, `q`, fields, `limit`) |
+| `/api/openapi.json` | `GET` | OpenAPI 3.1.0 specification |
+| [`/docs`](https://freestack.kuyacarlo.dev/docs) | `GET` | Interactive Scalar API documentation |
+
+---
+
+## Architecture & Data Pipeline
+
+Data is compiled from Markdown into a committed snapshot ([`src/data/catalog.generated.json`](src/data/catalog.generated.json)) so builds and test suites run offline without runtime network dependencies.
 
 ```bash
-pnpm build          # static + worker bundle to dist/
-pnpm preview        # local workerd preview of the build
+pnpm catalog:generate   # parse local catalogs/ into src/data/catalog.generated.json
+pnpm catalog:update     # refresh and generate in one step
 ```
 
-## Test
+---
 
-```bash
-pnpm test           # Vitest unit tests (parser + data layer)
-pnpm test:e2e       # Playwright end-to-end (builds, previews, drives chromium)
-```
-
-E2e needs a one-time `pnpm exec playwright install chromium`.
-
-## Deploy
-
-```bash
-pnpm deploy:cf      # pnpm build && wrangler deploy
-```
-
-First-time setup / domain (`freestack.kuyacarlo.dev`):
-
-1. `pnpm exec wrangler login`
-2. Dashboard → Workers & Pages → freestack → Settings → **Domains & Routes** → Add custom domain (the `kuyacarlo.dev` zone lives outside the wrangler OAuth account, so it can't auto-provision)
-3. `pnpm dns:freestack` to check resolution
-
-## Add a tool
-
-**Edit the catalog repo, not this site.** Each catalog owns its entries.
-
-- **SaaS / Dev Tools:** open a PR against [`freestackhq/saas`](https://github.com/freestackhq/saas) — add a `## <Tool>` section with `URL`, `Cost`, `Student`, `Commercial`, `Limits` fields. CI validates the schema.
-- **Self-hosted:** open a PR against [`freestackhq/selfhosted`](https://github.com/freestackhq/selfhosted) with the standard field table.
-
-Then `pnpm catalog:update` here and rebuild. `scripts/convert-tools.mjs` is
-retained as the one-way migrator from the legacy `src/data/tools.ts`; the
-source of truth now lives in the catalog repos.
-
-## API
-
-Public JSON (CORS open). Base: `https://freestack.kuyacarlo.dev`
-
-| Endpoint | Purpose |
-| --- | --- |
-| `GET /api/health` | Service ping + endpoint list |
-| `GET\|POST /api/claim` | Ordered claim/setup plan from profile flags |
-| `GET /api/catalogs` | List catalogs (labels, categories, entry counts) |
-| `GET\|POST /api/entries` | Filter/search entries across catalogs (`catalog`, `category`, `q`, field filters, `limit`) |
-| `GET /api/tools` | Legacy free-tools search (kept for the CLI; `category`, `cost`, `commercial`, `student`, `q`, `limit`) |
-| `GET /api/tools/:id` | Single legacy free-tool |
-| `GET /api/openapi.json` | OpenAPI 3.1 spec |
-| [`/docs`](https://freestack.kuyacarlo.dev/docs) | Interactive docs (Scalar) |
-
-Entries API example — field filters map to markdown table columns:
-
-```bash
-curl -s 'https://freestack.kuyacarlo.dev/api/entries?catalog=saas&cost=free%20forever&commercial=commercial%20ok&q=neon'
-curl -s 'https://freestack.kuyacarlo.dev/api/catalogs'
-```
-
-Claim query/body flags: `student`, `commercial`, `ph`, `ai` (`1`/`true`/`yes`; AI defaults on).
-
-```bash
-curl -s 'https://freestack.kuyacarlo.dev/api/claim?student=1&commercial=1' | jq .stackHint
-```
-
-Alternate claim directories (community scholarships, CSR learning, campus clubs): [`/guides/claim-order#alt-paths`](https://freestack.kuyacarlo.dev/guides/claim-order#alt-paths).
 ## CLI
 
 Package: [`packages/cli`](packages/cli) → `@kuyacarlo/freestack`
@@ -128,37 +74,16 @@ Package: [`packages/cli`](packages/cli) → `@kuyacarlo/freestack`
 pnpm dlx @kuyacarlo/freestack claim --student --commercial
 pnpm dlx @kuyacarlo/freestack tools --category ai --commercial yes
 pnpm dlx @kuyacarlo/freestack tool neon
-# from this repo:
-pnpm cli claim --commercial
 ```
 
-Override API base with `FREESTACK_API` (default production site). Prefer **pnpm** (`pnpm dlx` / `pnpm cli`) over npm/npx.
+---
 
-## Talks
+## Talks & Materials
 
-Marp workshop decks live in [`talks/`](talks/) (SaaS free-tier stack + student programs matrix).
+Marp workshop slide decks live in [`talks/`](talks/).
 
-## Sibling list
-
-The legacy free-tools markdown mirror lives at
-[`kuyacarlo/awesome-freestack`](https://github.com/kuyacarlo/awesome-freestack)
-(awesome.re style, CC0). It's superseded by `freestackhq/saas`; the
-`pnpm sync:awesome` script is retained for the old mirror. The new source of
-truth for the directory UI is the generated snapshot in
-`src/data/catalog.generated.json`.
-
-Live site: [freestack.kuyacarlo.dev](https://freestack.kuyacarlo.dev)
-
-## Workflow
-
-PRs against `master` for catalog/UI changes. Don't push straight to `master` for feature work.
-
-## Notes
-
-- Offers rotate. Re-check vendor pages before you bet a launch on $0.
-- Edu licenses are usually non-commercial.
-- Not affiliated with any vendor.
+---
 
 ## License
 
-Site and CLI code: [MIT](LICENSE). Catalog content is public reference; the markdown mirror [`awesome-freestack`](https://github.com/kuyacarlo/awesome-freestack) is CC0.
+MIT License. Catalog content is public reference data.
