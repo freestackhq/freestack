@@ -12,9 +12,9 @@ import {
 } from "./catalog";
 
 describe("catalog data layer (snapshot)", () => {
-  it("loads both catalogs from the generated snapshot", () => {
-    expect(CATALOGS.length).toBe(2);
-    expect(CATALOGS.map((c) => c.id)).toEqual(["selfhosted", "saas"]);
+  it("loads catalogs from the generated snapshot", () => {
+    expect(CATALOGS.length).toBe(4);
+    expect(CATALOGS.map((c) => c.id)).toEqual(["selfhosted", "saas", "apis", "llm-ai"]);
   });
 
   it("getCatalog resolves by id", () => {

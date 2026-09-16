@@ -18,14 +18,17 @@ const snapshot = { generatedAt: new Date().toISOString(), catalogs: [] };
 let skipped = 0;
 
 for (const c of catalogs) {
-  const repoDir = join(store, `${c.owner}-${c.repo}`);
+  let repoDir = join(root, "catalogs", c.id);
   if (!existsSync(repoDir)) {
-    console.warn(`skip ${c.id}: not fetched (run pnpm catalog:fetch)`);
+    repoDir = join(store, `${c.owner}-${c.repo}`);
+  }
+  if (!existsSync(repoDir)) {
+    console.warn(`skip ${c.id}: not found in catalogs/${c.id} or .catalogs/ (run pnpm catalog:fetch)`);
     skipped++;
     continue;
   }
   const files = readdirSync(repoDir)
-    .filter((f) => f.endsWith(".md") && !/^README|^CONTRIBUTING|^ROADMAP/i.test(f))
+    .filter((f) => f.endsWith(".md") && !f.startsWith("_") && !/^README|^CONTRIBUTING|^ROADMAP/i.test(f))
     .sort();
 
   const categories = [];

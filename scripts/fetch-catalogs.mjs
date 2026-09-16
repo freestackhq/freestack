@@ -12,6 +12,11 @@ const store = join(root, ".catalogs");
 mkdirSync(store, { recursive: true });
 
 for (const c of catalogs) {
+  const localDir = join(root, "catalogs", c.id);
+  if (existsSync(localDir)) {
+    console.log(`using local in-repo catalog for ${c.id} (catalogs/${c.id})`);
+    continue;
+  }
   const dest = join(store, `${c.owner}-${c.repo}`);
   const url = `https://github.com/${c.owner}/${c.repo}.git`;
   const branch = c.branch ?? "main";
