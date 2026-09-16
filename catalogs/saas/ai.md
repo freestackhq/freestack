@@ -41,7 +41,7 @@ order: 10
 | [Voyage AI](#voyage-ai) | credits | anyone | commercial ok | Free tokens on signup · then PAYG |
 | [Together Embeddings](#together-embeddings) | credits | anyone | commercial ok | PAYG · promo credits sometimes |
 | [Vercel AI SDK](#vercel-ai-sdk) | free forever | anyone | commercial ok | OSS SDK free · inference cost = your provider |
-| [Continue.dev](#continue-dev) | free forever | anyone | commercial ok | OSS · your model backend |
+| [Continue.dev](#continuedev) | free forever | anyone | commercial ok | OSS · your model backend |
 | [Tavily](#tavily) | free forever | anyone | commercial ok | ~1k API credits/mo free class |
 | [Exa](#exa) | free forever | anyone | commercial ok | Free signup credits · then PAYG |
 | [LlamaIndex](#llamaindex) | free forever | anyone | commercial ok | OSS framework free · you pay model/vector backends |

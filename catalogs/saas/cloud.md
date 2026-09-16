@@ -70,7 +70,7 @@ Stacks on top of free M0 forever tier.
 
 **Pick this if** your app speaks MongoDB (Mongoose, Motor, or the native driver) and you want a managed cluster with backups, search indexes, and Charts without paying until $50 runs out. The free University cert is a résumé line that actually signals competence.
 
-**vs Supabase/PlanetScale free tiers:** Those are relational (Postgres/MySQL). Atlas wins if your data is document-shaped (nested JSON, variable schemas). If you need joins and strict types, use a relational free tier instead.
+**vs Supabase/Neon free tiers:** Those are relational (Postgres). Atlas wins if your data is document-shaped (nested JSON, variable schemas). If you need joins and strict types, use a relational free tier instead.
 
 
 ---

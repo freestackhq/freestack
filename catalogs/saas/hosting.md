@@ -10,7 +10,7 @@ order: 2
 
 | Service | Cost | Student | Commercial | Limits |
 |---------|------|---------|------------|--------|
-| [Cloudflare Workers & Pages](#cloudflare-workers-and-pages) | free forever | anyone | commercial ok | 100k requests/day · static unlimited |
+| [Cloudflare Workers & Pages](#cloudflare-workers--pages) | free forever | anyone | commercial ok | 100k requests/day · static unlimited |
 | [Koyeb](#koyeb) | free forever | anyone | commercial ok | 1 web service · 512 MB · 0.1 vCPU |
 | [Vercel Hobby](#vercel-hobby) | free forever | anyone | hobby only | 100 GB bandwidth/mo · non-commercial |
 | [Railway](#railway) | credits | anyone | commercial ok | ~$5 credit/mo then $5 base + usage |

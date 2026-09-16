@@ -15,9 +15,9 @@ order: 17
 | [LiveKit Cloud](#livekit-cloud) | free forever | anyone | commercial ok | Free A/V minutes |
 | [Tinybird](#tinybird) | free forever | anyone | commercial ok | Free starter tier |
 | [Svix](#svix) | free forever | anyone | commercial ok | ~50k messages/mo |
-| [Dub.co](#dub-co) | free forever | anyone | commercial ok | Free plan |
+| [Dub.co](#dubco) | free forever | anyone | commercial ok | Free plan |
 | [Hugging Face Spaces](#hugging-face-spaces) | free forever | anyone | commercial ok | Free CPU · limited inference |
-| [Cron-job.org](#cron-job-org) | free forever | anyone | commercial ok | Free external cron jobs |
+| [Cron-job.org](#cron-joborg) | free forever | anyone | commercial ok | Free external cron jobs |
 | [Zyte Scrapy Cloud (Pack)](#zyte-scrapy-cloud-pack) | student free | student required | commercial ok | 1 unit forever · 120d retention |
 
 ---

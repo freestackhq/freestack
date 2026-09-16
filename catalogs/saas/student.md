@@ -24,7 +24,7 @@ order: 12
 | [1Password (Pack)](#1password-pack) | student free | student required | commercial ok | 1 year free via Pack · export before expiry |
 | [Datadog (Pack)](#datadog-pack) | student free | student required | check ToS | Pro · ~10 hosts · ~2 years via Pack (offer rotates) |
 | [Overleaf](#overleaf) | free forever | student helps | check ToS | Free · limited collaborators · campus Pro common |
-| [Name.com (Pack)](#name-com-pack) | student free | student required | commercial ok | 1 yr free on eligible TLDs · SSL add-ons vary |
+| [Name.com (Pack)](#namecom-pack) | student free | student required | commercial ok | 1 yr free on eligible TLDs · SSL add-ons vary |
 | [GitHub Pro (Education)](#github-pro-education) | student free | student required | check ToS | While education status active · re-verify |
 | [Azure for Students Starter](#azure-for-students-starter) | student free | student required | check ToS | No credit card · service caps · separate from $100 Azure Students |
 | [Working Copy (Pack)](#working-copy-pack) | student free | student required | commercial ok | Pro while Pack active |

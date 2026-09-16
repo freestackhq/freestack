@@ -14,6 +14,7 @@ description: Cloud LLM inference providers with free tiers for chat, completion,
 | [Cerebras](#cerebras) | api-key | free tier tokens | Llama 3.3 70B | ✓ | active |
 | [Google AI Studio](#google-ai-studio) | api-key | 1500 req/day (Flash) | Gemini 3 Flash, Gemma 3 | ✓ | active |
 | [Mistral](#mistral) | api-key | free tier available | Mistral Nemo | ✓ | active |
+| [DeepSeek](#deepseek) | api-key | low cost PAYG / promo credits | DeepSeek-V3, DeepSeek-R1 | ✓ | active |
 | [Cloudflare Workers AI](#cloudflare-workers-ai) | api-key | 10k neurons/day | Llama, Mistral, Phi models | ✓ | active |
 
 ---
@@ -147,3 +148,26 @@ Run inference at the edge alongside your Cloudflare Workers. No cold starts for 
 **Pick this if** your app is already on Cloudflare Workers and you want AI inference with zero extra infra.
 
 **vs Groq** — Slower inference but integrated into Cloudflare edge; no separate billing. Groq is faster but requires separate API management.
+
+---
+
+## DeepSeek
+
+| Field | Value |
+|-------|-------|
+| API Base | https://api.deepseek.com/v1 |
+| Docs | https://platform.deepseek.com/api-docs |
+| Auth | api-key |
+| Free Tier | low cost PAYG / occasional signup promo credits |
+| Models | deepseek-chat (V3), deepseek-reasoner (R1) |
+| OpenAI-compatible | ✓ |
+| Streaming | ✓ |
+| Self-host | ✓ (open weights on HuggingFace / Ollama) |
+| Status | active |
+
+Direct API from DeepSeek offering industry-leading price-to-performance on open-weight foundation models. Full OpenAI-compatible chat completions endpoint supporting standard system prompts, structured tool use, and streaming. Open weights allow identical execution locally or on third-party hosters.
+
+**Pick this if** you want state-of-the-art reasoning (R1) or general-purpose chat (V3) at near-zero per-token API cost or wish to prototype against open-weight frontier models.
+
+**vs Groq** — DeepSeek API provides native first-party checkpoints directly; Groq offers faster LPU inference on hosted open weights with daily free ceilings.
+

@@ -10,7 +10,7 @@ order: 16
 
 | Service | Cost | Student | Commercial | Limits |
 |---------|------|---------|------------|--------|
-| [uplb.tools](#uplb-tools) | free forever | student helps | commercial ok | Free web tools · not an official UP site |
+| [uplb.tools](#uplbtools) | free forever | student helps | commercial ok | Free web tools · not an official UP site |
 | [Room TBA](#room-tba) | free forever | student helps | commercial ok | Free · open source |
 | [Elbi GradeSim](#elbi-gradesim) | free forever | student helps | commercial ok | Browser extension · free |
 | [Awesome PH EdTech](#awesome-ph-edtech) | free forever | anyone | commercial ok | Markdown list · CC0 |

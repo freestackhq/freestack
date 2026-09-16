@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-16T15:44:12.886Z",
+  "generatedAt": "2026-09-16T17:28:30.795Z",
   "catalogs": [
     {
       "id": "saas",
@@ -6090,8 +6090,8 @@
               "pick": "your app speaks MongoDB (Mongoose, Motor, or the native driver) and you want a managed cluster with backups, search indexes, and Charts without paying until $50 runs out. The free University cert is a résumé line that actually signals competence.",
               "alternatives": [
                 {
-                  "name": "Supabase/PlanetScale free tiers:",
-                  "text": "Those are relational (Postgres/MySQL). Atlas wins if your data is document-shaped (nested JSON, variable schemas). If you need joins and strict types, use a relational free tier instead."
+                  "name": "Supabase/Neon free tiers:",
+                  "text": "Those are relational (Postgres). Atlas wins if your data is document-shaped (nested JSON, variable schemas). If you need joins and strict types, use a relational free tier instead."
                 }
               ],
               "matrixCells": {
@@ -8145,6 +8145,16 @@
               }
             },
             {
+              "service": "DeepSeek",
+              "cells": {
+                "auth": "api-key",
+                "free tier": "low cost PAYG / promo credits",
+                "models": "DeepSeek-V3, DeepSeek-R1",
+                "openai-compatible": "✓",
+                "status": "active"
+              }
+            },
+            {
               "service": "Cloudflare Workers AI",
               "cells": {
                 "auth": "api-key",
@@ -8347,6 +8357,38 @@
                 "status": "active"
               },
               "slug": "cloudflare-workers-ai"
+            },
+            {
+              "name": "DeepSeek",
+              "fields": {
+                "API Base": "https://api.deepseek.com/v1",
+                "Docs": "https://platform.deepseek.com/api-docs",
+                "Auth": "api-key",
+                "Free Tier": "low cost PAYG / occasional signup promo credits",
+                "Models": "deepseek-chat (V3), deepseek-reasoner (R1)",
+                "OpenAI-compatible": "✓",
+                "Streaming": "✓",
+                "Self-host": "✓ (open weights on HuggingFace / Ollama)",
+                "Status": "active"
+              },
+              "prose": [
+                "Direct API from DeepSeek offering industry-leading price-to-performance on open-weight foundation models. Full OpenAI-compatible chat completions endpoint supporting standard system prompts, structured tool use, and streaming. Open weights allow identical execution locally or on third-party hosters."
+              ],
+              "pick": "you want state-of-the-art reasoning (R1) or general-purpose chat (V3) at near-zero per-token API cost or wish to prototype against open-weight frontier models.",
+              "alternatives": [
+                {
+                  "name": "Groq",
+                  "text": "DeepSeek API provides native first-party checkpoints directly; Groq offers faster LPU inference on hosted open weights with daily free ceilings."
+                }
+              ],
+              "matrixCells": {
+                "auth": "api-key",
+                "free tier": "low cost PAYG / promo credits",
+                "models": "DeepSeek-V3, DeepSeek-R1",
+                "openai-compatible": "✓",
+                "status": "active"
+              },
+              "slug": "deepseek"
             }
           ]
         },
@@ -8720,7 +8762,7 @@
           ]
         }
       ],
-      "_entryCount": 17
+      "_entryCount": 18
     }
   ]
 }

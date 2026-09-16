@@ -20,7 +20,7 @@ order: 8
 | [TruffleHog](#trufflehog) | free forever | anyone | commercial ok | OSS free · enterprise cloud paid |
 | [Tailscale](#tailscale) | free forever | anyone | commercial ok | Personal free · 3 users / 100 devices class Free plan |
 | [CrowdSec](#crowdsec) | free forever | anyone | commercial ok | OSS agent free · Console free tier then paid |
-| [Let's Encrypt](#let-s-encrypt) | free forever | anyone | commercial ok | Rate limits per domain · 90-day certs |
+| [Let's Encrypt](#lets-encrypt) | free forever | anyone | commercial ok | Rate limits per domain · 90-day certs |
 | [Have I Been Pwned API](#have-i-been-pwned-api) | free forever | anyone | check ToS | Free Pwned Passwords API · paid for some enterprise feeds |
 | [Bitwarden](#bitwarden) | free forever | anyone | commercial ok | Personal free · unlimited items/devices · orgs paid |
 
