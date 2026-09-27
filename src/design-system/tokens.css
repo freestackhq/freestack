@@ -18,7 +18,7 @@
   --color-ok: #6b9e6b;
 
   /* type */
-  --font-sans: "Inter", system-ui, sans-serif;
+  --font-sans: "IBM Plex Sans", system-ui, sans-serif;
   --font-mono: "JetBrains Mono", ui-monospace, monospace;
 
   /* layout */

@@ -6,7 +6,7 @@
  * `pnpm catalog:fetch && pnpm catalog:generate`, and the pages/API
  * rebuild from the committed snapshot in src/data/catalog.generated.json.
  *
- * Category file shape (see freestackhq/selfhosted):
+ * Category file shape (see catalogs/_template.md):
  *   - YAML frontmatter: category, description
  *   - `## Comparison Matrix` table: quick-scan row per service
  *   - `## <Service>` sections: Field/Value table + prose

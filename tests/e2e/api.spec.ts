@@ -1,13 +1,12 @@
 import { expect, test } from "@playwright/test";
 
-test("GET /api/catalogs returns metadata for both catalogs", async ({ request }) => {
+test("GET /api/catalogs returns metadata for all catalogs", async ({ request }) => {
   const res = await request.get("/api/catalogs");
   expect(res.ok()).toBeTruthy();
   const body = await res.json();
   expect(body.ok).toBe(true);
   const ids = body.catalogs.map((c: any) => c.id);
-  expect(ids).toContain("selfhosted");
-  expect(ids).toContain("saas");
+  expect(ids).toEqual(["saas", "apis", "llm-ai"]);
   const saas = body.catalogs.find((c: any) => c.id === "saas");
   expect(saas.count).toBeGreaterThanOrEqual(150);
 });
@@ -17,7 +16,7 @@ test("GET /api/entries?meta=1 lists catalogs", async ({ request }) => {
   expect(res.ok()).toBeTruthy();
   const body = await res.json();
   expect(body.ok).toBe(true);
-  expect(body.catalogs.length).toBe(2);
+  expect(body.catalogs.length).toBe(3);
 });
 
 test("GET /api/entries filters by catalog, category, and q", async ({ request }) => {
@@ -45,12 +44,12 @@ test("GET /api/entries applies field filters", async ({ request }) => {
 
 test("POST /api/entries accepts a JSON body", async ({ request }) => {
   const res = await request.post("/api/entries", {
-    data: { catalog: "selfhosted", category: "databases", limit: 2 },
+    data: { catalog: "llm-ai", category: "inference", limit: 2 },
   });
   expect(res.ok()).toBeTruthy();
   const body = await res.json();
   expect(body.entries.length).toBe(2);
-  expect(body.entries[0].catalog).toBe("selfhosted");
+  expect(body.entries[0].catalog).toBe("llm-ai");
 });
 
 test("GET /api/entries respects limit", async ({ request }) => {

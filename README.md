@@ -3,7 +3,7 @@
 Directory of free developer tools, student unlocks, free public APIs, and AI models — with hard limits, eligibility, and commercial permissions. Numbers first.
 
 * **Live**: [freestack.kuyacarlo.dev](https://freestack.kuyacarlo.dev)
-* **Coverage**: 222 entries across 28 categories in 3 catalogs
+* **Coverage**: 223 entries across 28 categories in 3 catalogs
 * **GEO & AI**: [`/llms.txt`](https://freestack.kuyacarlo.dev/llms.txt) · [`/llms-full.txt`](https://freestack.kuyacarlo.dev/llms-full.txt)
 * **Stack**: Astro, Tailwind CSS v4, Cloudflare Workers runtime
 
@@ -29,7 +29,7 @@ Catalogs live directly in-repo under [`catalogs/`](catalogs/).
 |---|---|---|---|
 | **SaaS** | [`catalogs/saas/`](catalogs/saas/) | Free developer SaaS tiers & student unlocks | 187 across 17 categories |
 | **APIs** | [`catalogs/apis/`](catalogs/apis/) | Free public APIs with auth & rate limits | 18 across 6 categories |
-| **LLM & AI** | [`catalogs/llm-ai/`](catalogs/llm-ai/) | Free inference, embeddings, local models | 17 across 5 categories |
+| **LLM & AI** | [`catalogs/llm-ai/`](catalogs/llm-ai/) | Free inference, embeddings, local models | 18 across 5 categories |
 
 ### Adding or Updating Entries
 
@@ -46,7 +46,7 @@ Base URL: `https://freestack.kuyacarlo.dev` (CORS open).
 | Endpoint | Method | Purpose |
 |---|---|---|
 | `/llms.txt` | `GET` | Standard LLM navigation and catalog manifest |
-| `/llms-full.txt` | `GET` | Full plain-text digest of all 222 tools for AI ingestion |
+| `/llms-full.txt` | `GET` | Full plain-text digest of all 223 tools for AI ingestion |
 | `/api/health` | `GET` | Service status, version, and catalog counts |
 | `/api/catalogs` | `GET` | Catalog metadata, categories, and entry counts |
 | `/api/entries` | `GET, POST` | Filter and search entries (`catalog`, `category`, `q`, fields, `limit`) |
@@ -58,6 +58,8 @@ Base URL: `https://freestack.kuyacarlo.dev` (CORS open).
 ## Architecture & Data Pipeline
 
 Data is compiled from Markdown into a committed snapshot ([`src/data/catalog.generated.json`](src/data/catalog.generated.json)) so builds and test suites run offline without runtime network dependencies.
+
+See [`SPEC.md`](SPEC.md) for the product contract, [`DESIGN.md`](DESIGN.md) for visual rules, and [`docs/redesign.md`](docs/redesign.md) for the current release boundary and follow-up roadmap.
 
 ```bash
 pnpm catalog:generate   # parse local catalogs/ into src/data/catalog.generated.json

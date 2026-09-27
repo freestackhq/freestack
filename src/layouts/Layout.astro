@@ -24,7 +24,7 @@ const path = Astro.url.pathname;
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&family=JetBrains+Mono:wght@400;500&display=swap"
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
       rel="stylesheet"
     />
     <link
@@ -45,7 +45,7 @@ const path = Astro.url.pathname;
             class:list={[
               "rounded-md px-2.5 py-1 text-[0.8rem] transition-colors",
               path === "/" ? "text-ink" : "text-ink-2 hover:bg-s1 hover:text-ink",
-            ]}>directory</a
+            ]}>find a tool</a
           >
           <a
             href="/catalogs"
@@ -54,7 +54,7 @@ const path = Astro.url.pathname;
               path.startsWith("/catalogs")
                 ? "text-ink"
                 : "text-ink-2 hover:bg-s1 hover:text-ink",
-            ]}>catalogs</a
+            ]}>browse catalogs</a
           >
           <a
             href="/guides/claim-order"
@@ -107,7 +107,8 @@ const path = Astro.url.pathname;
         class="absolute top-[18px] right-6 text-[1.1rem] text-ink-3"
         aria-label="Close">✕</button
       >
-      <a href="/" class="text-2xl font-semibold text-ink-2">directory</a>
+      <a href="/" class="text-2xl font-semibold text-ink-2">find a tool</a>
+      <a href="/catalogs" class="text-2xl font-semibold text-ink-2">browse catalogs</a>
       <a href="/guides/claim-order" class="text-2xl font-semibold text-ink-2"
         >claim order</a
       >

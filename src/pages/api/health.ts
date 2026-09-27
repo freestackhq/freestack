@@ -15,7 +15,7 @@ export const GET: APIRoute = () =>
     entries: allEntries().length,
     endpoints: {
       catalogs: "GET /api/catalogs",
-      entries: "GET /api/entries?catalog=selfhosted&category=monitoring&q=uptime&limit=20",
+      entries: "GET /api/entries?catalog=saas&category=observability&q=uptime&limit=20",
       health: "GET /api/health",
       openapi: "GET /api/openapi.json",
     },
