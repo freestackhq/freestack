@@ -8,8 +8,8 @@ colors:
   border: "#252320"
   border-strong: "#363430"
   text: "#f0ede6"
-  text-secondary: "#888480"
-  text-muted: "#4a4844"
+  text-secondary: "#a09b94"
+  text-muted: "#888480"
   accent-sand: "#c4a882"
   status-ok: "#6b9e6b"
 typography:
@@ -68,11 +68,11 @@ components:
 
 ## Overview
 
-Freestack is a technical decision desk. It helps developers compare free and low-cost tools using limits, eligibility, commercial terms, and practical alternatives. The interface should feel precise and calm, with the catalog facts doing the persuasive work.
+Freestack is a technical decision desk. It helps founders check MVP limits and commercial terms, students publish reviewable demos, and hobbyists choose how much to operate themselves. The interface should feel precise and calm, with catalog facts doing the persuasive work.
 
 ## Colors
 
-The canvas is near-black. Raised surfaces use two restrained steps. Warm sand marks active choices and important links. Green is reserved for positive status. Keep secondary text readable and avoid adding accent colors without a clear data meaning.
+The canvas is near-black. Raised surfaces use two restrained steps. Warm sand marks active choices and important links. Green is reserved for positive status. Muted text maintains at least 4.5:1 contrast against the dark surfaces. Avoid adding accent colors without a clear data meaning.
 
 ## Typography
 
@@ -82,7 +82,9 @@ Large sans headings establish the task. Body copy explains choices in short para
 
 ## Layout
 
-Use a centered content width capped at 1360px, with responsive page gutters. The homepage begins with a task statement and direct category links. The directory uses compact rows and separators. Tables may scroll horizontally on small screens when preserving comparison data requires it.
+Use a centered content width capped at 1360px, with responsive page gutters. The homepage begins with audience paths for founders, students, and hobbyists, followed by direct category links. Each path leads to a practical guide and relevant directory filters. The directory uses compact rows and separators. Tables may scroll horizontally on small screens when preserving comparison data requires it.
+
+The design source of truth is this file. Runtime tokens live in [`src/design-system/tokens.css`](src/design-system/tokens.css); shared primitives live in [`src/design-system/components.css`](src/design-system/components.css). Use Tailwind utilities for page composition, and add shared components when a visual pattern repeats. Update this document and the token/component implementation together when the visual system changes.
 
 ## Elevation & Depth
 
@@ -97,8 +99,17 @@ Use tight 4px and 6px corners for controls and surfaces. Avoid pill-shaped cards
 - **Buttons:** Filled buttons use the primary text color over the dark background. Outline buttons use a raised surface and stronger border.
 - **Catalog tabs and filter chips:** Use mono labels, visible active state, and `aria-pressed` state on buttons.
 - **Directory rows:** Keep names, concise decision copy, and key fields together. Use hairlines instead of card containers.
+- **Audience paths:** State the user’s goal and the next action in each link. Cards navigate to complete guide pages; guide actions open existing catalog filters.
 - **Inputs:** Use raised dark fill, readable placeholder text, and a clear keyboard focus indicator.
 - **Active constraints:** Display selected category and field filters near the result count.
+
+## Usability and accessibility
+
+- Every whole audience tile is one keyboard-accessible link with a visible focus outline.
+- Keep text contrast strong enough to read on the dark surfaces; muted copy must not carry essential terms alone.
+- Use plain goal labels such as “Publish a portfolio project” and explain the next step in the supporting line.
+- Provide a direct browse-catalog route for visitors whose task does not fit an audience path.
+- Keep hover styling supplemental. Navigation and selected states must remain clear on touch screens.
 
 ## Do's and Don'ts
 

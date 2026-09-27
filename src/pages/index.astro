@@ -1,6 +1,7 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import Directory from "../components/Directory.astro";
+import AudiencePaths from "../components/AudiencePaths.astro";
 ---
 
 <Layout>
@@ -21,7 +22,18 @@ import Directory from "../components/Directory.astro";
       </div>
     </div>
 
-    <div class="mt-16 border-t border-b1 pt-7 sm:mt-20">
+    <div id="paths" class="mt-16 scroll-mt-[calc(var(--nav-h)+1rem)] border-t border-b1 pt-7 sm:mt-20">
+      <div class="mb-14">
+        <div class="flex flex-wrap items-end justify-between gap-5">
+          <div>
+            <h2 class="text-xl font-semibold tracking-[-0.02em] text-ink">What are you trying to do?</h2>
+            <p class="mt-2 max-w-xl text-sm leading-6 text-ink-2">Start from your project. Each path ends with tools you can compare and check.</p>
+          </div>
+          <a href="/catalogs" class="font-mono text-[0.7rem] text-ink-3 underline-offset-4 hover:text-ink hover:underline">skip to catalogs ↗</a>
+        </div>
+        <AudiencePaths />
+      </div>
+
       <div class="flex flex-wrap items-end justify-between gap-5">
         <div>
           <h2 class="text-xl font-semibold tracking-[-0.02em] text-ink">What are you building?</h2>

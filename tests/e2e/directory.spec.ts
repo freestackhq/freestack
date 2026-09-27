@@ -15,6 +15,32 @@ test("homepage renders all catalogs and defaults to SaaS", async ({ page }) => {
   await test.expect(page.locator("[data-catalog-panels=apis]")).toBeHidden();
 });
 
+test("audience paths lead to the right guide and working catalog entry points", async ({ page }) => {
+  await page.goto("/");
+
+  await page.getByRole("link", { name: /Launch a lean MVP/ }).click();
+  await test.expect(page).toHaveURL(/\/guides\/startup\/?$/);
+  await test.expect(page.getByRole("link", { name: /commercial hosting options/ })).toHaveAttribute(
+    "href",
+    /need=hosting.*commercial=yes/,
+  );
+
+  await page.goto("/");
+  await page.getByRole("link", { name: /Publish a portfolio project/ }).click();
+  await test.expect(page).toHaveURL(/\/guides\/portfolio\/?$/);
+  await page.getByRole("link", { name: /compare hosting options/ }).click();
+  await test.expect(page).toHaveURL(/\?need=hosting.*#directory$/);
+  await test.expect(page.locator('[data-category-chip="hosting"]')).toHaveAttribute("aria-pressed", "true");
+
+  await page.goto("/");
+  await page.getByRole("link", { name: /Pick cloud or self-hosted/ }).click();
+  await test.expect(page).toHaveURL(/\/guides\/hobby\/?$/);
+  await page.getByRole("link", { name: /Find self-hostable services/ }).click();
+  await test.expect(page).toHaveURL(/\?catalog=saas&q=self-host#directory$/);
+  await test.expect(page.locator("#q")).toHaveValue("self-host");
+  await test.expect(page.locator('[data-entry]:not(.is-hidden)').first()).toBeVisible();
+});
+
 test("switching catalog swaps panels and updates the URL", async ({ page }) => {
   await page.goto("/");
   await page.locator('[data-catalog-tab="apis"]').click();
