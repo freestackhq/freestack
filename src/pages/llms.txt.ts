@@ -5,34 +5,42 @@ export const prerender = true;
 
 export const GET: APIRoute = () => {
   const lines: string[] = [
-    "# freestack",
+    "# Freestack",
     "",
-    "> Directory of free developer tools, student unlocks, free APIs, and self-hosted software — with hard limits, eligibility, and commercial notes.",
+    "> A decision catalog for free and low-cost developer tools, public APIs, and AI services.",
+    "",
+    "Freestack helps founders launch an MVP, students publish project demos, and hobbyists choose between managed and self-hosted tools. It surfaces limits, eligibility, commercial terms, and alternatives.",
+    "",
+    "Results are filtered catalog entries, not rankings or personalized recommendations. Provider terms change; verify important details with the provider before relying on an offer.",
+    "",
+    "## Audience guides",
+    "",
+    "- [Launch a lean MVP](https://freestack.kuyacarlo.dev/guides/startup): Compare commercial terms and operating constraints before launch.",
+    "- [Publish a portfolio project](https://freestack.kuyacarlo.dev/guides/portfolio): Choose a demo deployment and make the project easy to review.",
+    "- [Build for yourself](https://freestack.kuyacarlo.dev/guides/hobby): Weigh managed convenience against self-hosting upkeep.",
+    "- [Student offers](https://freestack.kuyacarlo.dev/guides/claim-order): Review eligibility and time-sensitive offers.",
+    "- [Starter stacks](https://freestack.kuyacarlo.dev/guides/stacks): See editable stack examples; they are not personalized recommendations.",
     "",
     "## Catalogs",
     "",
   ];
 
-  for (const c of CATALOGS) {
-    const total = c.categories.reduce((n, cat) => n + cat.entries.length, 0);
-    lines.push(`- [${c.label}](https://freestack.kuyacarlo.dev/catalogs/${c.id}): ${c.description} (${total} entries across ${c.categories.length} categories)`);
+  for (const catalog of CATALOGS) {
+    const total = catalog.categories.reduce((count, category) => count + category.entries.length, 0);
+    lines.push(`- [${catalog.label}](https://freestack.kuyacarlo.dev/catalogs/${catalog.id}): ${catalog.description} (${total} entries across ${catalog.categories.length} categories)`);
   }
 
   lines.push(
     "",
-    "## API Endpoints",
+    "## Data and API",
     "",
-    "- [OpenAPI Spec](https://freestack.kuyacarlo.dev/api/openapi.json): Machine-readable OpenAPI 3.1.0 definition.",
-    "- [All Entries API](https://freestack.kuyacarlo.dev/api/entries): Query entries across all catalogs with filters.",
-    "- [Catalogs API](https://freestack.kuyacarlo.dev/api/catalogs): List of available catalogs, categories, and entry counts.",
-    "- [Full Text Dump](https://freestack.kuyacarlo.dev/llms-full.txt): Complete Markdown dump of all entries for LLMs.",
+    "- [Directory](https://freestack.kuyacarlo.dev/catalogs): Search and filter all catalogs.",
+    "- [Catalog API](https://freestack.kuyacarlo.dev/api/catalogs): Catalogs, categories, and entry counts.",
+    "- [Entries API](https://freestack.kuyacarlo.dev/api/entries): Search and filter catalog entries.",
+    "- [OpenAPI](https://freestack.kuyacarlo.dev/api/openapi.json): API schema.",
+    "- [Full catalog text](https://freestack.kuyacarlo.dev/llms-full.txt): Plain-text snapshot for language models.",
+    "- [API reference](https://freestack.kuyacarlo.dev/docs): Interactive API documentation.",
     "",
-    "## Guides",
-    "",
-    "- [Claim Order Guide](https://freestack.kuyacarlo.dev/guides/claim-order): Optimal claiming order for student & developer credits.",
-    "- [Startup Guide](https://freestack.kuyacarlo.dev/guides/startup): Zero-cost stack architecture guide for startups.",
-    "- [Stacks Guide](https://freestack.kuyacarlo.dev/guides/stacks): Recommended developer stacks with free tiers.",
-    ""
   );
 
   return new Response(lines.join("\n"), {

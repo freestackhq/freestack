@@ -47,4 +47,4 @@ The generated snapshot contains 223 entries across 28 categories: SaaS (187), AP
 
 ## Current Release Boundary
 
-The homepage offers three audience paths and six category starting points. The paths guide visitors to student portfolio, founder MVP, or hobbyist self-hosting content and working catalog filters. Search and filters are URL-backed, and visitors can copy a result link. Results are filtered catalog entries, not ranked recommendations. Ranking explanations, saved comparisons, provider-click analytics, and correction submissions remain future work.
+The homepage offers three audience paths and one direct link to the searchable directory. The paths guide visitors to student portfolio, founder MVP, or hobbyist self-hosting content and working catalog filters. Search and filters are URL-backed, and visitors can copy a result link. Results are filtered catalog entries, not ranked recommendations. Ranking explanations, saved comparisons, provider-click analytics, and correction submissions remain future work.

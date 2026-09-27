@@ -16,7 +16,7 @@ These jobs are evidence-informed hypotheses, not validated personas. Repository 
 
 ## Implemented locally in this redesign
 
-- The homepage leads with three audience paths and six category starting points.
+- The homepage presents three audience paths and one direct directory search link.
 - Founder path opens the lean MVP guide, which links to commercial hosting and AI inference filters.
 - Student path opens a portfolio guide with static, full-stack, and always-running demo choices, plus a project review checklist.
 - Hobbyist path compares managed hosting with self-hostable options and explains the operator work involved.
@@ -36,17 +36,16 @@ flowchart TD
     Founder --> Compare[Compare filtered tools]
     Student --> Compare
     Hobby --> Compare
-    Home --> Need[Choose a need]
-    Need --> Filter[Search and filter a catalog]
+    Home --> Browse[Search the directory]
+    Compare --> Filter[Search and filter a catalog]
     Filter --> Detail[Read source-backed detail]
     Detail --> Provider[Visit provider]
     Filter --> Share[Copy result link]
-    Home --> Browse[Browse all catalogs]
-    Home --> Guides[Read practical guides]
+    Browse --> Filter
     Home --> API[Use API or LLM text endpoints]
 ```
 
-The audience path is homepage → guide → relevant filter → catalog detail → provider. Visitors can skip the guide through a direct need preset or browse all catalogs.
+The audience path is homepage → guide → relevant filter → catalog detail → provider. Visitors can skip the guides and search the directory directly at `/catalogs`. Catalog tabs and filters expose the complete catalog scope.
 
 ## Research and evidence limits
 
@@ -56,18 +55,15 @@ The audience path is homepage → guide → relevant filter → catalog detail �
 - USENIX research reports technical background and maker identity correlate with self-hosting, and notes that operators assume security responsibility ([source](https://www.usenix.org/conference/usenixsecurity24/presentation/gr%C3%B6ber-private-clouds)). This informed the hobbyist guide’s balance of control and upkeep.
 - Founder, student, and hobbyist steps in Freestack are proposed journeys derived from the catalog and these public sources. They are not behavioral findings from Freestack analytics or interviews.
 
-## Homepage starting points
+## Audience paths and directory entry
 
-The six links open category filters backed by existing catalog categories:
+The homepage has three audience paths:
 
-- Host a web app — SaaS / Hosting
-- Store data — SaaS / Databases
-- Add authentication — SaaS / Auth & secrets
-- Send email — SaaS / Email & forms
-- Use a public API — APIs / Weather
-- Run AI — LLM & AI / Inference
+- Founder — lean MVP guidance, commercial hosting, AI inference.
+- Student — deploy a portfolio demo, check student offers.
+- Hobbyist — compare managed hosting and self-hostable tools.
 
-These are navigation shortcuts. They do not rank providers or guarantee a fit.
+The hero provides one direct link to the full directory. Need presets remain in guide links without repeating six more homepage choices.
 
 ## Visual direction
 

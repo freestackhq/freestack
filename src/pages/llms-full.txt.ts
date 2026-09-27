@@ -1,5 +1,5 @@
 import type { APIRoute } from "astro";
-import { CATALOGS } from "../lib/catalog";
+import { CATALOGS, GENERATED_AT } from "../lib/catalog";
 
 export const prerender = true;
 
@@ -7,7 +7,14 @@ export const GET: APIRoute = () => {
   const lines: string[] = [
     "# freestack — Full Catalog Digest",
     "",
-    "> Complete plain-text directory of free developer tools, APIs, and self-hosted software.",
+    "> Plain-text snapshot of catalog entries for free and low-cost developer tools, public APIs, and AI services.",
+    `Snapshot generated: ${GENERATED_AT}`,
+    "",
+    "Freestack helps people compare options while building an MVP, publishing a project demo, or running tools for themselves. Entries expose limits, eligibility, commercial terms, and alternatives when available.",
+    "",
+    "This is reference data, not a ranked or personalized recommendation. Provider terms and limits can change; confirm details with the provider before making a decision. Self-hostable tools appear where listed in the catalogs; this snapshot has no separate self-hosted catalog.",
+    "",
+    "Guides: https://freestack.kuyacarlo.dev/guides/startup · https://freestack.kuyacarlo.dev/guides/portfolio · https://freestack.kuyacarlo.dev/guides/hobby",
     "",
   ];
 

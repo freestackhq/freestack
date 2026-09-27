@@ -11,6 +11,22 @@ test("GET /api/catalogs returns metadata for all catalogs", async ({ request }) 
   expect(saas.count).toBeGreaterThanOrEqual(150);
 });
 
+test("LLM discovery files describe the audience paths and catalog limits", async ({ request }) => {
+  const indexResponse = await request.get("/llms.txt");
+  expect(indexResponse.ok()).toBeTruthy();
+  const index = await indexResponse.text();
+  expect(index).toContain("[Launch a lean MVP]");
+  expect(index).toContain("[Publish a portfolio project]");
+  expect(index).toContain("[Build for yourself]");
+  expect(index).toContain("not rankings or personalized recommendations");
+
+  const fullResponse = await request.get("/llms-full.txt");
+  expect(fullResponse.ok()).toBeTruthy();
+  const full = await fullResponse.text();
+  expect(full).toContain("Snapshot generated:");
+  expect(full).toContain("no separate self-hosted catalog");
+});
+
 test("GET /api/entries?meta=1 lists catalogs", async ({ request }) => {
   const res = await request.get("/api/entries?meta=1");
   expect(res.ok()).toBeTruthy();

@@ -1,72 +1,23 @@
 ---
 import Layout from "../layouts/Layout.astro";
-import Directory from "../components/Directory.astro";
 import AudiencePaths from "../components/AudiencePaths.astro";
 ---
 
 <Layout>
-  <section class="ds-wrap pb-16 pt-[72px] sm:pb-24 sm:pt-[112px]">
-    <div class="grid gap-12 lg:grid-cols-[minmax(0,1fr)_minmax(19rem,0.62fr)] lg:items-end lg:gap-20">
-      <div>
-        <h1 class="max-w-4xl text-[clamp(3.2rem,9vw,6rem)] leading-[0.9] font-bold tracking-[-0.04em] text-ink">
-          Choose the right free tool<span class="text-sand">.</span>
-        </h1>
-        <p class="mt-8 max-w-2xl text-[clamp(1rem,1.5vw,1.12rem)] leading-[1.75] text-ink-2">
-          Start with what you are building. Compare hard limits, eligibility, commercial
-          terms, and practical alternatives before you choose a provider.
-        </p>
-      </div>
-      <div class="border-y border-b1 py-5 lg:mb-2">
-        <p class="text-[1.05rem] leading-7 text-ink">Need → constraints → options → provider</p>
-        <a href="#directory" class="ds-btn ds-btn-filled mt-5">Browse options <span aria-hidden="true">↓</span></a>
-      </div>
-    </div>
+  <section class="ds-wrap pb-12 pt-[72px] sm:pb-16 sm:pt-[104px]">
+    <h1 class="max-w-4xl text-[clamp(3.2rem,9vw,6rem)] leading-[0.9] font-bold tracking-[-0.04em] text-ink">
+      Choose the right free tool<span class="text-sand">.</span>
+    </h1>
+    <p class="mt-7 max-w-2xl text-[clamp(1rem,1.5vw,1.12rem)] leading-[1.75] text-ink-2">
+      Find tools for your project and check their limits, eligibility, and terms before you commit.
+    </p>
+    <a href="/catalogs" class="ds-btn ds-btn-outline mt-5">Browse tools <span aria-hidden="true">→</span></a>
 
-    <div id="paths" class="mt-16 scroll-mt-[calc(var(--nav-h)+1rem)] border-t border-b1 pt-7 sm:mt-20">
-      <div class="mb-14">
-        <div class="flex flex-wrap items-end justify-between gap-5">
-          <div>
-            <h2 class="text-xl font-semibold tracking-[-0.02em] text-ink">What are you trying to do?</h2>
-            <p class="mt-2 max-w-xl text-sm leading-6 text-ink-2">Start from your project. Each path ends with tools you can compare and check.</p>
-          </div>
-          <a href="/catalogs" class="font-mono text-[0.7rem] text-ink-3 underline-offset-4 hover:text-ink hover:underline">skip to catalogs ↗</a>
-        </div>
-        <AudiencePaths />
-      </div>
-
-      <div class="flex flex-wrap items-end justify-between gap-5">
-        <div>
-          <h2 class="text-xl font-semibold tracking-[-0.02em] text-ink">What are you building?</h2>
-          <p class="mt-2 max-w-xl text-sm leading-6 text-ink-2">Choose a category, then filter the catalog against your project’s constraints.</p>
-        </div>
-        <a href="/catalogs" class="font-mono text-[0.7rem] text-ink-3 underline-offset-4 hover:text-ink hover:underline">browse everything ↗</a>
-      </div>
-      <div class="mt-6 grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
-        {
-          [
-            ["hosting", "Host a web app", "deploy, domains, bandwidth"],
-            ["databases", "Store data", "SQL, limits, backups"],
-            ["auth", "Add authentication", "users, sessions, secrets"],
-            ["email", "Send email", "forms, delivery, quotas"],
-            ["weather", "Use a public API", "data, auth, rate limits"],
-            ["inference", "Run AI", "models, compatibility, usage"],
-          ].map(([need, label, detail]) => (
-            <a
-              href={`/?need=${need}#directory`}
-              class="group border border-b1 bg-s1 px-4 py-4 transition-colors hover:border-sand hover:bg-s2 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sand"
-            >
-              <span class="block font-medium text-ink group-hover:text-sand">{label} <span aria-hidden="true">→</span></span>
-              <span class="mt-1 block font-mono text-[0.68rem] text-ink-3">{detail}</span>
-            </a>
-          ))
-        }
-      </div>
-      <div class="mt-5 flex flex-wrap items-center gap-x-5 gap-y-2">
-        <a href="/?need=hosting&commercial=yes#directory" class="font-mono text-[0.7rem] text-sand underline-offset-4 hover:underline">I need commercial use →</a>
-        <span class="font-mono text-[0.68rem] text-ink-3">Every result links to its limits, eligibility, and alternatives.</span>
-      </div>
+    <div id="paths" class="mt-12 scroll-mt-[calc(var(--nav-h)+1rem)] border-t border-b1 pt-7 sm:mt-16">
+      <h2 class="text-xl font-semibold tracking-[-0.02em] text-ink">What are you trying to do?</h2>
+      <p class="mt-2 max-w-xl text-sm leading-6 text-ink-2">Choose a path for practical guidance and relevant tools.</p>
+      <AudiencePaths />
     </div>
   </section>
 
-  <Directory defaultCatalog="saas" />
 </Layout>

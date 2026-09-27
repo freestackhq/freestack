@@ -13,7 +13,7 @@ Help people choose free or low-cost tools by making limits, eligibility, commerc
 
 ## Product contract
 
-1. The homepage gives visitors three audience paths (founder, student, hobbyist) and direct starting points for six common developer needs.
+1. The homepage gives visitors three audience paths (founder, student, hobbyist) and a direct link to search the full directory.
 2. Each audience path links to a guide and at least one working catalog filter or entry point.
 3. Search, category selection, and catalog field filters operate on the active catalog.
 4. The URL preserves active catalog, search, every selected category, need preset, and commercial filter state so results can be shared.
@@ -22,7 +22,9 @@ Help people choose free or low-cost tools by making limits, eligibility, commerc
 7. Catalog data is generated from local Markdown into a committed snapshot. Build and tests must not require fetching external catalogs.
 8. The JSON API, OpenAPI document, `llms.txt`, `llms-full.txt`, and CLI remain available alongside the site.
 
-## Homepage starting points
+## Need presets
+
+Directory need presets are kept for direct and guide links. They narrow the directory without adding a second grid of homepage choices.
 
 | Need | Catalog | Category |
 |---|---|---|
@@ -33,7 +35,7 @@ Help people choose free or low-cost tools by making limits, eligibility, commerc
 | Use a public API | APIs | Weather |
 | Run AI | LLM & AI | Inference |
 
-Each starting point narrows the directory. It does not imply a provider recommendation or verified ranking.
+Each preset narrows the directory. It does not imply a provider recommendation or verified ranking.
 
 ## Catalog and API contract
 
@@ -51,11 +53,10 @@ Each starting point narrows the directory. It does not imply a provider recommen
 - Product analytics or claims that an activation event is measured.
 - Catalog correction submissions and new freshness data fields.
 - Personalized stack generation, bill estimation, and operational guarantees for self-hosted tools.
-- A dedicated self-hosted catalog. Self-hostable options can appear in existing entries and search.
 
 ## Acceptance criteria
 
-- Each homepage starting point opens its intended catalog and category.
+- Each audience path and the direct directory link lead to their intended content.
 - Founder, student, and hobbyist cards open their matching guide paths; guide actions open relevant catalog filters.
 - Search, category, and field filters combine and update the visible result count.
 - Direct URLs restore supported query state, and copying a result link preserves it.

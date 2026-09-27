@@ -1,12 +1,16 @@
 import { test } from "@playwright/test";
 
-test("catalogs index lists all catalogs with entry counts", async ({ page }) => {
+test("catalog search opens with all three catalogs", async ({ page }) => {
   await page.goto("/catalogs");
-  await test.expect(page.getByRole("heading", { name: "catalogs." })).toBeVisible();
-  await test.expect(page.getByRole("heading", { name: "SaaS" })).toBeVisible();
-  await test.expect(page.getByRole("heading", { name: "APIs" })).toBeVisible();
-  await test.expect(page.getByRole("heading", { name: "LLM & AI" })).toBeVisible();
-  await test.expect(page.locator("text=/entries/").first()).toBeVisible();
+  await test.expect(page.getByRole("heading", { name: "Browse tools." })).toBeVisible();
+  const tabs = page.locator("[data-catalog-tab]");
+  await test.expect(tabs).toHaveCount(3);
+  await test.expect(tabs.nth(0)).toHaveText("SaaS");
+  await test.expect(tabs.nth(1)).toHaveText("APIs");
+  await test.expect(tabs.nth(2)).toHaveText("LLM & AI");
+  await test.expect(page.locator("#q")).toBeVisible();
+  await test.expect(page.locator("section").first()).toContainText("223 entries across SaaS, public APIs, and AI.");
+  await test.expect(page.locator("#count")).toContainText("187 entries");
 });
 
 test("catalog index shows categories", async ({ page }) => {
