@@ -1,39 +1,44 @@
 import { test } from "@playwright/test";
 
-test("catalogs index lists both catalogs with entry counts", async ({ page }) => {
+test("catalog search opens with all three catalogs", async ({ page }) => {
   await page.goto("/catalogs");
-  await test.expect(page.getByRole("heading", { name: "catalogs." })).toBeVisible();
-  await test.expect(page.getByRole("heading", { name: "Self-hosted" })).toBeVisible();
-  await test.expect(page.getByRole("heading", { name: "SaaS" })).toBeVisible();
-  await test.expect(page.locator("text=/entries/").first()).toBeVisible();
+  await test.expect(page.getByRole("heading", { name: "Browse tools." })).toBeVisible();
+  const tabs = page.locator("[data-catalog-tab]");
+  await test.expect(tabs).toHaveCount(3);
+  await test.expect(tabs.nth(0)).toHaveText("SaaS");
+  await test.expect(tabs.nth(1)).toHaveText("APIs");
+  await test.expect(tabs.nth(2)).toHaveText("LLM & AI");
+  await test.expect(page.locator("#q")).toBeVisible();
+  await test.expect(page.locator("section").first()).toContainText("223 entries across SaaS, public APIs, and AI.");
+  await test.expect(page.locator("#count")).toContainText("187 entries");
 });
 
 test("catalog index shows categories", async ({ page }) => {
-  await page.goto("/catalogs/selfhosted");
-  await test.expect(page.getByRole("heading", { name: /Self-hosted\./ })).toBeVisible();
-  await test.expect(page.getByRole("heading", { name: "Databases & Management" })).toBeVisible();
-  await test.expect(page.getByRole("heading", { name: "Security & Identity" })).toBeVisible();
+  await page.goto("/catalogs/apis");
+  await test.expect(page.getByRole("heading", { name: /APIs\./ })).toBeVisible();
+  await test.expect(page.getByRole("heading", { name: "Weather" })).toBeVisible();
+  await test.expect(page.getByRole("heading", { name: "Geolocation" })).toBeVisible();
 });
 
 test("category page renders comparison matrix and entry rows", async ({ page }) => {
-  await page.goto("/catalogs/selfhosted/databases");
-  await test.expect(page.getByRole("heading", { name: /Databases & Management\./ })).toBeVisible();
+  await page.goto("/catalogs/apis/weather");
+  await test.expect(page.getByRole("heading", { name: /Weather\./ })).toBeVisible();
   // matrix table
   await test.expect(page.locator("table")).toBeVisible();
-  await test.expect(page.locator("table").getByText("PostgreSQL").first()).toBeVisible();
+  await test.expect(page.locator("table").getByText("Open-Meteo").first()).toBeVisible();
   // entry list links to detail
-  const link = page.locator('a[href="/catalogs/selfhosted/databases/postgresql"]').first();
+  const link = page.locator('a[href="/catalogs/apis/weather/open-meteo"]').first();
   await test.expect(link).toBeVisible();
 });
 
 test("entry page renders fields, pick, and alternatives", async ({ page }) => {
-  await page.goto("/catalogs/selfhosted/databases/postgresql");
-  await test.expect(page.getByRole("heading", { name: /PostgreSQL\./ })).toBeVisible();
+  await page.goto("/catalogs/apis/weather/open-meteo");
+  await test.expect(page.getByRole("heading", { name: /Open-Meteo\./ })).toBeVisible();
   await test.expect(page.getByText("Pick this if")).toBeVisible();
-  await test.expect(page.getByText("https://www.postgresql.org").first()).toBeVisible();
+  await test.expect(page.getByText("https://open-meteo.com/en/docs").first()).toBeVisible();
   // alternatives block
   await test.expect(page.getByText("How it compares")).toBeVisible();
-  await test.expect(page.getByText("MariaDB", { exact: false }).first()).toBeVisible();
+  await test.expect(page.getByText("OpenWeatherMap", { exact: false }).first()).toBeVisible();
 });
 
 test("saas category renders from converted markdown", async ({ page }) => {

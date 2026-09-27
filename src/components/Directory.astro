@@ -30,19 +30,87 @@ const catalogConfig = CATALOGS.map((c) => ({
   })),
 }));
 
-const initialCatalogId =
-  catalogConfig.some((c) => c.id === (Astro.url.searchParams.get("catalog") ?? ""))
-    ? (Astro.url.searchParams.get("catalog") as string)
-    : (defaultCatalog ?? catalogConfig[0].id);
+const needPresets: Record<string, { catalog: string; category: string; label: string; note: string }> = {
+  hosting: {
+    catalog: "saas",
+    category: "hosting",
+    label: "Host a web app",
+    note: "Compare deploy targets, bandwidth, and commercial terms before you commit.",
+  },
+  databases: {
+    catalog: "saas",
+    category: "databases",
+    label: "Store data",
+    note: "Start with the storage model and limits your project can actually live with.",
+  },
+  auth: {
+    catalog: "saas",
+    category: "auth",
+    label: "Add authentication",
+    note: "Compare user, session, and secret-management constraints in one place.",
+  },
+  email: {
+    catalog: "saas",
+    category: "email",
+    label: "Send email",
+    note: "Check delivery quotas, form support, and the point where free stops being enough.",
+  },
+  weather: {
+    catalog: "apis",
+    category: "weather",
+    label: "Use a public API",
+    note: "Compare authentication, CORS, status, and rate-limit tradeoffs.",
+  },
+  inference: {
+    catalog: "llm-ai",
+    category: "inference",
+    label: "Run AI",
+    note: "Compare model access, compatibility, and usage constraints before integrating.",
+  },
+};
 
-const hint = Astro.url.searchParams.get("hint");
-const hintCategory =
-  hint && catalogConfig[0].categories.some((c) => c.id === hint) ? hint : null;
+const initialNeed = Astro.url.searchParams.get("need");
+const initialPreset = initialNeed ? needPresets[initialNeed] : null;
+const requestedCatalog = Astro.url.searchParams.get("catalog");
+const catalogFromQuery = initialPreset?.catalog ?? requestedCatalog;
+const initialCatalogId = catalogConfig.some((c) => c.id === catalogFromQuery)
+  ? (catalogFromQuery as string)
+  : (defaultCatalog ?? catalogConfig[0].id);
+const initialCategories = new Set(
+  [
+    ...Astro.url.searchParams.getAll("category"),
+    Astro.url.searchParams.get("hint") ?? "",
+  ].filter((id) => catalogConfig.find((c) => c.id === initialCatalogId)?.categories.some((cat) => cat.id === id)),
+);
+if (initialPreset?.catalog === initialCatalogId) initialCategories.add(initialPreset.category);
+const decisionNeed = initialPreset?.label ?? null;
+const decisionNote = initialPreset?.note ?? null;
+const initialCommercial = Astro.url.searchParams.get("commercial") === "yes";
 ---
 
 <script type="application/json" id="catalog-config-data" set:html={JSON.stringify(catalogConfig)}></script>
+<script type="application/json" id="need-presets-data" set:html={JSON.stringify(needPresets)}></script>
 
 <section id="directory" class="pb-24">
+  <div class="ds-wrap pt-8 sm:pt-12">
+    <div id="decision-summary" class:list={["border-y border-sand/60 bg-s1 px-4 py-4 sm:px-5", !decisionNeed && "hidden"]}>
+      <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+        <div>
+          <p class="font-mono text-[0.68rem] uppercase tracking-[0.14em] text-sand">Your decision path</p>
+          <h2 class="mt-2 text-xl font-semibold tracking-[-0.02em] text-ink">
+            <span data-decision-title>{decisionNeed}</span>
+          </h2>
+          <p class="mt-1 max-w-2xl text-sm leading-6 text-ink-2" data-decision-note>{decisionNote}</p>
+        </div>
+        <div class="flex shrink-0 gap-2">
+          <button type="button" id="share-decision" class="ds-btn ds-btn-outline">copy result link</button>
+          <a href="/catalogs" class="ds-btn ds-btn-outline">start over</a>
+        </div>
+      </div>
+      <p id="share-message" class="mt-3 hidden font-mono text-[0.68rem] text-ok" role="status" aria-live="polite"></p>
+    </div>
+  </div>
+
   <div
     id="filters"
     class="sticky top-[var(--nav-h)] z-40 border-b border-b1 bg-[#0d0c0bf2] py-3 backdrop-blur-md supports-[backdrop-filter]:bg-[#0d0c0be8]"
@@ -122,10 +190,10 @@ const hintCategory =
                     type="button"
                     class:list={[
                       "ds-chip",
-                      hintCategory === cat.id && "is-active",
+                      initialCategories.has(cat.id) && "is-active",
                     ]}
                     data-category-chip={cat.id}
-                    aria-pressed={hintCategory === cat.id ? "true" : "false"}
+                    aria-pressed={initialCategories.has(cat.id) ? "true" : "false"}
                   >
                     {cat.label}
                   </button>
@@ -170,6 +238,8 @@ const hintCategory =
             )}{" "}
             entries
           </p>
+          <p id="active-constraints" class="hidden font-mono text-[0.68rem] text-ink-2" aria-live="polite"></p>
+          <p id="commercial-note" class="hidden font-mono text-[0.68rem] text-sand" role="status">commercial use requested</p>
         </div>
       </div>
     </div>
@@ -190,7 +260,7 @@ const hintCategory =
           {c.categories.map((cat) => {
             const items = cat.entries;
             if (!items.length) return null;
-            const startHidden = Boolean(hintCategory) && cat.id !== hintCategory;
+            const startHidden = initialCategories.size > 0 && !initialCategories.has(cat.id);
             const f = catalogConfig.find((x) => x.id === c.id)?.filters ?? [];
             return (
               <section
@@ -218,6 +288,7 @@ const hintCategory =
                         class="entry-row group"
                         data-entry
                         data-haystack={haystack}
+                        data-catalog={c.id}
                         data-category={cat.id}
                         {...Object.fromEntries(
                           f.map((x) => [
@@ -287,10 +358,33 @@ const hintCategory =
 
   const state = {
     catalog: document.querySelector("[data-catalog-tab].is-active")?.dataset.catalogTab ?? "",
-    categories: new Set<string>(),
+    categories: new Set<string>([]),
     q: "",
     filters: {} as Record<string, Set<string>>,
   };
+
+  const NEED_PRESETS = JSON.parse(
+    document.getElementById("need-presets-data")?.textContent ?? "{}",
+  ) as Record<string, { catalog: string; category: string; label: string; note: string }>;
+  const requestedNeed = new URLSearchParams(window.location.search).get("need") ?? "";
+  const params = new URLSearchParams(window.location.search);
+  const requestedPreset = NEED_PRESETS[requestedNeed];
+  const requestedCommercial = params.get("commercial") === "yes";
+  const requestedHint = params.get("hint") ?? "";
+
+  if (requestedPreset) {
+    state.catalog = requestedPreset.catalog;
+    state.categories.add(requestedPreset.category);
+  }
+  if (requestedCommercial) {
+    state.filters.commercial = new Set(["commercial ok"]);
+  }
+  for (const id of [...params.getAll("category"), requestedHint]) {
+    if (CATALOG_CONFIG.find((c: any) => c.id === state.catalog)?.categories.some((c: any) => c.id === id)) {
+      state.categories.add(id);
+    }
+  }
+  state.q = (params.get("q") ?? "").trim().toLowerCase();
 
   const rows = [...document.querySelectorAll<HTMLElement>(".entry-row")];
   const panels = [...document.querySelectorAll<HTMLElement>(".cat-panel")];
@@ -301,6 +395,8 @@ const hintCategory =
   const popover = document.getElementById("filters-popover");
   const toggle = document.getElementById("filters-toggle");
   const activeMark = document.getElementById("filters-active-mark");
+  const commercialNote = document.getElementById("commercial-note");
+  const activeConstraints = document.getElementById("active-constraints");
   const catalogDesc = document.querySelector("[data-catalog-desc]");
   const catalogTabs = [
     ...document.querySelectorAll<HTMLButtonElement>("[data-catalog-tab]"),
@@ -419,9 +515,47 @@ const hintCategory =
     return state.categories.size > 0 || Object.values(state.filters).some((s) => s.size > 0);
   }
 
+  function updateActiveConstraints() {
+    if (!activeConstraints) return;
+    const cfg = catalogConfigFor(state.catalog);
+    const labels = [
+      ...[...state.categories].map((id) => cfg.categories.find((category: any) => category.id === id)?.label ?? id),
+      ...Object.entries(state.filters).flatMap(([key, values]) =>
+        [...values].map((value) => `${cfg.filters.find((filter: any) => filter.key === key)?.label ?? key}: ${value}`),
+      ),
+    ];
+    activeConstraints.textContent = labels.length ? `Showing: ${labels.join(" · ")}` : "";
+    activeConstraints.classList.toggle("hidden", labels.length === 0);
+  }
+
+  function syncUrl() {
+    const url = new URL(window.location.href);
+    url.searchParams.set("catalog", state.catalog);
+    if (
+      requestedNeed &&
+      requestedPreset &&
+      state.catalog === requestedPreset.catalog &&
+      state.categories.has(requestedPreset.category)
+    ) {
+      url.searchParams.set("need", requestedNeed);
+    }
+    else url.searchParams.delete("need");
+    if (state.q) url.searchParams.set("q", state.q);
+    else url.searchParams.delete("q");
+    if (state.filters.commercial?.has("commercial ok")) url.searchParams.set("commercial", "yes");
+    else url.searchParams.delete("commercial");
+    url.searchParams.delete("category");
+    url.searchParams.delete("hint");
+    state.categories.forEach((category) => url.searchParams.append("category", category));
+    history.replaceState(null, "", `${url.pathname}${url.search}${url.hash}`);
+  }
+
   function apply() {
     const catFilter = state.categories.size > 0;
     let visible = 0;
+
+    syncCategoryChips();
+    syncFilterChips();
 
     for (const panel of panels) {
       const cat = panel.dataset.category ?? "";
@@ -430,7 +564,7 @@ const hintCategory =
       const panelOn = catalogOn && (!catFilter || state.categories.has(cat));
 
       let panelVisible = 0;
-      const panelRows = rows.filter((r) => r.dataset.category === cat);
+      const panelRows = rows.filter((r) => r.dataset.category === cat && r.dataset.catalog === catalog);
       for (const row of panelRows) {
         let ok = panelOn;
         if (ok) {
@@ -466,9 +600,14 @@ const hintCategory =
       cp.hidden = !on;
     }
 
-    if (countEl) countEl.textContent = `${visible} entr${visible === 1 ? "y" : "ies"}`;
+    if (countEl) countEl.textContent = requestedPreset
+      ? `${visible} matching entr${visible === 1 ? "y" : "ies"}`
+      : `${visible} entr${visible === 1 ? "y" : "ies"}`;
     emptyEl?.classList.toggle("hidden", visible !== 0);
     activeMark?.classList.toggle("hidden", !filtersDirty());
+    commercialNote?.classList.toggle("hidden", !state.filters.commercial?.has("commercial ok"));
+    updateActiveConstraints();
+    syncUrl();
   }
 
   function switchCatalog(id: string) {
@@ -485,7 +624,7 @@ const hintCategory =
     });
     rebuildFiltersUI();
     apply();
-    history.replaceState(null, "", `?catalog=${id}`);
+    syncUrl();
   }
 
   function setPopover(open: boolean) {
@@ -531,6 +670,35 @@ const hintCategory =
     apply();
   });
 
+  const shareButton = document.getElementById("share-decision");
+  const shareMessage = document.getElementById("share-message");
+  shareButton?.addEventListener("click", async () => {
+    syncUrl();
+    const shareUrl = new URL(window.location.href);
+    shareUrl.hash = "directory";
+    try {
+      await navigator.clipboard.writeText(shareUrl.href);
+      if (shareMessage) {
+        shareMessage.textContent = "Result link copied.";
+        shareMessage.classList.remove("hidden");
+      }
+    } catch {
+      if (shareMessage) {
+        shareMessage.textContent = "Copy failed. Use the address bar to share this result.";
+        shareMessage.classList.remove("hidden");
+      }
+    }
+  });
+
   bindChips();
+  if (requestedPreset && state.catalog !== document.querySelector("[data-catalog-tab].is-active")?.dataset.catalogTab) {
+    catalogTabs.forEach((tab) => {
+      const on = tab.dataset.catalogTab === state.catalog;
+      tab.classList.toggle("is-active", on);
+      tab.setAttribute("aria-pressed", on ? "true" : "false");
+    });
+    rebuildFiltersUI();
+  }
+  if (qInput) qInput.value = state.q;
   apply();
 </script>

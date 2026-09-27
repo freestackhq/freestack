@@ -88,6 +88,11 @@
     border-color: var(--color-b2);
   }
 
+  .ds-input:focus-visible {
+    outline: 2px solid var(--color-sand);
+    outline-offset: 2px;
+  }
+
   /* exclusive switch / chip (single-select within a group) */
   .ds-switch {
     display: flex;

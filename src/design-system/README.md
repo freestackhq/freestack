@@ -1,4 +1,4 @@
-# freestack design system
+# Freestack design system
 
 Local, in-repo. Not a published package.
 
@@ -32,5 +32,5 @@ Local, in-repo. Not a published package.
 
 1. One accent. No purple gradients, glow stacks, or pill-cluster heroes.
 2. Limits live in mono, always visible.
-3. Category is a switch (one active), not a multi-select.
+3. Catalog tabs select one catalog. Category and field filters may combine.
 4. Prefer rows + hairlines over card grids for the directory.

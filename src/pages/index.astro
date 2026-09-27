@@ -1,35 +1,23 @@
 ---
 import Layout from "../layouts/Layout.astro";
-import Directory from "../components/Directory.astro";
+import AudiencePaths from "../components/AudiencePaths.astro";
 ---
 
 <Layout>
-  <section class="ds-wrap pb-16 pt-[88px] sm:pt-[120px]">
-    <h1
-      class="mb-7 text-[clamp(3.2rem,9vw,7.5rem)] leading-[0.9] font-bold tracking-[-0.045em] text-ink"
-    >
-      freestack<span class="text-ink-3">.</span>
+  <section class="ds-wrap pb-12 pt-[72px] sm:pb-16 sm:pt-[104px]">
+    <h1 class="max-w-4xl text-[clamp(3.2rem,9vw,6rem)] leading-[0.9] font-bold tracking-[-0.04em] text-ink">
+      Choose the right free tool<span class="text-sand">.</span>
     </h1>
+    <p class="mt-7 max-w-2xl text-[clamp(1rem,1.5vw,1.12rem)] leading-[1.75] text-ink-2">
+      Find tools for your project and check their limits, eligibility, and terms before you commit.
+    </p>
+    <a href="/catalogs" class="ds-btn ds-btn-outline mt-5">Browse tools <span aria-hidden="true">→</span></a>
 
-    <div class="flex flex-wrap items-center justify-between gap-x-8 gap-y-4">
-      <p class="max-w-xl text-[clamp(0.9rem,1.5vw,1.05rem)] leading-[1.75] text-ink-2">
-        Free developer tools, student unlocks, and self-hosted software.
-        Each listing states the{" "}
-        <strong class="font-medium text-ink">hard limits</strong>, who can claim it, and
-        whether commercial use is allowed — for builders tired of “generous free tier”
-        without numbers.
-      </p>
-      <div class="flex flex-wrap gap-2">
-        <a href="/guides/claim-order" class="ds-btn ds-btn-filled">Claim order →</a>
-        <a
-          href="https://github.com/freestackhq/saas"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="ds-btn ds-btn-outline">catalog repo ↗</a
-        >
-      </div>
+    <div id="paths" class="mt-12 scroll-mt-[calc(var(--nav-h)+1rem)] border-t border-b1 pt-7 sm:mt-16">
+      <h2 class="text-xl font-semibold tracking-[-0.02em] text-ink">What are you trying to do?</h2>
+      <p class="mt-2 max-w-xl text-sm leading-6 text-ink-2">Choose a path for practical guidance and relevant tools.</p>
+      <AudiencePaths />
     </div>
   </section>
 
-  <Directory defaultCatalog="saas" />
 </Layout>

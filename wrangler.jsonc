@@ -3,6 +3,7 @@
   "name": "freestack",
   "main": "@astrojs/cloudflare/entrypoints/server",
   "compatibility_date": "2025-05-21",
+  "workers_dev": true,
   "assets": {
     "directory": "./dist",
     "binding": "ASSETS"

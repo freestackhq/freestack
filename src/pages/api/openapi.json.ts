@@ -12,7 +12,7 @@ const openapi = {
     title: "freestack API",
     version: "0.2.0",
     description:
-      "Public JSON API for the freestack catalog directory — multi-catalog search, filtering, and health. CORS open.",
+      "Public JSON API for searching and filtering Freestack catalog data. Results are reference entries, not ranked recommendations; provider terms can change. CORS open.",
     license: { name: "MIT" },
   },
   servers: [

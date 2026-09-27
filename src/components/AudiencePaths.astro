@@ -1,0 +1,35 @@
+---
+const paths = [
+  {
+    href: "/guides/startup",
+    audience: "Founder · first customers",
+    title: "Launch a lean MVP",
+    description: "Check commercial terms, free limits, and the point where a service needs a paid plan.",
+  },
+  {
+    href: "/guides/portfolio",
+    audience: "Student · show your work",
+    title: "Publish a portfolio project",
+    description: "Choose a demo host, make the project easy to review, and share it from your profile.",
+  },
+  {
+    href: "/guides/hobby",
+    audience: "Hobbyist · build for yourself",
+    title: "Pick cloud or self-hosted",
+    description: "Compare convenience with control, then account for backups, updates, and uptime.",
+  },
+];
+---
+
+<div class="mt-6 grid gap-2 lg:grid-cols-3">
+  {paths.map((path) => (
+    <a
+      href={path.href}
+      class="group border border-b1 bg-s1 px-4 py-5 transition-colors hover:border-sand hover:bg-s2 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sand"
+    >
+      <span class="font-mono text-[0.68rem] uppercase tracking-[0.12em] text-ink-3">{path.audience}</span>
+      <span class="mt-2 block text-lg font-medium text-ink group-hover:text-sand">{path.title} <span aria-hidden="true">→</span></span>
+      <span class="mt-2 block text-sm leading-6 text-ink-2">{path.description}</span>
+    </a>
+  ))}
+</div>

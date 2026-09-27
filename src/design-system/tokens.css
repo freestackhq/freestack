@@ -10,15 +10,15 @@
 
   /* ink */
   --color-ink: #f0ede6;
-  --color-ink-2: #888480;
-  --color-ink-3: #4a4844;
+  --color-ink-2: #a09b94;
+  --color-ink-3: #888480;
 
   /* accent — warm sand, not purple/glow */
   --color-sand: #c4a882;
   --color-ok: #6b9e6b;
 
   /* type */
-  --font-sans: "Inter", system-ui, sans-serif;
+  --font-sans: "IBM Plex Sans", system-ui, sans-serif;
   --font-mono: "JetBrains Mono", ui-monospace, monospace;
 
   /* layout */

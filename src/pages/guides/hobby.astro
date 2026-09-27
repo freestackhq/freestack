@@ -1,0 +1,54 @@
+---
+import Layout from "../../layouts/Layout.astro";
+---
+
+<Layout
+  title="build for yourself · freestack."
+  description="Compare managed services and self-hostable tools for personal projects and home labs."
+>
+  <section class="ds-wrap py-[88px] sm:py-[110px]">
+    <div class="ds-section-label">
+      <span class="ds-section-num">05</span>
+      <span class="ds-section-name">Hobbyist path</span>
+      <span class="ds-hairline flex-1"></span>
+    </div>
+
+    <h1 class="mb-5 max-w-3xl text-[clamp(2.2rem,5vw,3.6rem)] leading-[1.05] font-bold tracking-[-0.03em]">
+      Build for yourself.<br /><span class="text-ink-3">Choose how much to operate.</span>
+    </h1>
+    <p class="mb-10 max-w-2xl text-ink-2">
+      A personal project can be a quick experiment, a weekend app, or a service running at home. Managed tools reduce upkeep. Self-hostable tools give you more control and put updates, access, backups, and recovery in your hands.
+    </p>
+
+    <div class="mb-16 grid gap-3 sm:grid-cols-2">
+      <a href="/catalogs?need=hosting#directory" class="group border border-b1 bg-s1 p-5 transition-colors hover:border-sand hover:bg-s2">
+        <span class="font-mono text-[0.68rem] uppercase tracking-[0.12em] text-ink-3">Less to maintain</span>
+        <span class="mt-2 block text-lg font-medium text-ink group-hover:text-sand">Compare managed hosting →</span>
+        <span class="mt-2 block text-sm leading-6 text-ink-2">Check sleep behavior, usage caps, regions, and what the paid step costs.</span>
+      </a>
+      <a href="/catalogs?catalog=saas&amp;q=self-host#directory" class="group border border-b1 bg-s1 p-5 transition-colors hover:border-sand hover:bg-s2">
+        <span class="font-mono text-[0.68rem] uppercase tracking-[0.12em] text-ink-3">More control</span>
+        <span class="mt-2 block text-lg font-medium text-ink group-hover:text-sand">Find self-hostable services →</span>
+        <span class="mt-2 block text-sm leading-6 text-ink-2">Search the SaaS catalog for entries that mention self-hosting; verify each project’s actual requirements.</span>
+      </a>
+    </div>
+
+    <div class="ds-section-label">
+      <span class="ds-section-num">01</span>
+      <span class="ds-section-name">Check the job before choosing</span>
+      <span class="ds-hairline flex-1"></span>
+    </div>
+    <ol class="mb-16 divide-y divide-b1 border-y border-b1">
+      <li class="grid gap-2 py-5 sm:grid-cols-[4rem_1fr] sm:gap-6"><span class="font-mono text-[0.72rem] text-ink-3">01</span><span class="text-[0.95rem] leading-relaxed text-ink-2">Decide what needs to stay available. A personal dashboard can sleep; a shared service or bot may need reliable uptime.</span></li>
+      <li class="grid gap-2 py-5 sm:grid-cols-[4rem_1fr] sm:gap-6"><span class="font-mono text-[0.72rem] text-ink-3">02</span><span class="text-[0.95rem] leading-relaxed text-ink-2">For self-hosting, check the supported install method, CPU and memory needs, storage, backups, and update process before installing.</span></li>
+      <li class="grid gap-2 py-5 sm:grid-cols-[4rem_1fr] sm:gap-6"><span class="font-mono text-[0.72rem] text-ink-3">03</span><span class="text-[0.95rem] leading-relaxed text-ink-2">Keep services private by default. Before exposing one to the internet, understand its authentication, updates, and recovery path.</span></li>
+      <li class="grid gap-2 py-5 sm:grid-cols-[4rem_1fr] sm:gap-6"><span class="font-mono text-[0.72rem] text-ink-3">04</span><span class="text-[0.95rem] leading-relaxed text-ink-2">Pick an install workflow you can maintain. Podman users can compare Compose-based setup, systemd-managed Compose, and native Quadlet units where the project supports them.</span></li>
+    </ol>
+
+    <div class="border-t border-b1 pt-6">
+      <h2 class="text-lg font-semibold text-ink">Ownership includes upkeep</h2>
+      <p class="mt-2 max-w-2xl text-sm leading-6 text-ink-2">Self-hosting can offer control and a useful learning project, but the operator also handles patching, access, backups, and outages. Research describes technical background and maker identity as correlated with self-hosting; it also notes that self-hosters take responsibility for security.</p>
+      <a href="https://www.usenix.org/conference/usenixsecurity24/presentation/gr%C3%B6ber-private-clouds" target="_blank" rel="noopener noreferrer" class="mt-3 inline-flex text-sm text-sand underline-offset-2 hover:underline">Read the USENIX study ↗</a>
+    </div>
+  </section>
+</Layout>
