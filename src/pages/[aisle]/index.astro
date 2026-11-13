@@ -1,0 +1,1043 @@
+---
+/**
+ * Aisle page (Aisle.dc.html, Phone.dc.html, PhoneSheet.dc.html; states from
+ * States.dc.html). Static: the grid is rendered here; filters and the compare
+ * tray live in the URL and are applied by the script below.
+ * Claim Once aisles have their own page (/student-programs).
+ */
+import Shell from "../../layouts/Shell.astro";
+import Label from "../../components/fresh/Label.astro";
+import Icon from "../../components/fresh/Icon.astro";
+import {
+  aisles,
+  checkHref,
+  now as currentDate,
+  tools as allTools,
+  toolsInAisle,
+  unlabeledInAisle,
+  writeLabelHref,
+} from "../../lib/fresh/catalog";
+import { labelState } from "../../lib/fresh/label";
+import { MUST, countLine, labelsText, one } from "../../lib/fresh/aisle-page";
+import type { Aisle } from "../../lib/fresh/types";
+
+export function getStaticPaths() {
+  return aisles()
+    .filter((a) => a.group !== "Claim Once")
+    .map((a) => ({ params: { aisle: a.id }, props: { aisle: a } }));
+}
+
+interface Props {
+  aisle: Aisle;
+}
+
+const { aisle } = Astro.props;
+const now = currentDate();
+const list = toolsInAisle(aisle.id, now);
+const bin = unlabeledInAisle(aisle.id);
+const noun = aisle.noun ?? "tools";
+const types = aisle.types ?? [];
+
+const states = list.map((t) => labelState(t, now));
+const checked = states.filter((s) => s === "checked").length;
+const overdue = states.filter((s) => s === "overdue").length;
+// "Check one" goes to a label nobody has checked, else one that needs a recheck.
+const target =
+  list.find((t) => labelState(t, now) === "unchecked") ??
+  list.find((t) => ["overdue", "vendor-changed"].includes(labelState(t, now)));
+
+const BIN_SHOWN = 5;
+const host = (url: string) => {
+  try {
+    return new URL(url).hostname.replace(/^www\./, "");
+  } catch {
+    return url;
+  }
+};
+
+// What the script needs: this aisle, its types, and every labeled tool by id
+// (to name picks from other aisles in the tray).
+const aisleIndex = Object.fromEntries(aisles().map((a) => [a.id, { name: a.name, noun: a.noun ?? "tools" }]));
+const data = {
+  aisle: { id: aisle.id, name: aisle.name, noun },
+  types,
+  aisles: aisleIndex,
+  index: Object.fromEntries(
+    allTools()
+      .filter((t) => t.source !== "imported")
+      .map((t) => [t.id, { name: t.name, aisle: t.aisle }]),
+  ),
+};
+const json = JSON.stringify(data).replace(/</g, "\\u003c");
+const binNoun = bin.length === 1 ? one(noun) : noun;
+---
+
+<Shell title={`${aisle.name} · freestack`} description={countLine(list.length, noun, aisle.label)} aisle={aisle.id}>
+  <div class="wrap page">
+    <div class="head">
+      <div class="head-main">
+        <p class="crumbs desk"><a href="/">All aisles</a> <span aria-hidden="true">/</span> {aisle.group}</p>
+        <a class="back phone" href="/"><Icon name="back" />All aisles</a>
+        <div class="title-row">
+          <h1 class="title-xl">{aisle.name}</h1>
+          <p class="phone count-sm" data-labels-count role="status">{labelsText(list.length)}</p>
+        </div>
+      </div>
+      <p class="count-line" data-count-line>
+        {countLine(list.length, noun, aisle.label)}
+        {
+          aisle.seeAlso && (
+            <>
+              {" "}
+              {aisle.seeAlso.text} <a href={`/${aisle.seeAlso.aisle}`}>{aisle.seeAlso.name}</a>.
+            </>
+          )
+        }
+      </p>
+    </div>
+
+    <div class="bar">
+      <div class="desk bar-desk">
+        {
+          types.length > 0 && (
+            <div role="group" aria-label="Type" class="chips">
+              <button type="button" class="chip" aria-pressed="true" data-type-chip="">
+                Any type
+              </button>
+              {types.map((t) => (
+                <button type="button" class="chip" aria-pressed="false" data-type-chip={t.id}>
+                  {t.label}
+                </button>
+              ))}
+            </div>
+          )
+        }
+        <div role="group" aria-label="Must allow" class="chips">
+          {
+            MUST.map((m) => (
+              <button type="button" class="chip" aria-pressed="false" data-must-chip={m.id}>
+                {m.chip}
+              </button>
+            ))
+          }
+        </div>
+        <p class="count" data-labels-count role="status">{labelsText(list.length)}</p>
+      </div>
+      <div class="phone bar-phone">
+        {
+          types.length > 0 && (
+            <div class="select">
+              <select class="field" aria-label="Type" data-type-select>
+                <option value="">Any type</option>
+                {types.map((t) => (
+                  <option value={t.id}>{t.label}</option>
+                ))}
+              </select>
+              <Icon name="chevron-down" />
+            </div>
+          )
+        }
+        <button type="button" class="btn btn-outline sheet-open" aria-haspopup="dialog" data-sheet-open>
+          <Icon name="filter" />Must allow<span data-must-count></span>
+        </button>
+      </div>
+    </div>
+
+    <div class="cross on-ink" role="status" data-cross hidden>
+      <p class="cross-text"><strong>Compare works inside one aisle.</strong> <span data-cross-text></span></p>
+      <div class="actions">
+        <button type="button" class="btn btn-promo" data-cross-go></button>
+        <button type="button" class="btn btn-on-ink" data-cross-keep>Keep {noun}</button>
+      </div>
+      <p class="cross-saved" data-cross-saved></p>
+    </div>
+
+    {
+      list.length > 0 && (
+        <div role="note" class="note">
+          <p>
+            <span class="pips" aria-hidden="true">
+              {states.map((s) => (
+                <span class:list={["pip", s === "checked" && "pip-on", s === "overdue" && "pip-due"]} />
+              ))}
+            </span>
+            <span>
+              <strong>
+                {checked} of {list.length} checked
+              </strong>{" "}
+              against the vendor's page.
+              {overdue > 0 && ` ${overdue} ${overdue === 1 ? "is" : "are"} due for a recheck.`}
+            </span>
+          </p>
+          {target && (
+            <a class="check-one" href={checkHref(target)}>
+              Check one
+            </a>
+          )}
+        </div>
+      )
+    }
+
+    <div class="results" data-results>
+      <script is:inline>
+        (function () {
+          // Filters in the URL: hold the grid until the page script applies them.
+          var r = document.currentScript.parentElement;
+          var q = new URLSearchParams(location.search);
+          if (!q.get("type") && !q.get("must")) return;
+          r.setAttribute("data-pending", "");
+          window.__aisleTimer = setTimeout(function () {
+            if (!r.hasAttribute("data-pending")) return;
+            r.removeAttribute("data-pending");
+            r.querySelector("[data-failed]").hidden = false;
+          }, 10000);
+        })();
+      </script>
+
+      <div class="skeleton" aria-busy="true" aria-label="Loading labels">
+        {
+          [50, 40, 60].map((w) => (
+            <div class="bone-card">
+              <span class="bone" style={`width: ${w}%; height: 18px`} />
+              <span class="bone" style={`width: ${w + 20}%; height: 52px`} />
+              <span class="bone" style="height: 12px" />
+              <span class="bone" style="width: 80%; height: 12px" />
+            </div>
+          ))
+        }
+      </div>
+
+      <div role="alert" class="alert-slot">
+        <div class="panel state" data-failed hidden>
+          <p class="state-title">The labels did not load</p>
+          <p>Your connection dropped, so your filters are off. Every label is still below.</p>
+          <button type="button" class="btn" onclick="location.reload()">Try again</button>
+        </div>
+      </div>
+
+      <div class="panel state" data-nomatch hidden>
+        <p class="state-title" data-nomatch-title></p>
+        <p data-nomatch-text></p>
+        <div class="actions">
+          <button type="button" class="btn" data-drop hidden></button>
+          <button type="button" class="btn btn-outline" data-clear>Clear filters</button>
+        </div>
+      </div>
+
+      <div class="grid" data-grid>
+        {list.map((t) => <Label tool={t} now={now} />)}
+      </div>
+    </div>
+
+    {
+      bin.length > 0 && (
+        <section class="bin" aria-labelledby="bin-h">
+          <div class="bin-head">
+            <h2 id="bin-h" class="title-md">
+              The unlabeled bin
+            </h2>
+            <p class="muted">
+              {bin.length} more {binNoun} pulled from community awesome lists. No limits checked yet, so{" "}
+              {bin.length === 1 ? "it is" : "they are"} search-only.
+            </p>
+          </div>
+          <ul class="bin-list">
+            {bin.slice(0, BIN_SHOWN).map((t) => (
+              <li data-bin={t.id}>
+                <span class="bin-name">{t.name}</span>
+                <span class="muted">{host(t.url)}</span>
+                <span class="bin-from muted">
+                  From {t.imported_from ?? "an awesome list"}. <a href={writeLabelHref(t)}>Write its label<span class="sr-only"> for {t.name}</span></a>
+                </span>
+              </li>
+            ))}
+          </ul>
+          {bin.length > BIN_SHOWN && (
+            <details class="bin-more">
+              <summary>Show all {bin.length}</summary>
+              <ul class="bin-list">
+                {bin.slice(BIN_SHOWN).map((t) => (
+                  <li data-bin={t.id}>
+                    <span class="bin-name">{t.name}</span>
+                    <span class="muted">{host(t.url)}</span>
+                    <span class="bin-from muted">
+                      From {t.imported_from ?? "an awesome list"}. <a href={writeLabelHref(t)}>Write its label<span class="sr-only"> for {t.name}</span></a>
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            </details>
+          )}
+        </section>
+      )
+    }
+  </div>
+
+  <div role="region" aria-label="Compare tray" class="tray on-ink" data-tray hidden>
+    <div class="wrap tray-row">
+      <p class="tray-count" data-tray-count></p>
+      <ul class="tray-list" data-tray-list></ul>
+      <p role="status" class="tray-hint" data-tray-hint></p>
+      <button type="button" class="tray-clear" data-tray-clear>Clear</button>
+      <a class="btn btn-promo" data-tray-go hidden>Compare labels</a>
+      <span class="btn tray-off" aria-disabled="true" data-tray-off>Compare labels</span>
+    </div>
+  </div>
+
+  <template data-tray-item>
+    <li><span data-name></span><button type="button" class="tray-x"><Icon name="close" size={12} /></button></li>
+  </template>
+
+  <dialog class="sheet" aria-labelledby="sheet-h" data-sheet>
+    <span class="grabber" aria-hidden="true"></span>
+    <div class="sheet-head">
+      <h2 id="sheet-h" class="sheet-title">Must allow</h2>
+      <button type="button" class="icon-btn" data-sheet-close>
+        <Icon name="close" size={18} /><span class="sr-only">Close</span>
+      </button>
+    </div>
+    <div class="switches">
+      {
+        MUST.map((m) => (
+          <label class="switch">
+            {m.sheet}
+            <input type="checkbox" role="switch" data-must-switch={m.id} />
+          </label>
+        ))
+      }
+    </div>
+    <div class="sheet-actions">
+      <button type="button" class="btn btn-outline" data-sheet-clear>Clear</button>
+      <button type="button" class="btn sheet-show" data-sheet-show>Show {list.length} {noun}</button>
+    </div>
+  </dialog>
+
+  <script is:inline type="application/json" id="aisle-data" set:html={json} />
+</Shell>
+
+<script>
+  import {
+    MAX_COMPARE,
+    activeCount,
+    andList,
+    compareHref,
+    crossAisle,
+    describeFilters,
+    dropOffers,
+    labelsText,
+    matches,
+    noMatchTitle,
+    one,
+    parseState,
+    toSearch,
+    trayHint,
+    type FilterItem,
+    type PageState,
+  } from "../../lib/fresh/aisle-page";
+
+  interface Data {
+    aisle: { id: string; name: string; noun: string };
+    types: { id: string; label: string }[];
+    aisles: Record<string, { name: string; noun: string }>;
+    index: Record<string, { name: string; aisle: string }>;
+  }
+
+  const data: Data = JSON.parse(document.getElementById("aisle-data")!.textContent!);
+  const $ = <T extends Element = HTMLElement>(sel: string) => document.querySelector<T>(sel)!;
+  const $$ = <T extends Element = HTMLElement>(sel: string) => [...document.querySelectorAll<T>(sel)];
+
+  const AISLE = data.aisle.id;
+  const NOUN = data.aisle.noun;
+  const SAVE_KEY = `freestack:compare:${AISLE}`;
+  const typeIds = data.types.map((t) => t.id);
+  const typeLabels = Object.fromEntries(data.types.map((t) => [t.id, t.label]));
+  const ids = Object.keys(data.index);
+
+  const items = $$<HTMLElement>("[data-grid] article.label").map((el) => ({
+    el,
+    id: el.dataset.tool!,
+    type: el.dataset.type ?? null,
+    sell: el.dataset.sell ?? "unknown",
+    card: el.dataset.card ?? "unknown",
+    who: (el.dataset.who ?? "").split(" ").filter(Boolean),
+  }));
+  const filterItems: FilterItem[] = items;
+
+  let state: PageState = parseState(location.search, typeIds, ids);
+  let warn = false;
+
+  // Picks saved when the visitor left for another aisle's compare.
+  if (!new URLSearchParams(location.search).has("compare")) {
+    try {
+      const saved = sessionStorage.getItem(SAVE_KEY);
+      if (saved) {
+        sessionStorage.removeItem(SAVE_KEY);
+        state.compare = parseState(`?compare=${saved}`, typeIds, ids).compare;
+      }
+    } catch {
+      /* storage blocked: start empty */
+    }
+  }
+
+  const own = () => state.compare.filter((id) => data.index[id]?.aisle === AISLE);
+
+  function write() {
+    history.replaceState(history.state, "", `${location.pathname}${toSearch(state)}${location.hash}`);
+  }
+
+  function update(next: Partial<PageState>, keepWarn = false) {
+    state = { ...state, ...next };
+    if (!keepWarn) warn = false;
+    write();
+    render();
+  }
+
+  function render() {
+    // Filters
+    let shown = 0;
+    for (const it of items) {
+      const ok = matches(it, state);
+      it.el.hidden = !ok;
+      if (ok) shown++;
+    }
+    for (const el of $$("[data-labels-count]")) el.textContent = labelsText(shown);
+    for (const b of $$("[data-type-chip]")) b.setAttribute("aria-pressed", String((b.dataset.typeChip || null) === state.type));
+    for (const b of $$("[data-must-chip]")) b.setAttribute("aria-pressed", String(state.must.includes(b.dataset.mustChip!)));
+    const select = document.querySelector<HTMLSelectElement>("[data-type-select]");
+    if (select) select.value = state.type ?? "";
+    for (const s of $$<HTMLInputElement>("[data-must-switch]")) s.checked = state.must.includes(s.dataset.mustSwitch!);
+    $("[data-must-count]").textContent = state.must.length ? ` (${state.must.length})` : "";
+    $("[data-sheet-show]").textContent = `Show ${shown} ${shown === 1 ? one(NOUN) : NOUN}`;
+
+    // No matches
+    const active = activeCount(state);
+    const none = shown === 0 && active > 0;
+    $("[data-nomatch]").hidden = !none;
+    if (none) {
+      $("[data-nomatch-title]").textContent = noMatchTitle(NOUN, active);
+      $("[data-nomatch-text]").textContent = describeFilters(state, typeLabels);
+      const best = dropOffers(filterItems, state, typeLabels)[0];
+      const drop = $("[data-drop]");
+      drop.hidden = !best || best.count === 0;
+      if (best) {
+        drop.textContent = `Drop "${best.label}" (${best.count} match)`;
+        drop.dataset.drop = best.key;
+      }
+    }
+
+    // Compare toggles and tray
+    const picks = own();
+    for (const b of $$("[data-grid] button[data-compare-toggle]")) {
+      const on = picks.includes(b.dataset.compareToggle!);
+      b.setAttribute("aria-pressed", String(on));
+      b.querySelector<HTMLElement>("[data-off]")!.hidden = on;
+      b.querySelector<HTMLElement>("[data-on]")!.hidden = !on;
+    }
+    $("[data-tray]").hidden = picks.length === 0;
+    $("[data-tray-count]").textContent = `${picks.length} to compare`;
+    $("[data-tray-hint]").textContent = trayHint(picks.length, warn);
+    const go = $<HTMLAnchorElement>("[data-tray-go]");
+    go.hidden = picks.length < 2;
+    go.href = compareHref(picks);
+    $("[data-tray-off]").hidden = picks.length >= 2;
+    const ul = $("[data-tray-list]");
+    const tpl = $<HTMLTemplateElement>("[data-tray-item]");
+    ul.replaceChildren(
+      ...picks.map((id) => {
+        const li = tpl.content.firstElementChild!.cloneNode(true) as HTMLElement;
+        const name = data.index[id].name;
+        li.querySelector("[data-name]")!.textContent = name;
+        const x = li.querySelector("button")!;
+        x.setAttribute("aria-label", `Remove ${name} from compare`);
+        x.dataset.remove = id;
+        return li;
+      }),
+    );
+
+    // Compare across aisles
+    const cross = crossAisle(state.compare, AISLE, data.index);
+    $("[data-cross]").hidden = !cross;
+    if (cross) {
+      const other = data.aisles[cross.aisle];
+      const n = cross.own.length;
+      const yours = n === 0 ? "" : `, but your tray has ${n} ${n === 1 ? one(NOUN) : NOUN}`;
+      $("[data-cross-text]").textContent = `You picked ${andList(cross.names)} from ${other.name}${yours}.`;
+      $("[data-cross-go]").textContent = `Start a ${other.name} compare`;
+      const saved = one(NOUN) === "tool" ? "Your picks here" : `Your ${one(NOUN)} picks`;
+      $("[data-cross-saved]").textContent = n ? `${saved} stay saved for when you come back.` : "";
+      $("[data-cross-saved]").hidden = n === 0;
+    }
+  }
+
+  // Filters
+  for (const b of $$("[data-type-chip]")) b.addEventListener("click", () => update({ type: b.dataset.typeChip || null }));
+  for (const b of $$("[data-must-chip]"))
+    b.addEventListener("click", () => {
+      const id = b.dataset.mustChip!;
+      update({ must: state.must.includes(id) ? state.must.filter((m) => m !== id) : [...state.must, id] });
+    });
+  document
+    .querySelector<HTMLSelectElement>("[data-type-select]")
+    ?.addEventListener("change", (e) => update({ type: (e.target as HTMLSelectElement).value || null }));
+  for (const s of $$<HTMLInputElement>("[data-must-switch]"))
+    s.addEventListener("change", () => {
+      const id = s.dataset.mustSwitch!;
+      update({ must: s.checked ? [...new Set([...state.must, id])] : state.must.filter((m) => m !== id) });
+    });
+  $("[data-drop]").addEventListener("click", (e) => {
+    const key = (e.currentTarget as HTMLElement).dataset.drop!;
+    update(key === "type" ? { type: null } : { must: state.must.filter((m) => m !== key) });
+  });
+  $("[data-clear]").addEventListener("click", () => update({ type: null, must: [] }));
+
+  // Phone sheet
+  const sheet = $<HTMLDialogElement>("[data-sheet]");
+  $("[data-sheet-open]").addEventListener("click", () => sheet.showModal());
+  $("[data-sheet-close]").addEventListener("click", () => sheet.close());
+  $("[data-sheet-show]").addEventListener("click", () => sheet.close());
+  $("[data-sheet-clear]").addEventListener("click", () => update({ must: [] }));
+  sheet.addEventListener("click", (e) => {
+    if (e.target === sheet) sheet.close();
+  });
+
+  // Compare
+  $("[data-grid]").addEventListener("click", (e) => {
+    const b = (e.target as HTMLElement).closest<HTMLElement>("button[data-compare-toggle]");
+    if (!b) return;
+    const id = b.dataset.compareToggle!;
+    if (state.compare.includes(id)) return update({ compare: state.compare.filter((x) => x !== id) });
+    if (own().length >= MAX_COMPARE) {
+      warn = true;
+      return render();
+    }
+    update({ compare: [...state.compare, id] });
+  });
+  $("[data-tray-list]").addEventListener("click", (e) => {
+    const b = (e.target as HTMLElement).closest<HTMLElement>("button[data-remove]");
+    if (b) update({ compare: state.compare.filter((x) => x !== b.dataset.remove) });
+  });
+  $("[data-tray-clear]").addEventListener("click", () => update({ compare: state.compare.filter((id) => !own().includes(id)) }));
+  $("[data-cross-keep]").addEventListener("click", () => update({ compare: own() }));
+  $("[data-cross-go]").addEventListener("click", () => {
+    const cross = crossAisle(state.compare, AISLE, data.index);
+    if (!cross) return;
+    try {
+      if (cross.own.length) sessionStorage.setItem(SAVE_KEY, cross.own.join(","));
+    } catch {
+      /* storage blocked: picks are not saved */
+    }
+    location.href = `/${cross.aisle}${toSearch({ type: null, must: [], compare: cross.ids })}`;
+  });
+
+  // Ready: apply the URL and drop the loading state.
+  render();
+  if (state.compare.length) write();
+  clearTimeout((window as unknown as { __aisleTimer?: number }).__aisleTimer);
+  $("[data-results]").removeAttribute("data-pending");
+</script>
+
+<style>
+  .page {
+    padding-block: 40px 120px;
+  }
+  .head {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 24px;
+    align-items: flex-end;
+  }
+  .head-main {
+    flex: 1 1 520px;
+    min-width: 0;
+  }
+  .title-row {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+  }
+  .title-row h1 {
+    overflow-wrap: anywhere;
+  }
+  .count-line {
+    flex: 0 1 380px;
+    margin: 0;
+    font-size: 17px;
+    line-height: 1.5;
+    color: var(--muted);
+  }
+  .back {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    min-height: var(--target);
+    font-size: 14px;
+    font-weight: 600;
+    text-decoration: none;
+  }
+  .count-sm {
+    margin: 0;
+    font-size: 14px;
+    color: var(--muted);
+    white-space: nowrap;
+  }
+
+  /* Filter bar */
+  .bar {
+    position: sticky;
+    top: 0;
+    z-index: 3;
+    margin-top: 32px;
+    padding: 14px 0;
+    background: var(--shelf);
+    border-bottom: 2px solid var(--ink);
+  }
+  .bar-desk {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px 24px;
+    align-items: center;
+  }
+  .chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+  .count {
+    margin: 0 0 0 auto;
+    font-size: 15px;
+    font-weight: 600;
+  }
+  .bar-phone {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 8px;
+  }
+  .bar-phone .sheet-open:only-child {
+    grid-column: 1 / -1;
+  }
+  .select {
+    position: relative;
+    min-width: 0;
+  }
+  .select select {
+    appearance: none;
+    padding-right: 36px;
+    font-weight: 600;
+    font-size: 15px;
+  }
+  .select :global(svg) {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    pointer-events: none;
+  }
+  .sheet-open {
+    font-weight: 600;
+  }
+
+  /* Check line */
+  .note {
+    margin-top: 16px;
+    padding: 4px 6px 4px 18px;
+    background: var(--label);
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0 16px;
+    font-size: 15px;
+    line-height: 1.5;
+  }
+  .note p {
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding-block: 8px;
+  }
+  .pips {
+    display: inline-flex;
+    flex-wrap: wrap;
+    gap: 2px;
+    flex: 0 0 auto;
+    max-width: 120px;
+  }
+  .pip {
+    width: 10px;
+    height: 10px;
+    background: var(--rule);
+  }
+  .pip-on {
+    background: var(--ink);
+  }
+  .pip-due {
+    background: var(--recheck);
+  }
+  .check-one {
+    margin-left: auto;
+    display: inline-flex;
+    align-items: center;
+    min-height: var(--target);
+    padding-inline: 8px;
+    font-weight: 700;
+  }
+
+  /* Cross-aisle message */
+  .cross {
+    margin-top: 16px;
+    padding: 20px 24px;
+    background: var(--ink);
+    color: var(--label);
+    display: grid;
+    gap: 14px;
+  }
+  .cross-text {
+    margin: 0;
+    font-size: 17px;
+    line-height: 1.45;
+  }
+  .cross-saved {
+    margin: 0;
+    font-size: 14px;
+    color: var(--on-ink-muted);
+  }
+  .actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  /* Results and states */
+  .results {
+    margin-top: 24px;
+    display: grid;
+    gap: 24px;
+  }
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr));
+    gap: 28px 20px;
+    align-items: stretch;
+  }
+  .skeleton {
+    display: none;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr));
+    gap: 20px;
+  }
+  .results[data-pending] .skeleton {
+    display: grid;
+  }
+  .results[data-pending] .grid,
+  .results[data-pending] [data-nomatch] {
+    display: none;
+  }
+  .bone-card {
+    background: var(--label);
+    border-top: 8px solid var(--skeleton);
+    padding: 16px;
+    display: grid;
+    gap: 10px;
+    min-height: 220px;
+    align-content: start;
+  }
+  .bone {
+    display: block;
+    background: var(--skeleton);
+  }
+  .alert-slot:empty,
+  .alert-slot:has(> [hidden]) {
+    display: none;
+  }
+  .state {
+    padding: 32px;
+    display: grid;
+    gap: 14px;
+    justify-items: start;
+  }
+  .state p {
+    margin: 0;
+    font-size: 16px;
+    line-height: 1.5;
+  }
+  .state .state-title {
+    font-weight: 900;
+    font-stretch: 62%;
+    line-height: 1;
+    font-size: 44px;
+  }
+
+  /* Unlabeled bin */
+  .bin {
+    margin-top: 64px;
+    padding: 28px;
+    border: 3px dashed var(--rule);
+  }
+  .bin-head {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 24px;
+    align-items: baseline;
+  }
+  .bin-head p {
+    margin: 0;
+    font-size: 15px;
+  }
+  .bin-list {
+    list-style: none;
+    margin: 20px 0 0;
+    padding: 0;
+    font-size: 15px;
+  }
+  .bin-list li {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 6px 16px;
+    padding: 4px 0;
+    border-top: 1px solid var(--rule);
+  }
+  .bin-name {
+    font-weight: 700;
+    min-width: min(220px, 100%);
+  }
+  .bin-from {
+    margin-left: auto;
+  }
+  .bin-from a {
+    display: inline-flex;
+    align-items: center;
+    min-height: var(--target);
+    color: var(--ink);
+    font-weight: 600;
+  }
+  .bin-more summary {
+    min-height: var(--target);
+    display: flex;
+    align-items: center;
+    font-weight: 600;
+    cursor: pointer;
+  }
+
+  /* Compare tray */
+  .tray {
+    position: sticky;
+    bottom: 0;
+    z-index: 4;
+    background: var(--ink);
+    color: var(--label);
+  }
+  .tray-row {
+    padding-block: 10px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px 16px;
+    align-items: center;
+  }
+  .tray-count {
+    margin: 0;
+    font-size: 15px;
+    font-weight: 700;
+  }
+  .tray-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+  .tray-list :global(li) {
+    display: inline-flex;
+    align-items: center;
+    background: var(--label);
+    color: var(--ink);
+    font-size: 14px;
+    font-weight: 600;
+    padding-left: 10px;
+  }
+  .tray-list :global(.tray-x) {
+    width: var(--target);
+    height: var(--target);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    border: 0;
+    color: var(--ink);
+    cursor: pointer;
+  }
+  .tray-list :global(.tray-x:focus-visible) {
+    outline-color: var(--focus);
+    outline-offset: -3px;
+  }
+  .tray-hint {
+    margin: 0;
+    font-size: 14px;
+    color: var(--promo);
+  }
+  .tray-clear {
+    margin-left: auto;
+    min-height: var(--target);
+    padding: 0 12px;
+    background: transparent;
+    border: 0;
+    color: var(--label);
+    font-weight: 600;
+    font-size: 15px;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    cursor: pointer;
+  }
+  .tray .btn {
+    font-size: 16px;
+  }
+  .tray-off {
+    background: var(--ink-line);
+    border-color: var(--ink-line);
+    color: var(--on-ink-muted);
+    cursor: not-allowed;
+  }
+
+  /* Phone sheet (PhoneSheet.dc.html) */
+  .sheet {
+    margin: auto 0 0;
+    width: 100%;
+    max-width: 100%;
+    max-height: 90dvh;
+    border: 0;
+    padding: 8px 16px calc(16px + env(safe-area-inset-bottom, 0px));
+    background: var(--label);
+    color: var(--ink);
+    box-shadow: 0 -20px 40px -20px rgba(0, 0, 0, 0.5);
+  }
+  .sheet::backdrop {
+    background: rgba(28, 35, 64, 0.55);
+  }
+  .grabber {
+    display: block;
+    width: 44px;
+    height: 5px;
+    margin: 0 auto 10px;
+    background: var(--rule);
+  }
+  .sheet-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .sheet-title {
+    margin: 0;
+    font-weight: 900;
+    font-stretch: 62%;
+    line-height: 1;
+    font-size: 36px;
+  }
+  .icon-btn {
+    width: var(--target);
+    height: var(--target);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    border: 0;
+    cursor: pointer;
+  }
+  .switches {
+    margin-top: 8px;
+  }
+  .switch {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    min-height: 56px;
+    border-top: 1px solid var(--shelf);
+    font-size: 17px;
+    font-weight: 600;
+    cursor: pointer;
+  }
+  .switch input {
+    width: 22px;
+    height: 22px;
+    accent-color: var(--ink);
+  }
+  .sheet-actions {
+    margin-top: 14px;
+    display: flex;
+    gap: 8px;
+  }
+  .sheet-show {
+    flex: 1;
+  }
+
+  /* Desktop / phone swaps */
+  .phone {
+    display: none;
+  }
+  @media (max-width: 640px) {
+    .desk {
+      display: none;
+    }
+    .phone {
+      display: revert;
+    }
+    .back.phone {
+      display: inline-flex;
+    }
+    .bar-phone.phone {
+      display: grid;
+    }
+    .page {
+      padding-block: 4px 64px;
+    }
+    .title-row h1 {
+      font-size: 56px;
+    }
+    /* Phone.dc.html: the label count sits beside the title instead. */
+    .count-line {
+      display: none;
+    }
+    .note {
+      padding: 2px 4px 2px 12px;
+      font-size: 14px;
+    }
+    .pips {
+      display: none;
+    }
+    .head {
+      gap: 8px;
+    }
+    .bar {
+      margin-top: 16px;
+      padding: 12px 0;
+    }
+    .cross {
+      padding: 16px;
+    }
+    .state {
+      padding: 20px;
+    }
+    .state .state-title {
+      font-size: 36px;
+    }
+    .bin {
+      margin-top: 40px;
+      padding: 16px;
+    }
+    .tray-list {
+      display: none;
+    }
+    .tray-row {
+      gap: 4px 8px;
+      padding-right: 8px;
+    }
+    .tray-hint {
+      order: 5;
+      flex-basis: 100%;
+    }
+    .tray .btn {
+      font-size: 15px;
+      padding: 0 14px;
+    }
+  }
+</style>
