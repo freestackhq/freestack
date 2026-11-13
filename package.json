@@ -21,6 +21,7 @@
     "test:e2e": "playwright test",
     "dns:freestack": "bash scripts/dns-freestack.sh",
     "cli": "node packages/cli/bin/freestack.js",
+    "ops:link-check": "node scripts/ops/link-check.mjs",
     "ops:pricing-scan": "node scripts/ops/pricing-scan.mjs",
     "ops:staleness": "node scripts/ops/staleness-gate.mjs"
   },
