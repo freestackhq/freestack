@@ -14,6 +14,7 @@ test.describe("label states (States.dc.html)", () => {
     await expect(cell("supabase").locator('[data-state="overdue"]')).toContainText("Due for a recheck");
     await expect(cell("supabase")).not.toContainText("Suggested");
     await expect(cell("d1").locator('[data-state="review"]')).toContainText("A change is waiting for review");
+    await expect(cell("d1").getByRole("link", { name: /^See it/ })).toHaveAttribute("href", /\/issues\/1$/);
     await expect(cell("turso").locator('[data-state="vendor-changed"]')).toContainText("Turso changed its pricing page on");
     await expect(cell("turso").getByRole("link", { name: "Recheck this label" })).toBeVisible();
     await expect(cell("xata-lite").locator('[data-state="imported"]')).toContainText("From free-for-dev. No numbers yet");

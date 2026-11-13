@@ -110,6 +110,7 @@ export const CAPTURES = [
   { id: "search-empty", title: "Search, nothing typed", path: "/", act: openSearch(""), overlay: true, boards: { desktop: "Search", phone: "PhoneSearch" } },
   { id: "search-broad", title: "Search, many results", path: "/", act: openSearch("cloud"), overlay: true, boards: { desktop: "Search", phone: "PhoneSearch" } },
   { id: "search-none", title: "Search, no results", path: "/", act: openSearch("zzqxv"), overlay: true, boards: { desktop: "Edges", phone: "PhoneSearch" } },
+  { id: "search-typo", title: "Search, did you mean", path: "/", act: openSearch("pocketbse"), overlay: true, boards: { desktop: "Edges", phone: "PhoneSearch" } },
   { id: "menu", title: "Aisles menu", path: "/", act: openMenu, overlay: true, boards: { desktop: "AislesMenu", phone: "PhoneMenu" } },
 
   // Side pages

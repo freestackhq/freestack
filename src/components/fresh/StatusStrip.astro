@@ -6,6 +6,7 @@
 import Icon from "./Icon.astro";
 import { strings } from "../../lib/fresh/label";
 import { now as currentDate, checkHref, writeLabelHref } from "../../lib/fresh/catalog";
+import { REPO_URL } from "../../lib/site";
 import type { Tool } from "../../lib/fresh/types";
 
 interface Props {
@@ -39,9 +40,16 @@ const href = s.state === "imported" ? writeLabelHref(tool) : checkHref(tool);
   }
   {
     s.state === "review" && (
-      <p class="row">
-        <Icon name="wrench" />
-        {s.text}
+      <p class="row split">
+        <span class="lead">
+          <Icon name="wrench" />
+          {s.text}
+        </span>
+        {tool.review_issue && (
+          <a href={`${REPO_URL}/issues/${tool.review_issue}`} target="_blank" rel="noopener noreferrer">
+            See it<span class="sr-only">: the review of {tool.name}, opens in a new tab</span>
+          </a>
+        )}
       </p>
     )
   }
@@ -95,6 +103,11 @@ const href = s.state === "imported" ? writeLabelHref(tool) : checkHref(tool);
     display: inline-flex;
     align-items: center;
     min-height: var(--target);
+  }
+  .lead {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
   }
   .on-ink {
     background: var(--ink);
