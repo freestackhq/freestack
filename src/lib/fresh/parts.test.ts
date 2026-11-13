@@ -20,7 +20,9 @@ describe("stack parts", () => {
     const secrets = parts().find((p) => p.key === "secrets")!;
     expect(partOptions(auth).map((t) => t.id)).toContain("clerk");
     expect(partOptions(auth).map((t) => t.id)).not.toContain("doppler");
-    expect(partOptions(secrets).map((t) => t.id)).toEqual(["doppler"]);
+    expect(partOptions(secrets).map((t) => t.id)).toContain("doppler");
+    expect(partOptions(secrets).map((t) => t.id)).not.toContain("clerk");
+    for (const t of partOptions(secrets)) expect(t.kind).toBe("Secrets");
   });
 
   it("never offers imported entries", () => {

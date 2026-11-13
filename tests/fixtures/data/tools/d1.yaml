@@ -1,0 +1,25 @@
+# TEST FIXTURE, not real data. Copied from the board samples (the old src/data/sample.ts).
+# *_days_ago keys are fixture-only: scripts/generate.mjs turns them into dates at build time.
+id: d1
+name: Cloudflare D1
+kind: SQLite on Workers
+url: https://developers.cloudflare.com/d1/
+aisle: databases
+metric: 5
+limits:
+  - 5 million row reads a day
+  - Only runs inside Workers
+who:
+  - anyone
+region: null
+sell: yes
+card: no
+catches:
+  - Only runs inside Workers
+use_if: []
+skip_if: []
+pricing_url: https://developers.cloudflare.com/d1/platform/pricing/
+verified_at: null
+verified_by: null
+source: catalog
+type: sqlite

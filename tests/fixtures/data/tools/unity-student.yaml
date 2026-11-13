@@ -1,0 +1,32 @@
+# TEST FIXTURE, not real data. Copied from the board samples (the old src/data/sample.ts).
+# *_days_ago keys are fixture-only: scripts/generate.mjs turns them into dates at build time.
+id: unity-student
+name: Unity Student
+kind: Student license
+url: https://unity.com/products/unity-student
+aisle: student-programs
+metric: null
+metric_note: While verified
+limits: []
+who:
+  - student_any_id
+region: null
+sell: unknown
+card: unknown
+catches:
+  - Needs a SheerID check
+use_if: []
+skip_if: []
+pricing_url: https://unity.com/products/unity-student
+verified_at: null
+verified_by: null
+source: catalog
+program:
+  order: 5
+  lasts_big: Enrolled
+  lasts_sub: lasts while verified
+  perks:
+    - Unity Pro editor
+  needs: Verified student, 16 or older
+  lasts: While verified
+  claim_url: https://unity.com/products/unity-student

@@ -1,0 +1,24 @@
+# TEST FIXTURE, not real data. Copied from the board samples (the old src/data/sample.ts).
+# *_days_ago keys are fixture-only: scripts/generate.mjs turns them into dates at build time.
+id: pocketbase
+name: PocketBase
+kind: Self-hosted SQLite
+url: https://pocketbase.io
+aisle: databases
+metric: null
+metric_note: No limit. Your own disk
+limits:
+  - You run the server
+who:
+  - anyone
+region: null
+sell: yes
+card: no
+catches: []
+use_if: []
+skip_if: []
+pricing_url: https://pocketbase.io
+verified_at: null
+verified_by: null
+source: catalog
+type: sqlite

@@ -1,21 +1,35 @@
 ---
 /**
- * Claim Once aisle (Programs.dc.html). Static page; the "I have" filter is
+ * Claim Once aisle (Programs.dc.html), for every aisle in the Claim Once
+ * group. Static page; the "I have" filter is
  * applied on the client from ?have= so the view stays shareable. The server
  * render applies the default so the page is correct without JavaScript.
  */
-import Shell from "../layouts/Shell.astro";
-import Icon from "../components/fresh/Icon.astro";
-import { aisle as getAisle, now, programsInAisle, toolHref } from "../lib/fresh/catalog";
-import { labelState } from "../lib/fresh/label";
-import { DEFAULT_HAVE, HAVE_OPTIONS, canClaim } from "../lib/fresh/programs";
+import Shell from "../../layouts/Shell.astro";
+import Icon from "./Icon.astro";
+import { now, programsInAisle, toolHref } from "../../lib/fresh/catalog";
+import { labelState } from "../../lib/fresh/label";
+import { DEFAULT_HAVE, HAVE_OPTIONS, canClaim } from "../../lib/fresh/programs";
 
-const AISLE = "student-programs";
-const aisle = getAisle(AISLE)!;
+import type { Aisle, Who } from "../../lib/fresh/types";
+
+interface Props {
+  aisle: Aisle;
+}
+
+const { aisle } = Astro.props;
+const AISLE = aisle.id;
 const programs = programsInAisle(AISLE);
+// The "I have" filter only matters when some program needs proof you are a student.
+const forStudents = programs.some((p) => p.who.some((w) => w.startsWith("student")));
+const intro =
+  aisle.intro ??
+  "Bundles you claim once with a school email. They are numbered in the order worth claiming. The big number is how long it lasts.";
+const source = AISLE === "student-programs" ? "the claim-order guide" : "the catalog";
 const at = now();
 const checked = programs.filter((p) => labelState(p, at) === "checked").length;
-const shown = programs.filter((p) => canClaim(p.who, DEFAULT_HAVE)).length;
+const visibleTo = (who: Who[]) => !forStudents || canClaim(who, DEFAULT_HAVE);
+const shown = programs.filter((p) => visibleTo(p.who)).length;
 const countText = (n: number) => `${n} ${n === 1 ? "program" : "programs"} you can claim`;
 ---
 
@@ -24,23 +38,30 @@ const countText = (n: number) => `${n} ${n === 1 ? "program" : "programs"} you c
     <p class="crumbs"><a href="/">All aisles</a> <span aria-hidden="true">/</span> {aisle.group}</p>
     <div class="head">
       <h1 class="title-xl">{aisle.name}</h1>
-      <p class="intro">
-        Bundles you claim once with a school email. They are numbered in the order worth claiming. The big number is
-        how long it lasts.
-      </p>
+      <p class="intro">{intro}</p>
     </div>
 
-    <div class="filter" role="group" aria-labelledby="have-label">
-      <span id="have-label" class="have">I have</span>
-      {
-        HAVE_OPTIONS.map((o) => (
-          <button type="button" class="chip" data-have={o.id} aria-pressed={String(o.id === DEFAULT_HAVE)}>
-            {o.label}
-          </button>
-        ))
-      }
-      <p class="count" role="status" data-count>{countText(shown)}</p>
-    </div>
+    {
+      forStudents ? (
+        <div class="filter" role="group" aria-labelledby="have-label" data-have-filter>
+          <span id="have-label" class="have">I have</span>
+          {HAVE_OPTIONS.map((o) => (
+            <button type="button" class="chip" data-have={o.id} aria-pressed={String(o.id === DEFAULT_HAVE)}>
+              {o.label}
+            </button>
+          ))}
+          <p class="count" role="status" data-count>
+            {countText(shown)}
+          </p>
+        </div>
+      ) : (
+        <div class="filter">
+          <p class="count" role="status" data-count>
+            {countText(shown)}
+          </p>
+        </div>
+      )
+    }
 
     <div class="grid" data-grid>
       {
@@ -52,7 +73,7 @@ const countText = (n: number) => `${n} ${n === 1 ? "program" : "programs"} you c
               data-program={t.id}
               data-order={p.order}
               data-who={t.who.join(" ")}
-              hidden={!canClaim(t.who, DEFAULT_HAVE)}
+              hidden={!visibleTo(t.who)}
             >
               {p.order === 1 && <span class="tag">Claim first</span>}
               <div class="name">
@@ -103,7 +124,7 @@ const countText = (n: number) => `${n} ${n === 1 ? "program" : "programs"} you c
     </div>
 
     <p class="note" data-note>
-      Order and terms from the claim-order guide.
+      Order and terms from {source}.
       {
         checked === 0
           ? " Not checked against each vendor yet."
@@ -114,8 +135,8 @@ const countText = (n: number) => `${n} ${n === 1 ? "program" : "programs"} you c
 </Shell>
 
 <script>
-  import { canClaim, parseHave, type Have } from "../lib/fresh/programs";
-  import type { Who } from "../lib/fresh/types";
+  import { canClaim, parseHave, type Have } from "../../lib/fresh/programs";
+  import type { Who } from "../../lib/fresh/types";
 
   const cards = Array.from(document.querySelectorAll<HTMLElement>("[data-program]"));
   const buttons = Array.from(document.querySelectorAll<HTMLButtonElement>("[data-have]"));
@@ -150,7 +171,8 @@ const countText = (n: number) => `${n} ${n === 1 ? "program" : "programs"} you c
     }),
   );
 
-  apply(parseHave(new URLSearchParams(location.search).get("have")));
+  // Aisles with no student-only program have no filter: show every card.
+  if (document.querySelector("[data-have-filter]")) apply(parseHave(new URLSearchParams(location.search).get("have")));
 </script>
 
 <style>

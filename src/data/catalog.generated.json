@@ -12645,8 +12645,8 @@
   "removed": [],
   "legacy": {
     "catalogs": {
-      "saas": "/",
-      "apis": "/",
+      "saas": "/#aisles-h",
+      "apis": "/#aisles-h",
       "llm-ai": "/inference"
     },
     "categories": {

@@ -1,0 +1,33 @@
+# TEST FIXTURE, not real data. Copied from the board samples (the old src/data/sample.ts).
+# *_days_ago keys are fixture-only: scripts/generate.mjs turns them into dates at build time.
+id: github-student-pack
+name: GitHub Student Developer Pack
+kind: Student bundle
+url: https://education.github.com/pack
+aisle: student-programs
+metric: 24
+limits: []
+who:
+  - student_school_email
+  - student_any_id
+region: null
+sell: unknown
+card: no
+catches:
+  - Partner offers rotate
+use_if: []
+skip_if: []
+pricing_url: https://education.github.com/pack
+verified_at: null
+verified_by: null
+source: catalog
+program:
+  order: 1
+  lasts_big: 2 yrs
+  lasts_sub: then verify again
+  perks:
+    - GitHub Pro, Copilot, Codespaces
+    - 80+ partner offers
+  needs: School email or proof of enrollment
+  lasts: About 2 years, then re-verify
+  claim_url: https://education.github.com/pack

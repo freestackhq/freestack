@@ -1,0 +1,28 @@
+# TEST FIXTURE, not real data. Copied from the board samples (the old src/data/sample.ts).
+# *_days_ago keys are fixture-only: scripts/generate.mjs turns them into dates at build time.
+school:
+  - job: Hosting
+    tool: cf-workers
+  - job: Database
+    tool: neon
+  - job: Sign-in
+    tool: clerk
+  - job: Secrets
+    tool: doppler
+student:
+  - job: Hosting
+    tool: cf-workers
+  - job: Database
+    tool: neon
+  - job: Sign-in
+    tool: clerk
+  - job: Cache
+    tool: upstash-redis
+indie:
+  - job: Hosting
+    tool: cf-workers
+  - job: Database
+    tool: neon
+  - job: Sign-in
+    tool: clerk
+startup: []

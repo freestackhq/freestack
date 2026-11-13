@@ -1,0 +1,69 @@
+# TEST FIXTURE, not real data. Copied from the board samples (the old src/data/sample.ts).
+# *_days_ago keys are fixture-only: scripts/generate.mjs turns them into dates at build time.
+- id: databases
+  group: Build
+  name: Databases
+  metric: storage_gb
+  unit: GB
+  label: free storage
+  noun: databases
+  types:
+    - id: postgres
+      label: Postgres
+    - id: sqlite
+      label: SQLite
+    - id: documents
+      label: Documents
+  seeAlso:
+    text: Redis and queues are in
+    aisle: cache
+    name: Cache and queues
+- id: cache
+  group: Build
+  name: Cache and queues
+  metric: commands_per_day
+  unit: a day
+  label: commands
+  noun: caches and queues
+- id: hosting
+  group: Build
+  name: Hosting
+  metric: requests_per_day
+  unit: a day
+  label: requests
+  noun: hosts
+- id: auth
+  group: Build
+  name: Auth and secrets
+  metric: monthly_users
+  unit: a month
+  label: users
+  noun: auth and secrets tools
+- id: email
+  group: Build
+  name: Email
+  metric: emails_per_month
+  unit: a month
+  label: emails
+  noun: email services
+- id: storage
+  group: Build
+  name: Storage
+  metric: storage_gb
+  unit: GB
+  label: free storage
+  noun: storage services
+- id: inference
+  group: AI
+  name: Inference APIs
+  metric: requests_per_day
+  unit: a day
+  label: requests
+  noun: inference APIs
+- id: student-programs
+  group: Claim Once
+  name: Student programs
+  metric: duration
+  unit: ""
+  label: how long it lasts
+  noun: programs

@@ -1,0 +1,22 @@
+# TEST FIXTURE, not real data. Copied from the board samples (the old src/data/sample.ts).
+# *_days_ago keys are fixture-only: scripts/generate.mjs turns them into dates at build time.
+id: upstash-redis
+name: Upstash Redis
+kind: Serverless Redis
+url: https://upstash.com
+aisle: cache
+metric: 10000
+limits:
+  - 256 MB data
+who:
+  - anyone
+region: null
+sell: yes
+card: no
+catches: []
+use_if: []
+skip_if: []
+pricing_url: https://upstash.com/pricing
+verified_days_ago: 10
+verified_by: Karlo
+source: catalog

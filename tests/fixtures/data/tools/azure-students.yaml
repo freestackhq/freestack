@@ -1,0 +1,32 @@
+# TEST FIXTURE, not real data. Copied from the board samples (the old src/data/sample.ts).
+# *_days_ago keys are fixture-only: scripts/generate.mjs turns them into dates at build time.
+id: azure-students
+name: Azure for Students
+kind: Cloud credit
+url: https://azure.microsoft.com/free/students/
+aisle: student-programs
+metric: 12
+limits: []
+who:
+  - student_school_email
+region: null
+sell: unknown
+card: no
+catches:
+  - Credit runs out if you leave VMs on
+use_if: []
+skip_if: []
+pricing_url: https://azure.microsoft.com/free/students/
+verified_at: null
+verified_by: null
+source: catalog
+program:
+  order: 3
+  lasts_big: 1 yr
+  lasts_sub: $100 credit, renews while enrolled
+  perks:
+    - $100 credit a year
+    - 25+ free services, no credit card
+  needs: School email
+  lasts: Renews while enrolled
+  claim_url: https://azure.microsoft.com/free/students/
