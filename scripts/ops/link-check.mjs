@@ -241,8 +241,10 @@ export function reportMarkdown(rows) {
     }), "");
   };
   section("Other url problems", (r) => r.urlResult, (r) => r.url);
-  section("pricing_url problems", (r) => r.pricingResult, (r) => r.pricing_url);
-  const deadPricing = rows.filter((r) => r.pricingResult && isDead(r.pricingResult));
+  // A pricing_url that is the same link as url is already listed above.
+  const ownPricing = (r) => (r.pricing_url !== r.url ? r.pricingResult : null);
+  section("pricing_url problems", ownPricing, (r) => r.pricing_url);
+  const deadPricing = rows.filter((r) => ownPricing(r) && isDead(r.pricingResult));
   if (deadPricing.length) lines.push("### Dead pricing_url (product url may be fine)", ...deadPricing.map((r) => `- \`${r.id}\`: ${fmt(r.pricingResult)} ${r.pricing_url}`), "");
   return lines.join("\n");
 }

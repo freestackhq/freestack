@@ -6,7 +6,7 @@
  *   FREESTACK_DATA=tests/fixtures/data pnpm catalog:generate -> tests/fixtures/data/.generated/catalog.json
  *
  * Inputs: aisles.yaml, tools/*.yaml, imported/*.yaml, state/reviews.yaml,
- * state/pricing.yaml, presets.yaml, catches.yaml, parts.yaml,
+ * state/pricing.yaml, state/links.yaml, presets.yaml, catches.yaml, parts.yaml,
  * situations.yaml, removed.yaml, legacy.yaml. Rules (data/rules.yaml) go to
  * src/data/rules.generated.json so the browser bundle stays small.
  *
@@ -113,6 +113,12 @@ for (const t of tools) {
   // A recheck that lands after the change clears the state.
   if (scan?.changed_at && !(t.verified_at && t.verified_at > scan.changed_at)) t.vendor_changed_at = scan.changed_at;
 }
+// Link check: labeled tools keep showing with a link_dead flag; imported
+// entries whose url failed on two runs are dropped below. Unknown ids are
+// ignored (the next check drops them), and a missing file means no data.
+const links = load("state/links.yaml", {}) ?? {};
+const linkDead = (id) => Boolean(links[id]?.dead_since);
+for (const t of tools) if (linkDead(t.id)) t.link_dead = true;
 for (const r of reviews) if (!curatedIds.has(r.tool)) fail(`state/reviews.yaml: unknown tool ${r.tool}`);
 for (const id of Object.keys(pricing)) if (!curatedIds.has(id)) fail(`state/pricing.yaml: unknown tool ${id}`);
 
@@ -126,8 +132,11 @@ for (const { file, data } of yamlFiles("imported")) {
     fail(`${file}: needs list.id and list.name`);
     continue;
   }
-  lists.push({ id: list.id, name: list.name, url: list.url, license: list.license, license_url: list.license_url, commit: list.commit, fetched_at: list.fetched_at, count: (data.entries ?? []).length });
-  for (const e of data.entries ?? []) {
+  const dead = (data.entries ?? []).filter((e) => linkDead(e.id) && !curatedIds.has(e.id));
+  for (const e of dead) console.log(`  imported ${e.id} (${list.id}) dropped: link dead since ${links[e.id].dead_since}`);
+  const live = (data.entries ?? []).filter((e) => !dead.includes(e));
+  lists.push({ id: list.id, name: list.name, url: list.url, license: list.license, license_url: list.license_url, commit: list.commit, fetched_at: list.fetched_at, count: live.length });
+  for (const e of live) {
     if (!aisleById.has(e.aisle)) {
       fail(`${file}: entry ${e.id} has unknown aisle "${e.aisle}"`);
       continue;
