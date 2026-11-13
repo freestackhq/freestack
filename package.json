@@ -22,12 +22,14 @@
     "test:e2e": "playwright test",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
+    "lint:workflows": "if command -v actionlint >/dev/null 2>&1; then actionlint; else echo \"lint:workflows: actionlint not installed, skipped (CI installs it: https://github.com/rhysd/actionlint)\"; fi",
     "review:shots": "node scripts/review/screenshots.mjs",
     "dns:freestack": "bash scripts/dns-freestack.sh",
     "cli": "node packages/cli/bin/freestack.js",
     "ops:link-check": "node scripts/ops/link-check.mjs",
     "ops:pricing-scan": "node scripts/ops/pricing-scan.mjs",
-    "ops:staleness": "node scripts/ops/staleness-gate.mjs"
+    "ops:staleness": "node scripts/ops/staleness-gate.mjs",
+    "prepare": "lefthook install"
   },
   "dependencies": {
     "@astrojs/cloudflare": "^14.2.0",
