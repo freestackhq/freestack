@@ -1,0 +1,63 @@
+---
+/**
+ * One compare cell, shared by the desktop table and the phone rows.
+ * Flags read Yes / No / Unknown in text; the icon is decoration.
+ */
+import Icon from "../Icon.astro";
+import type { Cell } from "../../../lib/fresh/compare";
+
+interface Props {
+  cell: Cell;
+}
+const { cell } = Astro.props;
+---
+
+{
+  cell.kind === "flag" ? (
+    cell.value === "yes" ? (
+      <span class="flag">
+        <Icon name="check" size={16} />
+        Yes
+      </span>
+    ) : cell.value === "no" ? (
+      <span class="flag">
+        <Icon name="cross" size={16} />
+        No
+      </span>
+    ) : (
+      <span class="flag unknown">
+        <Icon name="unknown" size={16} />
+        Unknown
+      </span>
+    )
+  ) : cell.lines.length === 1 ? (
+    <span class:list={{ muted: cell.muted }}>{cell.lines[0]}</span>
+  ) : (
+    <ul class:list={["lines", { muted: cell.muted }]}>
+      {cell.lines.map((l) => (
+        <li>{l}</li>
+      ))}
+    </ul>
+  )
+}
+
+<style>
+  .muted {
+    color: var(--muted);
+  }
+  .lines {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .flag {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-weight: 600;
+  }
+  .flag.unknown {
+    color: var(--muted);
+    font-weight: 400;
+  }
+</style>

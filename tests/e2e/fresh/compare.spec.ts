@@ -121,7 +121,7 @@ test.describe("compare, desktop", () => {
     await expect(page.getByRole("heading", { level: 1 })).toHaveText("Neon or Turso?");
     await expect(page.locator("[data-notice]")).toContainText('"fauna" is no longer in the catalog, so we dropped it.');
     // Links built from here no longer carry it.
-    await expect(page.locator("[data-copy-link]")).toHaveAttribute("href", "/compare?ids=neon,turso");
+    await expect(page.locator("[data-copy-link]").first()).toHaveAttribute("href", "/compare?ids=neon,turso");
   });
 
   test("tools from two aisles: the cross-aisle message", async ({ page }) => {
