@@ -10,10 +10,11 @@
  * and hashes it. State per tool: { hash, checked_at, changed_at }. First
  * sighting stores the hash with changed_at null; a moved hash sets changed_at
  * to today. A failed fetch leaves the entry alone and is only reported.
- * PRICING_SCAN_REPORT=<file> also writes a Markdown report (the PR body).
+ * PRICING_SCAN_REPORT=<file> also writes a Markdown report (the PR body), and
+ * under GitHub Actions it sets the step output `changes=true|false`.
  */
 import { createHash } from "node:crypto";
-import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
+import { appendFileSync, existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { parse, stringify } from "yaml";
 import { dataDir, isMain, loadTools, today } from "./tools.mjs";
@@ -161,6 +162,9 @@ async function main() {
   for (const id of report.changed) console.log(`  changed: ${id}`);
   for (const f of report.failed) console.log(`  failed: ${f.id}: ${f.error}`);
 
+  // In Actions, `changes` says whether hashes moved, appeared or went away (checked_at alone doesn't count).
+  const changes = report.changed.length + report.added.length + report.dropped.length > 0;
+  if (process.env.GITHUB_OUTPUT) appendFileSync(process.env.GITHUB_OUTPUT, `changes=${changes}\n`);
   if (process.env.PRICING_SCAN_REPORT) writeFileSync(process.env.PRICING_SCAN_REPORT, reportMarkdown(report, tools));
   if (process.argv.includes("--dry-run")) return;
   mkdirSync(dirname(file), { recursive: true });

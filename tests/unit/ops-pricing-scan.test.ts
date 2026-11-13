@@ -180,11 +180,16 @@ describe("pricing-scan CLI", () => {
       writeFileSync(p, readFileSync(p, "utf8").replace(/https:\/\/\w+\.test/, "http://127.0.0.1:9"));
     }
     const script = new URL("../../scripts/ops/pricing-scan.mjs", import.meta.url).pathname;
+    const ghOutput = join(dir, "gh-output");
+    const reportFile = join(dir, "report.md");
     const out = execFileSync(process.execPath, [script, "--today", DAY], {
-      env: { ...process.env, FREESTACK_DATA: dir },
+      env: { ...process.env, FREESTACK_DATA: dir, GITHUB_OUTPUT: ghOutput, PRICING_SCAN_REPORT: reportFile },
       encoding: "utf8",
     });
     expect(out).toContain("failed 3");
+    // "removed" was dropped, so the workflow should open the PR.
+    expect(readFileSync(ghOutput, "utf8")).toBe("changes=true\n");
+    expect(readFileSync(reportFile, "utf8")).toContain("### Could not fetch (left as they were)\n- `alpha`:");
     const before = readState(join(FIX, "scan/state/pricing.yaml"));
     const written = readState(join(dir, "state/pricing.yaml"));
     expect(written).toEqual({ alpha: before.alpha, gamma: before.gamma });
