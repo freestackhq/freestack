@@ -145,7 +145,11 @@ export async function scan({ tools, state, day, fetchImpl = fetch, concurrency =
       else report.unchanged.push(t.id);
     } catch (err) {
       if (prev) next[t.id] = prev;
-      report.failed.push({ id: t.id, url: t.pricing_url, error: err?.name === "TimeoutError" ? "timed out" : String(err?.message ?? err) });
+      report.failed.push({
+        id: t.id,
+        url: t.pricing_url,
+        error: err?.name === "TimeoutError" ? "timed out" : String(err?.message ?? err),
+      });
     }
   });
   const kept = new Set(targets.map((t) => t.id));
@@ -157,12 +161,21 @@ export async function scan({ tools, state, day, fetchImpl = fetch, concurrency =
 
 export function reportMarkdown(report, tools) {
   const url = new Map(tools.map((t) => [t.id, t.pricing_url]));
-  const lines = ["The weekly scan saw these pricing pages change. Their labels show \"Vendor changed\" until someone rechecks them.", ""];
-  if (report.changed.length) lines.push("### Changed", ...report.changed.map((id) => `- \`${id}\`: ${url.get(id)}`), "");
+  const lines = [
+    'The weekly scan saw these pricing pages change. Their labels show "Vendor changed" until someone rechecks them.',
+    "",
+  ];
+  if (report.changed.length)
+    lines.push("### Changed", ...report.changed.map((id) => `- \`${id}\`: ${url.get(id)}`), "");
   if (report.added.length) lines.push("### First scan", ...report.added.map((id) => `- \`${id}\``), "");
-  if (report.dropped.length) lines.push("### Dropped (no longer scanned)", ...report.dropped.map((id) => `- \`${id}\``), "");
+  if (report.dropped.length)
+    lines.push("### Dropped (no longer scanned)", ...report.dropped.map((id) => `- \`${id}\``), "");
   if (report.failed.length) {
-    lines.push("### Could not fetch (left as they were)", ...report.failed.map((f) => `- \`${f.id}\`: ${f.error} (${f.url})`), "");
+    lines.push(
+      "### Could not fetch (left as they were)",
+      ...report.failed.map((f) => `- \`${f.id}\`: ${f.error} (${f.url})`),
+      "",
+    );
   }
   return lines.join("\n");
 }
@@ -175,7 +188,9 @@ async function main() {
   const { state, report } = await scan({ tools, state: readState(file), day });
 
   console.log(`pricing scan ${day}: ${scannable(tools).length} pages`);
-  console.log(`  changed ${report.changed.length}, first seen ${report.added.length}, same ${report.unchanged.length}, failed ${report.failed.length}, dropped ${report.dropped.length}`);
+  console.log(
+    `  changed ${report.changed.length}, first seen ${report.added.length}, same ${report.unchanged.length}, failed ${report.failed.length}, dropped ${report.dropped.length}`,
+  );
   for (const id of report.changed) console.log(`  changed: ${id}`);
   for (const f of report.failed) console.log(`  failed: ${f.id}: ${f.error}`);
 

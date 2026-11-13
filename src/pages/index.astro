@@ -75,165 +75,166 @@ const sample = toolsInAisle("databases", at)[0];
         <div class="picker">
           <h2 id="basket-h">I'm building as</h2>
           <div class="chips" role="group" aria-labelledby="basket-h">
-            {
-              situations().map((s) => (
-                <button type="button" class="chip" data-sit={s.id} aria-pressed={s.id === defaultSituation ? "true" : "false"}>
-                  {s.label}
-                </button>
-              ))
-            }
+            {situations().map((s) => (
+              <button
+                type="button"
+                class="chip"
+                data-sit={s.id}
+                aria-pressed={s.id === defaultSituation ? "true" : "false"}
+              >
+                {s.label}
+              </button>
+            ))}
           </div>
           <label class="select">
             <span class="sr-only">I'm building as</span>
             <select data-sit-select>
-              {
-                situations().map((s) => (
-                  <option value={s.id} selected={s.id === defaultSituation}>
-                    {s.label}
-                  </option>
-                ))
-              }
+              {situations().map((s) => (
+                <option value={s.id} selected={s.id === defaultSituation}>
+                  {s.label}
+                </option>
+              ))}
             </select>
             <Icon name="chevron-down" size={16} class="caret" />
           </label>
         </div>
 
-        {
-          panels.map((p) => (
-            <div class="stack" data-panel={p.s.id} hidden={p.s.id !== defaultSituation}>
-              {p.rows.length > 0 ? (
-                <>
-                  <ul class="rows" aria-label={`Stack for ${p.s.label}`}>
-                    {p.rows.map((r) => (
-                      <li class:list={["row", r.state && `row-${r.state.state}`]} data-tool={r.t.id}>
-                        <span class="job">{r.job}</span>
-                        <span class="body">
-                          <a class="tool" href={toolHref(r.t)}>
-                            {r.t.name}
-                          </a>
-                          <span class="limits">{r.limits}</span>
-                          {r.t.catches[0] && (
-                            <span class="catch">
-                              <Icon name="wrench" />
-                              <span class="sr-only">Catch: </span>
-                              {r.t.catches[0]}
-                            </span>
-                          )}
-                          <Facts tool={r.t} hideWho class="facts" />
-                          {r.state && (
-                            <span class="state" data-state={r.state.state}>
-                              <span>{r.state.text}</span>
-                              {r.state.link && (
-                                <a href={checkHref(r.t)}>
-                                  {r.state.link}
-                                  <span class="sr-only"> {r.t.name}</span>
-                                </a>
-                              )}
-                            </span>
-                          )}
-                        </span>
-                      </li>
-                    ))}
-                  </ul>
-                  <div class="total">
-                    <div>
-                      <p class="total-label">Total per month</p>
-                      {p.note && <p class="total-note">{p.note}</p>}
-                    </div>
-                    <p class="price">$0.00</p>
+        {panels.map((p) => (
+          <div class="stack" data-panel={p.s.id} hidden={p.s.id !== defaultSituation}>
+            {p.rows.length > 0 ? (
+              <>
+                <ul class="rows" aria-label={`Stack for ${p.s.label}`}>
+                  {p.rows.map((r) => (
+                    <li class:list={["row", r.state && `row-${r.state.state}`]} data-tool={r.t.id}>
+                      <span class="job">{r.job}</span>
+                      <span class="body">
+                        <a class="tool" href={toolHref(r.t)}>
+                          {r.t.name}
+                        </a>
+                        <span class="limits">{r.limits}</span>
+                        {r.t.catches[0] && (
+                          <span class="catch">
+                            <Icon name="wrench" />
+                            <span class="sr-only">Catch: </span>
+                            {r.t.catches[0]}
+                          </span>
+                        )}
+                        <Facts tool={r.t} hideWho class="facts" />
+                        {r.state && (
+                          <span class="state" data-state={r.state.state}>
+                            <span>{r.state.text}</span>
+                            {r.state.link && (
+                              <a href={checkHref(r.t)}>
+                                {r.state.link}
+                                <span class="sr-only"> {r.t.name}</span>
+                              </a>
+                            )}
+                          </span>
+                        )}
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+                <div class="total">
+                  <div>
+                    <p class="total-label">Total per month</p>
+                    {p.note && <p class="total-note">{p.note}</p>}
                   </div>
-                  <div class="actions">
-                    <button type="button" class="btn copy-btn" data-copy-stack={JSON.stringify(p.copy)}>
-                      Copy this stack
-                    </button>
-                    <a class="btn btn-outline" href="/agents">
-                      Hand it to my coding agent
-                    </a>
-                    <a class="swap" href={p.buildHref}>
-                      Swap parts in Build a stack
-                    </a>
-                  </div>
-                </>
-              ) : (
-                <div class="empty" data-empty>
-                  <p class="empty-title">No ready-made stack here yet.</p>
-                  <p class="empty-sub">Pick each part from its aisle instead.</p>
-                  <ul class="empty-aisles">
-                    {groups
-                      .flatMap((g) => g.aisles)
-                      .filter((a) => a.group === "Build")
-                      .map((a) => (
-                        <li>
-                          <a href={`/${a.id}`}>
-                            {a.name} <span class="count">{aisleCount(a.id)}</span>
-                          </a>
-                        </li>
-                      ))}
-                  </ul>
+                  <p class="price">$0.00</p>
+                </div>
+                <div class="actions">
+                  <button type="button" class="btn copy-btn" data-copy-stack={JSON.stringify(p.copy)}>
+                    Copy this stack
+                  </button>
+                  <a class="btn btn-outline" href="/agents">
+                    Hand it to my coding agent
+                  </a>
                   <a class="swap" href={p.buildHref}>
-                    Start one in Build a stack
+                    Swap parts in Build a stack
                   </a>
                 </div>
-              )}
-            </div>
-          ))
-        }
+              </>
+            ) : (
+              <div class="empty" data-empty>
+                <p class="empty-title">No ready-made stack here yet.</p>
+                <p class="empty-sub">Pick each part from its aisle instead.</p>
+                <ul class="empty-aisles">
+                  {groups
+                    .flatMap((g) => g.aisles)
+                    .filter((a) => a.group === "Build")
+                    .map((a) => (
+                      <li>
+                        <a href={`/${a.id}`}>
+                          {a.name} <span class="count">{aisleCount(a.id)}</span>
+                        </a>
+                      </li>
+                    ))}
+                </ul>
+                <a class="swap" href={p.buildHref}>
+                  Start one in Build a stack
+                </a>
+              </div>
+            )}
+          </div>
+        ))}
       </section>
     </section>
 
     <section class="aisles" aria-labelledby="aisles-h">
-      <h2 id="aisles-h" class="h2">Or walk the aisles</h2>
+      <h2 id="aisles-h" class="h2">
+        Or walk the aisles
+      </h2>
       <p class="sub">Grouped by what you need. Numbers show how many tools have a label.</p>
       <div class="groups">
-        {
-          groups.map((g) => (
-            <div>
-              <h3 class="group">{g.group}</h3>
-              <ul class="aisle-list">
-                {g.aisles.map((a) => (
-                  <li>
-                    <a href={`/${a.id}`}>
-                      {a.name} <span class="count">{aisleCount(a.id)}</span>
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          ))
-        }
+        {groups.map((g) => (
+          <div>
+            <h3 class="group">{g.group}</h3>
+            <ul class="aisle-list">
+              {g.aisles.map((a) => (
+                <li>
+                  <a href={`/${a.id}`}>
+                    {a.name} <span class="count">{aisleCount(a.id)}</span>
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))}
       </div>
     </section>
 
-    {
-      sample && (
-        <section class="reading" aria-labelledby="label-h">
-          <div class="reading-text">
-            <h2 id="label-h" class="h2">Reading a label</h2>
-            <ol>
-              <li>
-                <strong>The big number</strong> is the one limit that aisle is about, like storage for databases. The
-                5-step scale beside it compares it with the biggest in the aisle.
-              </li>
-              <li>
-                <strong>The fine print</strong> lists the exact limits.
-              </li>
-              <li>
-                <strong>The bottom line</strong> covers who can claim it, whether you can sell with it, and whether signup
-                needs a credit card. A check means yes, a cross means no, and a dashed icon means nobody knows yet. The
-                card shows crossed out when you can sign up without one.
-              </li>
-              <li>
-                <strong>The date</strong> is when someone last checked the vendor's page. No date means nobody has.
-              </li>
-            </ol>
-          </div>
-          <figure>
-            <Label tool={sample} compare={false} />
-            <figcaption>Limits as listed in the catalog. Always confirm on the vendor's page before you launch.</figcaption>
-          </figure>
-        </section>
-      )
-    }
+    {sample && (
+      <section class="reading" aria-labelledby="label-h">
+        <div class="reading-text">
+          <h2 id="label-h" class="h2">
+            Reading a label
+          </h2>
+          <ol>
+            <li>
+              <strong>The big number</strong> is the one limit that aisle is about, like storage for databases. The
+              5-step scale beside it compares it with the biggest in the aisle.
+            </li>
+            <li>
+              <strong>The fine print</strong> lists the exact limits.
+            </li>
+            <li>
+              <strong>The bottom line</strong> covers who can claim it, whether you can sell with it, and whether signup
+              needs a credit card. A check means yes, a cross means no, and a dashed icon means nobody knows yet. The
+              card shows crossed out when you can sign up without one.
+            </li>
+            <li>
+              <strong>The date</strong> is when someone last checked the vendor's page. No date means nobody has.
+            </li>
+          </ol>
+        </div>
+        <figure>
+          <Label tool={sample} compare={false} />
+          <figcaption>
+            Limits as listed in the catalog. Always confirm on the vendor's page before you launch.
+          </figcaption>
+        </figure>
+      </section>
+    )}
 
     <section id="agents" class="agents on-ink" aria-labelledby="agents-h">
       <div>
@@ -245,7 +246,9 @@ const sample = toolsInAisle("databases", at)[0];
       </div>
       <div class="agents-cmd">
         <code>npx skills add https://github.com/freestackhq/freestack</code>
-        <p>Also available as a remote MCP server and a plain JSON API. <a href="/agents">Set it up</a></p>
+        <p>
+          Also available as a remote MCP server and a plain JSON API. <a href="/agents">Set it up</a>
+        </p>
       </div>
     </section>
   </div>

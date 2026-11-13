@@ -18,9 +18,7 @@ const openapi = {
       "Public JSON API for freestack: free developer tools as shelf labels, grouped into aisles. The old catalog ids (saas, apis, llm-ai) still work as aliases for the aisle groups. CORS open.",
     license: { name: "MIT" },
   },
-  servers: [
-    { url: SITE_URL, description: "Production" },
-  ],
+  servers: [{ url: SITE_URL, description: "Production" }],
   tags: [{ name: "health" }, { name: "catalogs" }, { name: "entries" }],
   paths: {
     "/api/health": {
@@ -67,7 +65,8 @@ const openapi = {
             name: "catalog",
             in: "query",
             schema: { type: "string", enum: catalogEnum },
-            description: "Old catalog id, an alias for aisle groups: saas = Build + Claim Once, apis = Free and Open Data, llm-ai = AI",
+            description:
+              "Old catalog id, an alias for aisle groups: saas = Build + Claim Once, apis = Free and Open Data, llm-ai = AI",
           },
           {
             name: "category",
@@ -118,13 +117,19 @@ const openapi = {
         operationId: "listTools",
         parameters: [
           { name: "category", in: "query", schema: { type: "string" }, description: "Aisle id or old category id" },
-          { name: "cost", in: "query", schema: { type: "string", enum: ["free", "credits", "student_free", "discount"] } },
+          {
+            name: "cost",
+            in: "query",
+            schema: { type: "string", enum: ["free", "credits", "student_free", "discount"] },
+          },
           { name: "commercial", in: "query", schema: { type: "string", enum: ["yes", "hobby", "edu", "check"] } },
           { name: "student", in: "query", schema: { type: "string", enum: ["no", "required", "helps"] } },
           { name: "q", in: "query", schema: { type: "string" } },
           { name: "limit", in: "query", schema: { type: "integer", minimum: 1 } },
         ],
-        responses: { "200": { description: "Tool list", content: { "application/json": { schema: { type: "object" } } } } },
+        responses: {
+          "200": { description: "Tool list", content: { "application/json": { schema: { type: "object" } } } },
+        },
       },
     },
     "/api/tools/{id}": {
@@ -135,7 +140,10 @@ const openapi = {
         parameters: [{ name: "id", in: "path", required: true, schema: { type: "string" } }],
         responses: {
           "200": { description: "The tool", content: { "application/json": { schema: { type: "object" } } } },
-          "404": { description: "No such tool", content: { "application/json": { schema: { $ref: "#/components/schemas/ErrorResponse" } } } },
+          "404": {
+            description: "No such tool",
+            content: { "application/json": { schema: { $ref: "#/components/schemas/ErrorResponse" } } },
+          },
         },
       },
     },
@@ -150,7 +158,9 @@ const openapi = {
           { name: "ph", in: "query", schema: { type: "string", enum: ["1", "0"] } },
           { name: "ai", in: "query", schema: { type: "string", enum: ["1", "0"] } },
         ],
-        responses: { "200": { description: "Claim plan", content: { "application/json": { schema: { type: "object" } } } } },
+        responses: {
+          "200": { description: "Claim plan", content: { "application/json": { schema: { type: "object" } } } },
+        },
       },
     },
     "/api/openapi.json": {

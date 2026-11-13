@@ -36,7 +36,8 @@ try {
 }
 const repo = process.env.PUBLIC_GITHUB_REPO?.trim() || "freestackhq/freestack";
 const pkg = JSON.parse(readFileSync(join(ROOT, "package.json"), "utf8"));
-const description = "Check free-tier labels (limits, catches, can you sell, card needed) before your agent adds anything paid.";
+const description =
+  "Check free-tier labels (limits, catches, can you sell, card needed) before your agent adds anything paid.";
 
 const json = (v) => `${JSON.stringify(v, null, 2)}\n`;
 const files = {
@@ -57,7 +58,10 @@ const files = {
     keywords: ["free tier", "stack", "hosting", "database", "mcp"],
   }),
   "plugins/freestack/.mcp.json": json({ mcpServers: { freestack: { type: "http", url: `${site}/mcp` } } }),
-  "plugins/freestack/skills/pick-free-stack/SKILL.md": fillSkill(readFileSync(join(ROOT, "skills/pick-free-stack/SKILL.md"), "utf8"), site),
+  "plugins/freestack/skills/pick-free-stack/SKILL.md": fillSkill(
+    readFileSync(join(ROOT, "skills/pick-free-stack/SKILL.md"), "utf8"),
+    site,
+  ),
 };
 
 let stale = 0;

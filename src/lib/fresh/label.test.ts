@@ -1,19 +1,25 @@
 import { describe, expect, it } from "vitest";
-import {
-  compactNumber,
-  headline,
-  isSuggested,
-  labelState,
-  scaleStep,
-  sortForAisle,
-  strings,
-} from "./label";
+import { compactNumber, headline, isSuggested, labelState, scaleStep, sortForAisle, strings } from "./label";
 import type { Aisle, Tool } from "./types";
 
 const NOW = new Date("2026-11-13T12:00:00Z");
 
-const db: Aisle = { id: "databases", group: "Build", name: "Databases", metric: "storage_gb", unit: "GB", label: "free storage" };
-const hosting: Aisle = { id: "hosting", group: "Build", name: "Hosting", metric: "requests_per_day", unit: "a day", label: "requests" };
+const db: Aisle = {
+  id: "databases",
+  group: "Build",
+  name: "Databases",
+  metric: "storage_gb",
+  unit: "GB",
+  label: "free storage",
+};
+const hosting: Aisle = {
+  id: "hosting",
+  group: "Build",
+  name: "Hosting",
+  metric: "requests_per_day",
+  unit: "a day",
+  label: "requests",
+};
 
 function make(over: Partial<Tool>): Tool {
   return {
@@ -52,7 +58,9 @@ describe("labelState", () => {
   it("puts imported first, then review, then vendor changed", () => {
     expect(labelState(make({ source: "imported", review_pending: true }), NOW)).toBe("imported");
     expect(labelState(make({ review_pending: true, vendor_changed_at: "2026-11-12" }), NOW)).toBe("review");
-    expect(labelState(make({ vendor_changed_at: "2026-11-12", verified_at: "2026-11-10" }), NOW)).toBe("vendor-changed");
+    expect(labelState(make({ vendor_changed_at: "2026-11-12", verified_at: "2026-11-10" }), NOW)).toBe(
+      "vendor-changed",
+    );
   });
 });
 
@@ -120,7 +128,9 @@ describe("compactNumber", () => {
 
 describe("strings", () => {
   it("writes each strip", () => {
-    expect(strings(make({ verified_at: "2026-11-10", verified_by: "Karlo" }), NOW).text).toBe("Checked 3 days ago by Karlo");
+    expect(strings(make({ verified_at: "2026-11-10", verified_by: "Karlo" }), NOW).text).toBe(
+      "Checked 3 days ago by Karlo",
+    );
     expect(strings(make({ verified_at: "2026-11-13", verified_by: "Karlo" }), NOW).text).toBe("Checked today by Karlo");
     expect(strings(make({ verified_at: "2026-07-24" }), NOW)).toMatchObject({
       text: "Checked 24 Jul. Due for a recheck",

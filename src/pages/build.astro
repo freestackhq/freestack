@@ -39,38 +39,49 @@ for (const { options } of allParts) for (const o of options) tools[o.t.id] = o.s
 
 const data = {
   tools,
-  parts: allParts.map(({ p, options }) => ({ key: p.key, label: p.label, core: !!p.core, options: options.map((o) => o.t.id) })),
+  parts: allParts.map(({ p, options }) => ({
+    key: p.key,
+    label: p.label,
+    core: !!p.core,
+    options: options.map((o) => o.t.id),
+  })),
   situations: situations(),
   fallback: defaultSituation,
 };
 const lower = (s: string) => (/^[A-Z]{2}/.test(s) ? s : s.toLowerCase());
 ---
 
-<Shell title="Build a stack · freestack" description="Pick a free tool for each part. We check that they work together.">
+<Shell
+  title="Build a stack · freestack"
+  description="Pick a free tool for each part. We check that they work together."
+>
   <div class="wrap page" data-builder>
     <div class="top">
       <h1>Build a stack</h1>
       <div class="sits" role="group" aria-labelledby="sits-l">
-        <span id="sits-l" class="sits-label">I'm building as</span>
-        {
-          situations().map((s) => (
-            <button type="button" class="chip" data-sit={s.id} aria-pressed={s.id === defaultSituation ? "true" : "false"}>
-              {s.label}
-            </button>
-          ))
-        }
+        <span id="sits-l" class="sits-label">
+          I'm building as
+        </span>
+        {situations().map((s) => (
+          <button
+            type="button"
+            class="chip"
+            data-sit={s.id}
+            aria-pressed={s.id === defaultSituation ? "true" : "false"}
+          >
+            {s.label}
+          </button>
+        ))}
       </div>
       <label class="select">
         <span class="select-label">I'm building as</span>
         <span class="select-box">
           <select data-sit-select>
-            {
-              situations().map((s) => (
-                <option value={s.id} selected={s.id === defaultSituation}>
-                  {s.label}
-                </option>
-              ))
-            }
+            {situations().map((s) => (
+              <option value={s.id} selected={s.id === defaultSituation}>
+                {s.label}
+              </option>
+            ))}
           </select>
           <Icon name="chevron-down" size={16} class="caret" />
         </span>
@@ -78,7 +89,9 @@ const lower = (s: string) => (/^[A-Z]{2}/.test(s) ? s : s.toLowerCase());
     </div>
 
     <div class="banner" role="status" data-banner data-kind="empty">
-      <p class="banner-title" data-banner-title>No parts yet</p>
+      <p class="banner-title" data-banner-title>
+        No parts yet
+      </p>
       <ul class="banner-list" data-banner-list>
         <li>Choose a part to start. We check each pick against the others.</li>
       </ul>
@@ -90,84 +103,88 @@ const lower = (s: string) => (/^[A-Z]{2}/.test(s) ? s : s.toLowerCase());
         <caption class="sr-only">Parts in your stack</caption>
         <thead>
           <tr>
-            <th scope="col" class="c-part">Part</th>
+            <th scope="col" class="c-part">
+              Part
+            </th>
             <th scope="col">Pick</th>
             <th scope="col">Free limit</th>
             <th scope="col">Catch</th>
-            <th scope="col" class="c-cost">Cost</th>
-            <th scope="col" class="c-acts"><span class="sr-only">Actions</span></th>
+            <th scope="col" class="c-cost">
+              Cost
+            </th>
+            <th scope="col" class="c-acts">
+              <span class="sr-only">Actions</span>
+            </th>
           </tr>
         </thead>
-        {
-          allParts.map(({ p, options }) => (
-            <tbody data-part={p.key} hidden={!p.core}>
-              <tr class="empty-row" data-row="">
+        {allParts.map(({ p, options }) => (
+          <tbody data-part={p.key} hidden={!p.core}>
+            <tr class="empty-row" data-row="">
+              <th scope="row" class="part">
+                {p.label}
+              </th>
+              <td colspan="5" class="choose-cell">
+                <button type="button" class="btn choose" data-choose={p.key}>
+                  + Choose {lower(p.label)}
+                </button>
+              </td>
+            </tr>
+            {options.map((o) => (
+              <tr class="tool-row" data-row={o.t.id} hidden>
                 <th scope="row" class="part">
                   {p.label}
                 </th>
-                <td colspan="5" class="choose-cell">
-                  <button type="button" class="btn choose" data-choose={p.key}>
-                    + Choose {lower(p.label)}
-                  </button>
+                <td class="pick">
+                  <a class="name" href={toolHref(o.t)}>
+                    {o.t.name}
+                  </a>
+                  <span class="sr-only problem-note" hidden>
+                    {" "}
+                    Has a problem.
+                  </span>
+                  <Facts tool={o.t} hideWho class="flags" />
+                  {o.state && (
+                    <span class="state" data-state={o.state.state}>
+                      {o.state.text}
+                      {o.state.link && (
+                        <a href={checkHref(o.t)}>
+                          {o.state.link}
+                          <span class="sr-only"> {o.t.name}</span>
+                        </a>
+                      )}
+                    </span>
+                  )}
+                </td>
+                <td class="limit">{o.s.limits}</td>
+                <td class="catch" data-none={o.s.catch ? undefined : ""}>
+                  {o.s.catch ? (
+                    <>
+                      <Icon name="wrench" />
+                      <span class="sr-only">Catch: </span>
+                      {o.s.catch}
+                    </>
+                  ) : (
+                    <>
+                      <span aria-hidden="true">—</span>
+                      <span class="sr-only">No catch listed</span>
+                    </>
+                  )}
+                </td>
+                <td class="cost">$0</td>
+                <td class="acts">
+                  <div>
+                    <button type="button" class="btn btn-outline swap" data-choose={p.key}>
+                      Swap<span class="sr-only"> {lower(p.label)}</span>
+                    </button>
+                    <button type="button" class="remove" data-remove={p.key} aria-label={`Remove ${lower(p.label)}`}>
+                      <Icon name="close" size={18} />
+                    </button>
+                  </div>
                 </td>
               </tr>
-              {options.map((o) => (
-                <tr class="tool-row" data-row={o.t.id} hidden>
-                  <th scope="row" class="part">
-                    {p.label}
-                  </th>
-                  <td class="pick">
-                    <a class="name" href={toolHref(o.t)}>
-                      {o.t.name}
-                    </a>
-                    <span class="sr-only problem-note" hidden>
-                      {" "}
-                      Has a problem.
-                    </span>
-                    <Facts tool={o.t} hideWho class="flags" />
-                    {o.state && (
-                      <span class="state" data-state={o.state.state}>
-                        {o.state.text}
-                        {o.state.link && (
-                          <a href={checkHref(o.t)}>
-                            {o.state.link}
-                            <span class="sr-only"> {o.t.name}</span>
-                          </a>
-                        )}
-                      </span>
-                    )}
-                  </td>
-                  <td class="limit">{o.s.limits}</td>
-                  <td class="catch" data-none={o.s.catch ? undefined : ""}>
-                    {o.s.catch ? (
-                      <>
-                        <Icon name="wrench" />
-                        <span class="sr-only">Catch: </span>
-                        {o.s.catch}
-                      </>
-                    ) : (
-                      <>
-                        <span aria-hidden="true">—</span>
-                        <span class="sr-only">No catch listed</span>
-                      </>
-                    )}
-                  </td>
-                  <td class="cost">$0</td>
-                  <td class="acts">
-                    <div>
-                      <button type="button" class="btn btn-outline swap" data-choose={p.key}>
-                        Swap<span class="sr-only"> {lower(p.label)}</span>
-                      </button>
-                      <button type="button" class="remove" data-remove={p.key} aria-label={`Remove ${lower(p.label)}`}>
-                        <Icon name="close" size={18} />
-                      </button>
-                    </div>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          ))
-        }
+            ))}
+          </tbody>
+        ))}
         <tfoot>
           <tr>
             <th scope="row" colspan="4" class="total-label">
@@ -182,74 +199,78 @@ const lower = (s: string) => (/^[A-Z]{2}/.test(s) ? s : s.toLowerCase());
 
     <div class="more" data-more>
       <span class="more-label">Add another part</span>
-      {
-        allParts
-          .filter(({ p }) => !p.core)
-          .map(({ p }) => (
-            <button type="button" class="btn btn-outline more-btn" data-choose={p.key} data-more-part={p.key}>
-              + {p.label}
-            </button>
-          ))
-      }
+      {allParts
+        .filter(({ p }) => !p.core)
+        .map(({ p }) => (
+          <button type="button" class="btn btn-outline more-btn" data-choose={p.key} data-more-part={p.key}>
+            + {p.label}
+          </button>
+        ))}
     </div>
 
     <div class="actions">
-      <button type="button" class="btn desk-copy" data-copy>Copy this stack</button>
-      <button type="button" class="btn btn-outline" data-share>Share link</button>
-      <a class="check-link" href="/check" data-check-link>Already have a stack? Check it</a>
+      <button type="button" class="btn desk-copy" data-copy>
+        Copy this stack
+      </button>
+      <button type="button" class="btn btn-outline" data-share>
+        Share link
+      </button>
+      <a class="check-link" href="/check" data-check-link>
+        Already have a stack? Check it
+      </a>
     </div>
 
-    {
-      allParts.map(({ p, options }) => (
-        <dialog class="picker" data-picker={p.key} aria-labelledby={`pick-h-${p.key}`}>
-          <div class="pick-head">
-            <h2 id={`pick-h-${p.key}`}>Choose {lower(p.label)}</h2>
-            <span class="pick-count">
-              {options.length} free {options.length === 1 ? "option" : "options"}
-            </span>
-            <button type="button" class="close" aria-label="Close" data-close>
-              <Icon name="close" size={20} />
-            </button>
-          </div>
-          {options.length === 0 ? (
-            <p class="pick-empty">
-              Nothing listed for this part yet. <a href="/add">Add a tool</a>
-            </p>
-          ) : (
-            <ul class="options">
-              {options.map((o) => (
-                <li class="option" data-option={o.t.id}>
-                  <div>
-                    <span class="o-name">{o.t.name}</span>
-                    <Facts tool={o.t} hideWho class="o-flags" />
-                  </div>
-                  <span class="o-limit">{o.s.limits}</span>
-                  <span class="o-catch">
-                    {o.s.catch ?? (
-                      <>
-                        <span aria-hidden="true">—</span>
-                        <span class="sr-only">No catch listed</span>
-                      </>
-                    )}
-                  </span>
-                  <span class="o-fit" data-fit />
-                  <button type="button" class="btn o-add" data-add={o.t.id}>
-                    Add<span class="sr-only"> {o.t.name}</span>
-                  </button>
-                </li>
-              ))}
-            </ul>
-          )}
-        </dialog>
-      ))
-    }
+    {allParts.map(({ p, options }) => (
+      <dialog class="picker" data-picker={p.key} aria-labelledby={`pick-h-${p.key}`}>
+        <div class="pick-head">
+          <h2 id={`pick-h-${p.key}`}>Choose {lower(p.label)}</h2>
+          <span class="pick-count">
+            {options.length} free {options.length === 1 ? "option" : "options"}
+          </span>
+          <button type="button" class="close" aria-label="Close" data-close>
+            <Icon name="close" size={20} />
+          </button>
+        </div>
+        {options.length === 0 ? (
+          <p class="pick-empty">
+            Nothing listed for this part yet. <a href="/add">Add a tool</a>
+          </p>
+        ) : (
+          <ul class="options">
+            {options.map((o) => (
+              <li class="option" data-option={o.t.id}>
+                <div>
+                  <span class="o-name">{o.t.name}</span>
+                  <Facts tool={o.t} hideWho class="o-flags" />
+                </div>
+                <span class="o-limit">{o.s.limits}</span>
+                <span class="o-catch">
+                  {o.s.catch ?? (
+                    <>
+                      <span aria-hidden="true">—</span>
+                      <span class="sr-only">No catch listed</span>
+                    </>
+                  )}
+                </span>
+                <span class="o-fit" data-fit />
+                <button type="button" class="btn o-add" data-add={o.t.id}>
+                  Add<span class="sr-only"> {o.t.name}</span>
+                </button>
+              </li>
+            ))}
+          </ul>
+        )}
+      </dialog>
+    ))}
 
     <div class="phone-bar on-ink">
       <div class="phone-total">
         <span>Total per month</span>
         <span class="phone-price">$0.00</span>
       </div>
-      <button type="button" class="btn btn-promo btn-block" data-copy>Copy this stack</button>
+      <button type="button" class="btn btn-promo btn-block" data-copy>
+        Copy this stack
+      </button>
     </div>
   </div>
 
@@ -321,7 +342,8 @@ const lower = (s: string) => (/^[A-Z]{2}/.test(s) ? s : s.toLowerCase());
   }
 
   function render() {
-    for (const c of $$<HTMLButtonElement>("[data-sit]")) c.setAttribute("aria-pressed", String(c.dataset.sit === situation));
+    for (const c of $$<HTMLButtonElement>("[data-sit]"))
+      c.setAttribute("aria-pressed", String(c.dataset.sit === situation));
     $<HTMLSelectElement>("[data-sit-select]").value = situation;
 
     const tools = stackTools();

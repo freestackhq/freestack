@@ -23,7 +23,12 @@ const neon = t({ id: "neon", name: "Neon", catches: ["Sleeps after 5 minutes idl
 const supabase = t({ id: "supabase", name: "Supabase", catches: ["Pauses after 1 week idle"] });
 const clerk = t({ id: "clerk", name: "Clerk", aisle: "auth", part: "Sign-in" });
 const doppler = t({ id: "doppler", name: "Doppler", aisle: "auth", who: ["student_school_email"], sell: "unknown" });
-const pack = t({ id: "pack", name: "Pack", aisle: "student-programs", who: ["student_school_email", "student_any_id"] });
+const pack = t({
+  id: "pack",
+  name: "Pack",
+  aisle: "student-programs",
+  who: ["student_school_email", "student_any_id"],
+});
 const r2 = t({ id: "r2", name: "Cloudflare R2", aisle: "storage", card: "yes" });
 
 describe("rules engine", () => {
@@ -72,10 +77,14 @@ describe("rules engine", () => {
     it("fires when Workers is missing", () => {
       const r = evaluate({ situation: "student", tools: [d1] });
       expect(r.problems.map((f) => f.rule)).toEqual(["d1-needs-workers"]);
-      expect(r.problems[0].text).toBe("Cloudflare D1 only runs inside Cloudflare Workers. Pair it with Cloudflare hosting.");
+      expect(r.problems[0].text).toBe(
+        "Cloudflare D1 only runs inside Cloudflare Workers. Pair it with Cloudflare hosting.",
+      );
     });
     it("fires with other hosting", () => {
-      expect(evaluate({ situation: "student", tools: [koyeb, d1] }).problems.map((f) => f.rule)).toEqual(["d1-needs-workers"]);
+      expect(evaluate({ situation: "student", tools: [koyeb, d1] }).problems.map((f) => f.rule)).toEqual([
+        "d1-needs-workers",
+      ]);
     });
     it("is fine with Workers", () => {
       expect(evaluate({ situation: "student", tools: [workers, d1] }).problems).toEqual([]);
@@ -115,7 +124,9 @@ describe("rules engine", () => {
 
   it("sleeps quotes the catch", () => {
     const r = evaluate({ situation: "student", tools: [neon] });
-    expect(r.watch.map((f) => f.text)).toEqual(["Neon: Sleeps after 5 minutes idle. The first visit after a break is slow."]);
+    expect(r.watch.map((f) => f.text)).toEqual([
+      "Neon: Sleeps after 5 minutes idle. The first visit after a break is slow.",
+    ]);
   });
 
   it("puts problems before things to watch and counts them", () => {

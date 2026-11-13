@@ -89,9 +89,7 @@ export function aisleSplit(tools: Tool[]): { main: string; others: Tool[] } {
 
 export type Flag = "yes" | "no" | "unknown";
 
-export type Cell =
-  | { kind: "text"; lines: string[]; muted: boolean; big?: boolean }
-  | { kind: "flag"; value: Flag };
+export type Cell = { kind: "text"; lines: string[]; muted: boolean; big?: boolean } | { kind: "flag"; value: Flag };
 
 export interface Row {
   label: string;
@@ -112,7 +110,9 @@ function cellKey(c: Cell): string {
 
 /** True when the cell says "Unknown" or shows an unknown number. */
 export function isUnknownCell(c: Cell): boolean {
-  return c.kind === "flag" ? c.value === "unknown" : c.lines.length === 1 && (c.lines[0] === "Unknown" || c.lines[0] === "?");
+  return c.kind === "flag"
+    ? c.value === "unknown"
+    : c.lines.length === 1 && (c.lines[0] === "Unknown" || c.lines[0] === "?");
 }
 
 function whoCell(t: Tool): Cell {
@@ -163,7 +163,11 @@ export function rows(tools: Tool[], aisle: Aisle, now: Date): Row[] {
         return text([s.text], s.state === "unchecked" || s.state === "imported");
       },
     },
-    { label: "Pick it if", noDiff: true, cell: (t) => (t.use_if[0] ? text([t.use_if[0]]) : text(["Not written yet"], true)) },
+    {
+      label: "Pick it if",
+      noDiff: true,
+      cell: (t) => (t.use_if[0] ? text([t.use_if[0]]) : text(["Not written yet"], true)),
+    },
   ];
   return list.map((d) => {
     const cells = tools.map(d.cell);

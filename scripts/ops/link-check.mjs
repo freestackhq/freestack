@@ -37,7 +37,8 @@ export const USER_AGENT = "Mozilla/5.0 (compatible; freestack-link-check/1.0)";
 const TIMEOUT_MS = 10_000;
 const CONCURRENCY = 4;
 const RETRY_DELAY_MS = 1_500;
-const HEADER = "# Link check: { <id>: { url_status, pricing_status, final_url, checked_at, failing_since, dead_since } }. Written by the weekly link check.\n";
+const HEADER =
+  "# Link check: { <id>: { url_status, pricing_status, final_url, checked_at, failing_since, dead_since } }. Written by the weekly link check.\n";
 
 export const DEAD = new Set(["client_error:404", "client_error:410", "dns"]);
 const ALIVE = new Set(["ok", "redirected"]);
@@ -75,7 +76,8 @@ export function classifyResponse(res, requested) {
 
 /** Class of a thrown fetch error. */
 export function classifyError(err) {
-  if (err?.name === "TimeoutError" || err?.name === "AbortError") return { status: "timeout", code: null, final_url: null, error: "timed out" };
+  if (err?.name === "TimeoutError" || err?.name === "AbortError")
+    return { status: "timeout", code: null, final_url: null, error: "timed out" };
   const cause = err?.cause ?? {};
   const msg = String(cause.code ?? cause.message ?? err?.message ?? err);
   if (/ENOTFOUND|EAI_NONAME|getaddrinfo/.test(msg) || /ENOTFOUND/.test(String(err?.message))) {
@@ -164,7 +166,8 @@ const FIELDS = ["url_status", "pricing_status", "final_url", "checked_at", "fail
 /** Sorted keys, fixed field order, so the same state is always the same bytes. */
 export function serializeState(state) {
   const ordered = {};
-  for (const id of Object.keys(state).sort()) ordered[id] = Object.fromEntries(FIELDS.map((f) => [f, state[id][f] ?? null]));
+  for (const id of Object.keys(state).sort())
+    ordered[id] = Object.fromEntries(FIELDS.map((f) => [f, state[id][f] ?? null]));
   return HEADER + stringify(ordered, { lineWidth: 0 });
 }
 
@@ -175,7 +178,8 @@ export function meaningfulChange(prev, next) {
     const a = prev[id];
     const b = next[id];
     if (!a || !b) return true;
-    for (const f of ["url_status", "pricing_status", "failing_since", "dead_since"]) if ((a[f] ?? null) !== (b[f] ?? null)) return true;
+    for (const f of ["url_status", "pricing_status", "failing_since", "dead_since"])
+      if ((a[f] ?? null) !== (b[f] ?? null)) return true;
   }
   return false;
 }
@@ -196,17 +200,27 @@ export function loadImported(dir) {
 
 /** One target per id: curated tools check url + pricing_url, imported entries only url. */
 export function targets(tools, imported) {
-  const curated = tools.map((t) => ({ id: t.id, name: t.name, url: t.url, pricing_url: t.pricing_url ?? null, source: "labeled" }));
+  const curated = tools.map((t) => ({
+    id: t.id,
+    name: t.name,
+    url: t.url,
+    pricing_url: t.pricing_url ?? null,
+    source: "labeled",
+  }));
   const ids = new Set(curated.map((t) => t.id));
-  const extra = imported.filter((e) => !ids.has(e.id)).map((e) => ({ id: e.id, name: e.name, url: e.url, pricing_url: null, source: "imported", list: e.list }));
+  const extra = imported
+    .filter((e) => !ids.has(e.id))
+    .map((e) => ({ id: e.id, name: e.name, url: e.url, pricing_url: null, source: "imported", list: e.list }));
   return [...curated, ...extra];
 }
 
 async function pool(items, size, fn) {
   const queue = [...items];
-  await Promise.all(Array.from({ length: Math.min(size, queue.length) }, async () => {
-    while (queue.length) await fn(queue.shift());
-  }));
+  await Promise.all(
+    Array.from({ length: Math.min(size, queue.length) }, async () => {
+      while (queue.length) await fn(queue.shift());
+    }),
+  );
 }
 
 /**
@@ -216,7 +230,15 @@ async function pool(items, size, fn) {
  *   fetchImpl?: FetchLike, concurrency?: number, timeoutMs?: number, retryDelayMs?: number
  * }} opts
  */
-export async function run({ targets: list, state, day, fetchImpl = fetch, concurrency = CONCURRENCY, timeoutMs, retryDelayMs }) {
+export async function run({
+  targets: list,
+  state,
+  day,
+  fetchImpl = fetch,
+  concurrency = CONCURRENCY,
+  timeoutMs,
+  retryDelayMs,
+}) {
   const urls = [...new Set(list.flatMap((t) => [t.url, t.pricing_url]).filter(Boolean))];
   const results = new Map();
   await pool(urls, concurrency, async (u) => results.set(u, await checkUrl(u, { fetchImpl, timeoutMs, retryDelayMs })));
@@ -248,30 +270,66 @@ export function totals(rows, pick) {
 const fmt = (r) => `${r.status}${r.code ? ` ${r.code}` : ""}${r.error ? ` (${r.error})` : ""}`;
 
 export function reportMarkdown(rows) {
-  const lines = ["The weekly link check found these links that need a look. Blocked and timed-out links are unknown, not dead.", ""];
-  const t = (label, pick, subset) => `- ${label}: ${Object.entries(totals(subset, pick)).filter(([, n]) => n).map(([k, n]) => `${k} ${n}`).join(", ")}`;
+  const lines = [
+    "The weekly link check found these links that need a look. Blocked and timed-out links are unknown, not dead.",
+    "",
+  ];
+  const t = (label, pick, subset) =>
+    `- ${label}: ${Object.entries(totals(subset, pick))
+      .filter(([, n]) => n)
+      .map(([k, n]) => `${k} ${n}`)
+      .join(", ")}`;
   const labeled = rows.filter((r) => r.source === "labeled");
   const imported = rows.filter((r) => r.source === "imported");
-  lines.push("### Totals", t("labeled url", (r) => r.urlResult, labeled), t("labeled pricing_url", (r) => r.pricingResult, labeled), t("imported url", (r) => r.urlResult, imported), "");
+  lines.push(
+    "### Totals",
+    t("labeled url", (r) => r.urlResult, labeled),
+    t("labeled pricing_url", (r) => r.pricingResult, labeled),
+    t("imported url", (r) => r.urlResult, imported),
+    "",
+  );
   const dead = rows.filter((r) => r.entry.dead_since);
-  if (dead.length) lines.push("### Dead (failed on two runs)", ...dead.map((r) => `- \`${r.id}\` (${r.source}) since ${r.entry.dead_since}: ${fmt(r.urlResult)} ${r.url}`), "");
+  if (dead.length)
+    lines.push(
+      "### Dead (failed on two runs)",
+      ...dead.map((r) => `- \`${r.id}\` (${r.source}) since ${r.entry.dead_since}: ${fmt(r.urlResult)} ${r.url}`),
+      "",
+    );
   const failing = rows.filter((r) => r.entry.failing_since && !r.entry.dead_since);
-  if (failing.length) lines.push("### Failing (first strike)", ...failing.map((r) => `- \`${r.id}\` (${r.source}) since ${r.entry.failing_since}: ${fmt(r.urlResult)} ${r.url}`), "");
+  if (failing.length)
+    lines.push(
+      "### Failing (first strike)",
+      ...failing.map((r) => `- \`${r.id}\` (${r.source}) since ${r.entry.failing_since}: ${fmt(r.urlResult)} ${r.url}`),
+      "",
+    );
   const section = (title, pick, urlOf) => {
     const hit = rows.filter((r) => pick(r) && pick(r).status !== "ok" && !isDead(pick(r)));
     if (!hit.length) return;
-    lines.push(`### ${title}`, ...hit.map((r) => {
-      const res = pick(r);
-      const to = res.final_url && res.final_url !== urlOf(r) ? ` -> ${res.final_url}` : "";
-      return `- \`${r.id}\` (${r.source}): ${fmt(res)} ${urlOf(r)}${to}`;
-    }), "");
+    lines.push(
+      `### ${title}`,
+      ...hit.map((r) => {
+        const res = pick(r);
+        const to = res.final_url && res.final_url !== urlOf(r) ? ` -> ${res.final_url}` : "";
+        return `- \`${r.id}\` (${r.source}): ${fmt(res)} ${urlOf(r)}${to}`;
+      }),
+      "",
+    );
   };
-  section("Other url problems", (r) => r.urlResult, (r) => r.url);
+  section(
+    "Other url problems",
+    (r) => r.urlResult,
+    (r) => r.url,
+  );
   // A pricing_url that is the same link as url is already listed above.
   const ownPricing = (r) => (r.pricing_url !== r.url ? r.pricingResult : null);
   section("pricing_url problems", ownPricing, (r) => r.pricing_url);
   const deadPricing = rows.filter((r) => ownPricing(r) && isDead(r.pricingResult));
-  if (deadPricing.length) lines.push("### Dead pricing_url (product url may be fine)", ...deadPricing.map((r) => `- \`${r.id}\`: ${fmt(r.pricingResult)} ${r.pricing_url}`), "");
+  if (deadPricing.length)
+    lines.push(
+      "### Dead pricing_url (product url may be fine)",
+      ...deadPricing.map((r) => `- \`${r.id}\`: ${fmt(r.pricingResult)} ${r.pricing_url}`),
+      "",
+    );
   return lines.join("\n");
 }
 
@@ -284,11 +342,20 @@ async function main() {
   const { state, rows } = await run({ targets: list, state: prev, day });
 
   console.log(`link check ${day}: ${list.length} ids`);
-  for (const [label, src, pick] of [["labeled url", "labeled", (r) => r.urlResult], ["labeled pricing_url", "labeled", (r) => r.pricingResult], ["imported url", "imported", (r) => r.urlResult]]) {
-    const n = totals(rows.filter((r) => r.source === src), pick);
+  for (const [label, src, pick] of [
+    ["labeled url", "labeled", (r) => r.urlResult],
+    ["labeled pricing_url", "labeled", (r) => r.pricingResult],
+    ["imported url", "imported", (r) => r.urlResult],
+  ]) {
+    const n = totals(
+      rows.filter((r) => r.source === src),
+      pick,
+    );
     console.log(`  ${label}: ${CLASSES.map((c) => `${c} ${n[c]}`).join(", ")}`);
   }
-  for (const r of rows) if (r.entry.failing_since) console.log(`  ${r.entry.dead_since ? "dead" : "failing"}: ${r.id} (${r.source}) ${fmt(r.urlResult)} ${r.url}`);
+  for (const r of rows)
+    if (r.entry.failing_since)
+      console.log(`  ${r.entry.dead_since ? "dead" : "failing"}: ${r.id} (${r.source}) ${fmt(r.urlResult)} ${r.url}`);
 
   const changes = meaningfulChange(prev, state);
   if (process.env.GITHUB_OUTPUT) appendFileSync(process.env.GITHUB_OUTPUT, `changes=${changes}\n`);

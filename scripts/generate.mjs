@@ -65,7 +65,8 @@ function resolveRelative(obj, where) {
       fail(`${where}: ${key} is for test fixtures only; use an absolute date`);
       continue;
     }
-    const target = { verified: "verified_at", checked: "checked_at", changed: "changed_at", opened: "opened" }[m[1]] ?? m[1];
+    const target =
+      { verified: "verified_at", checked: "checked_at", changed: "changed_at", opened: "opened" }[m[1]] ?? m[1];
     obj[target] = daysAgo(obj[key]);
     delete obj[key];
   }
@@ -100,7 +101,9 @@ for (const { file, data } of yamlFiles("tools")) {
 const curatedIds = new Set(tools.map((t) => t.id));
 
 // ---------- Trust-loop state ----------
-const reviews = (load("state/reviews.yaml", []) ?? []).map((r, i) => resolveRelative({ ...r }, `state/reviews.yaml[${i}]`));
+const reviews = (load("state/reviews.yaml", []) ?? []).map((r, i) =>
+  resolveRelative({ ...r }, `state/reviews.yaml[${i}]`),
+);
 const pricing = load("state/pricing.yaml", {}) ?? {};
 for (const t of tools) {
   const review = reviews.find((r) => r.tool === t.id);
@@ -133,9 +136,19 @@ for (const { file, data } of yamlFiles("imported")) {
     continue;
   }
   const dead = (data.entries ?? []).filter((e) => linkDead(e.id) && !curatedIds.has(e.id));
-  for (const e of dead) console.log(`  imported ${e.id} (${list.id}) dropped: link dead since ${links[e.id].dead_since}`);
+  for (const e of dead)
+    console.log(`  imported ${e.id} (${list.id}) dropped: link dead since ${links[e.id].dead_since}`);
   const live = (data.entries ?? []).filter((e) => !dead.includes(e));
-  lists.push({ id: list.id, name: list.name, url: list.url, license: list.license, license_url: list.license_url, commit: list.commit, fetched_at: list.fetched_at, count: live.length });
+  lists.push({
+    id: list.id,
+    name: list.name,
+    url: list.url,
+    license: list.license,
+    license_url: list.license_url,
+    commit: list.commit,
+    fetched_at: list.fetched_at,
+    count: live.length,
+  });
   for (const e of live) {
     if (!aisleById.has(e.aisle)) {
       fail(`${file}: entry ${e.id} has unknown aisle "${e.aisle}"`);
@@ -178,7 +191,9 @@ for (const { file, data } of yamlFiles("imported")) {
 const allIds = new Set(tools.map((t) => t.id));
 
 // skip_if.use must point at a tool we list.
-for (const t of tools) for (const s of t.skip_if) if (s.use && !allIds.has(s.use)) fail(`tools/${t.id}.yaml: skip_if uses unknown tool ${s.use}`);
+for (const t of tools)
+  for (const s of t.skip_if)
+    if (s.use && !allIds.has(s.use)) fail(`tools/${t.id}.yaml: skip_if uses unknown tool ${s.use}`);
 
 // ---------- Scale (5 steps against the aisle's biggest labeled value) ----------
 const maxByAisle = {};
@@ -229,7 +244,12 @@ for (const t of stale) console.warn(`  warning: ${t.id} is Suggested but not che
 
 // ---------- Write ----------
 const order = new Map(aisles.map((a, i) => [a.id, i]));
-tools.sort((a, b) => order.get(a.aisle) - order.get(b.aisle) || (a.source === "imported") - (b.source === "imported") || a.id.localeCompare(b.id));
+tools.sort(
+  (a, b) =>
+    order.get(a.aisle) - order.get(b.aisle) ||
+    (a.source === "imported") - (b.source === "imported") ||
+    a.id.localeCompare(b.id),
+);
 
 // Deterministic "as of" date: the newest date in the data, not the clock.
 const dates = [
@@ -259,4 +279,6 @@ writeFileSync(out, JSON.stringify(snapshot, null, 2) + "\n");
 writeFileSync(rulesOut, JSON.stringify(rules, null, 2) + "\n");
 
 const labeled = tools.filter((t) => t.source !== "imported").length;
-console.log(`wrote ${out.replace(root + "/", "")}: ${aisles.length} aisles, ${labeled} labeled tools, ${tools.length - labeled} imported from ${lists.length} lists`);
+console.log(
+  `wrote ${out.replace(root + "/", "")}: ${aisles.length} aisles, ${labeled} labeled tools, ${tools.length - labeled} imported from ${lists.length} lists`,
+);

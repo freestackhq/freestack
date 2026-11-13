@@ -48,7 +48,8 @@ const PUBLIC_APIS_RULES = [
     section: ["Machine Learning", "AI"],
     aisle: "inference",
     // Both lists also carry paid LLM gateways, so the entry must say "free".
-    match: /^(?=.*\bfree)(?=.*(\bllms?\b|inference|language models?|openai[- ]compatible|text generation|generative ai))/i,
+    match:
+      /^(?=.*\bfree)(?=.*(\bllms?\b|inference|language models?|openai[- ]compatible|text generation|generative ai))/i,
     skip: /benchmark|pricing|calculator|catalog|news|search|board|translat|compliance/i,
   },
 ];
@@ -208,7 +209,10 @@ export function parseTables(md) {
       continue;
     }
     if (!line.startsWith("|")) continue;
-    const cells = line.split("|").slice(1).map((c) => c.trim());
+    const cells = line
+      .split("|")
+      .slice(1)
+      .map((c) => c.trim());
     const m = cells[0]?.match(new RegExp(`^${LINK.source}$`));
     if (!m) continue;
     out.push({ section, name: m[1], url: m[2], text: cells[1] ?? "" });
@@ -352,7 +356,10 @@ export function nameKey(name) {
     .replace(/[^a-z0-9]+/g, " ")
     .split(" ")
     .filter((w) => w && !/^(api|apis|cloud|ai|inc|the|free|tier|always|hobby)$/.test(w));
-  while (words.length > 1 && /^(postgres|postgresql|database|db|auth|authentication|hosting|functions)$/.test(words.at(-1))) {
+  while (
+    words.length > 1 &&
+    /^(postgres|postgresql|database|db|auth|authentication|hosting|functions)$/.test(words.at(-1))
+  ) {
     words.pop();
   }
   const key = words.join("");
@@ -362,10 +369,31 @@ export function nameKey(name) {
 // Vendors with many unrelated products on one domain: dedupe on host + first
 // path segment instead of the whole domain.
 const SHARED_ROOTS = new Set([
-  "amazon.com", "google.com", "googleapis.com", "microsoft.com", "azure.com", "cloudflare.com",
-  "github.com", "github.io", "gitlab.com", "gitlab.io", "rapidapi.com", "oracle.com", "ibm.com",
-  "zoho.com", "salesforce.com", "pages.dev", "workers.dev", "vercel.app", "netlify.app",
-  "herokuapp.com", "onrender.com", "readthedocs.io", "rtfd.io", "prisma.io", "medium.com",
+  "amazon.com",
+  "google.com",
+  "googleapis.com",
+  "microsoft.com",
+  "azure.com",
+  "cloudflare.com",
+  "github.com",
+  "github.io",
+  "gitlab.com",
+  "gitlab.io",
+  "rapidapi.com",
+  "oracle.com",
+  "ibm.com",
+  "zoho.com",
+  "salesforce.com",
+  "pages.dev",
+  "workers.dev",
+  "vercel.app",
+  "netlify.app",
+  "herokuapp.com",
+  "onrender.com",
+  "readthedocs.io",
+  "rtfd.io",
+  "prisma.io",
+  "medium.com",
 ]);
 
 const SECOND_LEVEL = new Set(["co", "com", "net", "org", "gov", "edu", "ac", "or", "ne", "go"]);
@@ -380,7 +408,17 @@ export function rootDomain(host) {
 
 // Subdomains that name a console or the whole vendor, not one product.
 const GENERIC_SUBDOMAINS = new Set([
-  "aws", "cloud", "console", "dash", "dashboard", "developer", "developers", "docs", "app", "platform", "portal",
+  "aws",
+  "cloud",
+  "console",
+  "dash",
+  "dashboard",
+  "developer",
+  "developers",
+  "docs",
+  "app",
+  "platform",
+  "portal",
 ]);
 
 /**
@@ -412,8 +450,20 @@ export function hostKey(url) {
 // ---------------------------------------------------------------------------
 
 const PRICING_PAGE = /^(pricing|plans|prices?)(\.html?)?$/i;
-const CONSOLE_PATH = /^(api-?keys?|apikeys|keys|tokens?|myaccesstoken|account|settings|usercenter|profile|signup|sign-up|signin|login|ak)$/i;
-const CONSOLE_HOST = new Set(["console", "dashboard", "dash", "app", "platform", "portal", "account", "accounts", "token", "login"]);
+const CONSOLE_PATH =
+  /^(api-?keys?|apikeys|keys|tokens?|myaccesstoken|account|settings|usercenter|profile|signup|sign-up|signin|login|ak)$/i;
+const CONSOLE_HOST = new Set([
+  "console",
+  "dashboard",
+  "dash",
+  "app",
+  "platform",
+  "portal",
+  "account",
+  "accounts",
+  "token",
+  "login",
+]);
 
 export function productUrl(raw) {
   const u = new URL(raw);
@@ -422,7 +472,8 @@ export function productUrl(raw) {
   const labels = host.slice(0, -root.length).split(".").filter(Boolean);
   const segs = u.pathname.split("/").filter(Boolean);
   const shared = SHARED_ROOTS.has(root);
-  if (!shared && (labels.some((l) => CONSOLE_HOST.has(l)) || segs.some((s) => CONSOLE_PATH.test(s)))) return `https://${root}/`;
+  if (!shared && (labels.some((l) => CONSOLE_HOST.has(l)) || segs.some((s) => CONSOLE_PATH.test(s))))
+    return `https://${root}/`;
   if (segs.length && PRICING_PAGE.test(segs.at(-1))) {
     if (!shared) return `${u.origin}/`;
     segs.pop();
@@ -594,7 +645,15 @@ export function toYaml(list, entries, licenseText) {
     `  fetched_at: ${q(list.fetched_at)}`,
   ];
   const body = entries.length
-    ? ["entries:", ...entries.flatMap((e) => [`  - id: ${q(e.id)}`, `    name: ${q(e.name)}`, `    url: ${q(e.url)}`, `    aisle: ${q(e.aisle)}`])]
+    ? [
+        "entries:",
+        ...entries.flatMap((e) => [
+          `  - id: ${q(e.id)}`,
+          `    name: ${q(e.name)}`,
+          `    url: ${q(e.url)}`,
+          `    aisle: ${q(e.aisle)}`,
+        ]),
+      ]
     : ["entries: []"];
   return [...header, ...meta, ...body].join("\n") + "\n";
 }
@@ -633,7 +692,8 @@ async function main() {
 
   for (const base of LISTS) {
     const list = { ...base, fetched_at, commit: latest ? latestCommit(base.repo) : base.commit };
-    if (latest && list.commit !== base.commit) console.log(`${list.id}: HEAD is ${list.commit} (pinned ${base.commit})`);
+    if (latest && list.commit !== base.commit)
+      console.log(`${list.id}: HEAD is ${list.commit} (pinned ${base.commit})`);
     const raw = [];
     for (const src of list.sources) raw.push(...PARSERS[list.format](await fetchText(list.repo, list.commit, src)));
     const license = await fetchText(list.repo, list.commit, list.licenseFile);

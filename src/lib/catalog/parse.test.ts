@@ -1,13 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import {
-  parseCategoryFile,
-  parseInfoTable,
-  parseTable,
-  parseYaml,
-  slugify,
-  splitFrontmatter,
-} from "./parse.mjs";
+import { parseCategoryFile, parseInfoTable, parseTable, parseYaml, slugify, splitFrontmatter } from "./parse.mjs";
 
 describe("slugify", () => {
   it("lowercases and collapses separators", () => {
@@ -49,12 +42,7 @@ describe("frontmatter", () => {
 
 describe("tables", () => {
   it("parses a field/value table", () => {
-    const lines = [
-      "| Field | Value |",
-      "|-------|-------|",
-      "| URL | https://x.dev |",
-      "| Deploy | docker, binary |",
-    ];
+    const lines = ["| Field | Value |", "|-------|-------|", "| URL | https://x.dev |", "| Deploy | docker, binary |"];
     expect(parseInfoTable(lines)).toEqual({
       URL: "https://x.dev",
       Deploy: "docker, binary",
@@ -62,11 +50,7 @@ describe("tables", () => {
   });
 
   it("parses generic tables with a separator row", () => {
-    const lines = [
-      "| Service | Deploy |",
-      "|---------|--------|",
-      "| [Neon](#neon) | docker |",
-    ];
+    const lines = ["| Service | Deploy |", "|---------|--------|", "| [Neon](#neon) | docker |"];
     const rows = parseTable(lines);
     expect(rows).toHaveLength(1);
     expect(rows[0][0]).toBe("[Neon](#neon)");

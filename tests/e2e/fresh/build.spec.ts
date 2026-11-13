@@ -41,7 +41,9 @@ test.describe("Build a stack (Builder.dc.html)", () => {
     await expect(banner(page)).toHaveAttribute("data-kind", "problem");
     await expect(page.locator("[data-banner-title]")).toHaveText("1 problem, 1 to watch");
     const items = banner(page).locator("li");
-    await expect(items.nth(0)).toHaveText("Problem: Vercel Hobby does not allow selling, and you are building to sell. Swap hosting.");
+    await expect(items.nth(0)).toHaveText(
+      "Problem: Vercel Hobby does not allow selling, and you are building to sell. Swap hosting.",
+    );
     await expect(items.nth(1)).toHaveText("To watch: Supabase already has sign-in built in. You may not need Clerk.");
     await expect(row(page, "hosting")).toHaveClass(/has-problem/);
     await expect(row(page, "hosting")).toContainText("Has a problem.");
@@ -112,7 +114,9 @@ test.describe("Build a stack (Builder.dc.html)", () => {
 
   test("a tool the link no longer lists is dropped and named", async ({ page }) => {
     await page.goto("/build?as=indie&hosting=fauna&database=neon");
-    await expect(page.locator("[data-note]")).toHaveText("This link had a tool we no longer list (fauna). We left it out.");
+    await expect(page.locator("[data-note]")).toHaveText(
+      "This link had a tool we no longer list (fauna). We left it out.",
+    );
     await expect(page.getByRole("button", { name: "+ Choose hosting" })).toBeVisible();
     await expect(page).toHaveURL(/\?as=indie&database=neon$/);
   });
@@ -130,7 +134,10 @@ test.describe("Build a stack (Builder.dc.html)", () => {
   test("copy, share and check links", async ({ page, context }) => {
     await context.grantPermissions(["clipboard-read", "clipboard-write"]);
     await page.goto("/build?as=indie&hosting=cf-workers&database=neon");
-    await expect(page.getByRole("link", { name: "Already have a stack? Check it" })).toHaveAttribute("href", "/check?as=indie");
+    await expect(page.getByRole("link", { name: "Already have a stack? Check it" })).toHaveAttribute(
+      "href",
+      "/check?as=indie",
+    );
 
     await page.getByRole("button", { name: "Share link" }).click();
     await expect(page.locator("[data-toast]")).toContainText("Link copied");

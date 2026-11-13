@@ -49,7 +49,9 @@ async function get(path) {
 
 function printClaim(data) {
   console.log(`\nfreestack claim plan`);
-  console.log(`profile  student=${data.profile.student} commercial=${data.profile.commercial} ph=${Boolean(data.profile.ph)} ai=${data.profile.ai !== false}`);
+  console.log(
+    `profile  student=${data.profile.student} commercial=${data.profile.commercial} ph=${Boolean(data.profile.ph)} ai=${data.profile.ai !== false}`,
+  );
   console.log(`hint     ${data.stackHint}\n`);
   if (data.warnings?.length) {
     for (const w of data.warnings) console.log(`!  ${w}`);

@@ -17,7 +17,9 @@ export const GET: APIRoute = () => {
     if (!aisles.length) continue;
     lines.push(`## ${group}`, "");
     for (const a of aisles) {
-      lines.push(`- [${a.name}](${SITE_URL}/${a.id}): ${aisleCount(a.id)} labels. Headline: ${a.label}${a.unit ? ` (${a.unit})` : ""}.`);
+      lines.push(
+        `- [${a.name}](${SITE_URL}/${a.id}): ${aisleCount(a.id)} labels. Headline: ${a.label}${a.unit ? ` (${a.unit})` : ""}.`,
+      );
     }
     lines.push("");
   }

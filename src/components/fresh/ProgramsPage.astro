@@ -35,101 +35,103 @@ const countText = (n: number) => `${n} ${n === 1 ? "program" : "programs"} you c
 
 <Shell title={`${aisle.name} · freestack`} aisle={AISLE}>
   <div class="wrap page">
-    <p class="crumbs"><a href="/">All aisles</a> <span aria-hidden="true">/</span> {aisle.group}</p>
+    <p class="crumbs">
+      <a href="/">All aisles</a> <span aria-hidden="true">/</span> {aisle.group}
+    </p>
     <div class="head">
       <h1 class="title-xl">{aisle.name}</h1>
       <p class="intro">{intro}</p>
     </div>
 
-    {
-      forStudents ? (
-        <div class="filter" role="group" aria-labelledby="have-label" data-have-filter>
-          <span id="have-label" class="have">I have</span>
-          {HAVE_OPTIONS.map((o) => (
-            <button type="button" class="chip" data-have={o.id} aria-pressed={o.id === DEFAULT_HAVE ? "true" : "false"}>
-              {o.label}
-            </button>
-          ))}
-          <p class="count" role="status" data-count>
-            {countText(shown)}
-          </p>
-        </div>
-      ) : (
-        <div class="filter">
-          <p class="count" role="status" data-count>
-            {countText(shown)}
-          </p>
-        </div>
-      )
-    }
+    {forStudents ? (
+      <div class="filter" role="group" aria-labelledby="have-label" data-have-filter>
+        <span id="have-label" class="have">
+          I have
+        </span>
+        {HAVE_OPTIONS.map((o) => (
+          <button type="button" class="chip" data-have={o.id} aria-pressed={o.id === DEFAULT_HAVE ? "true" : "false"}>
+            {o.label}
+          </button>
+        ))}
+        <p class="count" role="status" data-count>
+          {countText(shown)}
+        </p>
+      </div>
+    ) : (
+      <div class="filter">
+        <p class="count" role="status" data-count>
+          {countText(shown)}
+        </p>
+      </div>
+    )}
 
     <div class="grid" data-grid>
-      {
-        programs.map((t) => {
-          const p = t.program!;
-          return (
-            <article
-              class:list={["program", { first: p.order === 1 }]}
-              data-program={t.id}
-              data-order={p.order}
-              data-who={t.who.join(" ")}
-              hidden={!visibleTo(t.who)}
-            >
-              {p.order === 1 && <span class="tag">Claim first</span>}
-              <div class="name">
-                <span class="order" aria-hidden="true">
-                  {p.order}
-                </span>
-                <h2 class="title">
-                  <a href={toolHref(t)}>
-                    <span class="sr-only">Number {p.order}: </span>
-                    {t.name}
-                  </a>
-                </h2>
-              </div>
-              <p class="big">{p.lasts_big}</p>
-              <p class="sub">{p.lasts_sub}</p>
-              <ul class="perks">
-                {p.perks.map((perk) => (
-                  <li>{perk}</li>
-                ))}
-              </ul>
-              <p class="needs">
-                Needs: {p.needs}
-                <br />
-                Lasts: {p.lasts}
+      {programs.map((t) => {
+        const p = t.program!;
+        return (
+          <article
+            class:list={["program", { first: p.order === 1 }]}
+            data-program={t.id}
+            data-order={p.order}
+            data-who={t.who.join(" ")}
+            hidden={!visibleTo(t.who)}
+          >
+            {p.order === 1 && <span class="tag">Claim first</span>}
+            <div class="name">
+              <span class="order" aria-hidden="true">
+                {p.order}
+              </span>
+              <h2 class="title">
+                <a href={toolHref(t)}>
+                  <span class="sr-only">Number {p.order}: </span>
+                  {t.name}
+                </a>
+              </h2>
+            </div>
+            <p class="big">{p.lasts_big}</p>
+            <p class="sub">{p.lasts_sub}</p>
+            <ul class="perks">
+              {p.perks.map((perk) => (
+                <li>{perk}</li>
+              ))}
+            </ul>
+            <p class="needs">
+              Needs: {p.needs}
+              <br />
+              Lasts: {p.lasts}
+            </p>
+            {t.catches[0] && (
+              <p class="catch">
+                <Icon name="wrench" />
+                {t.catches[0]}
               </p>
-              {t.catches[0] && (
-                <p class="catch">
-                  <Icon name="wrench" />
-                  {t.catches[0]}
-                </p>
-              )}
-              <a class="claim" href={p.claim_url} target="_blank" rel="noopener">
-                How to claim it<span class="sr-only">: {t.name}, opens in a new tab</span>
-              </a>
-            </article>
-          );
-        })
-      }
+            )}
+            <a class="claim" href={p.claim_url} target="_blank" rel="noopener">
+              How to claim it<span class="sr-only">: {t.name}, opens in a new tab</span>
+            </a>
+          </article>
+        );
+      })}
     </div>
 
     <div class="empty" data-empty hidden={shown > 0}>
       <p class="empty-title">Every program here needs proof you are a student.</p>
       <p>A school email gets you the most. Free tools anyone can use are in the other aisles.</p>
       <div class="empty-actions">
-        <button type="button" class="btn" data-have-set="school">Show programs for a school email</button>
-        <a class="btn btn-outline" href="/">All aisles</a>
+        <button type="button" class="btn" data-have-set="school">
+          Show programs for a school email
+        </button>
+        <a class="btn btn-outline" href="/">
+          All aisles
+        </a>
       </div>
     </div>
 
     <p class="note" data-note>
       Order and terms from {source}.
-      {
-        checked === 0
-          ? " Not checked against each vendor yet."
-          : ` ${checked} of ${programs.length} checked against the vendor's page.`
-      }
+      {checked === 0
+        ? " Not checked against each vendor yet."
+        : ` ${checked} of ${programs.length} checked against the vendor's page.`}
     </p>
   </div>
 </Shell>

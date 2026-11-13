@@ -31,7 +31,11 @@ export function checkLines(tool: Tool, aisle: Aisle): CheckLine[] {
 
   if (tool.program) {
     const p = tool.program;
-    lines.push({ field: "program.lasts", label: "How long it lasts", value: p.lasts_sub ? `${p.lasts_big}, ${p.lasts_sub}` : p.lasts_big });
+    lines.push({
+      field: "program.lasts",
+      label: "How long it lasts",
+      value: p.lasts_sub ? `${p.lasts_big}, ${p.lasts_sub}` : p.lasts_big,
+    });
     p.perks.forEach((perk, i) => lines.push({ field: `program.perks.${i}`, label: "Perk", value: perk }));
     if (p.needs) lines.push({ field: "program.needs", label: "What you need", value: p.needs });
   } else {
@@ -44,8 +48,16 @@ export function checkLines(tool: Tool, aisle: Aisle): CheckLine[] {
   tool.catches.forEach((c, i) => {
     if (!tool.limits.includes(c)) lines.push({ field: `catches.${i}`, label: "The catch", value: c });
   });
-  lines.push({ field: "who", label: "Who can claim it", value: tool.who.map((w) => WHO[w]).join(", ") || "Not listed" });
-  lines.push({ field: "sell", label: "Selling allowed", value: tool.sell === "yes" ? "Yes" : tool.sell === "no" ? "No" : "Not listed" });
+  lines.push({
+    field: "who",
+    label: "Who can claim it",
+    value: tool.who.map((w) => WHO[w]).join(", ") || "Not listed",
+  });
+  lines.push({
+    field: "sell",
+    label: "Selling allowed",
+    value: tool.sell === "yes" ? "Yes" : tool.sell === "no" ? "No" : "Not listed",
+  });
   lines.push({
     field: "card",
     label: "Credit card at signup",

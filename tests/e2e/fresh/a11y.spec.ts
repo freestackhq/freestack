@@ -118,7 +118,14 @@ test.describe("phone", () => {
 test.describe("keyboard", () => {
   test.use({ viewport: DESKTOP });
 
-  for (const path of ["/", "/databases", "/compare?ids=neon,turso,supabase,d1", "/add", "/no-such-page", "/dev/throw"]) {
+  for (const path of [
+    "/",
+    "/databases",
+    "/compare?ids=neon,turso,supabase,d1",
+    "/add",
+    "/no-such-page",
+    "/dev/throw",
+  ]) {
     test(`skip link and focus rings on ${path}`, async ({ page }) => {
       await page.goto(path);
       await expectSkipLink(page);

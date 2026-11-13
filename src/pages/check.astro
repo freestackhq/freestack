@@ -27,7 +27,9 @@ import { toStackTool, type StackTool } from "../lib/fresh/stack";
 
 const at = now();
 const partLabel = (aisleId: string, kind: string) =>
-  parts().find((p) => p.aisle === aisleId && (!p.kinds || p.kinds.includes(kind)))?.label ?? getAisle(aisleId)?.name ?? aisleId;
+  parts().find((p) => p.aisle === aisleId && (!p.kinds || p.kinds.includes(kind)))?.label ??
+  getAisle(aisleId)?.name ??
+  aisleId;
 
 // Labeled tools, in aisle order so swaps prefer suggested and checked ones.
 const labeled: StackTool[] = aisles().flatMap((a) =>
@@ -38,7 +40,11 @@ const unlabeled = allTools()
   .filter((t) => t.source === "imported")
   .map((t) => ({ id: t.id, name: t.name, href: writeLabelHref(t) }));
 const catchPages = Object.fromEntries(
-  labeled.flatMap((t) => catchesForTool(t.id).slice(0, 1).map((c) => [t.id, `/catches/${c.slug}`])),
+  labeled.flatMap((t) =>
+    catchesForTool(t.id)
+      .slice(0, 1)
+      .map((c) => [t.id, `/catches/${c.slug}`]),
+  ),
 );
 
 const data = { labeled, unlabeled, catchPages, situations: situations(), fallback: defaultSituation };
@@ -51,7 +57,9 @@ const data = { labeled, unlabeled, catchPages, situations: situations(), fallbac
 
     <form class="box" data-form>
       <div>
-        <label for="stack-in" class="field-label">Your tools</label>
+        <label for="stack-in" class="field-label">
+          Your tools
+        </label>
         <div class="field-box" data-field>
           <ul class="chips" aria-label="Your stack" data-chips></ul>
           <input
@@ -63,20 +71,29 @@ const data = { labeled, unlabeled, catchPages, situations: situations(), fallbac
             data-input
           />
         </div>
-        <p id="stack-hint" class="hint">Press Enter or type a comma after each one. You can paste a list.</p>
+        <p id="stack-hint" class="hint">
+          Press Enter or type a comma after each one. You can paste a list.
+        </p>
       </div>
       <div class="controls">
         <div class="sits" role="group" aria-labelledby="sits-l">
-          <span id="sits-l" class="sits-label">I'm building as</span>
-          {
-            situations().map((s) => (
-              <button type="button" class="chip" data-sit={s.id} aria-pressed={s.id === defaultSituation ? "true" : "false"}>
-                {s.label}
-              </button>
-            ))
-          }
+          <span id="sits-l" class="sits-label">
+            I'm building as
+          </span>
+          {situations().map((s) => (
+            <button
+              type="button"
+              class="chip"
+              data-sit={s.id}
+              aria-pressed={s.id === defaultSituation ? "true" : "false"}
+            >
+              {s.label}
+            </button>
+          ))}
         </div>
-        <button type="submit" class="btn btn-promo check-btn">Check it</button>
+        <button type="submit" class="btn btn-promo check-btn">
+          Check it
+        </button>
       </div>
     </form>
 
@@ -90,16 +107,28 @@ const data = { labeled, unlabeled, catchPages, situations: situations(), fallbac
       <ul class="verdicts" data-verdicts></ul>
       <div class="res-foot" data-foot>
         <a class="why" href="#" data-why hidden></a>
-        <button type="button" class="btn copy-fixed" data-copy-fixed>Copy the fixed stack</button>
+        <button type="button" class="btn copy-fixed" data-copy-fixed>
+          Copy the fixed stack
+        </button>
       </div>
     </section>
-    <p class="empty" data-empty>Add a tool above to check it.</p>
+    <p class="empty" data-empty>
+      Add a tool above to check it.
+    </p>
     <p class="small">Based on each tool's label. Not legal advice.</p>
 
-    <template data-icon="problem"><Icon name="cross" size={16} /></template>
-    <template data-icon="watch"><Icon name="wrench" size={16} /></template>
-    <template data-icon="fine"><Icon name="check" size={16} /></template>
-    <template data-icon="remove"><Icon name="close" size={16} /></template>
+    <template data-icon="problem">
+      <Icon name="cross" size={16} />
+    </template>
+    <template data-icon="watch">
+      <Icon name="wrench" size={16} />
+    </template>
+    <template data-icon="fine">
+      <Icon name="check" size={16} />
+    </template>
+    <template data-icon="remove">
+      <Icon name="close" size={16} />
+    </template>
   </div>
 
   <script type="application/json" id="check-data" set:html={JSON.stringify(data)} />
@@ -149,7 +178,9 @@ const data = { labeled, unlabeled, catchPages, situations: situations(), fallbac
   const nameOf = (e: Entry) => (e.kind === "tool" ? e.t.name : e.name);
 
   const q = new URLSearchParams(location.search);
-  let situation: SituationId = D.situations.some((s) => s.id === q.get("as")) ? (q.get("as") as SituationId) : D.fallback;
+  let situation: SituationId = D.situations.some((s) => s.id === q.get("as"))
+    ? (q.get("as") as SituationId)
+    : D.fallback;
   let entries: Entry[] = [];
   addAll(splitTools(q.get("tools") ?? ""), false);
 
@@ -162,7 +193,9 @@ const data = { labeled, unlabeled, catchPages, situations: situations(), fallbac
   }
 
   function icon(name: string): DocumentFragment {
-    return (root.querySelector<HTMLTemplateElement>(`template[data-icon="${name}"]`)!.content.cloneNode(true) as DocumentFragment);
+    return root
+      .querySelector<HTMLTemplateElement>(`template[data-icon="${name}"]`)!
+      .content.cloneNode(true) as DocumentFragment;
   }
 
   function el<K extends keyof HTMLElementTagNameMap>(tag: K, cls?: string, text?: string): HTMLElementTagNameMap[K] {
@@ -173,11 +206,16 @@ const data = { labeled, unlabeled, catchPages, situations: situations(), fallbac
   }
 
   function sellSentence(t: StackTool): string {
-    return t.sell === "yes" ? "Selling is allowed." : t.sell === "no" ? "Selling is not allowed." : "Check the terms before selling.";
+    return t.sell === "yes"
+      ? "Selling is allowed."
+      : t.sell === "no"
+        ? "Selling is not allowed."
+        : "Check the terms before selling.";
   }
 
   function render() {
-    for (const c of root.querySelectorAll<HTMLButtonElement>("[data-sit]")) c.setAttribute("aria-pressed", String(c.dataset.sit === situation));
+    for (const c of root.querySelectorAll<HTMLButtonElement>("[data-sit]"))
+      c.setAttribute("aria-pressed", String(c.dataset.sit === situation));
 
     // Chips
     const chips = $("[data-chips]");
@@ -186,7 +224,8 @@ const data = { labeled, unlabeled, catchPages, situations: situations(), fallbac
       const li = el("li", `chip stack-chip${e.kind === "tool" ? "" : " chip-dashed"}`);
       li.dataset.entry = key(e);
       li.append(el("span", "chip-name", nameOf(e)));
-      if (e.kind !== "tool") li.append(el("span", "sr-only", e.kind === "unknown" ? " (not on freestack)" : " (no label yet)"));
+      if (e.kind !== "tool")
+        li.append(el("span", "sr-only", e.kind === "unknown" ? " (not on freestack)" : " (no label yet)"));
       const rm = el("button", "chip-remove");
       rm.type = "button";
       rm.setAttribute("aria-label", `Remove ${nameOf(e)}`);
@@ -204,7 +243,11 @@ const data = { labeled, unlabeled, catchPages, situations: situations(), fallbac
     unknown.replaceChildren();
     for (const e of others) {
       const line = el("span", "unknown-line");
-      const strong = el("strong", undefined, e.kind === "unknown" ? `${e.name} isn't on freestack` : `${e.name} has no label yet`);
+      const strong = el(
+        "strong",
+        undefined,
+        e.kind === "unknown" ? `${e.name} isn't on freestack` : `${e.name} has no label yet`,
+      );
       const rest =
         known.length > 0
           ? `, so we checked the other ${known.length} without it.`
@@ -275,7 +318,8 @@ const data = { labeled, unlabeled, catchPages, situations: situations(), fallbac
     const url = new URL(location.href);
     url.search = "";
     url.searchParams.set("as", situation);
-    if (entries.length) url.searchParams.set("tools", entries.map((e) => (e.kind === "unknown" ? e.name : key(e))).join(","));
+    if (entries.length)
+      url.searchParams.set("tools", entries.map((e) => (e.kind === "unknown" ? e.name : key(e))).join(","));
     history.replaceState(null, "", url);
   }
 

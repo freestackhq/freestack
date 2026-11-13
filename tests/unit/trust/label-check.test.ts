@@ -78,7 +78,10 @@ describe("planLabelCheck", () => {
       kind: "reject",
       reasons: ["The tool id is empty.", "No line is answered."],
     });
-    const bad = planLabelCheck({ ...base, body: "### Tool id\n\n../../etc\n\n### Answers\n\n- sell | S: Yes | Still true" });
+    const bad = planLabelCheck({
+      ...base,
+      body: "### Tool id\n\n../../etc\n\n### Answers\n\n- sell | S: Yes | Still true",
+    });
     expect(bad.kind).toBe("reject");
   });
 });

@@ -113,7 +113,9 @@ describe("planAddTool", () => {
 describe("buildTool", () => {
   it("makes the id from the name and keeps the bullet-free lines", () => {
     const form = parseIssueForm(fx("add-tool.md"), ADD_TOOL);
-    const { tool } = buildTool({ ...form, id: "", name: "Fresh Base 2!", limits: "- one\n* two\n\n" }, [{ id: "databases", unit: "GB" }]);
+    const { tool } = buildTool({ ...form, id: "", name: "Fresh Base 2!", limits: "- one\n* two\n\n" }, [
+      { id: "databases", unit: "GB" },
+    ]);
     expect(tool.id).toBe("fresh-base-2");
     expect(tool.limits).toEqual(["one", "two"]);
   });

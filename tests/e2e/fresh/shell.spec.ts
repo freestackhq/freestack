@@ -10,14 +10,21 @@ test.describe("label states (States.dc.html)", () => {
     await expect(cell("neon").locator('[data-state="checked"]')).toContainText(/Checked (today|\d+ days ago) by Karlo/);
     await expect(cell("neon")).toContainText("Suggested");
     await expect(cell("convex").locator('[data-state="unchecked"]')).toContainText("Not checked yet");
-    await expect(cell("convex").getByRole("link", { name: /Check it/ })).toHaveAttribute("href", "/databases/convex/check");
+    await expect(cell("convex").getByRole("link", { name: /Check it/ })).toHaveAttribute(
+      "href",
+      "/databases/convex/check",
+    );
     await expect(cell("supabase").locator('[data-state="overdue"]')).toContainText("Due for a recheck");
     await expect(cell("supabase")).not.toContainText("Suggested");
     await expect(cell("d1").locator('[data-state="review"]')).toContainText("A change is waiting for review");
     await expect(cell("d1").getByRole("link", { name: /^See it/ })).toHaveAttribute("href", /\/issues\/1$/);
-    await expect(cell("turso").locator('[data-state="vendor-changed"]')).toContainText("Turso changed its pricing page on");
+    await expect(cell("turso").locator('[data-state="vendor-changed"]')).toContainText(
+      "Turso changed its pricing page on",
+    );
     await expect(cell("turso").getByRole("link", { name: "Recheck this label" })).toBeVisible();
-    await expect(cell("xata-lite").locator('[data-state="imported"]')).toContainText("From free-for-dev. No numbers yet");
+    await expect(cell("xata-lite").locator('[data-state="imported"]')).toContainText(
+      "From free-for-dev. No numbers yet",
+    );
     await expect(cell("xata-lite").getByRole("link", { name: /Write its label/ })).toHaveAttribute("href", /^\/add\?/);
   });
 
@@ -35,7 +42,10 @@ test.describe("label states (States.dc.html)", () => {
   test("scale, unknown and no limit", async ({ page }) => {
     await page.goto("/dev/states/");
     const full = page.locator(".grid");
-    await expect(full.locator('[data-tool="neon"] [role="img"]')).toHaveAttribute("aria-label", "Small: 1 of 5 on this aisle's scale.");
+    await expect(full.locator('[data-tool="neon"] [role="img"]')).toHaveAttribute(
+      "aria-label",
+      "Small: 1 of 5 on this aisle's scale.",
+    );
     await expect(full.locator('[data-tool="appwrite"]')).toContainText("?");
     await expect(full.locator('[data-tool="appwrite"]')).toContainText("Not listed");
     await expect(full.locator('[data-tool="pocketbase"]')).toContainText("No limit");

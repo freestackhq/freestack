@@ -40,29 +40,34 @@ const links = (picked.length ? picked : aisles().slice(0, 3)).map((a) => {
         >
           <Icon name="search" size={18} />
           Search {total} tools
-          <span aria-hidden="true" class="keys"><kbd>Ctrl</kbd><kbd>K</kbd></span>
+          <span aria-hidden="true" class="keys">
+            <kbd>Ctrl</kbd>
+            <kbd>K</kbd>
+          </span>
         </button>
-        <a class="home" href="/">Go to the home page</a>
+        <a class="home" href="/">
+          Go to the home page
+        </a>
       </div>
     </div>
     <div>
       <h2 class="aisles-h">Aisles to start with</h2>
       <ul class="aisles" data-aisle-links>
-        {
-          links.map((l) => (
-            <li>
-              <a href={l.href}>
-                {l.name}
-                <span class="n">{l.count}</span>
-              </a>
-            </li>
-          ))
-        }
+        {links.map((l) => (
+          <li>
+            <a href={l.href}>
+              {l.name}
+              <span class="n">{l.count}</span>
+            </a>
+          </li>
+        ))}
       </ul>
       <p class="report">
         Followed a link here?{" "}
         <a href="https://github.com/freestackhq/freestack/issues/new" target="_blank" rel="noopener">
-          Report the broken link<Icon name="external" size={14} /><span class="sr-only">, on GitHub, opens in a new tab</span>
+          Report the broken link
+          <Icon name="external" size={14} />
+          <span class="sr-only">, on GitHub, opens in a new tab</span>
         </a>
       </p>
     </div>

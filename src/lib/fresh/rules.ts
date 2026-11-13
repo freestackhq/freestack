@@ -151,7 +151,9 @@ export function fitFor(candidate: RuleTool, input: StackInput, replacing?: strin
   const key = (f: Finding) => `${f.rule}:${f.tool}`;
   const before = new Set(evaluate(input).problems.map(key));
   const tools = input.tools.filter((t) => t.id !== replacing && t.id !== candidate.id).concat(candidate);
-  const added = evaluate({ situation: input.situation, tools }).problems.filter((f) => !before.has(key(f)) || f.tool === candidate.id);
+  const added = evaluate({ situation: input.situation, tools }).problems.filter(
+    (f) => !before.has(key(f)) || f.tool === candidate.id,
+  );
   return added.find((f) => f.tool === candidate.id) ?? added[0] ?? null;
 }
 
@@ -163,7 +165,11 @@ export function bestSwap<T extends RuleTool>(toolId: string, input: StackInput, 
   const current = input.tools.find((t) => t.id === toolId);
   if (!current) return null;
   const key = (f: Finding) => `${f.rule}:${f.tool}`;
-  const kept = new Set(evaluate(input).problems.filter((f) => f.tool !== toolId).map(key));
+  const kept = new Set(
+    evaluate(input)
+      .problems.filter((f) => f.tool !== toolId)
+      .map(key),
+  );
   for (const c of candidates) {
     if (c.id === toolId || c.aisle !== current.aisle) continue;
     if (input.tools.some((t) => t.id === c.id)) continue;

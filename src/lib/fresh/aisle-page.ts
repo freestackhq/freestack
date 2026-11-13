@@ -38,8 +38,22 @@ export interface Must {
 
 /** "Must allow" filters. Unknown never counts as a match. */
 export const MUST: Must[] = [
-  { id: "sell", chip: "OK to sell", sheet: "Selling with it", short: "Can sell", phrase: "can sell", test: (i) => i.sell === "yes" },
-  { id: "no-card", chip: "No credit card", sheet: "No credit card", short: "No card", phrase: "no credit card", test: (i) => i.card === "no" },
+  {
+    id: "sell",
+    chip: "OK to sell",
+    sheet: "Selling with it",
+    short: "Can sell",
+    phrase: "can sell",
+    test: (i) => i.sell === "yes",
+  },
+  {
+    id: "no-card",
+    chip: "No credit card",
+    sheet: "No credit card",
+    short: "No card",
+    phrase: "no credit card",
+    test: (i) => i.card === "no",
+  },
   {
     id: "no-school-email",
     chip: "No school email",

@@ -21,8 +21,12 @@ const index = buildSearchIndex();
       <button type="button" class="icon-btn phone-only" aria-label="Close search" data-search-close>
         <Icon name="back" size={16} />
       </button>
-      <span class="glass desktop-only"><Icon name="search" size={22} /></span>
-      <label for="search-input" class="sr-only">Search tools, catches and aisles</label>
+      <span class="glass desktop-only">
+        <Icon name="search" size={22} />
+      </span>
+      <label for="search-input" class="sr-only">
+        Search tools, catches and aisles
+      </label>
       <input
         id="search-input"
         type="text"
@@ -45,22 +49,39 @@ const index = buildSearchIndex();
       </button>
     </div>
 
-    <p class="hint muted" data-search-hint>Type a tool, a catch or an aisle.</p>
+    <p class="hint muted" data-search-hint>
+      Type a tool, a catch or an aisle.
+    </p>
     <ul id="search-results" role="listbox" aria-label="Results" data-search-results></ul>
     <div class="nothing" role="status" data-search-empty></div>
 
     <div class="keys desktop-only" aria-hidden="true">
-      <span><kbd>↑</kbd><kbd>↓</kbd> move</span>
-      <span><kbd>Enter</kbd> open</span>
-      <span><kbd>Esc</kbd> close</span>
+      <span>
+        <kbd>↑</kbd>
+        <kbd>↓</kbd> move
+      </span>
+      <span>
+        <kbd>Enter</kbd> open
+      </span>
+      <span>
+        <kbd>Esc</kbd> close
+      </span>
     </div>
   </div>
 
   <template data-search-icons>
-    <span data-icon="yes"><Icon name="check" /></span>
-    <span data-icon="no"><Icon name="cross" /></span>
-    <span data-icon="unknown"><Icon name="unknown" /></span>
-    <span data-icon="wrench"><Icon name="wrench" /></span>
+    <span data-icon="yes">
+      <Icon name="check" />
+    </span>
+    <span data-icon="no">
+      <Icon name="cross" />
+    </span>
+    <span data-icon="unknown">
+      <Icon name="unknown" />
+    </span>
+    <span data-icon="wrench">
+      <Icon name="wrench" />
+    </span>
   </template>
   <script type="application/json" data-search-index set:html={JSON.stringify(index).replace(/</g, "\\u003c")} />
 </dialog>
@@ -410,9 +431,10 @@ const index = buildSearchIndex();
       input.focus();
       return;
     }
-    opener = document.activeElement instanceof HTMLElement && document.activeElement !== document.body
-      ? document.activeElement
-      : null;
+    opener =
+      document.activeElement instanceof HTMLElement && document.activeElement !== document.body
+        ? document.activeElement
+        : null;
     dialog.showModal();
     document.documentElement.style.overflow = "hidden";
     input.focus();

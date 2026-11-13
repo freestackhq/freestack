@@ -23,7 +23,11 @@ const lowerFirst = (s: string) => s.charAt(0).toLowerCase() + s.slice(1);
 
 // Example inputs for each tool, from the catalog.
 const firstAisle = aisles()[0];
-const compareIds = firstAisle ? toolsInAisle(firstAisle.id).slice(0, 3).map((t) => t.id) : [];
+const compareIds = firstAisle
+  ? toolsInAisle(firstAisle.id)
+      .slice(0, 3)
+      .map((t) => t.id)
+  : [];
 ---
 
 <Shell title="For coding agents · freestack" description="Your agent checks these labels before it adds anything paid.">
@@ -46,42 +50,44 @@ const compareIds = firstAisle ? toolsInAisle(firstAisle.id).slice(0, 3).map((t) 
       </section>
     </div>
 
-    {
-      showExample && (
-        <section class="block" aria-labelledby="ex-h">
-          <h2 id="ex-h" class="section-title">What it looks like</h2>
-          <div class="chat">
-            <div class="turn">
-              <p class="who">You</p>
-              <p class="said">Add a database and sign-in to my capstone. I might sell it later.</p>
-            </div>
-            <div class="turn agent">
-              <p class="who">Your agent, using freestack</p>
-              <p class="said">
-                Going with <strong>{db!.name}</strong> for the database and <strong>{signIn!.name}</strong> for sign-in.
-                {bothSell ? " Both are free and allow selling." : " Both are free. Check the terms before selling."}
-                {dbCatch && (
-                  <>
-                    <br />
-                    Catch: {db!.name} {lowerFirst(dbCatch)}.
-                  </>
-                )}
-                {skipped?.sell === "no" && (
-                  <>
-                    <br />
-                    Skipped <strong>{skipped.name}</strong> for hosting since it does not allow selling.
-                    {instead && ` Using ${instead.name} instead.`}
-                  </>
-                )}
-              </p>
-            </div>
+    {showExample && (
+      <section class="block" aria-labelledby="ex-h">
+        <h2 id="ex-h" class="section-title">
+          What it looks like
+        </h2>
+        <div class="chat">
+          <div class="turn">
+            <p class="who">You</p>
+            <p class="said">Add a database and sign-in to my capstone. I might sell it later.</p>
           </div>
-        </section>
-      )
-    }
+          <div class="turn agent">
+            <p class="who">Your agent, using freestack</p>
+            <p class="said">
+              Going with <strong>{db!.name}</strong> for the database and <strong>{signIn!.name}</strong> for sign-in.
+              {bothSell ? " Both are free and allow selling." : " Both are free. Check the terms before selling."}
+              {dbCatch && (
+                <>
+                  <br />
+                  Catch: {db!.name} {lowerFirst(dbCatch)}.
+                </>
+              )}
+              {skipped?.sell === "no" && (
+                <>
+                  <br />
+                  Skipped <strong>{skipped.name}</strong> for hosting since it does not allow selling.
+                  {instead && ` Using ${instead.name} instead.`}
+                </>
+              )}
+            </p>
+          </div>
+        </div>
+      </section>
+    )}
 
     <section class="block" aria-labelledby="tools-h">
-      <h2 id="tools-h" class="section-title">What the agent can ask</h2>
+      <h2 id="tools-h" class="section-title">
+        What the agent can ask
+      </h2>
       <div class="asks">
         <div class="ask">
           <h3>Find tools</h3>
@@ -107,7 +113,8 @@ const compareIds = firstAisle ? toolsInAisle(firstAisle.id).slice(0, 3).map((t) 
     </section>
 
     <p class="none">
-      No install at all? The same data is at <a href="/api/entries">/api/entries</a> and <a href="/llms.txt">/llms.txt</a>.
+      No install at all? The same data is at <a href="/api/entries">/api/entries</a> and{" "}
+      <a href="/llms.txt">/llms.txt</a>.
     </p>
   </div>
 </Shell>

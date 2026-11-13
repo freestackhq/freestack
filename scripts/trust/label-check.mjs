@@ -90,7 +90,9 @@ export function applyChange(text, answer, unit) {
     const f = parseMetric(now, unit);
     if (!f) return null;
     const next = setScalar(text, "metric", scalar(f.metric));
-    return f.note ? setScalar(next, "metric_note", scalar(f.note), { after: "metric" }) : removeScalar(next, "metric_note");
+    return f.note
+      ? setScalar(next, "metric_note", scalar(f.note), { after: "metric" })
+      : removeScalar(next, "metric_note");
   }
   const item = /^(limits|catches)\.(\d+)$/.exec(field);
   if (item) return setListItem(text, item[1], Number(item[2]), scalar(now));
@@ -186,7 +188,9 @@ export function prBody(plan, issue) {
     "Compare each value with the vendor's page before merging. Merging also marks the label checked and clears its review entry.",
     "",
     ...(plan.applied.length ? ["Applied:", ...plan.applied.map(line), ""] : []),
-    ...(plan.manual.length ? ["Set by hand before merging (not applied automatically):", ...plan.manual.map(line), ""] : []),
+    ...(plan.manual.length
+      ? ["Set by hand before merging (not applied automatically):", ...plan.manual.map(line), ""]
+      : []),
     `Closes #${issue}`,
   ].join("\n");
 }

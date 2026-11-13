@@ -16,7 +16,16 @@ export interface Snapshot {
   generatedAt: string;
   aisles: Aisle[];
   tools: Tool[];
-  lists: { id: string; name: string; url?: string; license?: string; license_url?: string; commit?: string; fetched_at?: string; count: number }[];
+  lists: {
+    id: string;
+    name: string;
+    url?: string;
+    license?: string;
+    license_url?: string;
+    commit?: string;
+    fetched_at?: string;
+    count: number;
+  }[];
   situations: Situation[];
   defaultSituation: SituationId;
   parts: Part[];
@@ -28,7 +37,15 @@ export interface Snapshot {
 
 /** Fixture snapshot for Node test processes; null in the Worker and in normal builds. */
 function fixtureSnapshot(): Snapshot | null {
-  const proc = (globalThis as { process?: { env?: Record<string, string | undefined>; getBuiltinModule?: (id: string) => unknown; cwd?: () => string } }).process;
+  const proc = (
+    globalThis as {
+      process?: {
+        env?: Record<string, string | undefined>;
+        getBuiltinModule?: (id: string) => unknown;
+        cwd?: () => string;
+      };
+    }
+  ).process;
   const dir = proc?.env?.FREESTACK_DATA;
   const fs = dir ? (proc?.getBuiltinModule?.("node:fs") as typeof import("node:fs") | undefined) : undefined;
   const path = dir ? (proc?.getBuiltinModule?.("node:path") as typeof import("node:path") | undefined) : undefined;
@@ -141,9 +158,7 @@ export interface PresetEntry extends PresetRow {
  * drops them. Returns [] when the situation has no valid preset.
  */
 export function preset(id: SituationId): PresetEntry[] {
-  return (SNAPSHOT.presets[id] ?? [])
-    .map((row) => ({ ...row, t: tool(row.tool)! }))
-    .filter((row) => row.t);
+  return (SNAPSHOT.presets[id] ?? []).map((row) => ({ ...row, t: tool(row.tool)! })).filter((row) => row.t);
 }
 
 export function presetIsValid(rows: PresetEntry[], at = now()): boolean {

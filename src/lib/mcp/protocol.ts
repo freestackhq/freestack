@@ -112,9 +112,13 @@ export function decodeHeader(value: string | null): string | null {
 export async function handleHttp(request: Request, server: McpServer): Promise<Response> {
   if (request.method === "OPTIONS") return reply(204, null);
   if (request.method !== "POST") {
-    return reply(405, error(null, ERR.INVALID_REQUEST, "Method not allowed. POST JSON-RPC messages to this endpoint."), {
-      Allow: "POST, OPTIONS",
-    });
+    return reply(
+      405,
+      error(null, ERR.INVALID_REQUEST, "Method not allowed. POST JSON-RPC messages to this endpoint."),
+      {
+        Allow: "POST, OPTIONS",
+      },
+    );
   }
 
   const text = await request.text();
@@ -129,7 +133,9 @@ export async function handleHttp(request: Request, server: McpServer): Promise<R
   // Batches (2025-03-26 clients). Header checks only make sense for one message.
   if (Array.isArray(body)) {
     if (body.length === 0) return reply(400, error(null, ERR.INVALID_REQUEST, "Invalid request: empty batch"));
-    const responses = body.map((m) => handleMessage(m, server, null).response).filter((r): r is RpcResponse => r !== null);
+    const responses = body
+      .map((m) => handleMessage(m, server, null).response)
+      .filter((r): r is RpcResponse => r !== null);
     return responses.length ? reply(200, responses) : reply(202, null);
   }
   const out = handleMessage(body, server, request.headers);
@@ -143,7 +149,8 @@ export async function handleHttp(request: Request, server: McpServer): Promise<R
  * mirrored-header checks are skipped.
  */
 export function handleMessage(msg: unknown, server: McpServer, headers: Headers | null): Outcome {
-  if (!isObject(msg)) return { status: 400, response: error(null, ERR.INVALID_REQUEST, "Invalid request: expected a JSON-RPC object") };
+  if (!isObject(msg))
+    return { status: 400, response: error(null, ERR.INVALID_REQUEST, "Invalid request: expected a JSON-RPC object") };
 
   const hasId = "id" in msg;
   const rawId = msg.id;
@@ -151,21 +158,32 @@ export function handleMessage(msg: unknown, server: McpServer, headers: Headers 
   const id: Id = idOk ? (rawId as string | number) : null;
 
   // A client-sent response (legacy clients answering a server request): accept and ignore.
-  if (msg.jsonrpc === "2.0" && hasId && !("method" in msg) && ("result" in msg || "error" in msg)) return { status: 202, response: null };
+  if (msg.jsonrpc === "2.0" && hasId && !("method" in msg) && ("result" in msg || "error" in msg))
+    return { status: 202, response: null };
 
   if (msg.jsonrpc !== "2.0" || typeof msg.method !== "string" || (hasId && !idOk)) {
-    return { status: 400, response: error(id, ERR.INVALID_REQUEST, "Invalid request: needs jsonrpc \"2.0\", a method, and a string or number id") };
+    return {
+      status: 400,
+      response: error(
+        id,
+        ERR.INVALID_REQUEST,
+        'Invalid request: needs jsonrpc "2.0", a method, and a string or number id',
+      ),
+    };
   }
   const method = msg.method;
   if ("params" in msg && !isObject(msg.params)) {
-    return hasId ? { status: 200, response: error(id, ERR.INVALID_PARAMS, "Invalid params: params must be an object") } : { status: 202, response: null };
+    return hasId
+      ? { status: 200, response: error(id, ERR.INVALID_PARAMS, "Invalid params: params must be an object") }
+      : { status: 202, response: null };
   }
   const params = (msg.params ?? {}) as Record<string, unknown>;
   const meta = isObject(params._meta) ? params._meta : {};
   const modernVersion = typeof meta[VERSION_META] === "string" ? (meta[VERSION_META] as string) : null;
 
   // Version and header checks, before anything runs.
-  const check = modernVersion !== null ? checkModern(modernVersion, method, params, headers) : checkLegacy(method, headers);
+  const check =
+    modernVersion !== null ? checkModern(modernVersion, method, params, headers) : checkLegacy(method, headers);
   if (check) return { status: check.status, response: error(id, check.code, check.message, check.data) };
 
   if (!hasId) return { status: 202, response: null }; // notifications/initialized and friends
@@ -176,7 +194,10 @@ export function handleMessage(msg: unknown, server: McpServer, headers: Headers 
     if (result === undefined) {
       return { status: modern ? 404 : 200, response: error(id, ERR.METHOD_NOT_FOUND, `Method not found: ${method}`) };
     }
-    return { status: 200, response: { jsonrpc: "2.0", id, result: modern ? { resultType: "complete", ...result } : result } };
+    return {
+      status: 200,
+      response: { jsonrpc: "2.0", id, result: modern ? { resultType: "complete", ...result } : result },
+    };
   } catch (e) {
     if (e instanceof RpcFailure) return { status: 200, response: error(id, e.code, e.message, e.data) };
     return { status: 200, response: error(id, ERR.INTERNAL, "Internal error") };
@@ -203,7 +224,12 @@ function mismatch(message: string): Check {
   return { status: 400, code: ERR.HEADER_MISMATCH, message: `Header mismatch: ${message}` };
 }
 
-function checkModern(version: string, method: string, params: Record<string, unknown>, headers: Headers | null): Check | null {
+function checkModern(
+  version: string,
+  method: string,
+  params: Record<string, unknown>,
+  headers: Headers | null,
+): Check | null {
   if (!(MODERN_VERSIONS as readonly string[]).includes(version)) return unsupported(version);
   if (!headers) return null;
   const hv = headers.get("mcp-protocol-version");
@@ -241,14 +267,20 @@ class RpcFailure extends Error {
 const READ_ONLY = { readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: false };
 
 /** Run a method. Returns undefined when the method doesn't exist. */
-function dispatch(method: string, params: Record<string, unknown>, server: McpServer, modern: boolean): Record<string, unknown> | undefined {
+function dispatch(
+  method: string,
+  params: Record<string, unknown>,
+  server: McpServer,
+  modern: boolean,
+): Record<string, unknown> | undefined {
   const capabilities = { tools: { listChanged: false } };
   const serverInfo = { name: server.name, ...(server.title ? { title: server.title } : {}), version: server.version };
 
   switch (method) {
     case "initialize": {
       const asked = params.protocolVersion;
-      if (typeof asked !== "string") throw new RpcFailure(ERR.INVALID_PARAMS, "Invalid params: protocolVersion is required");
+      if (typeof asked !== "string")
+        throw new RpcFailure(ERR.INVALID_PARAMS, "Invalid params: protocolVersion is required");
       const legacy = LEGACY_VERSIONS as readonly string[];
       return {
         protocolVersion: legacy.includes(asked) ? asked : legacy[0],
@@ -291,13 +323,17 @@ function callTool(params: Record<string, unknown>, server: McpServer): Record<st
   if (!tool) throw new RpcFailure(ERR.INVALID_PARAMS, `Unknown tool: ${name}`);
   const args = params.arguments ?? {};
   const problems = validate(args, tool.inputSchema);
-  if (problems.length) throw new RpcFailure(ERR.INVALID_PARAMS, `Invalid arguments for ${name}: ${problems.join("; ")}`, { errors: problems });
+  if (problems.length)
+    throw new RpcFailure(ERR.INVALID_PARAMS, `Invalid arguments for ${name}: ${problems.join("; ")}`, {
+      errors: problems,
+    });
 
   let structured: unknown;
   try {
     structured = tool.run(args as Record<string, unknown>);
   } catch (e) {
-    if (e instanceof InvalidParams) throw new RpcFailure(ERR.INVALID_PARAMS, `Invalid arguments for ${name}: ${e.message}`);
+    if (e instanceof InvalidParams)
+      throw new RpcFailure(ERR.INVALID_PARAMS, `Invalid arguments for ${name}: ${e.message}`);
     throw e;
   }
   return {

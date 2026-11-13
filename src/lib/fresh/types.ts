@@ -162,13 +162,7 @@ export interface Catch {
   avoid_heading?: string;
 }
 
-export type LabelState =
-  | "checked"
-  | "unchecked"
-  | "overdue"
-  | "review"
-  | "vendor-changed"
-  | "imported";
+export type LabelState = "checked" | "unchecked" | "overdue" | "review" | "vendor-changed" | "imported";
 
 /** A job in a stack (Build a stack rows, Home preset rows). UI-only. */
 export interface Part {

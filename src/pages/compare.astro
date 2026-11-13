@@ -92,7 +92,8 @@ const heads = picked.map((t) => headlineCell(t, mainAisle!));
 const anyUnknown = allRows.some((r) => r.cells.some(isUnknownCell)) || heads.some((h) => !h.known);
 const toCheck = picked.find((t) => ["unchecked", "overdue", "vendor-changed"].includes(labelState(t, now)));
 
-const title = n === 0 ? "Compare free tools" : n === 1 ? "Pick one more to compare" : questionFor(picked.map((t) => t.name));
+const title =
+  n === 0 ? "Compare free tools" : n === 1 ? "Pick one more to compare" : questionFor(picked.map((t) => t.name));
 
 const notices: string[] = [];
 if (sel.dropped.length) {
@@ -116,275 +117,268 @@ const minW = 180 + n * 240 + (canAdd ? 220 : 0);
   noindex={n === 0}
 >
   <div class="wrap page">
-    {
-      mainAisle ? (
-        <a class="back" href={`/${mainAisle.id}`}>
-          <Icon name="back" size={16} />
-          <span>
-            {mainAisle.name}<span class="desk-only"> aisle</span>
-          </span>
-        </a>
-      ) : (
-        <nav aria-label="Breadcrumb" class="crumbs">
-          <a href="/">All aisles</a>
-        </nav>
-      )
-    }
+    {mainAisle ? (
+      <a class="back" href={`/${mainAisle.id}`}>
+        <Icon name="back" size={16} />
+        <span>
+          {mainAisle.name}
+          <span class="desk-only"> aisle</span>
+        </span>
+      </a>
+    ) : (
+      <nav aria-label="Breadcrumb" class="crumbs">
+        <a href="/">All aisles</a>
+      </nav>
+    )}
     <h1 class="title">{title}</h1>
 
-    {
-      notices.length > 0 && (
-        <div class="notice" role="status" data-notice>
-          {notices.map((m) => (
-            <p>{m}</p>
-          ))}
-        </div>
-      )
-    }
+    {notices.length > 0 && (
+      <div class="notice" role="status" data-notice>
+        {notices.map((m) => (
+          <p>{m}</p>
+        ))}
+      </div>
+    )}
 
-    {
-      n === 0 && (
-        <section class="empty" aria-labelledby="pick-h">
-          <h2 id="pick-h" class="lead">
-            Compare works inside one aisle. Pick an aisle, then add up to {MAX_COMPARE} tools.
-          </h2>
-          {groups.map((g) => (
-            <div class="group">
-              <h3 class="expanded group-h">{g.group}</h3>
-              <ul class="aisle-list">
-                {g.aisles.map((a) => (
-                  <li>
-                    <a href={`/${a.id}`}>{a.name}</a>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          ))}
-        </section>
-      )
-    }
-
-    {
-      cross && (
-        <div class="cross on-ink" role="status" data-cross-aisle>
-          <p>
-            <strong>Compare works inside one aisle.</strong> You picked {crossPicked}, but the rest are from{" "}
-            {mainAisle!.name}.
-          </p>
-          <div class="cross-actions">
-            {otherAisles.map((a, i) => (
-              <a
-                class:list={["btn", i === 0 ? "btn-promo" : "btn-on-ink"]}
-                href={compareHref(split.others.filter((t) => t.aisle === a.id).map((t) => t.id))}
-              >
-                Start a {a.name} compare
-              </a>
-            ))}
-            <a class="btn btn-on-ink" href={compareHref(picked.filter((t) => t.aisle === split.main).map((t) => t.id))}>
-              Keep {mainAisle!.name.toLowerCase()}
-            </a>
-          </div>
-        </div>
-      )
-    }
-
-    {
-      !cross && n > 0 && (
-        <>
-          <div class="phone-only phone-picks">
-            <ul aria-label="Tools in this comparison" class="chips">
-              {picked.map((t) => (
-                <li class:list={{ suggested: isSuggested(t, now) }}>
-                  {t.name}
-                  <a class="chip-x" href={href(withRemoved(ids, t.id))} aria-label={`Remove ${t.name} from comparison`}>
-                    <Icon name="close" size={16} />
-                  </a>
+    {n === 0 && (
+      <section class="empty" aria-labelledby="pick-h">
+        <h2 id="pick-h" class="lead">
+          Compare works inside one aisle. Pick an aisle, then add up to {MAX_COMPARE} tools.
+        </h2>
+        {groups.map((g) => (
+          <div class="group">
+            <h3 class="expanded group-h">{g.group}</h3>
+            <ul class="aisle-list">
+              {g.aisles.map((a) => (
+                <li>
+                  <a href={`/${a.id}`}>{a.name}</a>
                 </li>
               ))}
             </ul>
-            {canAdd && addOptions.length > 0 && (
-              <form method="get" action="/compare" class="phone-add" data-autosubmit>
-                <input type="hidden" name="ids" value={ids.join(",")} />
-                {only && <input type="hidden" name="only" value="differs" />}
-                <div class="select dashed">
-                  <select name="add" aria-label="Add a tool to compare" required>
-                    <option value="" disabled selected>
-                      + Add a tool
-                    </option>
-                    {addOptions.map((o) => (
-                      <option value={o.id}>{o.name}</option>
-                    ))}
-                  </select>
-                  <Icon name="chevron-down" size={16} />
-                </div>
-                <noscript>
-                  <button class="btn btn-outline" type="submit">
-                    Add
-                  </button>
-                </noscript>
-              </form>
-            )}
           </div>
+        ))}
+      </section>
+    )}
 
-          <div class="toolbar">
-            {n > 1 && (
-              <form method="get" action="/compare" class="only" data-autosubmit>
-                <input type="hidden" name="ids" value={ids.join(",")} />
-                <label class="check">
-                  <input type="checkbox" name="only" value="differs" checked={only} />
-                  Only rows that differ
-                </label>
-                <noscript>
-                  <button class="btn btn-outline" type="submit">
-                    Apply
-                  </button>
-                </noscript>
-              </form>
-            )}
-            <a class="btn btn-outline copy desk-only" href={compareHref(ids)} data-copy-link>
-              Copy link to this comparison
+    {cross && (
+      <div class="cross on-ink" role="status" data-cross-aisle>
+        <p>
+          <strong>Compare works inside one aisle.</strong> You picked {crossPicked}, but the rest are from{" "}
+          {mainAisle!.name}.
+        </p>
+        <div class="cross-actions">
+          {otherAisles.map((a, i) => (
+            <a
+              class:list={["btn", i === 0 ? "btn-promo" : "btn-on-ink"]}
+              href={compareHref(split.others.filter((t) => t.aisle === a.id).map((t) => t.id))}
+            >
+              Start a {a.name} compare
             </a>
-          </div>
+          ))}
+          <a class="btn btn-on-ink" href={compareHref(picked.filter((t) => t.aisle === split.main).map((t) => t.id))}>
+            Keep {mainAisle!.name.toLowerCase()}
+          </a>
+        </div>
+      </div>
+    )}
 
-          {/* ---------- Desktop: one table ---------- */}
-          <div class="table-scroll desk-only">
-            <table data-compare-table style={`min-width: ${minW}px`}>
-              <thead>
-                <tr>
-                  <td class="corner">
-                    Big number: {mainAisle!.label}. All cost $0 a month. Shaded rows differ.
-                  </td>
-                  {picked.map((t, i) => (
-                    <th scope="col" data-col={t.id} class:list={{ suggested: isSuggested(t, now) }}>
-                      <div class="col-top">
-                        <span aria-hidden="true" class="slot">
-                          Tool {i + 1}
-                        </span>
-                        <a class="remove" href={href(withRemoved(ids, t.id))} aria-label={`Remove ${t.name} from comparison`}>
-                          <Icon name="close" size={18} />
-                        </a>
+    {!cross && n > 0 && (
+      <>
+        <div class="phone-only phone-picks">
+          <ul aria-label="Tools in this comparison" class="chips">
+            {picked.map((t) => (
+              <li class:list={{ suggested: isSuggested(t, now) }}>
+                {t.name}
+                <a class="chip-x" href={href(withRemoved(ids, t.id))} aria-label={`Remove ${t.name} from comparison`}>
+                  <Icon name="close" size={16} />
+                </a>
+              </li>
+            ))}
+          </ul>
+          {canAdd && addOptions.length > 0 && (
+            <form method="get" action="/compare" class="phone-add" data-autosubmit>
+              <input type="hidden" name="ids" value={ids.join(",")} />
+              {only && <input type="hidden" name="only" value="differs" />}
+              <div class="select dashed">
+                <select name="add" aria-label="Add a tool to compare" required>
+                  <option value="" disabled selected>
+                    + Add a tool
+                  </option>
+                  {addOptions.map((o) => (
+                    <option value={o.id}>{o.name}</option>
+                  ))}
+                </select>
+                <Icon name="chevron-down" size={16} />
+              </div>
+              <noscript>
+                <button class="btn btn-outline" type="submit">
+                  Add
+                </button>
+              </noscript>
+            </form>
+          )}
+        </div>
+
+        <div class="toolbar">
+          {n > 1 && (
+            <form method="get" action="/compare" class="only" data-autosubmit>
+              <input type="hidden" name="ids" value={ids.join(",")} />
+              <label class="check">
+                <input type="checkbox" name="only" value="differs" checked={only} />
+                Only rows that differ
+              </label>
+              <noscript>
+                <button class="btn btn-outline" type="submit">
+                  Apply
+                </button>
+              </noscript>
+            </form>
+          )}
+          <a class="btn btn-outline copy desk-only" href={compareHref(ids)} data-copy-link>
+            Copy link to this comparison
+          </a>
+        </div>
+
+        {/* ---------- Desktop: one table ---------- */}
+        <div class="table-scroll desk-only">
+          <table data-compare-table style={`min-width: ${minW}px`}>
+            <thead>
+              <tr>
+                <td class="corner">Big number: {mainAisle!.label}. All cost $0 a month. Shaded rows differ.</td>
+                {picked.map((t, i) => (
+                  <th scope="col" data-col={t.id} class:list={{ suggested: isSuggested(t, now) }}>
+                    <div class="col-top">
+                      <span aria-hidden="true" class="slot">
+                        Tool {i + 1}
+                      </span>
+                      <a
+                        class="remove"
+                        href={href(withRemoved(ids, t.id))}
+                        aria-label={`Remove ${t.name} from comparison`}
+                      >
+                        <Icon name="close" size={18} />
+                      </a>
+                    </div>
+                    <form method="get" action="/compare" data-autosubmit>
+                      <input type="hidden" name="ids" value={ids.join(",")} />
+                      <input type="hidden" name="col" value={i + 1} />
+                      {only && <input type="hidden" name="only" value="differs" />}
+                      <div class="select">
+                        <select name="swap" aria-label={`Tool ${i + 1}`}>
+                          {swapOptions(t).map((o) => (
+                            <option value={o.id} selected={o.id === t.id}>
+                              {o.name}
+                            </option>
+                          ))}
+                        </select>
+                        <Icon name="chevron-down" size={16} />
                       </div>
+                      <noscript>
+                        <button class="btn btn-outline noscript-btn" type="submit">
+                          Swap<span class="sr-only"> tool {i + 1}</span>
+                        </button>
+                      </noscript>
+                    </form>
+                    <span class:list={["big", { unknown: !heads[i].known }]}>{heads[i].big}</span>
+                    {heads[i].sub && <span class="unit">{heads[i].sub}</span>}
+                  </th>
+                ))}
+                {canAdd && (
+                  <th scope="col" class="add-col" data-add>
+                    <span aria-hidden="true" class="slot">
+                      Add a tool
+                    </span>
+                    {addOptions.length ? (
                       <form method="get" action="/compare" data-autosubmit>
                         <input type="hidden" name="ids" value={ids.join(",")} />
-                        <input type="hidden" name="col" value={i + 1} />
                         {only && <input type="hidden" name="only" value="differs" />}
-                        <div class="select">
-                          <select name="swap" aria-label={`Tool ${i + 1}`}>
-                            {swapOptions(t).map((o) => (
-                              <option value={o.id} selected={o.id === t.id}>
-                                {o.name}
-                              </option>
+                        <div class="select dashed">
+                          <select name="add" aria-label="Add a tool to compare" required>
+                            <option value="" disabled selected>
+                              Choose…
+                            </option>
+                            {addOptions.map((o) => (
+                              <option value={o.id}>{o.name}</option>
                             ))}
                           </select>
                           <Icon name="chevron-down" size={16} />
                         </div>
                         <noscript>
                           <button class="btn btn-outline noscript-btn" type="submit">
-                            Swap<span class="sr-only"> tool {i + 1}</span>
+                            Add
                           </button>
                         </noscript>
                       </form>
-                      <span class:list={["big", { unknown: !heads[i].known }]}>{heads[i].big}</span>
-                      {heads[i].sub && <span class="unit">{heads[i].sub}</span>}
-                    </th>
-                  ))}
-                  {canAdd && (
-                    <th scope="col" class="add-col" data-add>
-                      <span aria-hidden="true" class="slot">
-                        Add a tool
-                      </span>
-                      {addOptions.length ? (
-                        <form method="get" action="/compare" data-autosubmit>
-                          <input type="hidden" name="ids" value={ids.join(",")} />
-                          {only && <input type="hidden" name="only" value="differs" />}
-                          <div class="select dashed">
-                            <select name="add" aria-label="Add a tool to compare" required>
-                              <option value="" disabled selected>
-                                Choose…
-                              </option>
-                              {addOptions.map((o) => (
-                                <option value={o.id}>{o.name}</option>
-                              ))}
-                            </select>
-                            <Icon name="chevron-down" size={16} />
-                          </div>
-                          <noscript>
-                            <button class="btn btn-outline noscript-btn" type="submit">
-                              Add
-                            </button>
-                          </noscript>
-                        </form>
-                      ) : (
-                        <p class="add-note">No other tools in {mainAisle!.name} yet.</p>
-                      )}
-                      <span class="add-note">Up to {MAX_COMPARE} side by side</span>
-                    </th>
-                  )}
-                </tr>
-              </thead>
-              <tbody>
-                {tableRows.map((r) => (
-                  <tr data-row={r.label} class:list={{ differs: r.diff, pick: r.noDiff }}>
-                    <th scope="row">
-                      {r.label}
-                      {r.diff && <span class="differs-tag">Differs</span>}
-                    </th>
-                    {r.cells.map((c) => (
-                      <td>
-                        <CompareCell cell={c} />
-                      </td>
-                    ))}
-                    {canAdd && <td class="add-cell" />}
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-
-          {/* ---------- Phone: stacked rows ---------- */}
-          <div class="phone-only">
-            <div class="stack">
-              {shownRows.map((r, ri) => (
-                <section
-                  data-phone-row={r.label}
-                  class:list={["prow", { differs: r.diff }]}
-                  aria-labelledby={`prow-${ri}`}
-                >
-                  <div class="prow-head">
-                    <h2 id={`prow-${ri}`}>{r.label}</h2>
+                    ) : (
+                      <p class="add-note">No other tools in {mainAisle!.name} yet.</p>
+                    )}
+                    <span class="add-note">Up to {MAX_COMPARE} side by side</span>
+                  </th>
+                )}
+              </tr>
+            </thead>
+            <tbody>
+              {tableRows.map((r) => (
+                <tr data-row={r.label} class:list={{ differs: r.diff, pick: r.noDiff }}>
+                  <th scope="row">
+                    {r.label}
                     {r.diff && <span class="differs-tag">Differs</span>}
-                  </div>
-                  {r.cells.map((c, i) => (
-                    <div class="pline">
-                      <span class="pname">{picked[i].name}</span>
-                      <span class:list={["pval", { "pval-big": c.kind === "text" && c.big }]}>
-                        {r.headline ? (
-                          <span class:list={["big-sm", { unknown: !heads[i].known }]}>{heads[i].big}</span>
-                        ) : (
-                          <CompareCell cell={c} />
-                        )}
-                      </span>
-                    </div>
+                  </th>
+                  {r.cells.map((c) => (
+                    <td>
+                      <CompareCell cell={c} />
+                    </td>
                   ))}
-                </section>
+                  {canAdd && <td class="add-cell" />}
+                </tr>
               ))}
-            </div>
-          </div>
+            </tbody>
+          </table>
+        </div>
 
-          {anyUnknown && toCheck && (
-            <p class="footnote" data-unknown-note>
-              Labels marked unknown have not been checked against the vendor yet.{" "}
-              <a href={checkHref(toCheck)}>Check one</a>
-            </p>
-          )}
-          <div class="phone-only phone-bar">
-            <a class="btn btn-outline btn-block" href={compareHref(ids)} data-copy-link>
-              Copy link to this comparison
-            </a>
+        {/* ---------- Phone: stacked rows ---------- */}
+        <div class="phone-only">
+          <div class="stack">
+            {shownRows.map((r, ri) => (
+              <section
+                data-phone-row={r.label}
+                class:list={["prow", { differs: r.diff }]}
+                aria-labelledby={`prow-${ri}`}
+              >
+                <div class="prow-head">
+                  <h2 id={`prow-${ri}`}>{r.label}</h2>
+                  {r.diff && <span class="differs-tag">Differs</span>}
+                </div>
+                {r.cells.map((c, i) => (
+                  <div class="pline">
+                    <span class="pname">{picked[i].name}</span>
+                    <span class:list={["pval", { "pval-big": c.kind === "text" && c.big }]}>
+                      {r.headline ? (
+                        <span class:list={["big-sm", { unknown: !heads[i].known }]}>{heads[i].big}</span>
+                      ) : (
+                        <CompareCell cell={c} />
+                      )}
+                    </span>
+                  </div>
+                ))}
+              </section>
+            ))}
           </div>
-        </>
-      )
-    }
+        </div>
+
+        {anyUnknown && toCheck && (
+          <p class="footnote" data-unknown-note>
+            Labels marked unknown have not been checked against the vendor yet.{" "}
+            <a href={checkHref(toCheck)}>Check one</a>
+          </p>
+        )}
+        <div class="phone-only phone-bar">
+          <a class="btn btn-outline btn-block" href={compareHref(ids)} data-copy-link>
+            Copy link to this comparison
+          </a>
+        </div>
+      </>
+    )}
   </div>
 
   <div class="toast on-ink" role="status" aria-live="polite" data-toast hidden>

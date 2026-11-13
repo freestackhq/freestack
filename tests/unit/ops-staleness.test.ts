@@ -33,7 +33,13 @@ describe("staleSuggested", () => {
   });
 
   it("day 90 still passes, day 91 fails (same rule as the Overdue label)", () => {
-    const tool = (verified_at: string) => ({ id: "x", file: "tools/x.yaml", suggested: true, source: "catalog", verified_at });
+    const tool = (verified_at: string) => ({
+      id: "x",
+      file: "tools/x.yaml",
+      suggested: true,
+      source: "catalog",
+      verified_at,
+    });
     expect(staleSuggested([tool("2026-08-15")], NOW)).toEqual([]); // 90 days
     expect(staleSuggested([tool("2026-08-14")], NOW).map((t) => t.days)).toEqual([91]);
   });

@@ -153,7 +153,10 @@ export function parseCategoryFile(md, file) {
     if (!section) continue;
 
     if (section === "matrix") {
-      const cells = line.split("|").map((c) => c.trim()).filter(Boolean);
+      const cells = line
+        .split("|")
+        .map((c) => c.trim())
+        .filter(Boolean);
       if (cells.length) {
         const sep = cells.every((c) => /^:?-{2,}:?$/.test(c));
         if (sep) continue;

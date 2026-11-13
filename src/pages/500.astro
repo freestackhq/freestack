@@ -26,8 +26,12 @@ const retry = again === "/500" || again === "/500/" ? "/" : again;
       <h1 class="title">Something broke on our side</h1>
       <p class="lede">The page did not load. Try again in a minute.</p>
       <div class="actions">
-        <a class="btn" href={retry}>Try again</a>
-        <a class="btn btn-outline" href="/">Go home</a>
+        <a class="btn" href={retry}>
+          Try again
+        </a>
+        <a class="btn btn-outline" href="/">
+          Go home
+        </a>
       </div>
     </div>
   </div>

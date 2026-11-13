@@ -56,7 +56,10 @@ test.describe("catch page (Trap.dc.html)", () => {
     const cards = alt.locator("article");
     await expect(cards).toHaveCount(2);
     const cf = alt.locator('[data-tool="cf-workers"]');
-    await expect(cf.getByRole("link", { name: "Cloudflare Workers & Pages" })).toHaveAttribute("href", "/hosting/cf-workers");
+    await expect(cf.getByRole("link", { name: "Cloudflare Workers & Pages" })).toHaveAttribute(
+      "href",
+      "/hosting/cf-workers",
+    );
     await expect(cf).toContainText("100k");
     await expect(cf).toContainText("requests a day");
     await expect(cf).toContainText("You can sell with it.");

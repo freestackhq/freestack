@@ -81,12 +81,22 @@ describe("nextEntry", () => {
   });
 
   it("same hash only bumps checked_at and keeps an earlier change", () => {
-    expect(nextEntry({ hash: "h1", checked_at: "2026-11-06", changed_at: null }, "h1", DAY)).toEqual({ hash: "h1", checked_at: DAY, changed_at: null });
-    expect(nextEntry({ hash: "h1", checked_at: "2026-11-06", changed_at: "2026-10-01" }, "h1", DAY).changed_at).toBe("2026-10-01");
+    expect(nextEntry({ hash: "h1", checked_at: "2026-11-06", changed_at: null }, "h1", DAY)).toEqual({
+      hash: "h1",
+      checked_at: DAY,
+      changed_at: null,
+    });
+    expect(nextEntry({ hash: "h1", checked_at: "2026-11-06", changed_at: "2026-10-01" }, "h1", DAY).changed_at).toBe(
+      "2026-10-01",
+    );
   });
 
   it("a moved hash sets changed_at to today", () => {
-    expect(nextEntry({ hash: "h1", checked_at: "2026-11-06", changed_at: null }, "h2", DAY)).toEqual({ hash: "h2", checked_at: DAY, changed_at: DAY });
+    expect(nextEntry({ hash: "h1", checked_at: "2026-11-06", changed_at: null }, "h2", DAY)).toEqual({
+      hash: "h2",
+      checked_at: DAY,
+      changed_at: DAY,
+    });
   });
 });
 
@@ -131,7 +141,9 @@ describe("scan", () => {
     const fetchImpl = vi.fn(async (url: string, init: FetchInit) => {
       if (url.startsWith("https://alpha")) return new Response("x", { status: 503 });
       if (url.startsWith("https://beta")) return new Response("<script>app()</script>", { status: 200 });
-      return new Promise<Response>((_, reject) => init.signal.addEventListener("abort", () => reject(init.signal.reason)));
+      return new Promise<Response>((_, reject) =>
+        init.signal.addEventListener("abort", () => reject(init.signal.reason)),
+      );
     });
     const { state: next, report } = await scan({ tools, state, day: DAY, fetchImpl, timeoutMs: 20 });
     expect(report.failed.map((f) => [f.id, f.error])).toEqual([
@@ -145,7 +157,12 @@ describe("scan", () => {
 
   it("an unchanged page keeps changed_at as it was", async () => {
     const same = { alpha: { hash: hashText(visibleText(html)), checked_at: "2026-11-06", changed_at: null } };
-    const { state: next, report } = await scan({ tools: [tools[0]], state: same, day: DAY, fetchImpl: fakeFetch({ "https://alpha.test/pricing": html }) });
+    const { state: next, report } = await scan({
+      tools: [tools[0]],
+      state: same,
+      day: DAY,
+      fetchImpl: fakeFetch({ "https://alpha.test/pricing": html }),
+    });
     expect(report.unchanged).toEqual(["alpha"]);
     expect(next.alpha).toEqual({ ...same.alpha, checked_at: DAY });
   });

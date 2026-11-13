@@ -9,7 +9,9 @@ test.describe("Home (Home.dc.html)", () => {
   test("hero, default situation and the stack panel", async ({ page }) => {
     await page.goto("/");
     await expect(page.getByRole("heading", { level: 1 })).toHaveText("Pick a stack and start building.");
-    await expect(page.locator(".lede")).toHaveText(/^\d+ free tools, student perks and APIs\. Limits and catches up front\.$/);
+    await expect(page.locator(".lede")).toHaveText(
+      /^\d+ free tools, student perks and APIs\. Limits and catches up front\.$/,
+    );
 
     const group = page.getByRole("group", { name: "I'm building as" });
     for (const l of ["Student with school email", "Student", "Indie builder", "Startup"]) {
@@ -43,7 +45,10 @@ test.describe("Home (Home.dc.html)", () => {
     await expect(panel(page)).toHaveAttribute("data-panel", "indie");
 
     await page.goto("/?as=school");
-    await expect(page.getByRole("button", { name: "Student with school email" })).toHaveAttribute("aria-pressed", "true");
+    await expect(page.getByRole("button", { name: "Student with school email" })).toHaveAttribute(
+      "aria-pressed",
+      "true",
+    );
     await expect(panel(page)).toHaveAttribute("data-panel", "school");
 
     // Unknown value keeps the default.
@@ -53,18 +58,25 @@ test.describe("Home (Home.dc.html)", () => {
 
   test("swap parts opens Build a stack with the same picks", async ({ page }) => {
     await page.goto("/?as=indie");
-    const ids = await panel(page).locator(".row").evaluateAll((els) => els.map((e) => (e as HTMLElement).dataset.tool));
+    const ids = await panel(page)
+      .locator(".row")
+      .evaluateAll((els) => els.map((e) => (e as HTMLElement).dataset.tool));
     const href = await panel(page).getByRole("link", { name: "Swap parts in Build a stack" }).getAttribute("href");
     expect(href).toMatch(/^\/build\?as=indie&/);
     for (const id of ids) expect(href).toContain(`=${id}`);
-    await expect(panel(page).getByRole("link", { name: "Hand it to my coding agent" })).toHaveAttribute("href", "/agents");
+    await expect(panel(page).getByRole("link", { name: "Hand it to my coding agent" })).toHaveAttribute(
+      "href",
+      "/agents",
+    );
   });
 
   test("a preset tool that is not freshly checked shows its state", async ({ page }) => {
     await page.goto("/?as=school");
     const state = panel(page).locator(".state");
     await expect(state.first()).toBeVisible();
-    await expect(state.first()).toContainText(/Not checked yet|Due for a recheck|waiting for review|changed its pricing page/);
+    await expect(state.first()).toContainText(
+      /Not checked yet|Due for a recheck|waiting for review|changed its pricing page/,
+    );
     await expect(state.first().getByRole("link")).toHaveAttribute("href", /\/check$/);
     // Checked rows stay quiet.
     await expect(panel(page).locator('.row:not([class*="row-"]) .state')).toHaveCount(0);
@@ -76,7 +88,10 @@ test.describe("Home (Home.dc.html)", () => {
     await expect(p.locator(".row")).toHaveCount(0);
     await expect(p.locator("[data-empty]")).toContainText("No ready-made stack here yet.");
     await expect(p.getByRole("link", { name: /Databases/ })).toHaveAttribute("href", "/databases");
-    await expect(p.getByRole("link", { name: "Start one in Build a stack" })).toHaveAttribute("href", "/build?as=startup");
+    await expect(p.getByRole("link", { name: "Start one in Build a stack" })).toHaveAttribute(
+      "href",
+      "/build?as=startup",
+    );
     await expect(p.getByRole("button", { name: "Copy this stack" })).toHaveCount(0);
   });
 
@@ -84,7 +99,10 @@ test.describe("Home (Home.dc.html)", () => {
     await page.goto("/");
     await expect(page.getByRole("heading", { name: "Or walk the aisles" })).toBeVisible();
     await expect(page.locator(".aisles .group").first()).toHaveText("Build");
-    await expect(page.locator(".aisles").getByRole("link", { name: /Databases/ })).toHaveAttribute("href", "/databases");
+    await expect(page.locator(".aisles").getByRole("link", { name: /Databases/ })).toHaveAttribute(
+      "href",
+      "/databases",
+    );
     await expect(page.getByRole("heading", { name: "Reading a label" })).toBeVisible();
     await expect(page.locator(".reading .strip")).toBeVisible();
     await expect(page.getByRole("heading", { name: "Let your coding agent shop for you" })).toBeVisible();
@@ -177,7 +195,9 @@ test.describe("Home on a phone (PhoneHome.dc.html)", () => {
 
     // Targets are at least 44px.
     for (const name of ["Copy this stack", "Hand it to my coding agent"]) {
-      const box = await panel(page).getByRole(name.startsWith("Copy") ? "button" : "link", { name }).boundingBox();
+      const box = await panel(page)
+        .getByRole(name.startsWith("Copy") ? "button" : "link", { name })
+        .boundingBox();
       expect(box!.height).toBeGreaterThanOrEqual(44);
     }
     const sbox = await select.boundingBox();

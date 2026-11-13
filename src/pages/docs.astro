@@ -20,7 +20,8 @@ import Shell from "../layouts/Shell.astro";
   <script
     is:inline
     src="https://cdn.jsdelivr.net/npm/@scalar/api-reference@1.28.11/dist/browser/standalone.js"
-    slot="end"></script>
+    slot="end"
+  ></script>
   <script is:inline slot="end">
     window.Scalar.createApiReference("#scalar-root", {
       url: "/api/openapi.json",

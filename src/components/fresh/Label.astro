@@ -51,83 +51,83 @@ const catchLine = tool.catches[0];
 >
   {suggested && <span class="tag">Suggested</span>}
   <div class="name">
-    <H class="title">
-      {link ? <a href={href}>{tool.name}</a> : tool.name}
-    </H>
+    <H class="title">{link ? <a href={href}>{tool.name}</a> : tool.name}</H>
     {variant === "full" && <span class="kind">{tool.kind}</span>}
     {variant === "full" && suggested && <span class="tag-inline">Suggested</span>}
-    {
-      variant === "full" && compare && !imported && (
-        <button type="button" class="compare-inline" aria-pressed="false" data-compare-toggle={tool.id} data-name={tool.name}>
-          <span data-off>+ Compare</span>
-          <span data-on hidden>✓ Comparing</span>
-          <span class="sr-only"> {tool.name}</span>
-        </button>
-      )
-    }
+    {variant === "full" && compare && !imported && (
+      <button
+        type="button"
+        class="compare-inline"
+        aria-pressed="false"
+        data-compare-toggle={tool.id}
+        data-name={tool.name}
+      >
+        <span data-off>+ Compare</span>
+        <span data-on hidden>
+          ✓ Comparing
+        </span>
+        <span class="sr-only"> {tool.name}</span>
+      </button>
+    )}
   </div>
 
-  {
-    variant === "full" && !imported && !tool.program ? (
-      <div class="headline">
-        <p class:list={["big", { unknown: !head.known, long: head.big.length > 6 }]}>
-          {head.big}
-          {head.sub && head.known && scale.kind !== "unlimited" && <span class="unit">{head.sub}</span>}
-        </p>
-        <Scale scale={scale} />
-      </div>
-    ) : (
-      <p class:list={["big", "solo", { unknown: !head.known }]}>
+  {variant === "full" && !imported && !tool.program ? (
+    <div class="headline">
+      <p class:list={["big", { unknown: !head.known, long: head.big.length > 6 }]}>
         {head.big}
-        {variant === "full" && head.sub && <span class="unit">{head.sub}</span>}
+        {head.sub && head.known && scale.kind !== "unlimited" && <span class="unit">{head.sub}</span>}
       </p>
-    )
-  }
+      <Scale scale={scale} />
+    </div>
+  ) : (
+    <p class:list={["big", "solo", { unknown: !head.known }]}>
+      {head.big}
+      {variant === "full" && head.sub && <span class="unit">{head.sub}</span>}
+    </p>
+  )}
 
-  {
-    variant === "full" && (
-      <>
-        {tool.limits.length > 0 ? (
-          <>
-            <ul class="fine">
-              {tool.limits.map((l) => (
-                <li>{l}</li>
-              ))}
-            </ul>
-            <p class="fine-line">{tool.limits.join(", ")}</p>
-          </>
-        ) : imported ? (
-          <div class="fine-spacer" />
-        ) : (
-          <>
-            <ul class="fine">
-              <li class="none">No other ceilings listed</li>
-            </ul>
-            <p class="fine-line none">No other ceilings listed</p>
-          </>
-        )}
-        {!imported && <Facts tool={tool} class="facts-row" />}
-        {catchLine && !imported && (
-          <p class="catch">
-            <Icon name="wrench" />
-            {catchLine}
-          </p>
-        )}
-      </>
-    )
-  }
+  {variant === "full" && (
+    <>
+      {tool.limits.length > 0 ? (
+        <>
+          <ul class="fine">
+            {tool.limits.map((l) => (
+              <li>{l}</li>
+            ))}
+          </ul>
+          <p class="fine-line">{tool.limits.join(", ")}</p>
+        </>
+      ) : imported ? (
+        <div class="fine-spacer" />
+      ) : (
+        <>
+          <ul class="fine">
+            <li class="none">No other ceilings listed</li>
+          </ul>
+          <p class="fine-line none">No other ceilings listed</p>
+        </>
+      )}
+      {!imported && <Facts tool={tool} class="facts-row" />}
+      {catchLine && !imported && (
+        <p class="catch">
+          <Icon name="wrench" />
+          {catchLine}
+        </p>
+      )}
+    </>
+  )}
 
   <StatusStrip tool={tool} now={now} />
 
-  {
-    variant === "full" && compare && !imported && (
-      <button type="button" class="compare" aria-pressed="false" data-compare-toggle={tool.id} data-name={tool.name}>
-        <span data-off>+ Compare</span>
-        <span data-on hidden>✓ Comparing</span>
-        <span class="sr-only"> {tool.name}</span>
-      </button>
-    )
-  }
+  {variant === "full" && compare && !imported && (
+    <button type="button" class="compare" aria-pressed="false" data-compare-toggle={tool.id} data-name={tool.name}>
+      <span data-off>+ Compare</span>
+      <span data-on hidden>
+        ✓ Comparing
+      </span>
+      <span class="sr-only"> {tool.name}</span>
+    </button>
+  )}
 </article>
 
 <style>

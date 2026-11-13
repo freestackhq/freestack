@@ -267,11 +267,19 @@ const aisleById = Object.fromEntries(aisles.map((a) => [a.id, a]));
 const sources = [];
 for (const catalog of ["saas", "apis", "llm-ai"]) {
   const dir = join(CATALOG_DIR, catalog);
-  for (const file of readdirSync(dir).filter((f) => f.endsWith(".md")).sort()) {
+  for (const file of readdirSync(dir)
+    .filter((f) => f.endsWith(".md"))
+    .sort()) {
     const cat = parseCategoryFile(readFileSync(join(dir, file), "utf8"), file);
     if (!cat) continue;
     for (const e of cat.entries) {
-      sources.push({ key: `${catalog}/${cat.id}/${e.slug}`, catalog, category: cat.id, categoryLabel: cat.label, ...e });
+      sources.push({
+        key: `${catalog}/${cat.id}/${e.slug}`,
+        catalog,
+        category: cat.id,
+        categoryLabel: cat.label,
+        ...e,
+      });
     }
   }
 }
@@ -279,7 +287,11 @@ for (const catalog of ["saas", "apis", "llm-ai"]) {
 // ---------- Text helpers ----------
 
 const cap = (s) => (s ? s.charAt(0).toUpperCase() + s.slice(1) : s);
-const clean = (s) => String(s ?? "").replace(/\*\*/g, "").replace(/\s+/g, " ").trim();
+const clean = (s) =>
+  String(s ?? "")
+    .replace(/\*\*/g, "")
+    .replace(/\s+/g, " ")
+    .trim();
 const yn = (v) => (/^✓/.test(v ?? "") ? "yes" : /^✗/.test(v ?? "") ? "no" : "unknown");
 
 /** Plain-English units for limit lines. Numbers are never touched. */
@@ -345,7 +357,9 @@ const PARSERS = {
     const m = seg.match(new RegExp(`^${NUM}\\s*(MB|GB)(\\s*RAM)?$`, "i"));
     if (!m) return null;
     const v = toNumber(m[1], m[2]);
-    return m[3].toUpperCase() === "MB" ? { value: Math.round((v / 1024) * 1000) / 1000, note: clean(seg) } : { value: v };
+    return m[3].toUpperCase() === "MB"
+      ? { value: Math.round((v / 1024) * 1000) / 1000, note: clean(seg) }
+      : { value: v };
   },
   monthly_users(seg) {
     const m = seg.match(new RegExp(`${NUM}\\s*(MAU|MRU)\\b`));
@@ -384,12 +398,18 @@ const PARSERS = {
     return m ? { value: toNumber(m[1], m[2]) } : null;
   },
   calls_per_day(seg) {
-    const m = seg.match(new RegExp(`${NUM}\\s*(?:req|requests|calls|API calls)\\s*(?:/|per)\\s*day(?:\\s*\\(?(without token|non-commercial)\\)?)?`, "i"));
+    const m = seg.match(
+      new RegExp(
+        `${NUM}\\s*(?:req|requests|calls|API calls)\\s*(?:/|per)\\s*day(?:\\s*\\(?(without token|non-commercial)\\)?)?`,
+        "i",
+      ),
+    );
     return m ? { value: toNumber(m[1], m[2]), note: m[3] ? cap(m[3]) : undefined } : null;
   },
   duration(seg) {
     const m = seg.match(/(?<![$/\d])~?(\d+)\s*-?\s*(yrs?|years?|mo|months?)\b/i);
-    if (!m || /\/\s*mo\b/i.test(seg.slice(m.index + m[0].length - 3, m.index + m[0].length + 1)) && /^\$/.test(seg)) return null;
+    if (!m || (/\/\s*mo\b/i.test(seg.slice(m.index + m[0].length - 3, m.index + m[0].length + 1)) && /^\$/.test(seg)))
+      return null;
     const n = Number(m[1]);
     return { value: /^y/i.test(m[2]) ? n * 12 : n };
   },
@@ -423,7 +443,11 @@ function headlineFor(srcs, aisle) {
         if (hit.note) notes.push(hit.note);
         // A segment with other figures in it stays in the fine print too.
         const keep = new Set(numbers(seg)).size > 1;
-        return { metric: hit.value, metric_note: notes.length ? cap(notes.join(", ")) : undefined, used: keep ? null : seg };
+        return {
+          metric: hit.value,
+          metric_note: notes.length ? cap(notes.join(", ")) : undefined,
+          used: keep ? null : seg,
+        };
       }
     }
   }
@@ -452,7 +476,8 @@ function sellFor(src) {
 
 function whoFor(src) {
   const s = (src.fields.Student ?? "anyone").toLowerCase();
-  if (s === "student required") return /sheerid/i.test(src.fields.Limits ?? "") ? ["student_any_id"] : ["student_school_email"];
+  if (s === "student required")
+    return /sheerid/i.test(src.fields.Limits ?? "") ? ["student_any_id"] : ["student_school_email"];
   return ["anyone"];
 }
 
@@ -465,7 +490,9 @@ function cardFor(srcs) {
 
 function costFor(src) {
   if (src.fields.Cost) return COST[src.fields.Cost.toLowerCase()] ?? "free";
-  return /PAYG|promo credits|credits on signup|tokens on signup/i.test(src.fields["Free Tier"] ?? "") ? "credits" : "free";
+  return /PAYG|promo credits|credits on signup|tokens on signup/i.test(src.fields["Free Tier"] ?? "")
+    ? "credits"
+    : "free";
 }
 
 function apiFor(srcs) {
@@ -505,7 +532,8 @@ function limitsFor(srcs, used) {
 }
 
 /** Catch lines read from the limits: sleeping, expiry, non-commercial, trials. */
-const CATCH_WORDS = /sleep|pause|scale-to-zero|suspend|expire|expiry|idle|non-commercial|hobby|trial|not forever|prototyping only|rotates|offer sometimes pauses|edu-only/i;
+const CATCH_WORDS =
+  /sleep|pause|scale-to-zero|suspend|expire|expiry|idle|non-commercial|hobby|trial|not forever|prototyping only|rotates|offer sometimes pauses|edu-only/i;
 
 function derivedCatches(srcs, tool) {
   const out = [];
@@ -538,14 +566,24 @@ const SAMPLE_SKIP = { doppler: ["catches"] };
 function guard(text, srcs) {
   const nums = numbers(text);
   if (!nums.length) return true;
-  const have = new Set(srcs.flatMap((s) => numbers(Object.entries(s.fields).filter(([k]) => !/url|docs|api base/i.test(k)).map(([, v]) => v).join(" "))));
+  const have = new Set(
+    srcs.flatMap((s) =>
+      numbers(
+        Object.entries(s.fields)
+          .filter(([k]) => !/url|docs|api base/i.test(k))
+          .map(([, v]) => v)
+          .join(" "),
+      ),
+    ),
+  );
   return nums.every((n) => have.has(n));
 }
 const dropped = [];
 function keepSample(id, field, list, srcs) {
   const kept = [];
   if (SAMPLE_SKIP[id]?.includes(field)) {
-    for (const text of list) dropped.push({ id, field, text: typeof text === "string" ? text : text.reason, why: "contradicts the catalog" });
+    for (const text of list)
+      dropped.push({ id, field, text: typeof text === "string" ? text : text.reason, why: "contradicts the catalog" });
     return kept;
   }
   for (const item of list) {
@@ -607,7 +645,10 @@ for (const src of primaries) {
   tool.catches = s?.catches?.length ? keepSample(id, "catches", s.catches, srcs) : [];
   if (!tool.catches.length) tool.catches = derivedCatches(srcs, tool);
 
-  const picks = srcs.map((x) => x.pick).filter(Boolean).map((p) => cap(clean(p)));
+  const picks = srcs
+    .map((x) => x.pick)
+    .filter(Boolean)
+    .map((p) => cap(clean(p)));
   const sampleUse = s ? keepSample(id, "use_if", s.use_if, srcs) : [];
   tool.use_if = sampleUse.length ? sampleUse : [...new Set(picks)];
 
@@ -622,7 +663,9 @@ for (const src of primaries) {
       const reason = use ? cap(text) : `${a.name.replace(/:$/, "").trim()}: ${text}`;
       return { reason, ...(use && use !== id ? { use } : {}) };
     });
-  tool.skip_if = sampleSkip.length ? sampleSkip : vsSkips.filter((v, i, all) => all.findIndex((o) => o.reason === v.reason) === i);
+  tool.skip_if = sampleSkip.length
+    ? sampleSkip
+    : vsSkips.filter((v, i, all) => all.findIndex((o) => o.reason === v.reason) === i);
 
   tool.pricing_url = tool.url;
   tool.verified_at = srcs.map((x) => x.fields.Verified).find(Boolean) ?? null;
@@ -632,7 +675,10 @@ for (const src of primaries) {
   const firstSentence = (src.prose[0] ?? "").match(/^(.+?[.!?])(\s|$)/)?.[1] ?? src.prose[0];
   const tagline = s?.tagline && guard(s.tagline, srcs) ? s.tagline : firstSentence;
   if (tagline) tool.tagline = clean(tagline);
-  const about = srcs.flatMap((x) => x.prose).map(clean).filter(Boolean);
+  const about = srcs
+    .flatMap((x) => x.prose)
+    .map(clean)
+    .filter(Boolean);
   if (about.length) tool.about = [...new Set(about)].join("\n\n");
   if (s?.catch_detail?.length) {
     const cd = keepSample(id, "catch_detail", s.catch_detail, srcs);
@@ -641,7 +687,10 @@ for (const src of primaries) {
   const type = place.type ?? s?.type ?? dbType(src, aisleId);
   if (type) tool.type = type;
   if (s?.fits?.length) tool.fits = s.fits;
-  const tags = srcs.flatMap((x) => (x.fields.Tags ?? "").split(",")).map(clean).filter(Boolean);
+  const tags = srcs
+    .flatMap((x) => (x.fields.Tags ?? "").split(","))
+    .map(clean)
+    .filter(Boolean);
   if (tags.length) tool.tags = [...new Set(tags)];
   const api = apiFor(srcs);
   if (api) tool.api = api;
@@ -656,7 +705,6 @@ for (const src of primaries) {
       if (numbers(cell).some((n) => !body.has(n))) tool.limits.push(plain(cell));
     }
   }
-
 
   tools.push(tool);
   mapping.push({ key: src.key, id, aisle: aisleId });
@@ -677,7 +725,13 @@ function programFor(tool, srcs, head, s) {
   const months = head.metric;
   const whileSeg = head.metric === null && /^while/i.test(head.metric_note ?? "") ? head.metric_note : null;
   const big =
-    months !== null ? (months % 12 === 0 ? `${months / 12} ${months === 12 ? "yr" : "yrs"}` : `${months} mo`) : whileSeg ? "Enrolled" : "?";
+    months !== null
+      ? months % 12 === 0
+        ? `${months / 12} ${months === 12 ? "yr" : "yrs"}`
+        : `${months} mo`
+      : whileSeg
+        ? "Enrolled"
+        : "?";
   // Sample duration words ("lasts while verified") only stand next to a duration the catalog states.
   const known = months !== null || Boolean(whileSeg);
   const sub = (fallback, timing = false) =>
@@ -690,17 +744,22 @@ function programFor(tool, srcs, head, s) {
         ? "A school email"
         : "Nothing. Open to anyone";
   const perks = sp ? keepSample(tool.id, "program.perks", sp.perks, srcs) : [];
-  const ownPerks = splitLimits(srcs[0].fields.Limits).filter((x) => x !== usedSeg).map(plain);
+  const ownPerks = splitLimits(srcs[0].fields.Limits)
+    .filter((x) => x !== usedSeg)
+    .map(plain);
   return {
     order: 0, // set after sorting
     lasts_big: big,
-    lasts_sub: sub({
-      sample: sp?.lasts_sub ?? "",
-      own: months !== null ? plain(usedSeg) : whileSeg ? "lasts while you study" : "Not listed",
-    }, true),
+    lasts_sub: sub(
+      {
+        sample: sp?.lasts_sub ?? "",
+        own: months !== null ? plain(usedSeg) : whileSeg ? "lasts while you study" : "Not listed",
+      },
+      true,
+    ),
     perks: perks.length ? perks : ownPerks.length ? ownPerks : [tool.tagline ?? tool.kind],
     needs: sub({ sample: sp?.needs ?? "", own: needs }),
-    lasts: sub({ sample: sp?.lasts ?? "", own: months !== null ? plain(usedSeg) : whileSeg ?? "Not listed" }, true),
+    lasts: sub({ sample: sp?.lasts ?? "", own: months !== null ? plain(usedSeg) : (whileSeg ?? "Not listed") }, true),
     claim_url: tool.url,
   };
 }
@@ -755,9 +814,35 @@ const toolsDir = join(root, "data/tools");
 rmSync(toolsDir, { recursive: true, force: true });
 mkdirSync(toolsDir, { recursive: true });
 const ORDER = [
-  "id", "name", "kind", "url", "aisle", "metric", "metric_note", "limits", "who", "region", "sell", "card", "cost",
-  "catches", "use_if", "skip_if", "pricing_url", "verified_at", "verified_by", "source",
-  "tagline", "about", "catch_detail", "type", "fits", "suggested", "tags", "api", "program",
+  "id",
+  "name",
+  "kind",
+  "url",
+  "aisle",
+  "metric",
+  "metric_note",
+  "limits",
+  "who",
+  "region",
+  "sell",
+  "card",
+  "cost",
+  "catches",
+  "use_if",
+  "skip_if",
+  "pricing_url",
+  "verified_at",
+  "verified_by",
+  "source",
+  "tagline",
+  "about",
+  "catch_detail",
+  "type",
+  "fits",
+  "suggested",
+  "tags",
+  "api",
+  "program",
 ];
 for (const t of tools) {
   const ordered = Object.fromEntries(ORDER.filter((k) => t[k] !== undefined).map((k) => [k, t[k]]));
@@ -783,7 +868,9 @@ writeFileSync(
 
 writeReport();
 
-console.log(`${sources.length} source entries -> ${tools.length} tools (${sources.length - primaries.length} merged duplicates)`);
+console.log(
+  `${sources.length} source entries -> ${tools.length} tools (${sources.length - primaries.length} merged duplicates)`,
+);
 console.log(`numbers lost: ${lost.length}, sample strings dropped for unbacked numbers: ${dropped.length}`);
 if (lost.length) {
   console.error(lost);
@@ -819,27 +906,27 @@ function writeReport() {
     "",
     "## Assumptions",
     "",
-    "- **Numbers come from the catalog only.** The headline `metric` is read from Limits (saas) or Free Tier / Rate Limit (apis, llm-ai) only when a segment states it in the aisle's unit. Otherwise `metric: null` and `metric_note` holds the raw figure in its own unit (for example \"500 messages a day\") or \"Not listed\".",
-    "- Figures marked `~` or \"class\" keep the number and get `metric_note: About`.",
+    '- **Numbers come from the catalog only.** The headline `metric` is read from Limits (saas) or Free Tier / Rate Limit (apis, llm-ai) only when a segment states it in the aisle\'s unit. Otherwise `metric: null` and `metric_note` holds the raw figure in its own unit (for example "500 messages a day") or "Not listed".',
+    '- Figures marked `~` or "class" keep the number and get `metric_note: About`.',
     "- MB figures in GB aisles are converted (MB / 1024, rounded to 3 places) and the raw figure is kept in `metric_note`.",
-    "- The segment used for the headline is removed from `limits`, so the fine print lists the other limits. All other segments stay, with `/mo` and `/day` written as \"a month\" and \"a day\".",
+    '- The segment used for the headline is removed from `limits`, so the fine print lists the other limits. All other segments stay, with `/mo` and `/day` written as "a month" and "a day".',
     "- **Commercial -> sell:** commercial ok = yes, hobby only / edu only = no, check ToS = unknown. APIs without a Commercial field: no when the free tier says non-commercial or development only, else unknown.",
     "- **Student -> who:** anyone and student helps = `anyone`. Student required = `student_school_email` (the stricter proof), or `student_any_id` when the entry says SheerID. API entries = `anyone`. Startup credit programs (AWS Activate, Google for Startups, Microsoft for Startups) = `startup_proof`, because each says an application is required.",
-    "- **Cost:** kept as `cost` (free, credits, student, discount). Credits and student offers that you claim once live in the Claim Once aisles; usage-billed APIs with signup credit stay in their aisle with the catch \"Credits, not a free tier\".",
+    '- **Cost:** kept as `cost` (free, credits, student, discount). Credits and student offers that you claim once live in the Claim Once aisles; usage-billed APIs with signup credit stay in their aisle with the catch "Credits, not a free tier".',
     "- **Card:** `no` only when the entry says no card; `yes` only when it says a card is required; else `unknown`.",
     "- **Verified -> verified_at**, `verified_by: null`. The dates are 2026-07-24 and 2026-08-01, so these labels show as overdue. They are not changed.",
     "- **pricing_url** is the tool's URL: the catalog has no separate pricing link. **url** for API entries is the docs page (the base URL is in `api.base_url`). **region** is null (not in the data).",
     "- **Pick this if -> use_if.** **vs X -> skip_if**, with `use` set to X's tool id when X is a tool here.",
     "- **Prose** goes to `tagline` (first sentence) and `about` (all paragraphs).",
     "- **Curated copy from the board samples** (tagline, use_if, skip_if, catches, catch_detail, kind, type, fits, program perks and needs) is kept for the tools that exist in both, but a sample line is dropped when it holds a number the catalog doesn't (listed below). Sample numbers, limits, `verified_at`, `verified_by` and `suggested` are never used. Sample-only tools (xata-lite, fauna) are not in the real data; they live in the test fixtures.",
-    "- **Claim Once programs:** `program.lasts_big` comes from the catalog's duration (\"~2 yrs\" -> 24 months -> \"2 yrs\"), \"Enrolled\" when it says \"while\", else \"?\". Order follows the old claim-order guide, then catalog order.",
+    '- **Claim Once programs:** `program.lasts_big` comes from the catalog\'s duration ("~2 yrs" -> 24 months -> "2 yrs"), "Enrolled" when it says "while", else "?". Order follows the old claim-order guide, then catalog order.',
     "- Catches not in the samples are read from limit lines about sleeping, pausing, expiry, trials or non-commercial use, plus one for hobby-only, school-only, discount or credit plans.",
     "",
     "## Decisions beyond the migration",
     "",
     "- **Aisle ids.** The draft `student` aisle is `student-programs`, the id the UI and the `/student-programs` route already used. The one imported entry filed under `student` moved with it.",
     "- **Aisles added** (each with the metric its tools list): forms (`submissions_per_month`), jobs (`messages_per_month`), observability (`ingest_gb_month`), search (`records`), security, design and team (`seats`), embeddings (`tokens_per_month`), vectors (`storage_gb`), local-models and campus (`usage`), coding (`completions_per_month`), ai-tooling (`requests_per_month`), weather, geo, finance, crypto, news and reference (`calls_per_day`), cloud-credits, learning and startup-programs (`duration`, in months). A metric key shared by two aisles always has the same unit and label (enforced in tests and by the generator).",
-    "- **Aisles with no number yet.** Search, design, team, embeddings, local models, AI tooling, crypto, reference and campus have no tool that lists their metric. Their labels show \"?\" until someone checks them. Nothing was guessed to fill them.",
+    '- **Aisles with no number yet.** Search, design, team, embeddings, local models, AI tooling, crypto, reference and campus have no tool that lists their metric. Their labels show "?" until someone checks them. Nothing was guessed to fill them.',
     "- **Schema additions** (all optional): `tagline`, `about`, `catch_detail`, `type`, `fits`, `suggested`, `imported_from`, `tags`, `cost`, `api`, `program`.",
     "- **Imported entries** whose id matches a curated tool are skipped by the generator (the curated label wins) and logged; an imported entry in an unknown aisle fails the build.",
     "- **Published CLI.** `@kuyacarlo/freestack` 0.1 calls `/api/tools`, `/api/tools/<id>`, `/api/claim` and `/api/health`, not `/api/entries`. Those endpoints were removed before the redesign, so they are back, reading the new snapshot.",
@@ -858,15 +945,25 @@ function writeReport() {
     ...mapping
       .slice()
       .sort((a, b) => a.key.localeCompare(b.key))
-      .map((m) => `| \`${m.key}\` | \`${m.id}\`${m.merged_into ? " (merged)" : ""} | ${m.aisle} | \`/${m.aisle}/${m.id}\` |`),
+      .map(
+        (m) =>
+          `| \`${m.key}\` | \`${m.id}\`${m.merged_into ? " (merged)" : ""} | ${m.aisle} | \`/${m.aisle}/${m.id}\` |`,
+      ),
     "",
     "## Sample copy dropped",
     "",
     "Lines from `src/data/sample.ts` not kept because they hold a number the catalog doesn't have, or contradict it:",
     "",
-    ...(dropped.length ? dropped.map((d) => `- \`${d.id}\` ${d.field}: "${d.text}"${d.why ? ` (${d.why})` : ""}`) : ["- None."]),
+    ...(dropped.length
+      ? dropped.map((d) => `- \`${d.id}\` ${d.field}: "${d.text}"${d.why ? ` (${d.why})` : ""}`)
+      : ["- None."]),
     "",
-    `Sample tools matched in the catalog: ${sampleIds.filter((i) => ids.has(i)).length} of ${sampleIds.length}. Not in the catalog: ${sampleIds.filter((i) => !ids.has(i)).map((i) => `\`${i}\``).join(", ") || "none"}.`,
+    `Sample tools matched in the catalog: ${sampleIds.filter((i) => ids.has(i)).length} of ${sampleIds.length}. Not in the catalog: ${
+      sampleIds
+        .filter((i) => !ids.has(i))
+        .map((i) => `\`${i}\``)
+        .join(", ") || "none"
+    }.`,
     "",
   ];
   writeFileSync(join(root, "docs/migration-report.md"), lines.join("\n"));

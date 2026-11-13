@@ -44,7 +44,12 @@ test.describe("For coding agents (Agents.dc.html)", () => {
   test("what the agent can ask: four tools", async ({ page }) => {
     await page.goto(URL);
     const tools = page.getByRole("region", { name: "What the agent can ask" });
-    await expect(tools.getByRole("heading", { level: 3 })).toHaveText(["Find tools", "Compare", "Suggest a stack", "Check a stack"]);
+    await expect(tools.getByRole("heading", { level: 3 })).toHaveText([
+      "Find tools",
+      "Compare",
+      "Suggest a stack",
+      "Check a stack",
+    ]);
   });
 
   test("no-install links to the API and llms.txt", async ({ page }) => {

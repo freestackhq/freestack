@@ -32,8 +32,22 @@ function figureLabel(a: (typeof aisles)[number] | undefined) {
 }
 const fl = figureLabel(picked);
 
-const clientAisles = aisles.map((a) => ({ id: a.id, name: a.name, group: a.group, label: a.label, unit: a.unit, metric: a.metric }));
-const clientTools = tools.map((t) => ({ id: t.id, name: t.name, url: t.url, source: t.source, aisle: t.aisle, check: checkHref(t) }));
+const clientAisles = aisles.map((a) => ({
+  id: a.id,
+  name: a.name,
+  group: a.group,
+  label: a.label,
+  unit: a.unit,
+  metric: a.metric,
+}));
+const clientTools = tools.map((t) => ({
+  id: t.id,
+  name: t.name,
+  url: t.url,
+  source: t.source,
+  aisle: t.aisle,
+  check: checkHref(t),
+}));
 const json = JSON.stringify({ aisles: clientAisles, tools: clientTools }).replace(/</g, "\\u003c");
 
 const who = [
@@ -44,7 +58,10 @@ const who = [
 ];
 ---
 
-<Shell title="Add a tool · freestack" description="Write the label for a free tool. A maintainer checks the source before it goes live.">
+<Shell
+  title="Add a tool · freestack"
+  description="Write the label for a free tool. A maintainer checks the source before it goes live."
+>
   <div class="wrap page">
     <h1 class="h">Add a tool</h1>
     <p class="lede">Fill in its label. A maintainer checks the source before it goes live.</p>
@@ -52,22 +69,27 @@ const who = [
     <div class="cols">
       <form class="sheet" method="post" action="/add/sent" novalidate data-add-form>
         <div role="note" class="note">
-          {
-            imported ? (
-              <>
-                We prefilled {imported.name}'s name and link from {imported.imported_from ?? "the list it came from"}.
-              </>
-            ) : (
-              <>Writing a label for a tool from the unlabeled bin? We prefill the name and link from the list it came from.</>
-            )
-          }
+          {imported ? (
+            <>
+              We prefilled {imported.name}'s name and link from {imported.imported_from ?? "the list it came from"}.
+            </>
+          ) : (
+            <>
+              Writing a label for a tool from the unlabeled bin? We prefill the name and link from the list it came
+              from.
+            </>
+          )}
         </div>
 
         <section class="sec first" aria-labelledby="h-basics">
-          <h2 id="h-basics" class="h2">The basics</h2>
+          <h2 id="h-basics" class="h2">
+            The basics
+          </h2>
           <div class="two">
             <div>
-              <label class="lbl" for="f-name">Tool name</label>
+              <label class="lbl" for="f-name">
+                Tool name
+              </label>
               <input
                 id="f-name"
                 class="field"
@@ -82,7 +104,9 @@ const who = [
               <p class="err" id="err-name" data-error-for="name" hidden></p>
             </div>
             <div>
-              <label class="lbl" for="f-url">Website</label>
+              <label class="lbl" for="f-url">
+                Website
+              </label>
               <input
                 id="f-url"
                 class="field"
@@ -98,23 +122,32 @@ const who = [
             </div>
           </div>
           <p id="dup-note" class="dup" role="status" data-dup>
-            {
-              listedFull && (
-                <>
-                  <strong>{listedFull.name} is already on freestack.</strong>
-                  <a href={checkHref(listedFull)}>Check its label instead</a>
-                </>
-              )
-            }
+            {listedFull && (
+              <>
+                <strong>{listedFull.name} is already on freestack.</strong>
+                <a href={checkHref(listedFull)}>Check its label instead</a>
+              </>
+            )}
           </p>
 
           <div>
-            <label class="lbl" for="f-kind">What it is <span class="opt">a few words</span></label>
-            <input id="f-kind" class="field" type="text" name="kind" placeholder="Like Serverless Postgres" autocomplete="off" />
+            <label class="lbl" for="f-kind">
+              What it is <span class="opt">a few words</span>
+            </label>
+            <input
+              id="f-kind"
+              class="field"
+              type="text"
+              name="kind"
+              placeholder="Like Serverless Postgres"
+              autocomplete="off"
+            />
           </div>
 
           <div class="combo" data-combo>
-            <label class="lbl" for="aisle-in">Aisle</label>
+            <label class="lbl" for="aisle-in">
+              Aisle
+            </label>
             <div class="combo-box">
               <Icon name="search" size={16} />
               <input
@@ -133,17 +166,24 @@ const who = [
               <input type="hidden" name="aisle" value={picked?.id ?? ""} data-aisle-id />
             </div>
             <ul id="aisle-list" class="combo-list" role="listbox" aria-label="Matching aisles" hidden></ul>
-            <p id="aisle-hint" class="hint">The aisle decides the big number on the label.</p>
+            <p id="aisle-hint" class="hint">
+              The aisle decides the big number on the label.
+            </p>
             <p class="err" id="err-aisle" data-error-for="aisle" hidden></p>
           </div>
         </section>
 
         <section class="sec" aria-labelledby="h-numbers">
-          <h2 id="h-numbers" class="h2">The numbers</h2>
+          <h2 id="h-numbers" class="h2">
+            The numbers
+          </h2>
           <div class="two">
             <div>
               <label class="lbl" for="f-figure" data-figure-label>
-                <span data-figure-main>{fl.main}</span>{" "}<span class="opt" data-figure-unit>{fl.unit}</span>
+                <span data-figure-main>{fl.main}</span>{" "}
+                <span class="opt" data-figure-unit>
+                  {fl.unit}
+                </span>
               </label>
               <input
                 id="f-figure"
@@ -154,16 +194,26 @@ const who = [
                 autocomplete="off"
                 aria-describedby="figure-hint err-figure"
               />
-              <p id="figure-hint" class="hint" data-figure-hint>Copy it exactly, units and all.</p>
+              <p id="figure-hint" class="hint" data-figure-hint>
+                Copy it exactly, units and all.
+              </p>
               <p class="err" id="err-figure" data-error-for="figure" hidden></p>
               <div class="quick">
-                <button type="button" class="quick-btn" data-figure-set="No limit">No limit</button>
-                <button type="button" class="quick-btn" data-figure-set="Not listed">Not listed</button>
-                <button type="button" class="quick-btn" data-figure-add="per project">Per project</button>
+                <button type="button" class="quick-btn" data-figure-set="No limit">
+                  No limit
+                </button>
+                <button type="button" class="quick-btn" data-figure-set="Not listed">
+                  Not listed
+                </button>
+                <button type="button" class="quick-btn" data-figure-add="per project">
+                  Per project
+                </button>
               </div>
             </div>
             <div>
-              <label class="lbl" for="f-pricing">Pricing page</label>
+              <label class="lbl" for="f-pricing">
+                Pricing page
+              </label>
               <input
                 id="f-pricing"
                 class="field"
@@ -174,99 +224,191 @@ const who = [
                 autocomplete="off"
                 aria-describedby="pricing-hint err-pricing_url"
               />
-              <p id="pricing-hint" class="hint">Required. We check every number against it.</p>
+              <p id="pricing-hint" class="hint">
+                Required. We check every number against it.
+              </p>
               <p class="err" id="err-pricing_url" data-error-for="pricing_url" hidden></p>
             </div>
           </div>
           <div>
-            <label class="lbl" for="f-limits">Other limits</label>
-            <textarea id="f-limits" class="field" name="limits" rows="3" placeholder="One per line, the way the vendor writes them"></textarea>
+            <label class="lbl" for="f-limits">
+              Other limits
+            </label>
+            <textarea
+              id="f-limits"
+              class="field"
+              name="limits"
+              rows="3"
+              placeholder="One per line, the way the vendor writes them"
+            ></textarea>
           </div>
         </section>
 
         <section class="sec" aria-labelledby="h-bottom">
-          <h2 id="h-bottom" class="h2">The bottom line</h2>
+          <h2 id="h-bottom" class="h2">
+            The bottom line
+          </h2>
           <fieldset class="fs" aria-describedby="err-who">
             <legend class="lbl">Who can claim it</legend>
             <div class="chips">
-              {
-                who.map((w) => (
-                  <label class="chip pick">
-                    <input type="checkbox" name="who" value={w.v} checked={w.v === "anyone"} />
-                    {w.t}
-                  </label>
-                ))
-              }
+              {who.map((w) => (
+                <label class="chip pick">
+                  <input type="checkbox" name="who" value={w.v} checked={w.v === "anyone"} />
+                  {w.t}
+                </label>
+              ))}
             </div>
             <p class="err" id="err-who" data-error-for="who" hidden></p>
             <div class="region">
-              <label class="lbl small" for="f-region">Region lock <span class="opt">optional</span></label>
-              <input id="f-region" class="field" type="text" name="region" placeholder="Like US only" autocomplete="off" />
+              <label class="lbl small" for="f-region">
+                Region lock <span class="opt">optional</span>
+              </label>
+              <input
+                id="f-region"
+                class="field"
+                type="text"
+                name="region"
+                placeholder="Like US only"
+                autocomplete="off"
+              />
             </div>
           </fieldset>
           <fieldset class="fs">
             <legend class="lbl">Can you sell with it?</legend>
             <div class="chips">
-              <label class="chip pick"><input type="radio" name="sell" value="yes" />Yes</label>
-              <label class="chip pick"><input type="radio" name="sell" value="no" />No</label>
-              <label class="chip pick"><input type="radio" name="sell" value="unknown" checked />Not sure</label>
+              <label class="chip pick">
+                <input type="radio" name="sell" value="yes" />
+                Yes
+              </label>
+              <label class="chip pick">
+                <input type="radio" name="sell" value="no" />
+                No
+              </label>
+              <label class="chip pick">
+                <input type="radio" name="sell" value="unknown" checked />
+                Not sure
+              </label>
             </div>
           </fieldset>
           <fieldset class="fs">
             <legend class="lbl">Credit card at signup?</legend>
             <div class="chips">
-              <label class="chip pick"><input type="radio" name="card" value="no" />Not needed</label>
-              <label class="chip pick"><input type="radio" name="card" value="yes" />Needed</label>
-              <label class="chip pick"><input type="radio" name="card" value="unknown" checked />Not sure</label>
+              <label class="chip pick">
+                <input type="radio" name="card" value="no" />
+                Not needed
+              </label>
+              <label class="chip pick">
+                <input type="radio" name="card" value="yes" />
+                Needed
+              </label>
+              <label class="chip pick">
+                <input type="radio" name="card" value="unknown" checked />
+                Not sure
+              </label>
             </div>
           </fieldset>
         </section>
 
         <section class="sec" aria-labelledby="h-catch">
-          <h2 id="h-catch" class="h2">The catch, and when to skip it</h2>
-          <p class="sub">This is what makes a label worth reading. Someone should know in one look if this tool is for them.</p>
+          <h2 id="h-catch" class="h2">
+            The catch, and when to skip it
+          </h2>
+          <p class="sub">
+            This is what makes a label worth reading. Someone should know in one look if this tool is for them.
+          </p>
           <fieldset class="fs list" data-list="catch">
             <legend class="lbl">Catches</legend>
             <input class="field" type="text" name="catch" aria-label="Catch 1" placeholder="A catch, a few words" />
-            <input class="field" type="text" name="catch" aria-label="Catch 2" placeholder="Another catch, a few words" />
-            <button type="button" class="more" data-more>+ Add a catch</button>
+            <input
+              class="field"
+              type="text"
+              name="catch"
+              aria-label="Catch 2"
+              placeholder="Another catch, a few words"
+            />
+            <button type="button" class="more" data-more>
+              + Add a catch
+            </button>
           </fieldset>
           <fieldset class="fs list" data-list="use_if">
             <legend class="lbl">Use it if</legend>
-            <input class="field" type="text" name="use_if" aria-label="Use it if, reason 1" placeholder="A reason to pick it" />
-            <input class="field" type="text" name="use_if" aria-label="Use it if, reason 2" placeholder="Another reason" />
-            <button type="button" class="more" data-more>+ Add a reason</button>
+            <input
+              class="field"
+              type="text"
+              name="use_if"
+              aria-label="Use it if, reason 1"
+              placeholder="A reason to pick it"
+            />
+            <input
+              class="field"
+              type="text"
+              name="use_if"
+              aria-label="Use it if, reason 2"
+              placeholder="Another reason"
+            />
+            <button type="button" class="more" data-more>
+              + Add a reason
+            </button>
           </fieldset>
           <fieldset class="fs list" data-list="skip_if">
             <legend class="lbl">Skip it if, and what to use instead</legend>
-            {
-              [1, 2].map((n) => (
-                <div class="pair">
-                  <input class="field" type="text" name="skip_if" aria-label={`Skip it if, reason ${n}`} placeholder={n === 1 ? "A reason to skip it" : "Another reason to skip it"} />
-                  <input class="field alt" type="text" name="use_instead" aria-label={`Use instead, for reason ${n}`} placeholder="Use instead" />
-                </div>
-              ))
-            }
-            <button type="button" class="more" data-more>+ Add a reason</button>
+            {[1, 2].map((n) => (
+              <div class="pair">
+                <input
+                  class="field"
+                  type="text"
+                  name="skip_if"
+                  aria-label={`Skip it if, reason ${n}`}
+                  placeholder={n === 1 ? "A reason to skip it" : "Another reason to skip it"}
+                />
+                <input
+                  class="field alt"
+                  type="text"
+                  name="use_instead"
+                  aria-label={`Use instead, for reason ${n}`}
+                  placeholder="Use instead"
+                />
+              </div>
+            ))}
+            <button type="button" class="more" data-more>
+              + Add a reason
+            </button>
           </fieldset>
         </section>
 
         <div class="sec send">
           <div class="send-row">
-            <button type="submit" class="btn btn-promo">Send for review</button>
-            <span class="hint">Next you see the label, then send it as an issue on GitHub. A bot turns it into a pull request.</span>
+            <button type="submit" class="btn btn-promo">
+              Send for review
+            </button>
+            <span class="hint">
+              Next you see the label, then send it as an issue on GitHub. A bot turns it into a pull request.
+            </span>
           </div>
         </div>
       </form>
 
       <aside class="tips" aria-labelledby="h-tips">
-        <h2 id="h-tips" class="tips-h">Good labels</h2>
+        <h2 id="h-tips" class="tips-h">
+          Good labels
+        </h2>
         <ul>
-          <li><Icon name="check" size={16} /><span>Copy numbers exactly as the vendor writes them.</span></li>
-          <li><Icon name="check" size={16} /><span>Pick "Not sure" over guessing.</span></li>
-          <li><Icon name="check" size={16} /><span>The catch is what you wish you knew on day one.</span></li>
+          <li>
+            <Icon name="check" size={16} />
+            <span>Copy numbers exactly as the vendor writes them.</span>
+          </li>
+          <li>
+            <Icon name="check" size={16} />
+            <span>Pick "Not sure" over guessing.</span>
+          </li>
+          <li>
+            <Icon name="check" size={16} />
+            <span>The catch is what you wish you knew on day one.</span>
+          </li>
         </ul>
-        <p class="tips-foot">You send it from your GitHub account, so your GitHub name shows on the issue and the pull request.</p>
+        <p class="tips-foot">
+          You send it from your GitHub account, so your GitHub name shows on the issue and the pull request.
+        </p>
       </aside>
     </div>
   </div>
@@ -703,7 +845,8 @@ const who = [
   form.querySelectorAll<HTMLButtonElement>("[data-figure-add]").forEach((b) =>
     b.addEventListener("click", () => {
       const add = b.dataset.figureAdd!;
-      if (!new RegExp(`\\b${add}$`, "i").test(figureIn.value)) figureIn.value = `${figureIn.value.trim()} ${add}`.trim();
+      if (!new RegExp(`\\b${add}$`, "i").test(figureIn.value))
+        figureIn.value = `${figureIn.value.trim()} ${add}`.trim();
       renderFigure(true);
       figureIn.focus();
     }),

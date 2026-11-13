@@ -129,7 +129,10 @@ test.describe("compare, desktop", () => {
     const msg = page.locator("[data-cross-aisle]");
     await expect(msg).toContainText("Compare works inside one aisle.");
     await expect(msg).toContainText("You picked Vercel Hobby from Hosting, but the rest are from Databases.");
-    await expect(msg.getByRole("link", { name: "Start a Hosting compare" })).toHaveAttribute("href", "/compare?ids=vercel-hobby");
+    await expect(msg.getByRole("link", { name: "Start a Hosting compare" })).toHaveAttribute(
+      "href",
+      "/compare?ids=vercel-hobby",
+    );
     await expect(msg.getByRole("link", { name: "Keep databases" })).toHaveAttribute("href", "/compare?ids=neon,turso");
     await expect(table(page)).toHaveCount(0);
   });

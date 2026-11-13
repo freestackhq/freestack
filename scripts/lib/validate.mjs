@@ -18,5 +18,8 @@ const check = ajv.compile(schema);
 /** Errors for one tool object, as "path message" strings. Empty when valid. */
 export function validateTool(tool) {
   if (check(tool)) return [];
-  return check.errors.map((e) => `${e.instancePath || "/"} ${e.message}${e.params?.additionalProperty ? `: ${e.params.additionalProperty}` : ""}`);
+  return check.errors.map(
+    (e) =>
+      `${e.instancePath || "/"} ${e.message}${e.params?.additionalProperty ? `: ${e.params.additionalProperty}` : ""}`,
+  );
 }
