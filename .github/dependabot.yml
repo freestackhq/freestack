@@ -1,0 +1,23 @@
+# Weekly dependency updates, grouped so they arrive as two PRs, not twenty.
+version: 2
+updates:
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+      day: tuesday
+    open-pull-requests-limit: 5
+    groups:
+      astro-and-cloudflare:
+        patterns: ["astro", "@astrojs/*", "wrangler", "workerd"]
+      dev-tooling:
+        dependency-type: development
+        exclude-patterns: ["wrangler"]
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+      day: tuesday
+    groups:
+      actions:
+        patterns: ["*"]

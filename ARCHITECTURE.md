@@ -89,6 +89,21 @@ The site holds no secrets and stores nothing. People send checks and new tools a
 - `PUBLIC_GITHUB_REPO`: `owner/name` for issue forms and source links. Default `freestackhq/freestack`.
 - `PUBLIC_CF_ANALYTICS_TOKEN`: Cloudflare Web Analytics beacon. Empty ships no analytics.
 
+## CI/CD
+
+| Workflow | When | What |
+|---|---|---|
+| `ci.yml` | push to main/master, every PR | checks (typecheck, Prettier, actionlint), unit (Vitest + schema), data (snapshot fresh, staleness gate, plugin matches `SITE_URL`), build, e2e |
+| `deploy.yml` | CI green on the default branch; dispatched after a trust-loop data commit; daily 04:41 UTC; by hand | rebuilds, checks the snapshot and plugin, `pnpm deploy:cf`, smoke-tests `/api/health`. The daily run keeps label ages and "overdue" true, since they are computed at build time. |
+| `preview.yml` | PRs from this repo | `wrangler versions upload --preview-alias pr-<n>` and comments the link. No traffic moves. |
+| `label-check.yml`, `add-tool.yml` | issue forms | trust loop (see above). Data commits also regenerate the snapshot and dispatch `deploy.yml`, because pushes made with `GITHUB_TOKEN` start no other workflows. |
+| `pricing-scan.yml`, `link-check.yml` | weekly | open one PR each with state and snapshot |
+| Dependabot | weekly | npm (Astro/Cloudflare grouped, dev tooling grouped) and Actions |
+
+Repo setup the workflows need: secrets `CLOUDFLARE_API_TOKEN` (Workers Scripts: Edit) and `CLOUDFLARE_ACCOUNT_ID`; variables `SITE_URL` (and optionally `PUBLIC_GITHUB_REPO`, `PUBLIC_CF_ANALYTICS_TOKEN`); a `production` environment; labels `label-check`, `add-tool`, `invalid`; "Allow GitHub Actions to create and approve pull requests"; the default branch writable by `GITHUB_TOKEN` (the label-check commit). Bot PRs (trust loop, scans) don't start CI on their own: close and reopen one, or push to it, to run CI before merging.
+
+Locally, lefthook runs the same checks before a commit and a push (README, "Development").
+
 ## Decisions
 
 1. Domain: an env var (`SITE_URL`), not code.
