@@ -70,107 +70,111 @@ const binNoun = bin.length === 1 ? one(noun) : noun;
   <div class="wrap page">
     <div class="head">
       <div class="head-main">
-        <p class="crumbs desk"><a href="/">All aisles</a> <span aria-hidden="true">/</span> {aisle.group}</p>
-        <a class="back phone" href="/"><Icon name="back" />All aisles</a>
+        <p class="crumbs desk">
+          <a href="/">All aisles</a> <span aria-hidden="true">/</span> {aisle.group}
+        </p>
+        <a class="back phone" href="/">
+          <Icon name="back" />
+          All aisles
+        </a>
         <div class="title-row">
           <h1 class="title-xl">{aisle.name}</h1>
-          <p class="phone count-sm" data-labels-count role="status">{labelsText(list.length)}</p>
+          <p class="phone count-sm" data-labels-count role="status">
+            {labelsText(list.length)}
+          </p>
         </div>
       </div>
       <p class="count-line" data-count-line>
         {countLine(list.length, noun, aisle.label)}
-        {
-          aisle.seeAlso && (
-            <>
-              {" "}
-              {aisle.seeAlso.text} <a href={`/${aisle.seeAlso.aisle}`}>{aisle.seeAlso.name}</a>.
-            </>
-          )
-        }
+        {aisle.seeAlso && (
+          <>
+            {" "}
+            {aisle.seeAlso.text} <a href={`/${aisle.seeAlso.aisle}`}>{aisle.seeAlso.name}</a>.
+          </>
+        )}
       </p>
     </div>
 
     <div class="bar">
       <div class="desk bar-desk">
-        {
-          types.length > 0 && (
-            <div role="group" aria-label="Type" class="chips">
-              <button type="button" class="chip" aria-pressed="true" data-type-chip="">
-                Any type
+        {types.length > 0 && (
+          <div role="group" aria-label="Type" class="chips">
+            <button type="button" class="chip" aria-pressed="true" data-type-chip="">
+              Any type
+            </button>
+            {types.map((t) => (
+              <button type="button" class="chip" aria-pressed="false" data-type-chip={t.id}>
+                {t.label}
               </button>
-              {types.map((t) => (
-                <button type="button" class="chip" aria-pressed="false" data-type-chip={t.id}>
-                  {t.label}
-                </button>
-              ))}
-            </div>
-          )
-        }
+            ))}
+          </div>
+        )}
         <div role="group" aria-label="Must allow" class="chips">
-          {
-            MUST.map((m) => (
-              <button type="button" class="chip" aria-pressed="false" data-must-chip={m.id}>
-                {m.chip}
-              </button>
-            ))
-          }
+          {MUST.map((m) => (
+            <button type="button" class="chip" aria-pressed="false" data-must-chip={m.id}>
+              {m.chip}
+            </button>
+          ))}
         </div>
-        <p class="count" data-labels-count role="status">{labelsText(list.length)}</p>
+        <p class="count" data-labels-count role="status">
+          {labelsText(list.length)}
+        </p>
       </div>
       <div class="phone bar-phone">
-        {
-          types.length > 0 && (
-            <div class="select">
-              <select class="field" aria-label="Type" data-type-select>
-                <option value="">Any type</option>
-                {types.map((t) => (
-                  <option value={t.id}>{t.label}</option>
-                ))}
-              </select>
-              <Icon name="chevron-down" />
-            </div>
-          )
-        }
+        {types.length > 0 && (
+          <div class="select">
+            <select class="field" aria-label="Type" data-type-select>
+              <option value="">Any type</option>
+              {types.map((t) => (
+                <option value={t.id}>{t.label}</option>
+              ))}
+            </select>
+            <Icon name="chevron-down" />
+          </div>
+        )}
         <button type="button" class="btn btn-outline sheet-open" aria-haspopup="dialog" data-sheet-open>
-          <Icon name="filter" />Must allow<span data-must-count></span>
+          <Icon name="filter" />
+          Must allow<span data-must-count></span>
         </button>
       </div>
     </div>
 
     <div class="cross on-ink" role="status" data-cross hidden>
-      <p class="cross-text"><strong>Compare works inside one aisle.</strong> <span data-cross-text></span></p>
+      <p class="cross-text">
+        <strong>Compare works inside one aisle.</strong> <span data-cross-text></span>
+      </p>
       <div class="actions">
         <button type="button" class="btn btn-promo" data-cross-go></button>
-        <button type="button" class="btn btn-on-ink" data-cross-keep>Keep {noun}</button>
+        <button type="button" class="btn btn-on-ink" data-cross-keep>
+          Keep {noun}
+        </button>
       </div>
       <p class="cross-saved" data-cross-saved></p>
     </div>
 
-    {
-      list.length > 0 && (
-        <div role="note" class="note">
-          <p>
-            <span class="pips" aria-hidden="true">
-              {states.map((s) => (
-                <span class:list={["pip", s === "checked" && "pip-on", s === "overdue" && "pip-due"]} />
-              ))}
-            </span>
-            <span>
-              <strong>
-                {checked} of {list.length} checked
-              </strong>{" "}
-              against the vendor's page.
-              {overdue > 0 && ` ${overdue} ${overdue === 1 ? "is" : "are"} due for a recheck.`}
-            </span>
-          </p>
-          {target && (
-            <a class="check-one" href={checkHref(target)}>
-              Check one
-            </a>
-          )}
-        </div>
-      )
-    }
+    {list.length > 0 && (
+      <div role="note" class="note">
+        <p>
+          <span class="pips" aria-hidden="true">
+            {states.map((s) => (
+              <span class:list={["pip", s === "checked" && "pip-on", s === "overdue" && "pip-due"]} />
+            ))}
+          </span>
+          <span>
+            <strong>
+              {checked} of {list.length} checked
+            </strong>{" "}
+            against the vendor's page.
+            {overdue > 0 && ` ${overdue} ${overdue === 1 ? "is" : "are"} due for a recheck.`}
+          </span>
+        </p>
+        {target && (
+          <a class="check-one" href={checkHref(target)}>
+            Check one
+          </a>
+        )}
+      </div>
+    )}
 
     <div class="results" data-results>
       <script is:inline>
@@ -189,23 +193,23 @@ const binNoun = bin.length === 1 ? one(noun) : noun;
       </script>
 
       <div class="skeleton" aria-busy="true" aria-label="Loading labels">
-        {
-          [50, 40, 60].map((w) => (
-            <div class="bone-card">
-              <span class="bone" style={`width: ${w}%; height: 18px`} />
-              <span class="bone" style={`width: ${w + 20}%; height: 52px`} />
-              <span class="bone" style="height: 12px" />
-              <span class="bone" style="width: 80%; height: 12px" />
-            </div>
-          ))
-        }
+        {[50, 40, 60].map((w) => (
+          <div class="bone-card">
+            <span class="bone" style={`width: ${w}%; height: 18px`} />
+            <span class="bone" style={`width: ${w + 20}%; height: 52px`} />
+            <span class="bone" style="height: 12px" />
+            <span class="bone" style="width: 80%; height: 12px" />
+          </div>
+        ))}
       </div>
 
       <div role="alert" class="alert-slot">
         <div class="panel state" data-failed hidden>
           <p class="state-title">The labels did not load</p>
           <p>Your connection dropped, so your filters are off. Every label is still below.</p>
-          <button type="button" class="btn" onclick="location.reload()">Try again</button>
+          <button type="button" class="btn" onclick="location.reload()">
+            Try again
+          </button>
         </div>
       </div>
 
@@ -214,57 +218,65 @@ const binNoun = bin.length === 1 ? one(noun) : noun;
         <p data-nomatch-text></p>
         <div class="actions">
           <button type="button" class="btn" data-drop hidden></button>
-          <button type="button" class="btn btn-outline" data-clear>Clear filters</button>
+          <button type="button" class="btn btn-outline" data-clear>
+            Clear filters
+          </button>
         </div>
       </div>
 
       <div class="grid" data-grid>
-        {list.map((t) => <Label tool={t} now={now} level={2} />)}
+        {list.map((t) => (
+          <Label tool={t} now={now} level={2} />
+        ))}
       </div>
     </div>
 
-    {
-      bin.length > 0 && (
-        <section class="bin" aria-labelledby="bin-h">
-          <div class="bin-head">
-            <h2 id="bin-h" class="title-md">
-              The unlabeled bin
-            </h2>
-            <p class="muted">
-              {bin.length} more {binNoun} pulled from community awesome lists. No limits checked yet, so{" "}
-              {bin.length === 1 ? "it is" : "they are"} search-only.
-            </p>
-          </div>
-          <ul class="bin-list">
-            {bin.slice(0, BIN_SHOWN).map((t) => (
-              <li data-bin={t.id}>
-                <span class="bin-name">{t.name}</span>
-                <span class="muted">{host(t.url)}</span>
-                <span class="bin-from muted">
-                  From {t.imported_from ?? "an awesome list"}. <a href={writeLabelHref(t)}>Write its label<span class="sr-only"> for {t.name}</span></a>
-                </span>
-              </li>
-            ))}
-          </ul>
-          {bin.length > BIN_SHOWN && (
-            <details class="bin-more">
-              <summary>Show all {bin.length}</summary>
-              <ul class="bin-list">
-                {bin.slice(BIN_SHOWN).map((t) => (
-                  <li data-bin={t.id}>
-                    <span class="bin-name">{t.name}</span>
-                    <span class="muted">{host(t.url)}</span>
-                    <span class="bin-from muted">
-                      From {t.imported_from ?? "an awesome list"}. <a href={writeLabelHref(t)}>Write its label<span class="sr-only"> for {t.name}</span></a>
-                    </span>
-                  </li>
-                ))}
-              </ul>
-            </details>
-          )}
-        </section>
-      )
-    }
+    {bin.length > 0 && (
+      <section class="bin" aria-labelledby="bin-h">
+        <div class="bin-head">
+          <h2 id="bin-h" class="title-md">
+            The unlabeled bin
+          </h2>
+          <p class="muted">
+            {bin.length} more {binNoun} pulled from community awesome lists. No limits checked yet, so{" "}
+            {bin.length === 1 ? "it is" : "they are"} search-only.
+          </p>
+        </div>
+        <ul class="bin-list">
+          {bin.slice(0, BIN_SHOWN).map((t) => (
+            <li data-bin={t.id}>
+              <span class="bin-name">{t.name}</span>
+              <span class="muted">{host(t.url)}</span>
+              <span class="bin-from muted">
+                From {t.imported_from ?? "an awesome list"}.{" "}
+                <a href={writeLabelHref(t)}>
+                  Write its label<span class="sr-only"> for {t.name}</span>
+                </a>
+              </span>
+            </li>
+          ))}
+        </ul>
+        {bin.length > BIN_SHOWN && (
+          <details class="bin-more">
+            <summary>Show all {bin.length}</summary>
+            <ul class="bin-list">
+              {bin.slice(BIN_SHOWN).map((t) => (
+                <li data-bin={t.id}>
+                  <span class="bin-name">{t.name}</span>
+                  <span class="muted">{host(t.url)}</span>
+                  <span class="bin-from muted">
+                    From {t.imported_from ?? "an awesome list"}.{" "}
+                    <a href={writeLabelHref(t)}>
+                      Write its label<span class="sr-only"> for {t.name}</span>
+                    </a>
+                  </span>
+                </li>
+              ))}
+            </ul>
+          </details>
+        )}
+      </section>
+    )}
   </div>
 
   <div role="region" aria-label="Compare tray" class="tray on-ink" data-tray hidden>
@@ -272,37 +284,53 @@ const binNoun = bin.length === 1 ? one(noun) : noun;
       <p class="tray-count" data-tray-count></p>
       <ul class="tray-list" data-tray-list></ul>
       <p role="status" class="tray-hint" data-tray-hint></p>
-      <button type="button" class="tray-clear" data-tray-clear>Clear</button>
-      <a class="btn btn-promo" data-tray-go hidden>Compare labels</a>
-      <span class="btn tray-off" aria-disabled="true" data-tray-off>Compare labels</span>
+      <button type="button" class="tray-clear" data-tray-clear>
+        Clear
+      </button>
+      <a class="btn btn-promo" data-tray-go hidden>
+        Compare labels
+      </a>
+      <span class="btn tray-off" aria-disabled="true" data-tray-off>
+        Compare labels
+      </span>
     </div>
   </div>
 
   <template data-tray-item>
-    <li><span data-name></span><button type="button" class="tray-x"><Icon name="close" size={12} /></button></li>
+    <li>
+      <span data-name></span>
+      <button type="button" class="tray-x">
+        <Icon name="close" size={12} />
+      </button>
+    </li>
   </template>
 
   <dialog class="sheet" aria-labelledby="sheet-h" data-sheet>
     <span class="grabber" aria-hidden="true"></span>
     <div class="sheet-head">
-      <h2 id="sheet-h" class="sheet-title">Must allow</h2>
+      <h2 id="sheet-h" class="sheet-title">
+        Must allow
+      </h2>
       <button type="button" class="icon-btn" data-sheet-close>
-        <Icon name="close" size={18} /><span class="sr-only">Close</span>
+        <Icon name="close" size={18} />
+        <span class="sr-only">Close</span>
       </button>
     </div>
     <div class="switches">
-      {
-        MUST.map((m) => (
-          <label class="switch">
-            {m.sheet}
-            <input type="checkbox" role="switch" data-must-switch={m.id} />
-          </label>
-        ))
-      }
+      {MUST.map((m) => (
+        <label class="switch">
+          {m.sheet}
+          <input type="checkbox" role="switch" data-must-switch={m.id} />
+        </label>
+      ))}
     </div>
     <div class="sheet-actions">
-      <button type="button" class="btn btn-outline" data-sheet-clear>Clear</button>
-      <button type="button" class="btn sheet-show" data-sheet-show>Show {list.length} {noun}</button>
+      <button type="button" class="btn btn-outline" data-sheet-clear>
+        Clear
+      </button>
+      <button type="button" class="btn sheet-show" data-sheet-show>
+        Show {list.length} {noun}
+      </button>
     </div>
   </dialog>
 
@@ -395,8 +423,10 @@ const binNoun = bin.length === 1 ? one(noun) : noun;
       if (ok) shown++;
     }
     for (const el of $$("[data-labels-count]")) el.textContent = labelsText(shown);
-    for (const b of $$("[data-type-chip]")) b.setAttribute("aria-pressed", String((b.dataset.typeChip || null) === state.type));
-    for (const b of $$("[data-must-chip]")) b.setAttribute("aria-pressed", String(state.must.includes(b.dataset.mustChip!)));
+    for (const b of $$("[data-type-chip]"))
+      b.setAttribute("aria-pressed", String((b.dataset.typeChip || null) === state.type));
+    for (const b of $$("[data-must-chip]"))
+      b.setAttribute("aria-pressed", String(state.must.includes(b.dataset.mustChip!)));
     const select = document.querySelector<HTMLSelectElement>("[data-type-select]");
     if (select) select.value = state.type ?? "";
     for (const s of $$<HTMLInputElement>("[data-must-switch]")) s.checked = state.must.includes(s.dataset.mustSwitch!);
@@ -464,7 +494,8 @@ const binNoun = bin.length === 1 ? one(noun) : noun;
   }
 
   // Filters
-  for (const b of $$("[data-type-chip]")) b.addEventListener("click", () => update({ type: b.dataset.typeChip || null }));
+  for (const b of $$("[data-type-chip]"))
+    b.addEventListener("click", () => update({ type: b.dataset.typeChip || null }));
   for (const b of $$("[data-must-chip]"))
     b.addEventListener("click", () => {
       const id = b.dataset.mustChip!;
@@ -510,7 +541,9 @@ const binNoun = bin.length === 1 ? one(noun) : noun;
     const b = (e.target as HTMLElement).closest<HTMLElement>("button[data-remove]");
     if (b) update({ compare: state.compare.filter((x) => x !== b.dataset.remove) });
   });
-  $("[data-tray-clear]").addEventListener("click", () => update({ compare: state.compare.filter((id) => !own().includes(id)) }));
+  $("[data-tray-clear]").addEventListener("click", () =>
+    update({ compare: state.compare.filter((id) => !own().includes(id)) }),
+  );
   $("[data-cross-keep]").addEventListener("click", () => update({ compare: own() }));
   $("[data-cross-go]").addEventListener("click", () => {
     const cross = crossAisle(state.compare, AISLE, data.index);

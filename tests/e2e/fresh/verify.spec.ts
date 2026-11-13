@@ -78,7 +78,10 @@ test.describe("check a label (Verify.dc.html)", () => {
     await expect(done).toContainText("Once it is processed, Neon's label shows it was checked today");
     await expect(done.locator('[data-state="checked"]')).toContainText("Checked today");
     await expect(done.locator('[data-state="review"]')).toHaveCount(0);
-    await expect(done.getByRole("link", { name: /GitHub did not open/ })).toHaveAttribute("href", /^https:\/\/github\.com\//);
+    await expect(done.getByRole("link", { name: /GitHub did not open/ })).toHaveAttribute(
+      "href",
+      /^https:\/\/github\.com\//,
+    );
     await expect(done.getByRole("link", { name: "Check another label" })).toHaveAttribute("href", "/databases");
   });
 
@@ -94,7 +97,9 @@ test.describe("check a label (Verify.dc.html)", () => {
     expect(limitLine).toMatch(/^- limits\.0 \| Limit: .+ \| Still true$/);
 
     const done = page.getByRole("status").filter({ hasText: "Thanks." });
-    await expect(done).toContainText('the label shows "A change is waiting for review" until a maintainer confirms your 1 change');
+    await expect(done).toContainText(
+      'the label shows "A change is waiting for review" until a maintainer confirms your 1 change',
+    );
     await expect(done.locator('[data-state="review"]')).toContainText("A change is waiting for review");
     await expect(done.locator('[data-state="checked"]')).toHaveCount(0);
 
@@ -144,7 +149,9 @@ test.describe("check a label (Verify.dc.html)", () => {
     await expect(alert).toContainText("Your answers are still here.");
     const body = alert.getByLabel("Issue description");
     await expect(body).toBeFocused();
-    await expect(body).toHaveValue(/^<!-- freestack:label-check -->\n\n### Tool id\n\nneon\n\n### Answers\n\n- metric \| Free storage: 0\.5 GB \| Changed: 1 GB/);
+    await expect(body).toHaveValue(
+      /^<!-- freestack:label-check -->\n\n### Tool id\n\nneon\n\n### Answers\n\n- metric \| Free storage: 0\.5 GB \| Changed: 1 GB/,
+    );
     const issue = alert.getByRole("link", { name: /Open a new issue/ });
     const href = new URL((await issue.getAttribute("href"))!);
     expect(href.pathname).toBe(`/${REPO}/issues/new`);

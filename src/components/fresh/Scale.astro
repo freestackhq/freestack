@@ -21,18 +21,18 @@ const aria =
 ---
 
 <div class="scale" data-scale={scale.kind === "step" ? scale.step : scale.kind}>
-  <p aria-hidden="true" class:list={["word", { odd, muted: scale.kind === "unknown" }]}>{scale.word}</p>
-  {
-    odd ? (
-      <span class="sr-only">{aria}</span>
-    ) : (
-      <span role="img" aria-label={aria} class="steps">
-        {[1, 2, 3, 4, 5].map((i) => (
-          <span class:list={["step", { on: i <= filled }]} style={`height: ${bar}px`} />
-        ))}
-      </span>
-    )
-  }
+  <p aria-hidden="true" class:list={["word", { odd, muted: scale.kind === "unknown" }]}>
+    {scale.word}
+  </p>
+  {odd ? (
+    <span class="sr-only">{aria}</span>
+  ) : (
+    <span role="img" aria-label={aria} class="steps">
+      {[1, 2, 3, 4, 5].map((i) => (
+        <span class:list={["step", { on: i <= filled }]} style={`height: ${bar}px`} />
+      ))}
+    </span>
+  )}
 </div>
 
 <style>

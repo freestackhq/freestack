@@ -163,7 +163,8 @@ describe("parsers", () => {
   });
 
   it("parses indented heading links (amardeeplakshkar list)", () => {
-    const md = "  ## Provider APIs — First-Party Free LLM APIs\n\n  ### [Google Gemini](https://aistudio.google.com/app/apikey) 🇺🇸\n\n  > Free tier.\n";
+    const md =
+      "  ## Provider APIs — First-Party Free LLM APIs\n\n  ### [Google Gemini](https://aistudio.google.com/app/apikey) 🇺🇸\n\n  > Free tier.\n";
     expect(parseHeadingLinks(md)).toEqual([
       {
         section: "Provider APIs — First-Party Free LLM APIs",
@@ -177,7 +178,12 @@ describe("parsers", () => {
   it("parses open-free-llm-api html link tables and drops rows without a link", () => {
     const rows = parseHtmlLinkTables(OFLA);
     expect(rows).toEqual([
-      { section: "Permanent Free Tiers", name: "NVIDIA NIM", url: "https://build.nvidia.com/settings/api-keys", text: "" },
+      {
+        section: "Permanent Free Tiers",
+        name: "NVIDIA NIM",
+        url: "https://build.nvidia.com/settings/api-keys",
+        text: "",
+      },
     ]);
   });
 
@@ -218,7 +224,9 @@ describe("cleaning", () => {
   });
 
   it("allows http(s) only and drops tracking params and hashes", () => {
-    expect(cleanUrl("https://mailboxlayer.com?utm_source=Github&utm_medium=Referral")).toBe("https://mailboxlayer.com/");
+    expect(cleanUrl("https://mailboxlayer.com?utm_source=Github&utm_medium=Referral")).toBe(
+      "https://mailboxlayer.com/",
+    );
     expect(cleanUrl("https://voxell.ai/docs/#forge")).toBe("https://voxell.ai/docs/");
     expect(cleanUrl("javascript:alert(1)")).toBeNull();
     expect(cleanUrl("www.dwolla.com")).toBeNull();
@@ -304,8 +312,14 @@ describe("classify and select", () => {
 
   it("skips denied entries but keeps their name taken, so later lists skip them too", () => {
     const seen = new Seen();
-    const deny = [{ id: "stytch", reason: "test" }, { id: "x", url: "https://smtpfa.st/docs", reason: "test" }];
-    expect(selectEntries(parseTables(PUBLIC_APIS), rules, aisles, seen, deny).map((e) => e.id)).toEqual(["auth0", "groq"]);
+    const deny = [
+      { id: "stytch", reason: "test" },
+      { id: "x", url: "https://smtpfa.st/docs", reason: "test" },
+    ];
+    expect(selectEntries(parseTables(PUBLIC_APIS), rules, aisles, seen, deny).map((e) => e.id)).toEqual([
+      "auth0",
+      "groq",
+    ]);
     expect(selectEntries(parseTables(PUBLIC_APIS), rules, aisles, seen)).toEqual([]);
   });
 
@@ -321,12 +335,22 @@ describe("repo data", () => {
     mkdirSync(join(dir, "data/tools"), { recursive: true });
     mkdirSync(join(dir, "catalogs/saas"), { recursive: true });
     writeFileSync(join(dir, "data/aisles.yaml"), "- id: databases\n  group: Build\n- id: auth\n");
-    writeFileSync(join(dir, "data/tools/neon.yaml"), "id: neon\nname: Neon\nurl: https://neon.tech\npricing_url: https://neon.tech/pricing\n");
+    writeFileSync(
+      join(dir, "data/tools/neon.yaml"),
+      "id: neon\nname: Neon\nurl: https://neon.tech\npricing_url: https://neon.tech/pricing\n",
+    );
     writeFileSync(join(dir, "catalogs/saas/databases.md"), CATALOG_MD);
     expect([...readAisleIds(dir)]).toEqual(["databases", "auth"]);
     const tools = readCatalogTools(dir);
-    expect(tools).toContainEqual({ name: "Groq", urls: ["https://api.groq.com/openai/v1", "https://console.groq.com/docs"] });
-    expect(tools).toContainEqual({ id: "neon", name: "Neon", urls: ["https://neon.tech", "https://neon.tech/pricing"] });
+    expect(tools).toContainEqual({
+      name: "Groq",
+      urls: ["https://api.groq.com/openai/v1", "https://console.groq.com/docs"],
+    });
+    expect(tools).toContainEqual({
+      id: "neon",
+      name: "Neon",
+      urls: ["https://neon.tech", "https://neon.tech/pricing"],
+    });
   });
 });
 
@@ -342,12 +366,21 @@ describe("output", () => {
   };
 
   it("writes the list block, entries and a commented license header", () => {
-    const yaml = toYaml(list, [{ id: "auth0", name: "Auth0", url: "https://auth0.com/", aisle: "auth" }], "MIT License\n\nCopyright (c) 2022 public-apis\n");
+    const yaml = toYaml(
+      list,
+      [{ id: "auth0", name: "Auth0", url: "https://auth0.com/", aisle: "auth" }],
+      "MIT License\n\nCopyright (c) 2022 public-apis\n",
+    );
     expect(yaml).toContain("# MIT License\n#\n# Copyright (c) 2022 public-apis\n");
-    expect(yaml).toContain('list:\n  id: "public-apis"\n  name: "Public APIs"\n  url: "https://github.com/public-apis/public-apis"\n');
+    expect(yaml).toContain(
+      'list:\n  id: "public-apis"\n  name: "Public APIs"\n  url: "https://github.com/public-apis/public-apis"\n',
+    );
     expect(yaml).toContain('  license_url: "https://github.com/public-apis/public-apis/blob/abc123/LICENSE"\n');
-    expect(yaml).toContain('entries:\n  - id: "auth0"\n    name: "Auth0"\n    url: "https://auth0.com/"\n    aisle: "auth"\n');
-    for (const line of yaml.split("\n")) expect(line === "" || line.startsWith("#") || /^(list|entries):|^ {2}/.test(line)).toBe(true);
+    expect(yaml).toContain(
+      'entries:\n  - id: "auth0"\n    name: "Auth0"\n    url: "https://auth0.com/"\n    aisle: "auth"\n',
+    );
+    for (const line of yaml.split("\n"))
+      expect(line === "" || line.startsWith("#") || /^(list|entries):|^ {2}/.test(line)).toBe(true);
   });
 
   it("writes an empty entries list when nothing fits", () => {
@@ -379,7 +412,12 @@ describe("product URLs and the deny list", () => {
   });
 
   it("leaves product pages, docs and shared-vendor consoles alone", () => {
-    for (const u of ["https://smtpfa.st/docs", "https://studio.example.com/", "https://console.cloud.google.com/apis", "https://aiven.io/free-mysql-database"]) {
+    for (const u of [
+      "https://smtpfa.st/docs",
+      "https://studio.example.com/",
+      "https://console.cloud.google.com/apis",
+      "https://aiven.io/free-mysql-database",
+    ]) {
       expect(productUrl(u)).toBe(u);
     }
   });

@@ -22,9 +22,20 @@ export const CATALOG_GROUPS: Record<string, AisleGroup[]> = {
 };
 
 const CATALOG_INFO: Record<string, { label: string; description: string }> = {
-  saas: { label: "SaaS", description: "Free developer tools and claim-once student and startup programs: limits, who can claim, can you sell." },
-  apis: { label: "APIs", description: "Free and open data APIs: weather, maps, money, crypto, news, reference data, plus PH and campus tools." },
-  "llm-ai": { label: "LLM & AI", description: "Free inference, embeddings, vector databases, local models and AI tooling." },
+  saas: {
+    label: "SaaS",
+    description:
+      "Free developer tools and claim-once student and startup programs: limits, who can claim, can you sell.",
+  },
+  apis: {
+    label: "APIs",
+    description:
+      "Free and open data APIs: weather, maps, money, crypto, news, reference data, plus PH and campus tools.",
+  },
+  "llm-ai": {
+    label: "LLM & AI",
+    description: "Free inference, embeddings, vector databases, local models and AI tooling.",
+  },
 };
 
 const aisleById = new Map(snap.aisles.map((a) => [a.id, a]));
@@ -52,7 +63,12 @@ export function aisleForCategory(category: string): string | null {
 /** Catalogs in the old shape, counted from the new snapshot. */
 export const CATALOGS = Object.entries(CATALOG_GROUPS).map(([id, groups]) => {
   const aisles = snap.aisles.filter((a) => groups.includes(a.group));
-  const categories = aisles.map((a) => ({ id: a.id, label: a.name, group: a.group, count: snap.tools.filter((t) => t.aisle === a.id).length }));
+  const categories = aisles.map((a) => ({
+    id: a.id,
+    label: a.name,
+    group: a.group,
+    count: snap.tools.filter((t) => t.aisle === a.id).length,
+  }));
   return { id, ...CATALOG_INFO[id], groups, categories, count: categories.reduce((n, c) => n + c.count, 0) };
 });
 
@@ -108,7 +124,7 @@ function fieldsFor(t: Tool, a: Aisle | undefined): Record<string, string> {
 export function toEntry(t: Tool, at = new Date()) {
   const a = aisleById.get(t.aisle);
   const catalog = a ? catalogForGroup(a.group) : "saas";
-  const toolName = (id?: string) => (id ? snap.tools.find((x) => x.id === id)?.name ?? id : "");
+  const toolName = (id?: string) => (id ? (snap.tools.find((x) => x.id === id)?.name ?? id) : "");
   return {
     // Old fields (kept).
     id: legacyIdByTool.get(t.id) ?? `${catalog}/${t.aisle}/${t.id}`,
@@ -196,14 +212,27 @@ export function queryEntries(query: EntryQuery) {
   for (const [key, wanted] of Object.entries(query.filters ?? {})) {
     if (!wanted.length) continue;
     rows = rows.filter((r) => {
-      const tokens = entryField(r, key).toLowerCase().split(",").map((t) => t.trim());
+      const tokens = entryField(r, key)
+        .toLowerCase()
+        .split(",")
+        .map((t) => t.trim());
       return wanted.some((w) => tokens.includes(w.toLowerCase()));
     });
   }
   if (query.q) {
     const q = query.q.toLowerCase();
     rows = rows.filter((r) =>
-      [r.name, r.kind, r.tagline ?? "", r.categoryLabel, r.url, ...r.prose, ...r.limits, ...r.catches, ...Object.values(r.fields)]
+      [
+        r.name,
+        r.kind,
+        r.tagline ?? "",
+        r.categoryLabel,
+        r.url,
+        ...r.prose,
+        ...r.limits,
+        ...r.catches,
+        ...Object.values(r.fields),
+      ]
         .join(" ")
         .toLowerCase()
         .includes(q),
@@ -242,7 +271,9 @@ export function legacyPath(parts: string[]): string | null {
 export function legacyHomeRedirect(params: URLSearchParams): string | null {
   const hint = params.get("hint");
   if (hint) {
-    const hit = Object.entries(snap.legacy.categories).find(([key]) => key === `saas/${hint}` || key.split("/")[1] === hint);
+    const hit = Object.entries(snap.legacy.categories).find(
+      ([key]) => key === `saas/${hint}` || key.split("/")[1] === hint,
+    );
     if (hit) return hit[1];
   }
   const catalog = params.get("catalog");
@@ -252,7 +283,12 @@ export function legacyHomeRedirect(params: URLSearchParams): string | null {
 
 // ---------- /api/tools and /api/claim (the published CLI, @kuyacarlo/freestack 0.1) ----------
 
-const CLI_COST: Record<string, Tool["cost"]> = { free: "free", credits: "credits", student_free: "student", discount: "discount" };
+const CLI_COST: Record<string, Tool["cost"]> = {
+  free: "free",
+  credits: "credits",
+  student_free: "student",
+  discount: "discount",
+};
 const CLI_SELL: Record<string, Tool["sell"]> = { yes: "yes", hobby: "no", edu: "no", check: "unknown" };
 
 /** One tool in the CLI's flat shape, plus the new label fields. */
@@ -286,7 +322,10 @@ export function queryTools(p: URLSearchParams) {
   if (student === "no" || student === "helps") list = list.filter((t) => t.who.includes("anyone"));
   if (student === "required") list = list.filter((t) => t.who.length > 0 && !t.who.includes("anyone"));
   const q = p.get("q")?.toLowerCase();
-  if (q) list = list.filter((t) => [t.name, t.kind, t.tagline ?? "", ...t.limits, ...(t.tags ?? [])].join(" ").toLowerCase().includes(q));
+  if (q)
+    list = list.filter((t) =>
+      [t.name, t.kind, t.tagline ?? "", ...t.limits, ...(t.tags ?? [])].join(" ").toLowerCase().includes(q),
+    );
   const count = list.length;
   const limit = Number(p.get("limit"));
   if (limit > 0) list = list.slice(0, limit);
@@ -306,7 +345,12 @@ export interface ClaimProfile {
 
 export function parseClaimQuery(p: URLSearchParams): ClaimProfile {
   const on = (k: string) => ["1", "true", "yes"].includes(p.get(k) ?? "");
-  return { student: on("student"), commercial: on("commercial"), ph: on("ph"), ai: p.get("ai") !== "0" && p.get("ai") !== "false" };
+  return {
+    student: on("student"),
+    commercial: on("commercial"),
+    ph: on("ph"),
+    ai: p.get("ai") !== "0" && p.get("ai") !== "false",
+  };
 }
 
 /**
@@ -327,11 +371,14 @@ export function buildClaimPlan(profile: ClaimProfile, siteUrl: string) {
     if (!a) continue;
     let list = snap.tools.filter((t) => t.aisle === id && t.source !== "imported");
     if (a.group === "Claim Once") {
-      list = list.filter((t) => profile.student || !t.who.every((w) => w.startsWith("student"))).sort((x, y) => (x.program?.order ?? 99) - (y.program?.order ?? 99));
+      list = list
+        .filter((t) => profile.student || !t.who.every((w) => w.startsWith("student")))
+        .sort((x, y) => (x.program?.order ?? 99) - (y.program?.order ?? 99));
     }
     if (profile.commercial) {
       const noSell = list.filter((t) => t.sell === "no");
-      if (noSell.length) warnings.push(`${a.name}: skipped ${noSell.map((t) => t.name).join(", ")}. They do not allow selling.`);
+      if (noSell.length)
+        warnings.push(`${a.name}: skipped ${noSell.map((t) => t.name).join(", ")}. They do not allow selling.`);
       list = list.filter((t) => t.sell !== "no");
     }
     if (!list.length) continue;
@@ -343,13 +390,21 @@ export function buildClaimPlan(profile: ClaimProfile, siteUrl: string) {
       tools: list.map((t) => ({
         id: t.id,
         name: t.name,
-        limits: [t.program ? `${t.program.lasts_big} ${t.program.lasts_sub}` : headlineText(t, a), ...t.limits].filter(Boolean).join(" · "),
+        limits: [t.program ? `${t.program.lasts_big} ${t.program.lasts_sub}` : headlineText(t, a), ...t.limits]
+          .filter(Boolean)
+          .join(" · "),
         url: t.program?.claim_url ?? t.url,
         href: `${siteUrl}/${t.aisle}/${t.id}`,
       })),
     });
   }
-  const situation = profile.commercial ? (profile.student ? "indie" : "startup") : profile.student ? "student" : "indie";
+  const situation = profile.commercial
+    ? profile.student
+      ? "indie"
+      : "startup"
+    : profile.student
+      ? "student"
+      : "indie";
   return {
     profile,
     stackHint: `Stack presets for you: ${siteUrl}/?as=${situation}`,

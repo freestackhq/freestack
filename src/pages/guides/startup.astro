@@ -102,14 +102,23 @@ const phases = [
 
 const antiRecs = [
   ["Intercom day-0", "Seat pricing arrives before you have customers. Use Chatwoot or Crisp until tickets hurt."],
-  ["Vercel Hobby in prod", "Not for anything that makes money. Use Cloudflare Workers, or paid Vercel once you charge."],
+  [
+    "Vercel Hobby in prod",
+    "Not for anything that makes money. Use Cloudflare Workers, or paid Vercel once you charge.",
+  ],
   ["Edu licenses in prod", "JetBrains, Figma and Autodesk education plans are for school only. Buy seats."],
-  ["Frontier model by default", "Claude or GPT on every request. Cheap or local first; frontier only on the hard steps."],
+  [
+    "Frontier model by default",
+    "Claude or GPT on every request. Cheap or local first; frontier only on the hard steps.",
+  ],
   ["Idle cloud-credit VMs", "Credits expire. Spend them on load tests and GPU jobs, not always-on toys."],
 ];
 ---
 
-<Shell title="Startup lean · freestack" description="Ship without a burn narrative: known costs, commercial-safe licenses, metered AI.">
+<Shell
+  title="Startup lean · freestack"
+  description="Ship without a burn narrative: known costs, commercial-safe licenses, metered AI."
+>
   <div class="wrap guide">
     <p class="crumbs muted">Guide</p>
     <h1 class="title-lg">Startup lean, without a burn narrative.</h1>
@@ -120,75 +129,69 @@ const antiRecs = [
     </p>
 
     <ol class="rows">
-      {
-        acts.map((a) => (
-          <li class="row">
-            <span class="num muted">{a.num}</span>
-            <div>
-              <h2>{a.title}</h2>
-              <p>{a.body}</p>
-            </div>
-          </li>
-        ))
-      }
+      {acts.map((a) => (
+        <li class="row">
+          <span class="num muted">{a.num}</span>
+          <div>
+            <h2>{a.title}</h2>
+            <p>{a.body}</p>
+          </div>
+        </li>
+      ))}
     </ol>
 
     <h2 class="section">A. Default lean stack</h2>
     <p class="muted">Swap pieces freely. Keep every part one that lets you sell.</p>
     <dl class="rows">
-      {
-        leanStack.map(([k, v]) => (
-          <div class="row">
-            <dt class="num muted">{k}</dt>
-            <dd>{v}</dd>
-          </div>
-        ))
-      }
+      {leanStack.map(([k, v]) => (
+        <div class="row">
+          <dt class="num muted">{k}</dt>
+          <dd>{v}</dd>
+        </div>
+      ))}
     </dl>
 
     <h2 class="section">B. AI spend rules</h2>
     <div class="grid">
-      {
-        aiRules.map((r) => (
-          <div class="panel card">
-            <h3>{r.title}</h3>
-            <p>{r.body}</p>
-          </div>
-        ))
-      }
+      {aiRules.map((r) => (
+        <div class="panel card">
+          <h3>{r.title}</h3>
+          <p>{r.body}</p>
+        </div>
+      ))}
     </div>
 
     <h2 class="section">C. Phases</h2>
-    {
-      phases.map((p) => (
-        <section class="phase">
-          <h3>
-            Phase {p.num}: {p.title} <span class="muted">{p.spend}</span>
-          </h3>
-          <ul>
-            {p.points.map((pt) => (
-              <li>{pt}</li>
-            ))}
-          </ul>
-        </section>
-      ))
-    }
+    {phases.map((p) => (
+      <section class="phase">
+        <h3>
+          Phase {p.num}: {p.title} <span class="muted">{p.spend}</span>
+        </h3>
+        <ul>
+          {p.points.map((pt) => (
+            <li>{pt}</li>
+          ))}
+        </ul>
+      </section>
+    ))}
 
     <h2 class="section">D. Looks free, then eats the company</h2>
     <dl class="rows">
-      {
-        antiRecs.map(([k, v]) => (
-          <div class="row">
-            <dt class="num muted">{k}</dt>
-            <dd>{v}</dd>
-          </div>
-        ))
-      }
+      {antiRecs.map(([k, v]) => (
+        <div class="row">
+          <dt class="num muted">{k}</dt>
+          <dd>{v}</dd>
+        </div>
+      ))}
     </dl>
 
     <p class="next">
-      <a class="btn btn-promo" href="/build?as=startup">Build a startup stack</a>
-      <a class="btn btn-outline" href="/student-programs">Claim Once programs</a>
+      <a class="btn btn-promo" href="/build?as=startup">
+        Build a startup stack
+      </a>
+      <a class="btn btn-outline" href="/student-programs">
+        Claim Once programs
+      </a>
     </p>
   </div>
 </Shell>

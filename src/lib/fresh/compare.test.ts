@@ -15,7 +15,14 @@ import {
 import type { Aisle, Tool } from "./types";
 
 const NOW = new Date("2026-11-13T12:00:00Z");
-const db: Aisle = { id: "databases", group: "Build", name: "Databases", metric: "storage_gb", unit: "GB", label: "free storage" };
+const db: Aisle = {
+  id: "databases",
+  group: "Build",
+  name: "Databases",
+  metric: "storage_gb",
+  unit: "GB",
+  label: "free storage",
+};
 
 function make(over: Partial<Tool>): Tool {
   return {

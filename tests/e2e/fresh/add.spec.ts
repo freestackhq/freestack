@@ -53,7 +53,10 @@ test.describe("add a tool (AddTool.dc.html)", () => {
     await page.goto("/add?name=Neon");
     const note = page.getByRole("status").filter({ hasText: "already on freestack" });
     await expect(note).toContainText("Neon is already on freestack.");
-    await expect(note.getByRole("link", { name: "Check its label instead" })).toHaveAttribute("href", "/databases/neon/check");
+    await expect(note.getByRole("link", { name: "Check its label instead" })).toHaveAttribute(
+      "href",
+      "/databases/neon/check",
+    );
 
     // Typing a listed website finds it too.
     await page.goto("/add");
@@ -158,7 +161,10 @@ test.describe("add a tool (AddTool.dc.html)", () => {
     });
 
     const follow = status.getByRole("link", { name: /Follow it on GitHub/ });
-    await expect(follow).toHaveAttribute("href", `https://github.com/${REPO}/pulls?q=is%3Apr%20is%3Aopen%20label%3Aadd-tool`);
+    await expect(follow).toHaveAttribute(
+      "href",
+      `https://github.com/${REPO}/pulls?q=is%3Apr%20is%3Aopen%20label%3Aadd-tool`,
+    );
     await expect(page.locator("[data-placeholder]")).toHaveCount(0);
 
     const label = page.locator('article[data-tool="fresh-base"]');
@@ -215,7 +221,9 @@ test.describe("add a tool on a phone", () => {
   test("reflows without side scroll; targets are 44px", async ({ page }) => {
     await page.goto("/add?aisle=databases");
     await expectNoSideScroll(page);
-    const targets = page.locator("main form button, main form input[type=text], main form input:not([type]), main form .chip");
+    const targets = page.locator(
+      "main form button, main form input[type=text], main form input:not([type]), main form .chip",
+    );
     for (let i = 0; i < (await targets.count()); i++) {
       const b = await targets.nth(i).boundingBox();
       if (b) expect(b.height, `target ${i}`).toBeGreaterThanOrEqual(44);

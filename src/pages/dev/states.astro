@@ -28,20 +28,20 @@ const full = [...toolsInAisle("databases"), ...unlabeledInAisle("databases").sli
     <section>
       <h1 class="title-lg">Label states</h1>
       <div class="mini-grid">
-        {
-          states.map((s) => (
-            <div class="cell" data-state-cell={s.id}>
-              <p class="cap">{s.title}</p>
-              <Label tool={s.t} variant="mini" compare={false} level={2} />
-            </div>
-          ))
-        }
+        {states.map((s) => (
+          <div class="cell" data-state-cell={s.id}>
+            <p class="cap">{s.title}</p>
+            <Label tool={s.t} variant="mini" compare={false} level={2} />
+          </div>
+        ))}
       </div>
     </section>
     <section>
       <h2 class="title-md">Full labels</h2>
       <div class="grid">
-        {full.map((t) => <Label tool={t} />)}
+        {full.map((t) => (
+          <Label tool={t} />
+        ))}
       </div>
     </section>
   </div>

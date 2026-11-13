@@ -56,7 +56,15 @@ for (const [name, viewport] of [
 
 test.describe("focus is always visible", () => {
   test.use({ viewport: DESKTOP });
-  for (const path of ["/databases/", "/databases/neon/", "/databases/neon/check", "/build", "/check", "/student-programs/", "/agents"]) {
+  for (const path of [
+    "/databases/",
+    "/databases/neon/",
+    "/databases/neon/check",
+    "/build",
+    "/check",
+    "/student-programs/",
+    "/agents",
+  ]) {
     test(path, async ({ page }) => {
       await page.goto(path);
       await expect(page.locator("h1").first()).toBeVisible();
@@ -72,7 +80,10 @@ test("labels give screen readers a sentence for the scale, the facts and the sta
   for (const label of (await labels.all()).slice(0, 12)) {
     const scale = label.locator(".scale");
     if (await scale.count()) {
-      const said = await scale.evaluate((el) => el.querySelector('[role="img"]')?.getAttribute("aria-label") ?? el.querySelector(".sr-only")?.textContent);
+      const said = await scale.evaluate(
+        (el) =>
+          el.querySelector('[role="img"]')?.getAttribute("aria-label") ?? el.querySelector(".sr-only")?.textContent,
+      );
       expect(said).toMatch(/^[A-Z].*\.$/);
     }
     const facts = label.locator(".facts .sr-only");

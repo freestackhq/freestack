@@ -22,18 +22,38 @@ import Icon from "./Icon.astro";
     <button type="button" role="tab" id="copy-tab-md" aria-controls="copy-panel" aria-selected="true" data-format="md">
       For your notes
     </button>
-    <button type="button" role="tab" id="copy-tab-link" aria-controls="copy-panel" aria-selected="false" tabindex="-1" data-format="link">
+    <button
+      type="button"
+      role="tab"
+      id="copy-tab-link"
+      aria-controls="copy-panel"
+      aria-selected="false"
+      tabindex="-1"
+      data-format="link"
+    >
       Link
     </button>
-    <button type="button" role="tab" id="copy-tab-agent" aria-controls="copy-panel" aria-selected="false" tabindex="-1" data-format="agent">
+    <button
+      type="button"
+      role="tab"
+      id="copy-tab-agent"
+      aria-controls="copy-panel"
+      aria-selected="false"
+      tabindex="-1"
+      data-format="agent"
+    >
       For your coding agent
     </button>
   </div>
   <div class="panel" role="tabpanel" id="copy-panel" aria-labelledby="copy-tab-md">
-    <p class="hint" data-hint>Markdown. Paste it into a README, Notion or your group chat.</p>
+    <p class="hint" data-hint>
+      Markdown. Paste it into a README, Notion or your group chat.
+    </p>
     <pre data-text tabindex="0" role="region" aria-label="Text to copy"></pre>
     <div class="actions">
-      <button type="button" class="btn" data-copy>Copy text</button>
+      <button type="button" class="btn" data-copy>
+        Copy text
+      </button>
       <span class="status" role="status" data-status></span>
     </div>
   </div>
@@ -41,7 +61,9 @@ import Icon from "./Icon.astro";
 
 <div class="toast-region" role="status" data-toast-region>
   <div class="toast on-ink" data-toast hidden>
-    <span class="tick"><Icon name="check" size={18} /></span>
+    <span class="tick">
+      <Icon name="check" size={18} />
+    </span>
     <span class="t">Link copied</span>
     <span class="s">Anyone with it sees this stack.</span>
     <button type="button" class="dismiss" aria-label="Dismiss" data-dismiss>
@@ -57,7 +79,11 @@ import Icon from "./Icon.astro";
   const FORMATS: Record<CopyFormat, { hint: string; btn: string; text: (d: CopyStackData) => string }> = {
     md: { hint: "Markdown. Paste it into a README, Notion or your group chat.", btn: "Copy text", text: stackMarkdown },
     link: { hint: "Anyone with the link sees this stack with live limits.", btn: "Copy link", text: (d) => d.url },
-    agent: { hint: "Paste into Claude Code, Cursor or Kiro before it scaffolds.", btn: "Copy prompt", text: stackPrompt },
+    agent: {
+      hint: "Paste into Claude Code, Cursor or Kiro before it scaffolds.",
+      btn: "Copy prompt",
+      text: stackPrompt,
+    },
   };
 
   const dialog = document.getElementById("copy-stack") as HTMLDialogElement;

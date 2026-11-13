@@ -10,30 +10,66 @@
     "kind": { "type": "string", "maxLength": 40 },
     "url": { "type": "string", "format": "uri" },
     "aisle": { "type": "string", "pattern": "^[a-z0-9-]+$" },
-    "metric": { "type": ["number", "null"], "description": "Value in the aisle's headline unit. null means not listed." },
-    "metric_note": { "type": "string", "description": "Required when metric is null or qualified, e.g. 'per database', 'no limit'." },
+    "metric": {
+      "type": ["number", "null"],
+      "description": "Value in the aisle's headline unit. null means not listed."
+    },
+    "metric_note": {
+      "type": "string",
+      "description": "Required when metric is null or qualified, e.g. 'per database', 'no limit'."
+    },
     "limits": { "type": "array", "items": { "type": "string" } },
-    "who": { "type": "array", "minItems": 1, "items": { "enum": ["anyone", "student_any_id", "student_school_email", "startup_proof"] } },
+    "who": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "enum": ["anyone", "student_any_id", "student_school_email", "startup_proof"] }
+    },
     "region": { "type": ["string", "null"] },
     "sell": { "enum": ["yes", "no", "unknown"] },
     "card": { "enum": ["yes", "no", "unknown"], "description": "yes = card needed at signup" },
     "catches": { "type": "array", "items": { "type": "string", "maxLength": 40 } },
     "use_if": { "type": "array", "items": { "type": "string" } },
-    "skip_if": { "type": "array", "items": { "type": "object", "required": ["reason"], "properties": { "reason": { "type": "string" }, "use": { "type": "string" } }, "additionalProperties": false } },
+    "skip_if": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["reason"],
+        "properties": { "reason": { "type": "string" }, "use": { "type": "string" } },
+        "additionalProperties": false
+      }
+    },
     "pricing_url": { "type": "string", "format": "uri" },
     "verified_at": { "type": ["string", "null"], "format": "date" },
     "verified_by": { "type": ["string", "null"] },
     "source": { "enum": ["catalog", "submitted", "imported"] },
 
     "tagline": { "type": "string", "description": "One-line summary for the tool page." },
-    "about": { "type": "string", "description": "Longer plain description (API, llms-full.txt). Not shown on the label." },
-    "catch_detail": { "type": "array", "items": { "type": "string" }, "description": "Longer catch sentences for the tool page." },
-    "type": { "type": "string", "pattern": "^[a-z0-9-]+$", "description": "Filter chip id inside the aisle (matches the aisle's types)." },
-    "fits": { "type": "array", "items": { "enum": ["school", "student", "indie", "startup"] }, "description": "Situations this tool fits." },
+    "about": {
+      "type": "string",
+      "description": "Longer plain description (API, llms-full.txt). Not shown on the label."
+    },
+    "catch_detail": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Longer catch sentences for the tool page."
+    },
+    "type": {
+      "type": "string",
+      "pattern": "^[a-z0-9-]+$",
+      "description": "Filter chip id inside the aisle (matches the aisle's types)."
+    },
+    "fits": {
+      "type": "array",
+      "items": { "enum": ["school", "student", "indie", "startup"] },
+      "description": "Situations this tool fits."
+    },
     "suggested": { "type": "boolean", "description": "Curator pick. Only shown while the label is checked (90 days)." },
     "imported_from": { "type": "string", "description": "Awesome list name, for imported entries." },
     "tags": { "type": "array", "items": { "type": "string" } },
-    "cost": { "enum": ["free", "credits", "student", "discount"], "description": "free = free forever, credits = trial or signup credit, student = free while a student, discount = paid, cheaper." },
+    "cost": {
+      "enum": ["free", "credits", "student", "discount"],
+      "description": "free = free forever, credits = trial or signup credit, student = free while a student, discount = paid, cheaper."
+    },
     "api": {
       "type": "object",
       "description": "Facts for API entries (open data and AI APIs). Plain strings as the vendor states them.",

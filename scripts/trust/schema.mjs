@@ -43,7 +43,9 @@ export function validate(schema, value, path = "") {
       errors.push(`${at} should be ${schema.maxLength} characters at most.`);
     if (schema.pattern && !new RegExp(schema.pattern).test(value)) errors.push(`${at} has characters it can't have.`);
     if (schema.format && !formatOk(schema.format, value))
-      errors.push(`${at} should be ${schema.format === "uri" ? "a link starting with https://" : "a date like 2026-01-31"}.`);
+      errors.push(
+        `${at} should be ${schema.format === "uri" ? "a link starting with https://" : "a date like 2026-01-31"}.`,
+      );
   }
   if (Array.isArray(value)) {
     if (schema.minItems !== undefined && value.length < schema.minItems)

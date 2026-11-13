@@ -10,7 +10,16 @@
  * out of the agent's context.
  */
 import type * as CatalogModule from "../fresh/catalog";
-import { compareHref, headlineCell, isUnknownCell, parseIds, resolve, rows, aisleSplit, type Cell } from "../fresh/compare";
+import {
+  compareHref,
+  headlineCell,
+  isUnknownCell,
+  parseIds,
+  resolve,
+  rows,
+  aisleSplit,
+  type Cell,
+} from "../fresh/compare";
 import { headline, isSuggested, labelState, strings } from "../fresh/label";
 import { canClaim, HAVE_OPTIONS, type Have } from "../fresh/programs";
 import { RULES, bestSwap, evaluate, fitFor, summary, type Finding, type RuleTool } from "../fresh/rules";
@@ -50,7 +59,10 @@ const HAVE_FOR: Record<SituationId, Have> = { school: "school", student: "id", i
 /** Free text from an unchecked source: one line, no control characters, capped. */
 function plain(s: string | undefined, max = 80): string | null {
   if (!s) return null;
-  const out = s.replace(/[\u0000-\u001f\u007f-\u009f​-‏‪-‮⁦-⁩]/g, " ").replace(/\s+/g, " ").trim();
+  const out = s
+    .replace(/[\u0000-\u001f\u007f-\u009f​-‏‪-‮⁦-⁩]/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
   return out ? out.slice(0, max) : null;
 }
 
@@ -174,7 +186,19 @@ export function searchTools(args: Record<string, unknown>, ctx: ToolContext) {
     const hay =
       t.source === "imported"
         ? `${norm(t.id)} ${name}`
-        : [t.id, t.name, t.kind, t.aisle, cat.aisle(t.aisle)?.name ?? "", t.tagline ?? "", ...t.limits, ...t.catches, ...t.use_if].map(norm).join(" ");
+        : [
+            t.id,
+            t.name,
+            t.kind,
+            t.aisle,
+            cat.aisle(t.aisle)?.name ?? "",
+            t.tagline ?? "",
+            ...t.limits,
+            ...t.catches,
+            ...t.use_if,
+          ]
+            .map(norm)
+            .join(" ");
     if (!words.every((w) => hay.includes(w))) return;
     const score = name === query ? 0 : name.startsWith(query) ? 1 : words.every((w) => name.includes(w)) ? 2 : 3;
     scored.push({ t, score, i });
@@ -219,7 +243,9 @@ export function compareTools(args: Record<string, unknown>, ctx: ToolContext) {
         label_url: ctx.siteUrl(cat.toolHref(t)),
       };
     }),
-    rows: a ? rows(labeled, a, cat.now()).map((r) => ({ label: r.label, differs: r.diff, values: r.cells.map(cellValue) })) : [],
+    rows: a
+      ? rows(labeled, a, cat.now()).map((r) => ({ label: r.label, differs: r.diff, values: r.cells.map(cellValue) }))
+      : [],
     other_aisle: others.map((t) => t.id),
     unknown_ids: sel.dropped,
     unlabeled: imported.map((t) => importedEntry(t, ctx)),
@@ -260,11 +286,14 @@ export function suggestStack(args: Record<string, unknown>, ctx: ToolContext) {
     // The situation's preset first, then the first checked option that adds no problem.
     for (const row of cat.preset(situation)) {
       const p = cat.partForJob(row.job);
-      if (p && !picks.has(p.key) && labelState(row.t, at) === "checked" && canFill(p.key, row.t.id)) picks.set(p.key, { t: row.t, from: "preset" });
+      if (p && !picks.has(p.key) && labelState(row.t, at) === "checked" && canFill(p.key, row.t.id))
+        picks.set(p.key, { t: row.t, from: "preset" });
     }
     for (const p of allParts) {
       if (!p.core || picks.has(p.key)) continue;
-      const pick = options.get(p.key)!.find((t) => labelState(t, at) === "checked" && fitFor(asRule(t, p), current()) === null);
+      const pick = options
+        .get(p.key)!
+        .find((t) => labelState(t, at) === "checked" && fitFor(asRule(t, p), current()) === null);
       if (pick) picks.set(p.key, { t: pick, from: "suggested" });
     }
   }
@@ -273,7 +302,8 @@ export function suggestStack(args: Record<string, unknown>, ctx: ToolContext) {
   for (const p of allParts) {
     const pick = picks.get(p.key);
     const a = pick && cat.aisle(pick.t.aisle);
-    if (pick && a) stack.push({ p, t: pick.t, from: pick.from, s: toStackTool(pick.t, a, cat.toolHref(pick.t), at, p.label) });
+    if (pick && a)
+      stack.push({ p, t: pick.t, from: pick.from, s: toStackTool(pick.t, a, cat.toolHref(pick.t), at, p.label) });
   }
   const input = { situation, tools: stack.map((x) => x.s) };
   const result = evaluate(input);
@@ -329,7 +359,8 @@ export function claimOrder(args: Record<string, unknown>, ctx: ToolContext) {
   const situation = args.situation as SituationId | undefined;
   const hasFlags = typeof args.school_email === "boolean" || typeof args.student_id === "boolean";
   if (!situation && !hasFlags) throw new InvalidParams("give a situation, or school_email / student_id");
-  const have: Have = args.school_email === true ? "school" : args.student_id === true ? "id" : hasFlags ? "none" : HAVE_FOR[situation!];
+  const have: Have =
+    args.school_email === true ? "school" : args.student_id === true ? "id" : hasFlags ? "none" : HAVE_FOR[situation!];
 
   const at = cat.now();
   const programs = cat
@@ -361,7 +392,9 @@ export function claimOrder(args: Record<string, unknown>, ctx: ToolContext) {
         label_url: ctx.siteUrl(cat.toolHref(t)),
       };
     }),
-    not_eligible: programs.filter((t) => !ok.includes(t)).map((t) => ({ id: t.id, name: t.name, needs: t.program!.needs })),
+    not_eligible: programs
+      .filter((t) => !ok.includes(t))
+      .map((t) => ({ id: t.id, name: t.name, needs: t.program!.needs })),
   };
 }
 
@@ -377,7 +410,12 @@ export function freestackTools(ctx: ToolContext): McpTool[] {
     .join(", ");
   const situation: Schema = { type: "string", enum: situationIds, description: `Who is building: ${situationText}.` };
   const partProps: Record<string, Schema> = Object.fromEntries(
-    cat.parts().map((p) => [p.key, { type: "string", minLength: 1, maxLength: 80, description: `Tool id for ${p.label}.` } as Schema]),
+    cat
+      .parts()
+      .map((p) => [
+        p.key,
+        { type: "string", minLength: 1, maxLength: 80, description: `Tool id for ${p.label}.` } as Schema,
+      ]),
   );
 
   return [
@@ -389,11 +427,17 @@ export function freestackTools(ctx: ToolContext): McpTool[] {
       inputSchema: {
         type: "object",
         properties: {
-          query: { type: "string", maxLength: 200, description: "Words to match, e.g. \"postgres\" or \"redis\"." },
+          query: { type: "string", maxLength: 200, description: 'Words to match, e.g. "postgres" or "redis".' },
           aisle: { type: "string", enum: aisleIds, description: "Only this aisle." },
           situation,
-          can_sell: { type: "boolean", description: "true keeps only tools whose terms allow selling (unknown is left out)." },
-          no_card: { type: "boolean", description: "true keeps only tools that need no credit card at signup (unknown is left out)." },
+          can_sell: {
+            type: "boolean",
+            description: "true keeps only tools whose terms allow selling (unknown is left out).",
+          },
+          no_card: {
+            type: "boolean",
+            description: "true keeps only tools that need no credit card at signup (unknown is left out).",
+          },
           limit: { type: "integer", minimum: 1, maximum: 50, description: "Max results, default 10." },
         },
         additionalProperties: false,
@@ -408,7 +452,13 @@ export function freestackTools(ctx: ToolContext): McpTool[] {
       inputSchema: {
         type: "object",
         properties: {
-          ids: { type: "array", items: { type: "string", minLength: 1, maxLength: 80 }, minItems: 2, maxItems: 4, description: "Tool ids, e.g. [\"neon\", \"turso\"]." },
+          ids: {
+            type: "array",
+            items: { type: "string", minLength: 1, maxLength: 80 },
+            minItems: 2,
+            maxItems: 4,
+            description: 'Tool ids, e.g. ["neon", "turso"].',
+          },
         },
         required: ["ids"],
         additionalProperties: false,
@@ -424,7 +474,12 @@ export function freestackTools(ctx: ToolContext): McpTool[] {
         type: "object",
         properties: {
           situation,
-          parts: { type: "object", properties: partProps, additionalProperties: false, description: "Picks keyed by part, like the /build URL: {\"hosting\": \"cf-workers\"}." },
+          parts: {
+            type: "object",
+            properties: partProps,
+            additionalProperties: false,
+            description: 'Picks keyed by part, like the /build URL: {"hosting": "cf-workers"}.',
+          },
           fill: { type: "boolean", description: "Fill empty core parts with a suggestion. Default true." },
         },
         required: ["situation"],

@@ -195,7 +195,9 @@ export function readReviews(text) {
 /** Writes the reviews file: a YAML list, one flow map per line. */
 export function writeReviews(entries) {
   if (!entries.length) return `${REVIEWS_HEADER}[]\n`;
-  const rows = entries.map((e) => `- { tool: ${scalar(e.tool)}, issue: ${Number(e.issue)}, opened: ${scalar(e.opened)} }`);
+  const rows = entries.map(
+    (e) => `- { tool: ${scalar(e.tool)}, issue: ${Number(e.issue)}, opened: ${scalar(e.opened)} }`,
+  );
   return `${REVIEWS_HEADER}${rows.join("\n")}\n`;
 }
 
@@ -224,7 +226,10 @@ export function toolYaml(t) {
     ...list("catches", t.catches),
     ...list("use_if", t.use_if),
     ...(t.skip_if.length
-      ? ["skip_if:", ...t.skip_if.flatMap((s) => [`  - reason: ${scalar(s.reason)}`, ...(s.use ? [`    use: ${s.use}`] : [])])]
+      ? [
+          "skip_if:",
+          ...t.skip_if.flatMap((s) => [`  - reason: ${scalar(s.reason)}`, ...(s.use ? [`    use: ${s.use}`] : [])]),
+        ]
       : ["skip_if: []"]),
     `pricing_url: ${scalar(t.pricing_url)}`,
     `verified_at: ${scalar(t.verified_at)}`,

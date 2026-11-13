@@ -21,7 +21,10 @@ const total = totalTools();
 
 <header class="site-header">
   <nav aria-label="Main" class="bar wrap">
-    <a href="/" class="wordmark"><LogoMark size={30} />freestack</a>
+    <a href="/" class="wordmark">
+      <LogoMark size={30} />
+      freestack
+    </a>
 
     <button
       type="button"
@@ -33,7 +36,10 @@ const total = totalTools();
     >
       <Icon name="search" size={18} />
       <span class="grow">Search {total} tools</span>
-      <span aria-hidden="true" class="keys"><kbd>Ctrl</kbd><kbd>K</kbd></span>
+      <span aria-hidden="true" class="keys">
+        <kbd>Ctrl</kbd>
+        <kbd>K</kbd>
+      </span>
     </button>
 
     <div class="right">
@@ -46,9 +52,12 @@ const total = totalTools();
         aria-current={current ? "page" : undefined}
         data-aisles-open
       >
-        Aisles<Icon name="chevron-down" size={14} />
+        Aisles
+        <Icon name="chevron-down" size={14} />
       </button>
-      <a href="/add" class="add">Add a tool</a>
+      <a href="/add" class="add">
+        Add a tool
+      </a>
     </div>
 
     <div class="phone-actions">
@@ -72,7 +81,10 @@ const total = totalTools();
   <div class="scrim" data-aisles-scrim hidden></div>
   <div id="aisles-menu" class="menu" data-aisles-menu hidden role="dialog" aria-label="Aisles menu">
     <div class="phone-top">
-      <a href="/" class="wordmark small"><LogoMark size={26} />freestack</a>
+      <a href="/" class="wordmark small">
+        <LogoMark size={26} />
+        freestack
+      </a>
       <button type="button" class="icon-btn" data-aisles-close aria-label="Close menu">
         <Icon name="close" size={22} />
       </button>
@@ -80,39 +92,41 @@ const total = totalTools();
     <nav aria-label="Aisles" class="menu-inner wrap">
       <p class="phone-label">Aisles</p>
       <div class="groups">
-        {
-          groups.map(({ group, aisles }, gi) => (
-            <div class="group">
-              <h2 class="group-h expanded">
-                <button type="button" class="group-toggle" aria-expanded={gi === 0 ? "true" : "false"} data-group-toggle>
-                  {group}
-                  <Icon name="chevron-down" size={14} />
-                </button>
-                <span class="group-label">{group}</span>
-              </h2>
-              <ul class:list={["aisle-list", { collapsed: gi !== 0 }]}>
-                {aisles.length === 0 && <li class="empty">Coming soon</li>}
-                {aisles.map((a) => (
-                  <li>
-                    <a href={`/${a.id}`} aria-current={a.id === current ? "page" : undefined}>
-                      {a.name}
-                      <span class="count">{aisleCount(a.id)}</span>
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          ))
-        }
+        {groups.map(({ group, aisles }, gi) => (
+          <div class="group">
+            <h2 class="group-h expanded">
+              <button type="button" class="group-toggle" aria-expanded={gi === 0 ? "true" : "false"} data-group-toggle>
+                {group}
+                <Icon name="chevron-down" size={14} />
+              </button>
+              <span class="group-label">{group}</span>
+            </h2>
+            <ul class:list={["aisle-list", { collapsed: gi !== 0 }]}>
+              {aisles.length === 0 && <li class="empty">Coming soon</li>}
+              {aisles.map((a) => (
+                <li>
+                  <a href={`/${a.id}`} aria-current={a.id === current ? "page" : undefined}>
+                    {a.name}
+                    <span class="count">{aisleCount(a.id)}</span>
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))}
       </div>
       <div class="menu-foot">
         <span class="muted know">Already know what you need?</span>
         <a href="/build">Build a stack</a>
         <a href="/check">Check my stack</a>
         <a href="/agents">For coding agents</a>
-        <span class="esc muted"><kbd>Esc</kbd> close</span>
+        <span class="esc muted">
+          <kbd>Esc</kbd> close
+        </span>
       </div>
-      <a href="/add" class="btn btn-on-ink btn-block phone-add">Add a tool</a>
+      <a href="/add" class="btn btn-on-ink btn-block phone-add">
+        Add a tool
+      </a>
     </nav>
   </div>
 </header>
@@ -490,7 +504,7 @@ const total = totalTools();
   openers.forEach((b) =>
     b.addEventListener("click", (e) => {
       e.stopPropagation();
-      setOpen(menu?.hidden ?? true, b);
+      setOpen(menu?.hidden !== false, b); // hidden may also be "until-found"
     }),
   );
   document.querySelector("[data-aisles-close]")?.addEventListener("click", () => setOpen(false));
@@ -532,7 +546,7 @@ const total = totalTools();
     });
   });
 
-  document.querySelectorAll<HTMLButtonElement>("[data-search-open]").forEach((b) =>
-    b.addEventListener("click", () => window.dispatchEvent(new CustomEvent("fs:search-open"))),
-  );
+  document
+    .querySelectorAll<HTMLButtonElement>("[data-search-open]")
+    .forEach((b) => b.addEventListener("click", () => window.dispatchEvent(new CustomEvent("fs:search-open"))));
 </script>

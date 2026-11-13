@@ -96,7 +96,8 @@ export interface HeadlineParts {
  */
 export function metricParts(n: string, aisle: Aisle): { big: string; sub: string | null } {
   const [first = "", ...rest] = aisle.unit.split(" ");
-  if (INLINE_UNITS.has(first)) return { big: `${n} ${first}`.trim(), sub: rest.length ? [aisle.label, ...rest].join(" ") : null };
+  if (INLINE_UNITS.has(first))
+    return { big: `${n} ${first}`.trim(), sub: rest.length ? [aisle.label, ...rest].join(" ") : null };
   if (first && aisle.label.split(" ").includes(first)) return { big: n, sub: aisle.label };
   return { big: n, sub: [aisle.label, aisle.unit].filter(Boolean).join(" ") || null };
 }
@@ -132,7 +133,11 @@ export function strings(tool: Tool, now: Date) {
         link: "Recheck this label",
       };
     case "imported":
-      return { state, text: `From ${tool.imported_from ?? "an awesome list"}. No numbers yet`, link: "Write its label" };
+      return {
+        state,
+        text: `From ${tool.imported_from ?? "an awesome list"}. No numbers yet`,
+        link: "Write its label",
+      };
   }
 }
 

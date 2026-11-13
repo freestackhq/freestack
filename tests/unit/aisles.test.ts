@@ -32,7 +32,11 @@ describe("data/aisles.yaml", () => {
   });
 
   it("every aisle has a tool", () => {
-    for (const a of aisles) expect(tools.some((t) => t.aisle === a.id), a.id).toBe(true);
+    for (const a of aisles)
+      expect(
+        tools.some((t) => t.aisle === a.id),
+        a.id,
+      ).toBe(true);
   });
 });
 

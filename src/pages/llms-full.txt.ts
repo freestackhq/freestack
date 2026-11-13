@@ -44,7 +44,8 @@ export const GET: APIRoute = () => {
         lines.push(`- Can sell: ${YNU[t.sell]}. Card at signup: ${YNU[t.card]}.`);
         for (const c of t.catches) lines.push(`- Catch: ${c}`);
         for (const u of t.use_if) lines.push(`- Use it if: ${u}`);
-        for (const s of t.skip_if) lines.push(`- Skip it if: ${s.reason}${s.use ? ` Use ${tool(s.use)?.name ?? s.use}.` : ""}`);
+        for (const s of t.skip_if)
+          lines.push(`- Skip it if: ${s.reason}${s.use ? ` Use ${tool(s.use)?.name ?? s.use}.` : ""}`);
         lines.push(`- Label: ${strings(t, at).text}`);
         lines.push(`- ${SITE_URL}/${t.aisle}/${t.id} (vendor: ${t.url})`, "");
       }

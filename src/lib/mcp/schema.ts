@@ -38,16 +38,22 @@ export function validate(value: unknown, schema: Schema, path = "arguments"): st
     errors.push(`${path}: must be one of ${schema.enum.map((e) => JSON.stringify(e)).join(", ")}`);
   }
   if (typeof value === "number") {
-    if (schema.minimum !== undefined && value < schema.minimum) errors.push(`${path}: must be at least ${schema.minimum}`);
-    if (schema.maximum !== undefined && value > schema.maximum) errors.push(`${path}: must be at most ${schema.maximum}`);
+    if (schema.minimum !== undefined && value < schema.minimum)
+      errors.push(`${path}: must be at least ${schema.minimum}`);
+    if (schema.maximum !== undefined && value > schema.maximum)
+      errors.push(`${path}: must be at most ${schema.maximum}`);
   }
   if (typeof value === "string") {
-    if (schema.minLength !== undefined && value.length < schema.minLength) errors.push(`${path}: must be at least ${schema.minLength} characters`);
-    if (schema.maxLength !== undefined && value.length > schema.maxLength) errors.push(`${path}: must be at most ${schema.maxLength} characters`);
+    if (schema.minLength !== undefined && value.length < schema.minLength)
+      errors.push(`${path}: must be at least ${schema.minLength} characters`);
+    if (schema.maxLength !== undefined && value.length > schema.maxLength)
+      errors.push(`${path}: must be at most ${schema.maxLength} characters`);
   }
   if (Array.isArray(value)) {
-    if (schema.minItems !== undefined && value.length < schema.minItems) errors.push(`${path}: needs at least ${schema.minItems} items`);
-    if (schema.maxItems !== undefined && value.length > schema.maxItems) errors.push(`${path}: takes at most ${schema.maxItems} items`);
+    if (schema.minItems !== undefined && value.length < schema.minItems)
+      errors.push(`${path}: needs at least ${schema.minItems} items`);
+    if (schema.maxItems !== undefined && value.length > schema.maxItems)
+      errors.push(`${path}: takes at most ${schema.maxItems} items`);
     if (schema.items) value.forEach((v, i) => errors.push(...validate(v, schema.items!, `${path}[${i}]`)));
   }
   if (t === "object") {
@@ -57,7 +63,8 @@ export function validate(value: unknown, schema: Schema, path = "arguments"): st
       const prop = schema.properties?.[key];
       if (prop) errors.push(...validate(v, prop, `${path}.${key}`));
       else if (schema.additionalProperties === false) errors.push(`${path}.${key}: unknown argument`);
-      else if (typeof schema.additionalProperties === "object") errors.push(...validate(v, schema.additionalProperties, `${path}.${key}`));
+      else if (typeof schema.additionalProperties === "object")
+        errors.push(...validate(v, schema.additionalProperties, `${path}.${key}`));
     }
   }
   return errors;

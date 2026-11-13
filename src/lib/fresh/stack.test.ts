@@ -14,8 +14,22 @@ import {
 import type { Aisle, Tool } from "./types";
 
 const NOW = new Date("2026-11-13T12:00:00Z");
-const db: Aisle = { id: "databases", group: "Build", name: "Databases", metric: "storage_gb", unit: "GB", label: "free storage" };
-const hosting: Aisle = { id: "hosting", group: "Build", name: "Hosting", metric: "requests_per_day", unit: "a day", label: "requests" };
+const db: Aisle = {
+  id: "databases",
+  group: "Build",
+  name: "Databases",
+  metric: "storage_gb",
+  unit: "GB",
+  label: "free storage",
+};
+const hosting: Aisle = {
+  id: "hosting",
+  group: "Build",
+  name: "Hosting",
+  metric: "requests_per_day",
+  unit: "a day",
+  label: "requests",
+};
 
 function make(over: Partial<Tool>): Tool {
   return {
@@ -43,7 +57,11 @@ function make(over: Partial<Tool>): Tool {
 
 describe("limitsLine", () => {
   it("leads with the headline figure in the aisle's unit", () => {
-    const t = make({ metric: 0.5, limits: ["5 GB transfer a month", "Sleeps after 5 minutes idle"], catches: ["Sleeps after 5 minutes idle"] });
+    const t = make({
+      metric: 0.5,
+      limits: ["5 GB transfer a month", "Sleeps after 5 minutes idle"],
+      catches: ["Sleeps after 5 minutes idle"],
+    });
     expect(limitsLine(t, db)).toBe("0.5 GB free storage, 5 GB transfer a month");
     expect(limitsLine(make({ aisle: "hosting", metric: 100000, limits: ["10 ms CPU per request"] }), hosting)).toBe(
       "100k requests a day, 10 ms CPU per request",
@@ -59,10 +77,15 @@ describe("limitsLine", () => {
   it("uses the vendor's own wording when the metric does not apply", () => {
     expect(limitsLine(make({ metric: null, metric_note: "750 hours a month" }), hosting)).toBe("750 hours a month");
     // The note is often also the first limit; say it once.
-    expect(limitsLine(make({ metric: null, metric_note: "100k requests a day", limits: ["100k requests a day", "Static unlimited"] }), hosting)).toBe(
-      "100k requests a day, Static unlimited",
+    expect(
+      limitsLine(
+        make({ metric: null, metric_note: "100k requests a day", limits: ["100k requests a day", "Static unlimited"] }),
+        hosting,
+      ),
+    ).toBe("100k requests a day, Static unlimited");
+    expect(limitsLine(make({ metric: null, metric_note: "No limit. Your own disk" }), db)).toBe(
+      "No limit. Your own disk",
     );
-    expect(limitsLine(make({ metric: null, metric_note: "No limit. Your own disk" }), db)).toBe("No limit. Your own disk");
   });
 });
 
@@ -84,18 +107,37 @@ describe("rowState", () => {
 
 describe("toStackTool", () => {
   it("keeps what the rules need plus the row text", () => {
-    const s = toStackTool(make({ id: "neon", name: "Neon", metric: 0.5, catches: ["Sleeps"] }), db, "/databases/neon", NOW, "Database");
-    expect(s).toMatchObject({ id: "neon", name: "Neon", href: "/databases/neon", catch: "Sleeps", part: "Database", state: "unchecked" });
+    const s = toStackTool(
+      make({ id: "neon", name: "Neon", metric: 0.5, catches: ["Sleeps"] }),
+      db,
+      "/databases/neon",
+      NOW,
+      "Database",
+    );
+    expect(s).toMatchObject({
+      id: "neon",
+      name: "Neon",
+      href: "/databases/neon",
+      catch: "Sleeps",
+      part: "Database",
+      state: "unchecked",
+    });
   });
 });
 
 describe("URL", () => {
   const parts = [{ key: "hosting" }, { key: "database" }, { key: "auth" }];
-  const ok: Record<string, string[]> = { hosting: ["cf-workers", "vercel-hobby"], database: ["neon", "d1"], auth: ["clerk"] };
+  const ok: Record<string, string[]> = {
+    hosting: ["cf-workers", "vercel-hobby"],
+    database: ["neon", "d1"],
+    auth: ["clerk"],
+  };
   const opts = {
     parts,
     canFill: (k: string, id: string) => ok[k]?.includes(id) ?? false,
-    situations: ["school", "student", "indie", "startup"] as const as unknown as ("school" | "student" | "indie" | "startup")[],
+    situations: ["school", "student", "indie", "startup"] as const as unknown as (
+      "school" | "student" | "indie" | "startup"
+    )[],
     fallback: "student" as const,
   };
 

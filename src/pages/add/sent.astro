@@ -28,93 +28,110 @@ const missing = Object.values(errors as DraftErrors).filter(Boolean);
 ---
 
 <Shell title={t ? `Send ${t.name} · freestack` : "Add a tool · freestack"} noindex>
-  {
-    t && a && link ? (
-      <div class="wrap page">
-        <div role="status" class="main">
-          <h1 class="h">One step left.</h1>
-          <p class="lede">
-            Your label for {t.name} is ready. Send it on GitHub to put it up for review. Nothing shows on the site until
-            someone checks it.
-          </p>
-          {link.kind === "url" ? (
-            <div class="send">
-              <a class="btn btn-promo" href={link.url} target="_blank" rel="noopener" data-send>
-                Send on GitHub<Icon name="external" size={14} />
-                <span class="sr-only">, opens in a new tab</span>
-              </a>
-              <span class="muted hint">You need a GitHub account. Your GitHub name shows on the issue.</span>
-            </div>
-          ) : (
-            <div class="send copy-box" data-copy-box>
-              <p class="copy-h">Too long for a GitHub link</p>
-              <p>Copy this, open a new issue, and paste it as the description.</p>
-              <label class="copy-lbl" for="issue-body">Issue description</label>
-              <textarea id="issue-body" class="field copy" rows="10" readonly data-copy-body>{link.body}</textarea>
-              <div class="copy-row">
-                <button type="button" class="btn btn-outline" data-copy hidden>Copy</button>
-                <a class="btn btn-promo" href={link.url} target="_blank" rel="noopener">
-                  Open a new issue<Icon name="external" size={14} />
-                  <span class="sr-only">, opens GitHub in a new tab</span>
-                </a>
-                <span class="muted hint" role="status" data-copied />
-              </div>
-            </div>
-          )}
-          <h2 class="next-h">What happens next</h2>
-          <ol class="steps">
-            <li>
-              <span class="n" aria-hidden="true">1</span>
-              <span>
-                <span class="step">You submit the issue on GitHub.</span>
-                <span class="muted">A bot turns it into a pull request with the label.</span>
-              </span>
-            </li>
-            <li>
-              <span class="n" aria-hidden="true">2</span>
-              <span>
-                <span class="step">A maintainer compares it with {shortUrl(t.pricing_url)}.</span>
-                <span class="muted">Usually within a week.</span>
-              </span>
-            </li>
-            <li>
-              <span class="n" aria-hidden="true">3</span>
-              <span>
-                <span class="step">It goes live in the {a.name} aisle.</span>
-                <span class="muted">Marked "Not checked yet" until someone checks it against the vendor's page.</span>
-              </span>
-            </li>
-          </ol>
-          <div class="actions">
-            <a class="btn" href="/add">Add another tool</a>
-            <a class="btn btn-outline" href={`/${a.id}`}>Back to {a.name}</a>
-            <a class="pr" href={openAdditionsUrl(GITHUB_REPO)} target="_blank" rel="noopener">
-              Follow it on GitHub<Icon name="external" size={14} />
+  {t && a && link ? (
+    <div class="wrap page">
+      <div role="status" class="main">
+        <h1 class="h">One step left.</h1>
+        <p class="lede">
+          Your label for {t.name} is ready. Send it on GitHub to put it up for review. Nothing shows on the site until
+          someone checks it.
+        </p>
+        {link.kind === "url" ? (
+          <div class="send">
+            <a class="btn btn-promo" href={link.url} target="_blank" rel="noopener" data-send>
+              Send on GitHub
+              <Icon name="external" size={14} />
               <span class="sr-only">, opens in a new tab</span>
             </a>
+            <span class="muted hint">You need a GitHub account. Your GitHub name shows on the issue.</span>
           </div>
-        </div>
-        <div class="preview">
-          <p class="cap">How it will look</p>
-          <Label tool={t} compare={false} link={false} />
+        ) : (
+          <div class="send copy-box" data-copy-box>
+            <p class="copy-h">Too long for a GitHub link</p>
+            <p>Copy this, open a new issue, and paste it as the description.</p>
+            <label class="copy-lbl" for="issue-body">
+              Issue description
+            </label>
+            <textarea id="issue-body" class="field copy" rows="10" readonly data-copy-body>{link.body}</textarea>
+            <div class="copy-row">
+              <button type="button" class="btn btn-outline" data-copy hidden>
+                Copy
+              </button>
+              <a class="btn btn-promo" href={link.url} target="_blank" rel="noopener">
+                Open a new issue
+                <Icon name="external" size={14} />
+                <span class="sr-only">, opens GitHub in a new tab</span>
+              </a>
+              <span class="muted hint" role="status" data-copied />
+            </div>
+          </div>
+        )}
+        <h2 class="next-h">What happens next</h2>
+        <ol class="steps">
+          <li>
+            <span class="n" aria-hidden="true">
+              1
+            </span>
+            <span>
+              <span class="step">You submit the issue on GitHub.</span>
+              <span class="muted">A bot turns it into a pull request with the label.</span>
+            </span>
+          </li>
+          <li>
+            <span class="n" aria-hidden="true">
+              2
+            </span>
+            <span>
+              <span class="step">A maintainer compares it with {shortUrl(t.pricing_url)}.</span>
+              <span class="muted">Usually within a week.</span>
+            </span>
+          </li>
+          <li>
+            <span class="n" aria-hidden="true">
+              3
+            </span>
+            <span>
+              <span class="step">It goes live in the {a.name} aisle.</span>
+              <span class="muted">Marked "Not checked yet" until someone checks it against the vendor's page.</span>
+            </span>
+          </li>
+        </ol>
+        <div class="actions">
+          <a class="btn" href="/add">
+            Add another tool
+          </a>
+          <a class="btn btn-outline" href={`/${a.id}`}>
+            Back to {a.name}
+          </a>
+          <a class="pr" href={openAdditionsUrl(GITHUB_REPO)} target="_blank" rel="noopener">
+            Follow it on GitHub
+            <Icon name="external" size={14} />
+            <span class="sr-only">, opens in a new tab</span>
+          </a>
         </div>
       </div>
-    ) : (
-      <div class="wrap page">
-        <div role="alert" class="main">
-          <h1 class="h">Some answers are missing</h1>
-          <ul class="missing">
-            {missing.map((m) => (
-              <li>{m}</li>
-            ))}
-          </ul>
-          <div class="actions">
-            <a class="btn" href="/add">Back to the form</a>
-          </div>
+      <div class="preview">
+        <p class="cap">How it will look</p>
+        <Label tool={t} compare={false} link={false} />
+      </div>
+    </div>
+  ) : (
+    <div class="wrap page">
+      <div role="alert" class="main">
+        <h1 class="h">Some answers are missing</h1>
+        <ul class="missing">
+          {missing.map((m) => (
+            <li>{m}</li>
+          ))}
+        </ul>
+        <div class="actions">
+          <a class="btn" href="/add">
+            Back to the form
+          </a>
         </div>
       </div>
-    )
-  }
+    </div>
+  )}
 </Shell>
 
 <style>

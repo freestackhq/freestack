@@ -77,8 +77,6 @@ export interface Tool {
   suggested?: boolean;
   /** Set by the trust loop when someone marked a line "Changed". UI-only. */
   review_pending?: boolean;
-  /** GitHub issue number of that open review. UI-only. */
-  review_issue?: number | null;
   /** Set by the weekly pricing-page scan (ISO date). UI-only. */
   vendor_changed_at?: string | null;
   /** Set by the weekly link check when the tool's url failed on two runs. Generated. */
@@ -164,13 +162,7 @@ export interface Catch {
   avoid_heading?: string;
 }
 
-export type LabelState =
-  | "checked"
-  | "unchecked"
-  | "overdue"
-  | "review"
-  | "vendor-changed"
-  | "imported";
+export type LabelState = "checked" | "unchecked" | "overdue" | "review" | "vendor-changed" | "imported";
 
 /** A job in a stack (Build a stack rows, Home preset rows). UI-only. */
 export interface Part {

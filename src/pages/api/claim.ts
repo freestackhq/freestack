@@ -8,7 +8,8 @@ export const prerender = false;
 export const OPTIONS: APIRoute = () => options();
 
 /** Claim plan for the published CLI (`freestack claim`), built from the Claim Once aisles. */
-export const GET: APIRoute = ({ url }) => json({ ok: true, ...buildClaimPlan(parseClaimQuery(url.searchParams), SITE_URL) });
+export const GET: APIRoute = ({ url }) =>
+  json({ ok: true, ...buildClaimPlan(parseClaimQuery(url.searchParams), SITE_URL) });
 
 export const POST: APIRoute = async ({ request }) => {
   const body = (await request.json().catch(() => null)) as Partial<ClaimProfile> | null;

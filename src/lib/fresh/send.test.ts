@@ -1,6 +1,14 @@
 import { describe, expect, it } from "vitest";
 import { readFileSync } from "node:fs";
-import { ADD_TOOL, LABEL_CHECK, MAX_URL, answerLine, issueBody, parseAnswers, parseIssueForm } from "../trust/forms.mjs";
+import {
+  ADD_TOOL,
+  LABEL_CHECK,
+  MAX_URL,
+  answerLine,
+  issueBody,
+  parseAnswers,
+  parseIssueForm,
+} from "../trust/forms.mjs";
 import { addToolLink, addToolValues, answersText, labelCheckLink, openAdditionsUrl } from "./send";
 import type { CheckLine } from "./checks";
 import type { ToolDraft } from "./addtool";
@@ -116,7 +124,9 @@ describe("answersText and parseAnswers", () => {
   });
 
   it("names lines it cannot read and Changed without a value", () => {
-    const r = parseAnswers("- metric | x | Changed:\n- bogus | x | Still true\nhello\n\n- sell | x | still true\n- sell | x | Still true");
+    const r = parseAnswers(
+      "- metric | x | Changed:\n- bogus | x | Still true\nhello\n\n- sell | x | still true\n- sell | x | Still true",
+    );
     expect(r.answers.map((a) => a.field)).toEqual(["sell"]);
     expect(r.errors).toEqual([
       '"metric" says Changed but not what it says now.',
@@ -129,13 +139,18 @@ describe("answersText and parseAnswers", () => {
 
 describe("parseIssueForm", () => {
   it("reads GitHub's rendering, with _No response_ as empty", () => {
-    const body = issueBody(LABEL_CHECK, { tool: "neon", answers: "- sell | S: Yes | Still true", source: "https://neon.tech/pricing" });
+    const body = issueBody(LABEL_CHECK, {
+      tool: "neon",
+      answers: "- sell | S: Yes | Still true",
+      source: "https://neon.tech/pricing",
+    });
     expect(body).toContain("### Anything else\n\n_No response_");
     expect(parseIssueForm(body, LABEL_CHECK).note).toBe("");
   });
 
   it("keeps a ### line typed inside an answer, and unwraps a fenced block", () => {
-    const body = "### Tool id\n\nneon\n\n### Answers\n\n```text\n- sell | S: Yes | Still true\n```\n\n### Anything else\n\n### not a heading\nmore";
+    const body =
+      "### Tool id\n\nneon\n\n### Answers\n\n```text\n- sell | S: Yes | Still true\n```\n\n### Anything else\n\n### not a heading\nmore";
     const r = parseIssueForm(body, LABEL_CHECK);
     expect(r.answers).toBe("- sell | S: Yes | Still true");
     expect(r.note).toBe("### not a heading\nmore");

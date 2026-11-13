@@ -46,7 +46,12 @@ function modernHeaders(method: string, name?: string) {
 
 describe("legacy handshake", () => {
   it("initialize echoes a supported version and advertises tools", async () => {
-    const res = await post({ jsonrpc: "2.0", id: 1, method: "initialize", params: { protocolVersion: "2025-06-18", capabilities: {}, clientInfo: { name: "t", version: "1" } } });
+    const res = await post({
+      jsonrpc: "2.0",
+      id: 1,
+      method: "initialize",
+      params: { protocolVersion: "2025-06-18", capabilities: {}, clientInfo: { name: "t", version: "1" } },
+    });
     expect(res.status).toBe(200);
     expect(res.headers.get("content-type")).toContain("application/json");
     expect(res.headers.get("access-control-allow-origin")).toBe("*");
@@ -59,7 +64,9 @@ describe("legacy handshake", () => {
   });
 
   it("initialize with an unknown version answers with the newest handshake version", async () => {
-    const body = await (await post({ jsonrpc: "2.0", id: "a", method: "initialize", params: { protocolVersion: "1999-01-01" } })).json();
+    const body = await (
+      await post({ jsonrpc: "2.0", id: "a", method: "initialize", params: { protocolVersion: "1999-01-01" } })
+    ).json();
     expect(body.result.protocolVersion).toBe("2025-11-25");
   });
 
@@ -69,7 +76,10 @@ describe("legacy handshake", () => {
   });
 
   it("notifications/initialized gets 202 and no body", async () => {
-    const res = await post({ jsonrpc: "2.0", method: "notifications/initialized" }, { "MCP-Protocol-Version": "2025-06-18" });
+    const res = await post(
+      { jsonrpc: "2.0", method: "notifications/initialized" },
+      { "MCP-Protocol-Version": "2025-06-18" },
+    );
     expect(res.status).toBe(202);
     expect(await res.text()).toBe("");
   });
@@ -90,7 +100,9 @@ describe("legacy handshake", () => {
 
 describe("modern per-request metadata", () => {
   it("server/discover lists versions and server info", async () => {
-    const body = await (await post({ jsonrpc: "2.0", id: 1, method: "server/discover", params: meta }, modernHeaders("server/discover"))).json();
+    const body = await (
+      await post({ jsonrpc: "2.0", id: 1, method: "server/discover", params: meta }, modernHeaders("server/discover"))
+    ).json();
     expect(body.result.resultType).toBe("complete");
     expect(body.result.supportedVersions).toContain(MODERN);
     expect(body.result.supportedVersions).toContain("2025-11-25");
@@ -132,7 +144,12 @@ describe("modern per-request metadata", () => {
 
   it("an unknown modern version is UnsupportedProtocolVersion with the list", async () => {
     const res = await post(
-      { jsonrpc: "2.0", id: 1, method: "tools/list", params: { _meta: { "io.modelcontextprotocol/protocolVersion": "2099-01-01" } } },
+      {
+        jsonrpc: "2.0",
+        id: 1,
+        method: "tools/list",
+        params: { _meta: { "io.modelcontextprotocol/protocolVersion": "2099-01-01" } },
+      },
       { "MCP-Protocol-Version": "2099-01-01", "Mcp-Method": "tools/list" },
     );
     expect(res.status).toBe(400);
@@ -142,7 +159,10 @@ describe("modern per-request metadata", () => {
   });
 
   it("an unknown modern method is 404 with -32601", async () => {
-    const res = await post({ jsonrpc: "2.0", id: 1, method: "resources/list", params: meta }, modernHeaders("resources/list"));
+    const res = await post(
+      { jsonrpc: "2.0", id: 1, method: "resources/list", params: meta },
+      modernHeaders("resources/list"),
+    );
     expect(res.status).toBe(404);
     expect((await res.json()).error.code).toBe(ERR.METHOD_NOT_FOUND);
   });
@@ -157,7 +177,9 @@ describe("tools", () => {
   });
 
   it("tools/call returns structuredContent and the same JSON as text", async () => {
-    const body = await (await post({ jsonrpc: "2.0", id: 1, method: "tools/call", params: { name: "echo", arguments: { word: "b" } } })).json();
+    const body = await (
+      await post({ jsonrpc: "2.0", id: 1, method: "tools/call", params: { name: "echo", arguments: { word: "b" } } })
+    ).json();
     expect(body.result.structuredContent).toEqual({ word: "b" });
     expect(body.result.content[0].type).toBe("text");
     expect(JSON.parse(body.result.content[0].text)).toEqual({ word: "b" });
@@ -165,11 +187,14 @@ describe("tools", () => {
   });
 
   it("unknown tool, bad arguments and tool-level refusals are -32602", async () => {
-    const call = async (params: unknown) => (await (await post({ jsonrpc: "2.0", id: 9, method: "tools/call", params })).json()).error;
+    const call = async (params: unknown) =>
+      (await (await post({ jsonrpc: "2.0", id: 9, method: "tools/call", params })).json()).error;
     expect((await call({ name: "nope" })).message).toContain("Unknown tool");
     expect((await call({ name: "echo", arguments: {} })).code).toBe(ERR.INVALID_PARAMS);
     expect((await call({ name: "echo", arguments: { word: "z" } })).data.errors[0]).toContain("must be one of");
-    expect((await call({ name: "echo", arguments: { word: "a", extra: 1 } })).data.errors[0]).toContain("unknown argument");
+    expect((await call({ name: "echo", arguments: { word: "a", extra: 1 } })).data.errors[0]).toContain(
+      "unknown argument",
+    );
     expect((await call({ name: "echo", arguments: { word: "a", n: 3 } })).message).toContain("not allowed");
     expect((await call({ name: "echo", arguments: "word" })).code).toBe(ERR.INVALID_PARAMS);
     expect((await call({})).code).toBe(ERR.INVALID_PARAMS);
@@ -185,7 +210,13 @@ describe("JSON-RPC edge cases", () => {
   });
 
   it("invalid requests are -32600", async () => {
-    for (const bad of [{ id: 1, method: "ping" }, { jsonrpc: "2.0", id: 1 }, { jsonrpc: "2.0", id: true, method: "ping" }, 42, `"x"`]) {
+    for (const bad of [
+      { id: 1, method: "ping" },
+      { jsonrpc: "2.0", id: 1 },
+      { jsonrpc: "2.0", id: true, method: "ping" },
+      42,
+      `"x"`,
+    ]) {
       const res = await post(bad);
       expect(res.status).toBe(400);
       expect((await res.json()).error.code).toBe(ERR.INVALID_REQUEST);
@@ -199,7 +230,9 @@ describe("JSON-RPC edge cases", () => {
   });
 
   it("non-object params are -32602", async () => {
-    expect((await (await post({ jsonrpc: "2.0", id: 1, method: "ping", params: [1] })).json()).error.code).toBe(ERR.INVALID_PARAMS);
+    expect((await (await post({ jsonrpc: "2.0", id: 1, method: "ping", params: [1] })).json()).error.code).toBe(
+      ERR.INVALID_PARAMS,
+    );
   });
 
   it("a batch gets an array of responses, notifications left out", async () => {
@@ -226,7 +259,9 @@ describe("JSON-RPC edge cases", () => {
   });
 
   it("a huge body is refused", async () => {
-    expect((await post({ jsonrpc: "2.0", id: 1, method: "ping", params: { pad: "x".repeat(70_000) } })).status).toBe(413);
+    expect((await post({ jsonrpc: "2.0", id: 1, method: "ping", params: { pad: "x".repeat(70_000) } })).status).toBe(
+      413,
+    );
   });
 });
 

@@ -9,7 +9,5 @@ export const SITE_PLACEHOLDER = "<freestack site>";
 /** @param {string} skill SKILL.md source  @param {string} siteUrl origin, no trailing slash */
 export function fillSkill(skill, siteUrl) {
   const origin = siteUrl.replace(/\/+$/, "");
-  return skill
-    .replace(/^If the address above still reads .*\n\n?/m, "")
-    .replaceAll(SITE_PLACEHOLDER, origin);
+  return skill.replace(/^If the address above still reads .*\n\n?/m, "").replaceAll(SITE_PLACEHOLDER, origin);
 }

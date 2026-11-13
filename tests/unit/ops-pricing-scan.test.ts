@@ -5,6 +5,7 @@ import { join } from "node:path";
 import { describe, expect, it, vi } from "vitest";
 import { parse } from "yaml";
 import {
+  type FetchInit,
   USER_AGENT,
   hashText,
   nextEntry,
@@ -21,7 +22,7 @@ const DAY = "2026-11-13";
 
 /** A fetch stand-in that serves fixed bodies per URL; anything else 404s. */
 function fakeFetch(pages: Record<string, string | Error | number>) {
-  return vi.fn(async (url: string) => {
+  return vi.fn(async (url: string, _init: FetchInit) => {
     const page = pages[url];
     if (page instanceof Error) throw page;
     if (typeof page === "number") return new Response("nope", { status: page });
@@ -80,12 +81,22 @@ describe("nextEntry", () => {
   });
 
   it("same hash only bumps checked_at and keeps an earlier change", () => {
-    expect(nextEntry({ hash: "h1", checked_at: "2026-11-06", changed_at: null }, "h1", DAY)).toEqual({ hash: "h1", checked_at: DAY, changed_at: null });
-    expect(nextEntry({ hash: "h1", checked_at: "2026-11-06", changed_at: "2026-10-01" }, "h1", DAY).changed_at).toBe("2026-10-01");
+    expect(nextEntry({ hash: "h1", checked_at: "2026-11-06", changed_at: null }, "h1", DAY)).toEqual({
+      hash: "h1",
+      checked_at: DAY,
+      changed_at: null,
+    });
+    expect(nextEntry({ hash: "h1", checked_at: "2026-11-06", changed_at: "2026-10-01" }, "h1", DAY).changed_at).toBe(
+      "2026-10-01",
+    );
   });
 
   it("a moved hash sets changed_at to today", () => {
-    expect(nextEntry({ hash: "h1", checked_at: "2026-11-06", changed_at: null }, "h2", DAY)).toEqual({ hash: "h2", checked_at: DAY, changed_at: DAY });
+    expect(nextEntry({ hash: "h1", checked_at: "2026-11-06", changed_at: null }, "h2", DAY)).toEqual({
+      hash: "h2",
+      checked_at: DAY,
+      changed_at: DAY,
+    });
   });
 });
 
@@ -127,13 +138,15 @@ describe("scan", () => {
   });
 
   it("treats HTTP errors, empty pages and timeouts as failures", async () => {
-    const fetchImpl = vi.fn(async (url: string, init: RequestInit) => {
+    const fetchImpl = vi.fn(async (url: string, init: FetchInit) => {
       if (url.startsWith("https://alpha")) return new Response("x", { status: 503 });
       if (url.startsWith("https://beta")) return new Response("<script>app()</script>", { status: 200 });
-      return new Promise<Response>((_, reject) => init.signal!.addEventListener("abort", () => reject(init.signal!.reason)));
+      return new Promise<Response>((_, reject) =>
+        init.signal.addEventListener("abort", () => reject(init.signal.reason)),
+      );
     });
     const { state: next, report } = await scan({ tools, state, day: DAY, fetchImpl, timeoutMs: 20 });
-    expect(report.failed.map((f: { id: string; error: string }) => [f.id, f.error])).toEqual([
+    expect(report.failed.map((f) => [f.id, f.error])).toEqual([
       ["alpha", "HTTP 503"],
       ["beta", "no visible text"],
       ["gamma", "timed out"],
@@ -144,7 +157,12 @@ describe("scan", () => {
 
   it("an unchanged page keeps changed_at as it was", async () => {
     const same = { alpha: { hash: hashText(visibleText(html)), checked_at: "2026-11-06", changed_at: null } };
-    const { state: next, report } = await scan({ tools: [tools[0]], state: same, day: DAY, fetchImpl: fakeFetch({ "https://alpha.test/pricing": html }) });
+    const { state: next, report } = await scan({
+      tools: [tools[0]],
+      state: same,
+      day: DAY,
+      fetchImpl: fakeFetch({ "https://alpha.test/pricing": html }),
+    });
     expect(report.unchanged).toEqual(["alpha"]);
     expect(next.alpha).toEqual({ ...same.alpha, checked_at: DAY });
   });

@@ -71,12 +71,19 @@ describe("matches", () => {
 
   it("no school email: anything but school-email-only", () => {
     expect(matches(item({ who: ["student_school_email"] }), { type: null, must: ["no-school-email"] })).toBe(false);
-    expect(matches(item({ who: ["student_school_email", "student_any_id"] }), { type: null, must: ["no-school-email"] })).toBe(true);
+    expect(
+      matches(item({ who: ["student_school_email", "student_any_id"] }), { type: null, must: ["no-school-email"] }),
+    ).toBe(true);
   });
 });
 
 describe("no matches", () => {
-  const items = [item({ card: "unknown" }), item({ type: "sqlite" }), item({ type: "sqlite" }), item({ type: "sqlite", sell: "no" })];
+  const items = [
+    item({ card: "unknown" }),
+    item({ type: "sqlite" }),
+    item({ type: "sqlite" }),
+    item({ type: "sqlite", sell: "no" }),
+  ];
 
   it("offers the drop that gives the most matches", () => {
     const f = { type: "postgres", must: ["no-card", "sell"] };

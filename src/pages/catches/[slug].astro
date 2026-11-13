@@ -6,7 +6,14 @@
 import Shell from "../../layouts/Shell.astro";
 import Icon from "../../components/fresh/Icon.astro";
 import Facts from "../../components/fresh/Facts.astro";
-import { aisle as getAisle, catchAlternatives, catchBySlug, catches, tool as getTool, toolHref } from "../../lib/fresh/catalog";
+import {
+  aisle as getAisle,
+  catchAlternatives,
+  catchBySlug,
+  catches,
+  tool as getTool,
+  toolHref,
+} from "../../lib/fresh/catalog";
 import { headline, longDate } from "../../lib/fresh/label";
 
 export function getStaticPaths() {
@@ -26,13 +33,11 @@ const altHeading = c.avoid_heading ?? `Free ${aisle?.noun ?? "tools"} without th
   <div class="wrap page">
     <p class="crumbs">
       <a href="/">All aisles</a>{" "}
-      {
-        aisle && (
-          <>
-            <span aria-hidden="true">/</span> <a href={`/${aisle.id}`}>{aisle.name}</a>{" "}
-          </>
-        )
-      }
+      {aisle && (
+        <>
+          <span aria-hidden="true">/</span> <a href={`/${aisle.id}`}>{aisle.name}</a>{" "}
+        </>
+      )}
       <span aria-hidden="true">/</span> Catches
     </p>
     <h1 class="question">{c.question}</h1>
@@ -40,38 +45,36 @@ const altHeading = c.avoid_heading ?? `Free ${aisle?.noun ?? "tools"} without th
     <div class="top">
       <section class="card" aria-labelledby="ans-h" data-answer>
         <div class="lead">
-          <p id="ans-h" class="answer">{c.answer}</p>
+          <p id="ans-h" class="answer">
+            {c.answer}
+          </p>
           <p class="detail">{c.detail}</p>
         </div>
         <div class="body">
-          {
-            c.includes.length > 0 && (
-              <>
-                <h2 id="inc-h">That includes</h2>
-                <ul aria-labelledby="inc-h">
-                  {c.includes.map((i) => (
-                    <li>
-                      <Icon name="cross" size={18} />
-                      <span>{i}</span>
-                    </li>
-                  ))}
-                </ul>
-              </>
-            )
-          }
-          {
-            c.still_fine && (
-              <>
-                <h2 id="fine-h">Still fine</h2>
-                <ul aria-labelledby="fine-h">
+          {c.includes.length > 0 && (
+            <>
+              <h2 id="inc-h">That includes</h2>
+              <ul aria-labelledby="inc-h">
+                {c.includes.map((i) => (
                   <li>
-                    <Icon name="check" size={18} />
-                    <span>{c.still_fine}</span>
+                    <Icon name="cross" size={18} />
+                    <span>{i}</span>
                   </li>
-                </ul>
-              </>
-            )
-          }
+                ))}
+              </ul>
+            </>
+          )}
+          {c.still_fine && (
+            <>
+              <h2 id="fine-h">Still fine</h2>
+              <ul aria-labelledby="fine-h">
+                <li>
+                  <Icon name="check" size={18} />
+                  <span>{c.still_fine}</span>
+                </li>
+              </ul>
+            </>
+          )}
         </div>
         <p class="source" data-source>
           <span>From {c.source_name}</span>
@@ -86,45 +89,47 @@ const altHeading = c.avoid_heading ?? `Free ${aisle?.noun ?? "tools"} without th
         <div class="on-ink cta">
           <h2>Already on {plan}?</h2>
           <p>Paste your stack and we flag every catch like this one.</p>
-          <a class="btn btn-promo" href="/check">Check my stack</a>
+          <a class="btn btn-promo" href="/check">
+            Check my stack
+          </a>
         </div>
         <p class="legal">Not legal advice. When in doubt, ask {vendor}.</p>
       </aside>
     </div>
 
-    {
-      alternatives.length > 0 && (
-        <section class="alts" aria-labelledby="alt-h">
-          <h2 id="alt-h" class="title-md">{altHeading}</h2>
-          <div class="grid">
-            {alternatives.map((t) => {
-              const a = getAisle(t.aisle);
-              const h = a ? headline(t, a) : { big: "?", sub: "Not listed", known: false };
-              return (
-                <article class="mini" data-tool={t.id}>
-                  <div class="name">
-                    <h3>
-                      <a href={toolHref(t)}>{t.name}</a>
-                    </h3>
-                    <span class="kind">{t.kind}</span>
-                  </div>
-                  <p class:list={["big", { unknown: !h.known }]}>{h.big}</p>
-                  {h.sub && <p class="sub">{h.sub}</p>}
-                  <Facts tool={t} hideWho class="facts" />
-                  {t.catches[0] && (
-                    <p class="catch">
-                      <Icon name="wrench" />
-                      {t.catches[0]}
-                    </p>
-                  )}
-                  {t.tagline && <p class="tagline">{t.tagline}</p>}
-                </article>
-              );
-            })}
-          </div>
-        </section>
-      )
-    }
+    {alternatives.length > 0 && (
+      <section class="alts" aria-labelledby="alt-h">
+        <h2 id="alt-h" class="title-md">
+          {altHeading}
+        </h2>
+        <div class="grid">
+          {alternatives.map((t) => {
+            const a = getAisle(t.aisle);
+            const h = a ? headline(t, a) : { big: "?", sub: "Not listed", known: false };
+            return (
+              <article class="mini" data-tool={t.id}>
+                <div class="name">
+                  <h3>
+                    <a href={toolHref(t)}>{t.name}</a>
+                  </h3>
+                  <span class="kind">{t.kind}</span>
+                </div>
+                <p class:list={["big", { unknown: !h.known }]}>{h.big}</p>
+                {h.sub && <p class="sub">{h.sub}</p>}
+                <Facts tool={t} hideWho class="facts" />
+                {t.catches[0] && (
+                  <p class="catch">
+                    <Icon name="wrench" />
+                    {t.catches[0]}
+                  </p>
+                )}
+                {t.tagline && <p class="tagline">{t.tagline}</p>}
+              </article>
+            );
+          })}
+        </div>
+      </section>
+    )}
   </div>
 </Shell>
 

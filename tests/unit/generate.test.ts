@@ -104,7 +104,12 @@ describe("generator", () => {
   it("fails on a tool that breaks the schema or a null metric without a note", () => {
     const d = copyFixtures();
     const file = join(d, "tools/appwrite.yaml");
-    writeFileSync(file, readFileSync(file, "utf8").replace(/metric_note: .*\n/, "").replace("sell: unknown", "sell: maybe"));
+    writeFileSync(
+      file,
+      readFileSync(file, "utf8")
+        .replace(/metric_note: .*\n/, "")
+        .replace("sell: unknown", "sell: maybe"),
+    );
     const r = run(d);
     expect(r.status).not.toBe(0);
     expect(r.stderr).toContain("tools/appwrite.yaml");

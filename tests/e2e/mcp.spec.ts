@@ -9,7 +9,12 @@ test.describe("MCP server at /mcp", () => {
   test("initialize, tools/list and tools/call", async ({ request }) => {
     const init = await request.post("/mcp", {
       headers: HEADERS,
-      data: { jsonrpc: "2.0", id: 1, method: "initialize", params: { protocolVersion: LEGACY, capabilities: {}, clientInfo: { name: "e2e", version: "1" } } },
+      data: {
+        jsonrpc: "2.0",
+        id: 1,
+        method: "initialize",
+        params: { protocolVersion: LEGACY, capabilities: {}, clientInfo: { name: "e2e", version: "1" } },
+      },
     });
     expect(init.status()).toBe(200);
     expect(init.headers()["access-control-allow-origin"]).toBe("*");
@@ -25,7 +30,10 @@ test.describe("MCP server at /mcp", () => {
     expect(ready.status()).toBe(202);
 
     const list = await (
-      await request.post("/mcp", { headers: { ...HEADERS, "MCP-Protocol-Version": LEGACY }, data: { jsonrpc: "2.0", id: 2, method: "tools/list" } })
+      await request.post("/mcp", {
+        headers: { ...HEADERS, "MCP-Protocol-Version": LEGACY },
+        data: { jsonrpc: "2.0", id: 2, method: "tools/list" },
+      })
     ).json();
     const names = list.result.tools.map((t: { name: string }) => t.name);
     expect(names).toEqual(["search_tools", "compare", "suggest_stack", "claim_order"]);
@@ -51,12 +59,21 @@ test.describe("MCP server at /mcp", () => {
 
   test("modern per-request metadata works without initialize", async ({ request }) => {
     const res = await request.post("/mcp", {
-      headers: { ...HEADERS, "MCP-Protocol-Version": "2026-07-28", "Mcp-Method": "tools/call", "Mcp-Name": "suggest_stack" },
+      headers: {
+        ...HEADERS,
+        "MCP-Protocol-Version": "2026-07-28",
+        "Mcp-Method": "tools/call",
+        "Mcp-Name": "suggest_stack",
+      },
       data: {
         jsonrpc: "2.0",
         id: 1,
         method: "tools/call",
-        params: { _meta: { "io.modelcontextprotocol/protocolVersion": "2026-07-28" }, name: "suggest_stack", arguments: { situation: "indie" } },
+        params: {
+          _meta: { "io.modelcontextprotocol/protocolVersion": "2026-07-28" },
+          name: "suggest_stack",
+          arguments: { situation: "indie" },
+        },
       },
     });
     expect(res.status()).toBe(200);

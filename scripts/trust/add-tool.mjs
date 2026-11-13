@@ -36,10 +36,7 @@ const lines = (s) =>
     .map((l) => l.replace(/^\s*[-*]\s+/, "").trim())
     .filter(Boolean);
 
-/**
- * Builds the tool from the form, or says what is wrong with it.
- * @returns {{ tool: object, errors: string[] }}
- */
+/** Builds the tool from the form, or says what is wrong with it. Returns { tool, errors }. */
 export function buildTool(form, aisles) {
   const errors = [];
   const name = form.name.trim();
@@ -61,7 +58,8 @@ export function buildTool(form, aisles) {
     }
   }
   let metric_note = form.metric_note.trim() || undefined;
-  if (metric === null && !metric_note) metric_note = /^no limit\b/i.test(form.figure.trim()) ? "No limit" : "Not listed";
+  if (metric === null && !metric_note)
+    metric_note = /^no limit\b/i.test(form.figure.trim()) ? "No limit" : "Not listed";
 
   const who = form.who
     .split(/[,\s]+/)
@@ -109,7 +107,7 @@ export function buildTool(form, aisles) {
  * Decides what an Add a tool issue means.
  * @returns {{ kind: "reject", reasons: string[] }
  *   | { kind: "listed", id: string, aisle: string }
- *   | { kind: "add", tool: object, yaml: string }}
+ *   | { kind: "add", tool: ReturnType<typeof buildTool>["tool"], yaml: string }}
  */
 export function planAddTool({ body, aislesText, schema, readTool }) {
   const form = parseIssueForm(body, ADD_TOOL);
@@ -125,7 +123,10 @@ export function planAddTool({ body, aislesText, schema, readTool }) {
 
 // ---------- Messages ----------
 
-/** Where a listed tool's label lives: the site when SITE_URL is set, else its data file. */
+/**
+ * Where a listed tool's label lives: the site when SITE_URL is set, else its data file.
+ * @param {{ siteUrl: string, repo: string, branch: string, id: string, aisle?: string }} where
+ */
 export function labelUrl({ siteUrl, repo, branch, id, aisle }) {
   if (siteUrl && aisle) return `${siteUrl.replace(/\/+$/, "")}/${aisle}/${id}`;
   return `https://github.com/${repo}/blob/${branch}/${toolPath(id)}`;
@@ -182,8 +183,16 @@ async function main() {
   gh.removeLabel(n, "invalid");
 
   if (plan.kind === "listed") {
-    const url = labelUrl({ siteUrl: process.env.SITE_URL, repo: event.repository.full_name, branch: defaultBranch, ...plan });
-    gh.comment(n, `Thanks. \`${plan.id}\` is already on freestack: ${url}\n\nIf its label is wrong, check it from that page instead.`);
+    const url = labelUrl({
+      siteUrl: process.env.SITE_URL,
+      repo: event.repository.full_name,
+      branch: defaultBranch,
+      ...plan,
+    });
+    gh.comment(
+      n,
+      `Thanks. \`${plan.id}\` is already on freestack: ${url}\n\nIf its label is wrong, check it from that page instead.`,
+    );
     gh.close(n, "not planned");
     return;
   }
@@ -200,7 +209,11 @@ async function main() {
     `feat(data): add ${plan.tool.id} from #${n}`,
   );
   const pr = gh.ensurePr(branch, `feat(data): add ${plan.tool.name} (#${n})`, prBody(plan.tool, n), ADD_TOOL.label);
-  if (pr.created) gh.comment(n, `Thanks @${issue.user.login}. Your label is in ${pr.url}. A maintainer compares it with the vendor's page.`);
+  if (pr.created)
+    gh.comment(
+      n,
+      `Thanks @${issue.user.login}. Your label is in ${pr.url}. A maintainer compares it with the vendor's page.`,
+    );
 }
 
 if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {

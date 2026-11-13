@@ -69,7 +69,10 @@ export const WHO_LABELS = {
 
 // ---------- Building an issue (site side) ----------
 
-const oneLine = (/** @type {string} */ s) => String(s ?? "").replace(/\s+/g, " ").trim();
+const oneLine = (/** @type {string} */ s) =>
+  String(s ?? "")
+    .replace(/\s+/g, " ")
+    .trim();
 
 /**
  * One Check a label answer as a line of the Answers field:
@@ -142,7 +145,9 @@ export function parseIssueForm(body, form) {
   /** @type {Record<string, string[]>} */
   const parts = {};
   let current = null;
-  for (const line of String(body ?? "").replace(/\r\n?/g, "\n").split("\n")) {
+  for (const line of String(body ?? "")
+    .replace(/\r\n?/g, "\n")
+    .split("\n")) {
     const h = /^###\s+(.+?)\s*$/.exec(line);
     const id = h ? byLabel.get(h[1].toLowerCase()) : undefined;
     if (id) {

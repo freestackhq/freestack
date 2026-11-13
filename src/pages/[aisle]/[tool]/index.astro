@@ -76,245 +76,253 @@ const addToCompare = compareHref([t.id]);
   <div class="wrap page" data-tool-page={t.id}>
     <nav aria-label="Breadcrumb" class="crumbs desk-only">
       <a href="/">All aisles</a> <span aria-hidden="true">/</span> <a href={aisleHref}>{aisle.name}</a>{" "}
-      <span aria-hidden="true">/</span>{" "}
-      {imported ? "From an awesome list" : <span aria-current="page">{t.name}</span>}
+      <span aria-hidden="true">/</span> {imported ? "From an awesome list" : <span aria-current="page">{t.name}</span>}
     </nav>
-    <a href={aisleHref} class="phone-back phone-only"><Icon name="back" size={16} />{aisle.name}</a>
+    <a href={aisleHref} class="phone-back phone-only">
+      <Icon name="back" size={16} />
+      {aisle.name}
+    </a>
 
-    {
-      imported ? (
-        <section class="imported panel" data-imported aria-labelledby="tool-h">
-          <h1 id="tool-h" class="title-lg">{t.name}</h1>
-          <p class="imp-num">
-            <span class="q" aria-hidden="true">?</span>
-            <span class="muted">No numbers yet. From {t.imported_from ?? "an awesome list"}.</span>
-          </p>
-          <p class="imp-copy">
-            Nobody has written its label. Until someone does, it shows up in search only, not in filters or stacks.
-          </p>
-          <div class="actions">
-            <a class="btn" href={writeLabelHref(t)}>Write its label</a>
-            <a class="btn btn-outline" href={t.url} target="_blank" rel="noopener noreferrer">
-              Go to {domain}
-              <span class="sr-only"> (opens in a new tab)</span>
-            </a>
-          </div>
-        </section>
-      ) : (
-        <div class="layout">
-          <div class="main-col">
-            <div class="phone-head">
-              <h1 class:list={["title-xl", { long: t.name.length > 12, longer: t.name.length > 22 }]}>{t.name}</h1>
-              <div class="phone-only phone-scale">
-                <Scale scale={scale} bar={10} />
-              </div>
+    {imported ? (
+      <section class="imported panel" data-imported aria-labelledby="tool-h">
+        <h1 id="tool-h" class="title-lg">
+          {t.name}
+        </h1>
+        <p class="imp-num">
+          <span class="q" aria-hidden="true">
+            ?
+          </span>
+          <span class="muted">No numbers yet. From {t.imported_from ?? "an awesome list"}.</span>
+        </p>
+        <p class="imp-copy">
+          Nobody has written its label. Until someone does, it shows up in search only, not in filters or stacks.
+        </p>
+        <div class="actions">
+          <a class="btn" href={writeLabelHref(t)}>
+            Write its label
+          </a>
+          <a class="btn btn-outline" href={t.url} target="_blank" rel="noopener noreferrer">
+            Go to {domain}
+            <span class="sr-only"> (opens in a new tab)</span>
+          </a>
+        </div>
+      </section>
+    ) : (
+      <div class="layout">
+        <div class="main-col">
+          <div class="phone-head">
+            <h1 class:list={["title-xl", { long: t.name.length > 12, longer: t.name.length > 22 }]}>{t.name}</h1>
+            <div class="phone-only phone-scale">
+              <Scale scale={scale} bar={10} />
             </div>
-            <p class="tagline">
-              <span class="phone-summary phone-only">{summary} </span>
-              {tagline}
-            </p>
+          </div>
+          <p class="tagline">
+            <span class="phone-summary phone-only">{summary} </span>
+            {tagline}
+          </p>
 
-            <div class="decide panel" data-decide>
-              <section aria-labelledby="decide-h" class="decide-grid">
-                <h2 id="decide-h" class="sr-only">
-                  Should you use {t.name}?
-                </h2>
-                <div class="cell" data-use-if>
-                  <h3 class="sub">Use it if</h3>
-                  {t.use_if.length ? (
-                    <ul class="ticks">
-                      {t.use_if.map((u) => (
-                        <li>
-                          <Icon name="check" size={18} />
-                          <span>{u}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  ) : (
-                    <p class="muted">Not written yet.</p>
-                  )}
-                </div>
-                <div class="cell" data-skip-if>
-                  <h3 class="sub">Skip it if</h3>
-                  {skips.length ? (
-                    <ul class="ticks">
-                      {skips.map((s) => (
-                        <li>
-                          <Icon name="cross" size={18} />
-                          <span>
-                            {s.reason}{" "}
-                            {s.alt && (
-                              <a class="use" href={toolHref(s.alt)}>
-                                Use {s.alt.name}
-                              </a>
-                            )}
-                          </span>
-                        </li>
-                      ))}
-                    </ul>
-                  ) : (
-                    <p class="muted">Not written yet.</p>
-                  )}
-                </div>
-              </section>
-              <section aria-labelledby="catch-h" class="cell catch" data-catch>
-                <h2 id="catch-h" class="sub">The catch</h2>
-                {catchLines.length ? (
+          <div class="decide panel" data-decide>
+            <section aria-labelledby="decide-h" class="decide-grid">
+              <h2 id="decide-h" class="sr-only">
+                Should you use {t.name}?
+              </h2>
+              <div class="cell" data-use-if>
+                <h3 class="sub">Use it if</h3>
+                {t.use_if.length ? (
                   <ul class="ticks">
-                    {catchLines.map((c) => (
+                    {t.use_if.map((u) => (
                       <li>
-                        <Icon name="wrench" size={18} />
-                        <span>{c}</span>
+                        <Icon name="check" size={18} />
+                        <span>{u}</span>
                       </li>
                     ))}
                   </ul>
                 ) : (
-                  <p class="muted">None listed.</p>
-                )}
-              </section>
-              <div class="cell fits" data-fits>
-                <span class="fits-h">Fits</span>
-                {fits.length ? (
-                  fits.map((f) => (
-                    <span class="fit">
-                      <Icon name="check" size={16} />
-                      {f.label}
-                    </span>
-                  ))
-                ) : (
-                  <span class="muted">Unknown</span>
-                )}
-                {compareWith.length > 0 && (
-                  <a class="compare-with" href={compareHref([t.id, ...compareWith.map((o) => o.id)])}>
-                    Compare with {listJoin(compareWith.map((o) => o.name))}
-                  </a>
+                  <p class="muted">Not written yet.</p>
                 )}
               </div>
+              <div class="cell" data-skip-if>
+                <h3 class="sub">Skip it if</h3>
+                {skips.length ? (
+                  <ul class="ticks">
+                    {skips.map((s) => (
+                      <li>
+                        <Icon name="cross" size={18} />
+                        <span>
+                          {s.reason}{" "}
+                          {s.alt && (
+                            <a class="use" href={toolHref(s.alt)}>
+                              Use {s.alt.name}
+                            </a>
+                          )}
+                        </span>
+                      </li>
+                    ))}
+                  </ul>
+                ) : (
+                  <p class="muted">Not written yet.</p>
+                )}
+              </div>
+            </section>
+            <section aria-labelledby="catch-h" class="cell catch" data-catch>
+              <h2 id="catch-h" class="sub">
+                The catch
+              </h2>
+              {catchLines.length ? (
+                <ul class="ticks">
+                  {catchLines.map((c) => (
+                    <li>
+                      <Icon name="wrench" size={18} />
+                      <span>{c}</span>
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <p class="muted">None listed.</p>
+              )}
+            </section>
+            <div class="cell fits" data-fits>
+              <span class="fits-h">Fits</span>
+              {fits.length ? (
+                fits.map((f) => (
+                  <span class="fit">
+                    <Icon name="check" size={16} />
+                    {f.label}
+                  </span>
+                ))
+              ) : (
+                <span class="muted">Unknown</span>
+              )}
+              {compareWith.length > 0 && (
+                <a class="compare-with" href={compareHref([t.id, ...compareWith.map((o) => o.id)])}>
+                  Compare with {listJoin(compareWith.map((o) => o.name))}
+                </a>
+              )}
             </div>
+          </div>
 
-            <div class="rows">
-              <section aria-labelledby="check-h" class="row" data-check-row data-state={status.state}>
-                <div class="row-text">
-                  {status.state === "unchecked" && (
-                    <>
-                      <h2 id="check-h">Not checked with {t.name} yet</h2>
-                      <p>
-                        Open{" "}
-                        <a href={t.pricing_url} target="_blank" rel="noopener noreferrer">
-                          their pricing page
-                        </a>{" "}
-                        and check the numbers. Takes two minutes.
-                      </p>
-                    </>
-                  )}
-                  {status.state === "checked" && (
-                    <>
-                      <h2 id="check-h">{status.text}</h2>
-                      <p>
-                        The numbers matched{" "}
-                        <a href={t.pricing_url} target="_blank" rel="noopener noreferrer">
-                          their pricing page
-                        </a>{" "}
-                        on {longDate(t.verified_at!)}. Seen something different?
-                      </p>
-                    </>
-                  )}
-                  {status.state === "overdue" && (
-                    <>
-                      <h2 id="check-h">{status.text}</h2>
-                      <p>
-                        That was over 90 days ago. Open{" "}
-                        <a href={t.pricing_url} target="_blank" rel="noopener noreferrer">
-                          their pricing page
-                        </a>{" "}
-                        and check the numbers. Takes two minutes.
-                      </p>
-                    </>
-                  )}
-                  {status.state === "vendor-changed" && (
-                    <>
-                      <h2 id="check-h">{status.text}</h2>
-                      <p>
-                        The numbers here may be out of date. Open{" "}
-                        <a href={t.pricing_url} target="_blank" rel="noopener noreferrer">
-                          their pricing page
-                        </a>{" "}
-                        and check them. Takes two minutes.
-                      </p>
-                    </>
-                  )}
-                  {status.state === "review" && (
-                    <>
-                      <h2 id="check-h">{status.text}</h2>
-                      <p>
-                        Someone marked a number as changed. The label stays like this until a maintainer applies or
-                        rejects it.
-                      </p>
-                    </>
-                  )}
-                </div>
-                {(status.state === "unchecked" || status.state === "overdue") && (
-                  <div class="row-actions">
-                    <a class="btn" href={check}>
-                      The numbers hold
-                    </a>
-                    <a class="btn btn-outline" href={check}>
-                      Something changed
-                    </a>
-                  </div>
+          <div class="rows">
+            <section aria-labelledby="check-h" class="row" data-check-row data-state={status.state}>
+              <div class="row-text">
+                {status.state === "unchecked" && (
+                  <>
+                    <h2 id="check-h">Not checked with {t.name} yet</h2>
+                    <p>
+                      Open{" "}
+                      <a href={t.pricing_url} target="_blank" rel="noopener noreferrer">
+                        their pricing page
+                      </a>{" "}
+                      and check the numbers. Takes two minutes.
+                    </p>
+                  </>
                 )}
                 {status.state === "checked" && (
-                  <div class="row-actions">
-                    <a class="btn btn-outline" href={check}>
-                      Something changed
-                    </a>
-                  </div>
+                  <>
+                    <h2 id="check-h">{status.text}</h2>
+                    <p>
+                      The numbers matched{" "}
+                      <a href={t.pricing_url} target="_blank" rel="noopener noreferrer">
+                        their pricing page
+                      </a>{" "}
+                      on {longDate(t.verified_at!)}. Seen something different?
+                    </p>
+                  </>
+                )}
+                {status.state === "overdue" && (
+                  <>
+                    <h2 id="check-h">{status.text}</h2>
+                    <p>
+                      That was over 90 days ago. Open{" "}
+                      <a href={t.pricing_url} target="_blank" rel="noopener noreferrer">
+                        their pricing page
+                      </a>{" "}
+                      and check the numbers. Takes two minutes.
+                    </p>
+                  </>
                 )}
                 {status.state === "vendor-changed" && (
-                  <div class="row-actions">
-                    <a class="btn" href={check}>
-                      Recheck this label
-                    </a>
-                  </div>
+                  <>
+                    <h2 id="check-h">{status.text}</h2>
+                    <p>
+                      The numbers here may be out of date. Open{" "}
+                      <a href={t.pricing_url} target="_blank" rel="noopener noreferrer">
+                        their pricing page
+                      </a>{" "}
+                      and check them. Takes two minutes.
+                    </p>
+                  </>
                 )}
-              </section>
-
-              <section aria-labelledby="agent-h" class="row" data-agent>
-                <div class="row-text">
-                  <h2 id="agent-h">Ask your coding agent</h2>
-                  <p>With the freestack skill, it answers from this label.</p>
+                {status.state === "review" && (
+                  <>
+                    <h2 id="check-h">{status.text}</h2>
+                    <p>
+                      Someone marked a number as changed. The label stays like this until a maintainer applies or
+                      rejects it.
+                    </p>
+                  </>
+                )}
+              </div>
+              {(status.state === "unchecked" || status.state === "overdue") && (
+                <div class="row-actions">
+                  <a class="btn" href={check}>
+                    The numbers hold
+                  </a>
+                  <a class="btn btn-outline" href={check}>
+                    Something changed
+                  </a>
                 </div>
-                <code class="prompt">Is {t.name}'s free tier enough for my app?</code>
-              </section>
-            </div>
-          </div>
+              )}
+              {status.state === "checked" && (
+                <div class="row-actions">
+                  <a class="btn btn-outline" href={check}>
+                    Something changed
+                  </a>
+                </div>
+              )}
+              {status.state === "vendor-changed" && (
+                <div class="row-actions">
+                  <a class="btn" href={check}>
+                    Recheck this label
+                  </a>
+                </div>
+              )}
+            </section>
 
-          <div class="side">
-            <div class="label-wrap">
-              <Label tool={t} now={now} compare={false} link={false} level={2} />
-              <a class="add-compare desk-only" href={addToCompare}>
-                <Icon name="plus" size={16} />
-                Add to compare
-              </a>
-            </div>
-            <a class="visit desk-only" href={t.url} target="_blank" rel="noopener noreferrer">
-              Go to {domain}
-              <span class="sr-only"> (opens in a new tab)</span>
-            </a>
-          </div>
-
-          <div class="phone-bar phone-only">
-            <a class="btn btn-outline" href={addToCompare}>
-              + Compare
-            </a>
-            <a class="btn" href={t.url} target="_blank" rel="noopener noreferrer">
-              Go to {domain}
-              <span class="sr-only"> (opens in a new tab)</span>
-            </a>
+            <section aria-labelledby="agent-h" class="row" data-agent>
+              <div class="row-text">
+                <h2 id="agent-h">Ask your coding agent</h2>
+                <p>With the freestack skill, it answers from this label.</p>
+              </div>
+              <code class="prompt">Is {t.name}'s free tier enough for my app?</code>
+            </section>
           </div>
         </div>
-      )
-    }
+
+        <div class="side">
+          <div class="label-wrap">
+            <Label tool={t} now={now} compare={false} link={false} level={2} />
+            <a class="add-compare desk-only" href={addToCompare}>
+              <Icon name="plus" size={16} />
+              Add to compare
+            </a>
+          </div>
+          <a class="visit desk-only" href={t.url} target="_blank" rel="noopener noreferrer">
+            Go to {domain}
+            <span class="sr-only"> (opens in a new tab)</span>
+          </a>
+        </div>
+
+        <div class="phone-bar phone-only">
+          <a class="btn btn-outline" href={addToCompare}>
+            + Compare
+          </a>
+          <a class="btn" href={t.url} target="_blank" rel="noopener noreferrer">
+            Go to {domain}
+            <span class="sr-only"> (opens in a new tab)</span>
+          </a>
+        </div>
+      </div>
+    )}
   </div>
 </Shell>
 

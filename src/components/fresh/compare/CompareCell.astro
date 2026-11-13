@@ -12,34 +12,32 @@ interface Props {
 const { cell } = Astro.props;
 ---
 
-{
-  cell.kind === "flag" ? (
-    cell.value === "yes" ? (
-      <span class="flag">
-        <Icon name="check" size={16} />
-        Yes
-      </span>
-    ) : cell.value === "no" ? (
-      <span class="flag">
-        <Icon name="cross" size={16} />
-        No
-      </span>
-    ) : (
-      <span class="flag unknown">
-        <Icon name="unknown" size={16} />
-        Unknown
-      </span>
-    )
-  ) : cell.lines.length === 1 ? (
-    <span class:list={{ muted: cell.muted }}>{cell.lines[0]}</span>
+{cell.kind === "flag" ? (
+  cell.value === "yes" ? (
+    <span class="flag">
+      <Icon name="check" size={16} />
+      Yes
+    </span>
+  ) : cell.value === "no" ? (
+    <span class="flag">
+      <Icon name="cross" size={16} />
+      No
+    </span>
   ) : (
-    <ul class:list={["lines", { muted: cell.muted }]}>
-      {cell.lines.map((l) => (
-        <li>{l}</li>
-      ))}
-    </ul>
+    <span class="flag unknown">
+      <Icon name="unknown" size={16} />
+      Unknown
+    </span>
   )
-}
+) : cell.lines.length === 1 ? (
+  <span class:list={{ muted: cell.muted }}>{cell.lines[0]}</span>
+) : (
+  <ul class:list={["lines", { muted: cell.muted }]}>
+    {cell.lines.map((l) => (
+      <li>{l}</li>
+    ))}
+  </ul>
+)}
 
 <style>
   .muted {

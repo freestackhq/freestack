@@ -33,7 +33,8 @@ test.describe("aisle page, desktop (Aisle.dc.html)", () => {
   test("grid follows the catalog order, imported entries stay out", async ({ page }) => {
     await page.goto("/databases");
     expect(await visibleIds(page)).toEqual(dbTools.map((t) => t.id));
-    for (const u of unlabeledInAisle("databases")) await expect(grid(page).locator(`[data-tool="${u.id}"]`)).toHaveCount(0);
+    for (const u of unlabeledInAisle("databases"))
+      await expect(grid(page).locator(`[data-tool="${u.id}"]`)).toHaveCount(0);
   });
 
   test("other aisles render, Claim Once aisles are not built here", async ({ page }) => {
@@ -148,7 +149,9 @@ test.describe("aisle page, desktop (Aisle.dc.html)", () => {
       `/compare?ids=${a.id},${b.id}`,
     );
 
-    await tray(page).getByRole("button", { name: `Remove ${a.name} from compare` }).click();
+    await tray(page)
+      .getByRole("button", { name: `Remove ${a.name} from compare` })
+      .click();
     await expect(toggle(page, a.id)).toHaveAttribute("aria-pressed", "false");
     await expect(tray(page)).toContainText("1 to compare");
 
@@ -285,7 +288,8 @@ test.describe("aisle page, phone (Phone.dc.html, PhoneSheet.dc.html)", () => {
     const n = dbTools.filter((t) => t.card === "no").length;
     const show = sheet.getByRole("button", { name: `Show ${n} databases` });
     await expect(show).toBeVisible();
-    for (const row of await sheet.locator("label").all()) expect((await row.boundingBox())!.height).toBeGreaterThanOrEqual(44);
+    for (const row of await sheet.locator("label").all())
+      expect((await row.boundingBox())!.height).toBeGreaterThanOrEqual(44);
     await show.click();
     await expect(sheet).toBeHidden();
     await expect(page.getByRole("button", { name: /^Must allow/ })).toContainText("1");

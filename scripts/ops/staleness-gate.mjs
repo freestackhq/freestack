@@ -12,11 +12,20 @@ import { dataDir, isMain, loadTools, today } from "./tools.mjs";
 
 export { RECHECK_DAYS };
 
-/** Tools marked suggested: true whose verified_at is null or older than RECHECK_DAYS. */
+/**
+ * Tools marked suggested: true whose verified_at is null or older than RECHECK_DAYS.
+ * @param {{ id: string, file: string, suggested?: unknown, source?: string, verified_at?: string | Date | null }[]} tools
+ * @param {Date} now
+ */
 export function staleSuggested(tools, now) {
   return tools
     .filter((t) => t.suggested === true && t.source !== "imported")
-    .map((t) => ({ id: t.id, file: t.file, verified_at: t.verified_at ?? null, days: t.verified_at ? daysSince(String(t.verified_at), now) : null }))
+    .map((t) => ({
+      id: t.id,
+      file: t.file,
+      verified_at: t.verified_at ?? null,
+      days: t.verified_at ? daysSince(String(t.verified_at), now) : null,
+    }))
     .filter((t) => t.days === null || t.days > RECHECK_DAYS)
     .sort((a, b) => a.id.localeCompare(b.id));
 }
@@ -30,9 +39,13 @@ function main() {
     console.log(`staleness gate: ${suggested} suggested tools, all checked within ${RECHECK_DAYS} days`);
     return 0;
   }
-  console.error(`staleness gate: ${stale.length} suggested tools need a recheck (over ${RECHECK_DAYS} days or never checked):`);
+  console.error(
+    `staleness gate: ${stale.length} suggested tools need a recheck (over ${RECHECK_DAYS} days or never checked):`,
+  );
   for (const t of stale) {
-    console.error(`  ${t.id} (${t.file}): ${t.verified_at ? `checked ${t.verified_at}, ${t.days} days ago` : "never checked"}`);
+    console.error(
+      `  ${t.id} (${t.file}): ${t.verified_at ? `checked ${t.verified_at}, ${t.days} days ago` : "never checked"}`,
+    );
   }
   console.error("Recheck them, or set suggested: false until someone does.");
   return 1;

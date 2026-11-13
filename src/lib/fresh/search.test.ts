@@ -2,11 +2,41 @@ import { describe, expect, it } from "vitest";
 import { didYouMean, distance, searchLocal, type SearchEntry } from "./search";
 
 const index: SearchEntry[] = [
-  { group: "catches", title: "Can I sell things on Vercel Hobby?", sub: "No.", href: "/catches/x", terms: "vercel hobby sell" },
-  { group: "catches", title: "Neon sleeps after 5 minutes idle", sub: "Slow first visit.", href: "/databases/neon", terms: "neon" },
-  { group: "tools", title: "Vercel Hobby", sub: "Hosting. Not listed", href: "/hosting/vercel-hobby", terms: "frontend hosting" },
-  { group: "tools", title: "Neon", sub: "Databases. 0.5 GB", href: "/databases/neon", terms: "serverless postgres sleeps" },
-  { group: "tools", title: "PocketBase", sub: "Databases. No limit", href: "/databases/pocketbase", terms: "self-hosted sqlite" },
+  {
+    group: "catches",
+    title: "Can I sell things on Vercel Hobby?",
+    sub: "No.",
+    href: "/catches/x",
+    terms: "vercel hobby sell",
+  },
+  {
+    group: "catches",
+    title: "Neon sleeps after 5 minutes idle",
+    sub: "Slow first visit.",
+    href: "/databases/neon",
+    terms: "neon",
+  },
+  {
+    group: "tools",
+    title: "Vercel Hobby",
+    sub: "Hosting. Not listed",
+    href: "/hosting/vercel-hobby",
+    terms: "frontend hosting",
+  },
+  {
+    group: "tools",
+    title: "Neon",
+    sub: "Databases. 0.5 GB",
+    href: "/databases/neon",
+    terms: "serverless postgres sleeps",
+  },
+  {
+    group: "tools",
+    title: "PocketBase",
+    sub: "Databases. No limit",
+    href: "/databases/pocketbase",
+    terms: "self-hosted sqlite",
+  },
   { group: "aisles", title: "Hosting", sub: "4 labels", href: "/hosting", terms: "" },
   { group: "aisles", title: "Databases", sub: "8 labels", href: "/databases", terms: "" },
 ];

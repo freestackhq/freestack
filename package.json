@@ -6,11 +6,12 @@
   "license": "MIT",
   "packageManager": "pnpm@10.33.0",
   "engines": {
-    "node": ">=22.12.0"
+    "node": ">=22.18.0"
   },
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
+    "typecheck": "astro check",
     "deploy:cf": "node scripts/deploy.mjs",
     "plugin:build": "node scripts/build-plugin.mjs",
     "preview": "astro preview",
@@ -19,12 +20,16 @@
     "import:lists": "node scripts/import-lists.mjs",
     "test": "vitest run",
     "test:e2e": "playwright test",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "lint:workflows": "if command -v actionlint >/dev/null 2>&1; then actionlint; else echo \"lint:workflows: actionlint not installed, skipped (CI installs it: https://github.com/rhysd/actionlint)\"; fi",
     "review:shots": "node scripts/review/screenshots.mjs",
     "dns:freestack": "bash scripts/dns-freestack.sh",
     "cli": "node packages/cli/bin/freestack.js",
     "ops:link-check": "node scripts/ops/link-check.mjs",
     "ops:pricing-scan": "node scripts/ops/pricing-scan.mjs",
-    "ops:staleness": "node scripts/ops/staleness-gate.mjs"
+    "ops:staleness": "node scripts/ops/staleness-gate.mjs",
+    "prepare": "lefthook install"
   },
   "dependencies": {
     "@astrojs/cloudflare": "^14.2.0",
@@ -33,10 +38,16 @@
     "tailwindcss": "^4.3.3"
   },
   "devDependencies": {
+    "@astrojs/check": "^0.9.12",
     "@axe-core/playwright": "4.10.2",
     "@playwright/test": "^1.58.2",
+    "@types/node": "^22.20.5",
     "ajv": "^8.20.0",
     "ajv-formats": "^3.0.1",
+    "lefthook": "^2.2.2",
+    "prettier": "^3.9.10",
+    "prettier-plugin-astro": "^1.1.2",
+    "typescript": "^6.0.3",
     "vitest": "^4.1.2",
     "wrangler": "^4.122.0",
     "yaml": "^2.9.1"

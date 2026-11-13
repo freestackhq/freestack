@@ -2,16 +2,53 @@ import { describe, expect, it } from "vitest";
 import { findListed, parseFigure, readDraft, sameSite } from "./addtool";
 import type { Aisle, Tool } from "./types";
 
-const db: Aisle = { id: "databases", group: "Build", name: "Databases", metric: "storage_gb", unit: "GB", label: "free storage" };
-const hosting: Aisle = { id: "hosting", group: "Build", name: "Hosting", metric: "requests_per_day", unit: "a day", label: "requests" };
-const programs: Aisle = { id: "student-programs", group: "Claim Once", name: "Student programs", metric: "duration", unit: "", label: "how long it lasts" };
+const db: Aisle = {
+  id: "databases",
+  group: "Build",
+  name: "Databases",
+  metric: "storage_gb",
+  unit: "GB",
+  label: "free storage",
+};
+const hosting: Aisle = {
+  id: "hosting",
+  group: "Build",
+  name: "Hosting",
+  metric: "requests_per_day",
+  unit: "a day",
+  label: "requests",
+};
+const programs: Aisle = {
+  id: "student-programs",
+  group: "Claim Once",
+  name: "Student programs",
+  metric: "duration",
+  unit: "",
+  label: "how long it lasts",
+};
 const AISLES = [db, hosting, programs];
 
 function make(over: Partial<Tool>): Tool {
   return {
-    id: "x", name: "X", kind: "", url: "https://x.dev", aisle: "databases", metric: 1, limits: [], who: ["anyone"],
-    region: null, sell: "yes", card: "no", catches: [], use_if: [], skip_if: [], pricing_url: "", verified_at: null,
-    verified_by: null, source: "catalog", ...over,
+    id: "x",
+    name: "X",
+    kind: "",
+    url: "https://x.dev",
+    aisle: "databases",
+    metric: 1,
+    limits: [],
+    who: ["anyone"],
+    region: null,
+    sell: "yes",
+    card: "no",
+    catches: [],
+    use_if: [],
+    skip_if: [],
+    pricing_url: "",
+    verified_at: null,
+    verified_by: null,
+    source: "catalog",
+    ...over,
   };
 }
 const TOOLS = [
@@ -29,7 +66,11 @@ describe("parseFigure", () => {
   });
 
   it("reads counts with commas and k or M", () => {
-    expect(parseFigure("100,000 requests a day", hosting)).toMatchObject({ kind: "number", value: 100000, display: "100k requests a day" });
+    expect(parseFigure("100,000 requests a day", hosting)).toMatchObject({
+      kind: "number",
+      value: 100000,
+      display: "100k requests a day",
+    });
     expect(parseFigure("100k", hosting)).toMatchObject({ value: 100000 });
     expect(parseFigure("1.5M", hosting)).toMatchObject({ value: 1500000 });
   });

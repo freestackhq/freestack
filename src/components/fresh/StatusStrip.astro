@@ -19,64 +19,54 @@ const href = s.state === "imported" ? writeLabelHref(tool) : checkHref(tool);
 ---
 
 <div class:list={["strip", `strip-${s.state}`]} data-state={s.state}>
-  {
-    s.state === "checked" && (
-      <p class="row on-ink">
-        <Icon name="check" />
+  {s.state === "checked" && (
+    <p class="row on-ink">
+      <Icon name="check" />
+      {s.text}
+    </p>
+  )}
+  {(s.state === "unchecked" || s.state === "overdue") && (
+    <p class="row split">
+      <span>{s.text}</span>
+      <a href={href}>
+        {s.link}
+        <span class="sr-only"> {tool.name}</span>
+      </a>
+    </p>
+  )}
+  {s.state === "review" && (
+    <p class="row split">
+      <span class="lead">
+        <Icon name="wrench" />
+        {s.text}
+      </span>
+      {tool.review_issue && (
+        <a href={`${REPO_URL}/issues/${tool.review_issue}`} target="_blank" rel="noopener noreferrer">
+          See it<span class="sr-only">: the review of {tool.name}, opens in a new tab</span>
+        </a>
+      )}
+    </p>
+  )}
+  {s.state === "vendor-changed" && (
+    <>
+      <p class="row on-ink pad">
+        <Icon name="wrench" />
         {s.text}
       </p>
-    )
-  }
-  {
-    (s.state === "unchecked" || s.state === "overdue") && (
-      <p class="row split">
-        <span>{s.text}</span>
-        <a href={href}>
-          {s.link}
-          <span class="sr-only"> {tool.name}</span>
-        </a>
-      </p>
-    )
-  }
-  {
-    s.state === "review" && (
-      <p class="row split">
-        <span class="lead">
-          <Icon name="wrench" />
-          {s.text}
-        </span>
-        {tool.review_issue && (
-          <a href={`${REPO_URL}/issues/${tool.review_issue}`} target="_blank" rel="noopener noreferrer">
-            See it<span class="sr-only">: the review of {tool.name}, opens in a new tab</span>
-          </a>
-        )}
-      </p>
-    )
-  }
-  {
-    s.state === "vendor-changed" && (
-      <>
-        <p class="row on-ink pad">
-          <Icon name="wrench" />
-          {s.text}
-        </p>
-        <a class="below" href={href}>
-          {s.link}
-        </a>
-      </>
-    )
-  }
-  {
-    s.state === "imported" && (
-      <>
-        <p class="row pad">{s.text}</p>
-        <a class="below" href={href}>
-          {s.link}
-          <span class="sr-only"> for {tool.name}</span>
-        </a>
-      </>
-    )
-  }
+      <a class="below" href={href}>
+        {s.link}
+      </a>
+    </>
+  )}
+  {s.state === "imported" && (
+    <>
+      <p class="row pad">{s.text}</p>
+      <a class="below" href={href}>
+        {s.link}
+        <span class="sr-only"> for {tool.name}</span>
+      </a>
+    </>
+  )}
 </div>
 
 <style>

@@ -45,7 +45,10 @@ run("node", ["scripts/generate.mjs"], { FREESTACK_DATA: FIXTURES });
 run("pnpm", ["astro", "build"], { FREESTACK_DATA: FIXTURES, ASTRO_OUT_DIR: "" });
 
 // 3. Fixture site on PORT (astro preview daemonizes; wait for it).
-spawnSync("pnpm", ["astro", "preview", "--port", PORT], { stdio: "inherit", env: { ...process.env, ASTRO_OUT_DIR: "" } });
+spawnSync("pnpm", ["astro", "preview", "--port", PORT], {
+  stdio: "inherit",
+  env: { ...process.env, ASTRO_OUT_DIR: "" },
+});
 const deadline = Date.now() + 90_000;
 let up = false;
 while (!up && Date.now() < deadline) {
@@ -62,7 +65,18 @@ if (!up) {
 }
 
 // 4. Real prerendered pages on REAL_PORT.
-const TYPES = { ".html": "text/html; charset=utf-8", ".css": "text/css", ".js": "text/javascript", ".svg": "image/svg+xml", ".woff2": "font/woff2", ".json": "application/json", ".txt": "text/plain", ".png": "image/png", ".ico": "image/x-icon", ".webmanifest": "application/manifest+json" };
+const TYPES = {
+  ".html": "text/html; charset=utf-8",
+  ".css": "text/css",
+  ".js": "text/javascript",
+  ".svg": "image/svg+xml",
+  ".woff2": "font/woff2",
+  ".json": "application/json",
+  ".txt": "text/plain",
+  ".png": "image/png",
+  ".ico": "image/x-icon",
+  ".webmanifest": "application/manifest+json",
+};
 const base = join(process.cwd(), REAL_OUT, "client");
 createServer((req, res) => {
   const path = normalize(decodeURIComponent(new URL(req.url, "http://x").pathname));

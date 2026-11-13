@@ -1,0 +1,51 @@
+# Git hooks (https://lefthook.dev). Installed by `pnpm install` (prepare script).
+# Skip once in an emergency: LEFTHOOK=0 git commit ... (CI runs every check anyway).
+
+pre-commit:
+  parallel: true
+  jobs:
+    # Format staged files; .prettierignore still applies to paths passed explicitly.
+    - name: prettier
+      glob: "*.{astro,ts,mts,js,mjs,json,jsonc,css,yaml,yml}"
+      run: pnpm exec prettier --write --ignore-unknown --no-error-on-unmatched-pattern {staged_files}
+      stage_fixed: true
+
+    # Rebuild the catalog snapshot; fail if it changed but isn't staged.
+    - name: catalog
+      glob:
+        - "data/**"
+        - "schema/**"
+        - "src/lib/fresh/label.ts"
+        - "scripts/generate.mjs"
+      run: node scripts/hooks/catalog-fresh.mjs
+
+    - name: schema
+      glob:
+        - "data/tools/**"
+        - "schema/**"
+      run: pnpm exec vitest run tests/unit/schema.test.ts
+
+    - name: actionlint
+      glob: ".github/workflows/*.{yml,yaml}"
+      run: |
+        if command -v actionlint >/dev/null 2>&1; then
+          actionlint {staged_files}
+        else
+          echo "actionlint not installed, skipped (CI runs it)"
+        fi
+
+    - name: no-secrets
+      run: node scripts/hooks/no-secrets.mjs {staged_files}
+
+commit-msg:
+  jobs:
+    - name: conventional-commit
+      run: node scripts/hooks/commit-msg.mjs {1}
+
+pre-push:
+  parallel: true
+  jobs:
+    - name: typecheck
+      run: pnpm typecheck
+    - name: unit tests
+      run: pnpm test

@@ -29,6 +29,8 @@ import {
   writeReviews,
 } from "./yaml.mjs";
 
+/** @typedef {import("../../src/lib/trust/forms.mjs").ParsedAnswer} ParsedAnswer */
+
 export const REVIEWS_PATH = "data/state/reviews.yaml";
 export const toolPath = (id) => `data/tools/${id}.yaml`;
 export const branchFor = (issue) => `label-check/${issue}`;
@@ -88,7 +90,9 @@ export function applyChange(text, answer, unit) {
     const f = parseMetric(now, unit);
     if (!f) return null;
     const next = setScalar(text, "metric", scalar(f.metric));
-    return f.note ? setScalar(next, "metric_note", scalar(f.note), { after: "metric" }) : removeScalar(next, "metric_note");
+    return f.note
+      ? setScalar(next, "metric_note", scalar(f.note), { after: "metric" })
+      : removeScalar(next, "metric_note");
   }
   const item = /^(limits|catches)\.(\d+)$/.exec(field);
   if (item) return setListItem(text, item[1], Number(item[2]), scalar(now));
@@ -114,7 +118,7 @@ export function markChecked(text, today, login) {
  * Decides what a Check a label issue means.
  * @returns {{ kind: "reject", reasons: string[] }
  *   | { kind: "verify", tool: string, toolText: string }
- *   | { kind: "review", tool: string, toolText: string, applied: object[], manual: object[] }}
+ *   | { kind: "review", tool: string, toolText: string, applied: ParsedAnswer[], manual: ParsedAnswer[] }}
  */
 export function planLabelCheck({ body, author, today, readTool, aislesText }) {
   const form = parseIssueForm(body, LABEL_CHECK);
@@ -184,7 +188,9 @@ export function prBody(plan, issue) {
     "Compare each value with the vendor's page before merging. Merging also marks the label checked and clears its review entry.",
     "",
     ...(plan.applied.length ? ["Applied:", ...plan.applied.map(line), ""] : []),
-    ...(plan.manual.length ? ["Set by hand before merging (not applied automatically):", ...plan.manual.map(line), ""] : []),
+    ...(plan.manual.length
+      ? ["Set by hand before merging (not applied automatically):", ...plan.manual.map(line), ""]
+      : []),
     `Closes #${issue}`,
   ].join("\n");
 }

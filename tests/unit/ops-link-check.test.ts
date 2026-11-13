@@ -5,6 +5,8 @@
 import { describe, expect, it, vi } from "vitest";
 import { parse } from "yaml";
 import {
+  type FetchInit,
+  type FetchResponse,
   USER_AGENT,
   checkUrl,
   classifyError,
@@ -28,25 +30,34 @@ function answer(status: number, url: string, headers: Record<string, string> = {
 /** Routes "METHOD url" or "url" to an answer, an Error, or a function of the call count. */
 function fakeFetch(routes: Record<string, unknown>) {
   const calls: Record<string, number> = {};
-  return vi.fn(async (url: string, init: RequestInit) => {
+  return vi.fn(async (url: string, init: FetchInit): Promise<FetchResponse> => {
     const key = `${init.method} ${url}`;
     calls[key] = (calls[key] ?? 0) + 1;
     let r = routes[key] ?? routes[url];
     if (typeof r === "function") r = r(calls[key]);
     if (r instanceof Error) throw r;
     if (typeof r === "number") return answer(r, url);
-    if (r) return r;
+    if (r) return r as FetchResponse;
     return answer(404, url);
   });
 }
 
-const dnsError = () => Object.assign(new TypeError("fetch failed"), { cause: { code: "ENOTFOUND", message: "getaddrinfo ENOTFOUND gone.test" } });
-const timeoutError = () => Object.assign(new Error("The operation was aborted due to timeout"), { name: "TimeoutError" });
+const dnsError = () =>
+  Object.assign(new TypeError("fetch failed"), {
+    cause: { code: "ENOTFOUND", message: "getaddrinfo ENOTFOUND gone.test" },
+  });
+const timeoutError = () =>
+  Object.assign(new Error("The operation was aborted due to timeout"), { name: "TimeoutError" });
 
 describe("classifyResponse", () => {
   it("ok on the same registrable domain, subdomains included", () => {
-    expect(classifyResponse(answer(200, "https://www.neon.tech/"), "https://neon.tech")).toMatchObject({ status: "ok", code: 200 });
-    expect(classifyResponse(answer(200, "https://docs.neon.tech/x"), "https://neon.tech")).toMatchObject({ status: "ok" });
+    expect(classifyResponse(answer(200, "https://www.neon.tech/"), "https://neon.tech")).toMatchObject({
+      status: "ok",
+      code: 200,
+    });
+    expect(classifyResponse(answer(200, "https://docs.neon.tech/x"), "https://neon.tech")).toMatchObject({
+      status: "ok",
+    });
   });
 
   it("redirected when the final URL is on another registrable domain", () => {
@@ -61,8 +72,11 @@ describe("classifyResponse", () => {
     expect(classifyResponse(answer(404, "https://a.test/x"), "https://a.test/x").status).toBe("client_error");
     expect(classifyResponse(answer(410, "https://a.test/x"), "https://a.test/x").status).toBe("client_error");
     expect(classifyResponse(answer(502, "https://a.test/"), "https://a.test/").status).toBe("server_error");
-    for (const code of [401, 403, 429]) expect(classifyResponse(answer(code, "https://a.test/"), "https://a.test/").status).toBe("blocked");
-    expect(classifyResponse(answer(503, "https://a.test/", { "cf-mitigated": "challenge" }), "https://a.test/").status).toBe("blocked");
+    for (const code of [401, 403, 429])
+      expect(classifyResponse(answer(code, "https://a.test/"), "https://a.test/").status).toBe("blocked");
+    expect(
+      classifyResponse(answer(503, "https://a.test/", { "cf-mitigated": "challenge" }), "https://a.test/").status,
+    ).toBe("blocked");
   });
 });
 
@@ -70,7 +84,9 @@ describe("classifyError", () => {
   it("timeout, dns and other network errors", () => {
     expect(classifyError(timeoutError()).status).toBe("timeout");
     expect(classifyError(dnsError()).status).toBe("dns");
-    expect(classifyError(Object.assign(new TypeError("fetch failed"), { cause: { code: "ECONNREFUSED" } }))).toMatchObject({ status: "error", error: "ECONNREFUSED" });
+    expect(
+      classifyError(Object.assign(new TypeError("fetch failed"), { cause: { code: "ECONNREFUSED" } })),
+    ).toMatchObject({ status: "error", error: "ECONNREFUSED" });
   });
 });
 
@@ -85,12 +101,17 @@ describe("checkUrl", () => {
 
   it("falls back to GET when HEAD is refused", async () => {
     const f = fakeFetch({ "HEAD https://a.test/": 405, "GET https://a.test/": 200 });
-    expect(await checkUrl("https://a.test/", { fetchImpl: f, retryDelayMs: 0 })).toMatchObject({ status: "ok", code: 200 });
+    expect(await checkUrl("https://a.test/", { fetchImpl: f, retryDelayMs: 0 })).toMatchObject({
+      status: "ok",
+      code: 200,
+    });
     expect(f.mock.calls.map((c) => c[1].method)).toEqual(["HEAD", "GET"]);
   });
 
   it("retries a transient failure once", async () => {
-    const f = fakeFetch({ "https://a.test/": (n: number) => (n === 1 ? timeoutError() : answer(200, "https://a.test/")) });
+    const f = fakeFetch({
+      "https://a.test/": (n: number) => (n === 1 ? timeoutError() : answer(200, "https://a.test/")),
+    });
     expect(await checkUrl("https://a.test/", { fetchImpl: f, retryDelayMs: 0 })).toMatchObject({ status: "ok" });
     expect(f).toHaveBeenCalledTimes(3); // HEAD timeout, GET timeout, HEAD ok
   });
@@ -124,23 +145,37 @@ describe("nextEntry (two-strike rule)", () => {
     expect(nextEntry(first, dead, null, DAY).dead_since).toBeNull();
     const second = nextEntry(first, dead, null, LATER);
     expect(second).toMatchObject({ failing_since: DAY, dead_since: LATER });
-    expect(nextEntry(second, { status: "dns", code: null, final_url: null }, null, "2026-11-27")).toMatchObject({ dead_since: LATER });
+    expect(nextEntry(second, { status: "dns", code: null, final_url: null }, null, "2026-11-27")).toMatchObject({
+      dead_since: LATER,
+    });
   });
 
   it("a one-off outage clears on the next good run", () => {
     const first = nextEntry(undefined, dead, null, DAY);
-    expect(nextEntry(first, ok, null, LATER)).toMatchObject({ failing_since: null, dead_since: null, url_status: "ok" });
+    expect(nextEntry(first, ok, null, LATER)).toMatchObject({
+      failing_since: null,
+      dead_since: null,
+      url_status: "ok",
+    });
   });
 
   it("unknown answers neither count as strikes nor clear them", () => {
     expect(nextEntry(undefined, timeout, null, DAY)).toMatchObject({ failing_since: null, dead_since: null });
     const first = nextEntry(undefined, dead, null, DAY);
-    expect(nextEntry(first, { status: "blocked", code: 403, final_url: null }, null, LATER)).toMatchObject({ failing_since: DAY, dead_since: null });
-    expect(nextEntry(undefined, { status: "server_error", code: 500, final_url: null }, null, DAY).failing_since).toBeNull();
+    expect(nextEntry(first, { status: "blocked", code: 403, final_url: null }, null, LATER)).toMatchObject({
+      failing_since: DAY,
+      dead_since: null,
+    });
+    expect(
+      nextEntry(undefined, { status: "server_error", code: 500, final_url: null }, null, DAY).failing_since,
+    ).toBeNull();
   });
 
   it("only the url decides; a dead pricing_url is recorded but not a strike", () => {
-    expect(nextEntry(undefined, ok, dead, DAY)).toMatchObject({ pricing_status: "client_error:404", failing_since: null });
+    expect(nextEntry(undefined, ok, dead, DAY)).toMatchObject({
+      pricing_status: "client_error:404",
+      failing_since: null,
+    });
   });
 });
 
@@ -165,7 +200,11 @@ describe("run", () => {
     expect(list.map((t) => t.id)).toEqual(["alpha", "gone", "moved"]);
     expect(state.alpha).toMatchObject({ url_status: "ok", pricing_status: "client_error:404", failing_since: null });
     expect(state.gone).toMatchObject({ url_status: "dns", pricing_status: null, failing_since: DAY, dead_since: null });
-    expect(state.moved).toMatchObject({ url_status: "redirected", final_url: "https://acquirer.test/", failing_since: null });
+    expect(state.moved).toMatchObject({
+      url_status: "redirected",
+      final_url: "https://acquirer.test/",
+      failing_since: null,
+    });
     const md = reportMarkdown(rows);
     expect(md).toContain("- imported url: redirected 1, dns 1");
     expect(md).toContain("`gone` (imported) since 2026-11-13: dns");
@@ -174,12 +213,21 @@ describe("run", () => {
 });
 
 describe("serializeState and meaningfulChange", () => {
-  const a = { url_status: "ok", pricing_status: null, final_url: "https://a.test/", checked_at: DAY, failing_since: null, dead_since: null };
+  const a = {
+    url_status: "ok",
+    pricing_status: null,
+    final_url: "https://a.test/",
+    checked_at: DAY,
+    failing_since: null,
+    dead_since: null,
+  };
 
   it("writes sorted ids in a fixed field order and round-trips", () => {
     const out = serializeState({ zeta: { ...a, dead_since: null, url_status: "dns" }, alpha: a });
     expect(out.indexOf("alpha:")).toBeLessThan(out.indexOf("zeta:"));
-    expect(out).toContain("alpha:\n  url_status: ok\n  pricing_status: null\n  final_url: https://a.test/\n  checked_at: 2026-11-13\n  failing_since: null\n  dead_since: null\n");
+    expect(out).toContain(
+      "alpha:\n  url_status: ok\n  pricing_status: null\n  final_url: https://a.test/\n  checked_at: 2026-11-13\n  failing_since: null\n  dead_since: null\n",
+    );
     expect(parse(out).alpha).toEqual(a);
     expect(parse(serializeState({}))).toEqual({});
   });

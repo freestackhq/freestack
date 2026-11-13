@@ -45,69 +45,84 @@ const pricingText = shortUrl(t.pricing_url);
     data-pricing={t.pricing_url}
     data-lines={JSON.stringify(lines)}
   >
-    <a class="back" href={toolHref(t)}><Icon name="back" size={16} />{t.name}</a>
+    <a class="back" href={toolHref(t)}>
+      <Icon name="back" size={16} />
+      {t.name}
+    </a>
 
     <div data-view="form">
-      <h1 class="h" tabindex="-1">Check {t.name}'s label</h1>
+      <h1 class="h" tabindex="-1">
+        Check {t.name}'s label
+      </h1>
       <p class="lede">Open {t.name}'s pricing page next to this one. For each line, tell us if it still holds.</p>
       <a class="btn btn-outline open" href={t.pricing_url} target="_blank" rel="noopener">
-        Open {pricingText}<Icon name="external" size={14} /><span class="sr-only">, opens in a new tab</span>
+        Open {pricingText}
+        <Icon name="external" size={14} />
+        <span class="sr-only">, opens in a new tab</span>
       </a>
 
       <form class="sheet" data-check-form novalidate>
-        {
-          lines.map((l) => (
-            <fieldset class="line" data-line={l.id}>
-              <legend class="sr-only">
-                {l.label}: {l.value}
-              </legend>
-              <div class="what" aria-hidden="true">
-                <p class="lbl">{l.label}</p>
-                <p class="val">{l.value}</p>
-              </div>
-              <div class="choice">
-                <button type="button" class="pick" aria-pressed="false" data-verdict="holds">
-                  Still true
-                </button>
-                <button type="button" class="pick" aria-pressed="false" data-verdict="changed">
-                  Changed
-                </button>
-              </div>
-              <div class="now" data-now hidden>
-                <label for={`${l.id}-now`}>What does it say now?</label>
-                <input
-                  id={`${l.id}-now`}
-                  class="field"
-                  type="text"
-                  placeholder="Write it the way the page does"
-                  aria-describedby={`${l.id}-err`}
-                  autocomplete="off"
-                />
-                <p class="err" id={`${l.id}-err`} hidden>
-                  <Icon name="cross" />
-                  Write what the page says now, or pick Still true.
-                </p>
-              </div>
-            </fieldset>
-          ))
-        }
+        {lines.map((l) => (
+          <fieldset class="line" data-line={l.id}>
+            <legend class="sr-only">
+              {l.label}: {l.value}
+            </legend>
+            <div class="what" aria-hidden="true">
+              <p class="lbl">{l.label}</p>
+              <p class="val">{l.value}</p>
+            </div>
+            <div class="choice">
+              <button type="button" class="pick" aria-pressed="false" data-verdict="holds">
+                Still true
+              </button>
+              <button type="button" class="pick" aria-pressed="false" data-verdict="changed">
+                Changed
+              </button>
+            </div>
+            <div class="now" data-now hidden>
+              <label for={`${l.id}-now`}>What does it say now?</label>
+              <input
+                id={`${l.id}-now`}
+                class="field"
+                type="text"
+                placeholder="Write it the way the page does"
+                aria-describedby={`${l.id}-err`}
+                autocomplete="off"
+              />
+              <p class="err" id={`${l.id}-err`} hidden>
+                <Icon name="cross" />
+                Write what the page says now, or pick Still true.
+              </p>
+            </div>
+          </fieldset>
+        ))}
 
         <div class="foot">
           <div class="credit">
-            <label for="check-note">Anything else <span class="opt">optional</span></label>
+            <label for="check-note">
+              Anything else <span class="opt">optional</span>
+            </label>
             <textarea id="check-note" class="field" rows="2" aria-describedby="check-note-hint"></textarea>
-            <p id="check-note-hint" class="muted hint">The label credits your GitHub name as "Checked by".</p>
+            <p id="check-note-hint" class="muted hint">
+              The label credits your GitHub name as "Checked by".
+            </p>
           </div>
 
           <div class="alert" role="alert" data-alert hidden>
             <p class="alert-h">Too long for a GitHub link</p>
             <p>Copy this, open a new issue, and paste it as the description. Your answers are still here.</p>
-            <label class="copy-lbl" for="check-body">Issue description</label>
+            <label class="copy-lbl" for="check-body">
+              Issue description
+            </label>
             <textarea id="check-body" class="field copy" rows="8" readonly data-copy-body></textarea>
             <div class="copy-row">
-              <button type="button" class="btn btn-outline" data-copy>Copy</button>
+              <button type="button" class="btn btn-outline" data-copy>
+                Copy
+              </button>
               <a class="btn btn-promo" href="#" target="_blank" rel="noopener" data-new-issue>
-                Open a new issue<Icon name="external" size={14} /><span class="sr-only">, opens GitHub in a new tab</span>
+                Open a new issue
+                <Icon name="external" size={14} />
+                <span class="sr-only">, opens GitHub in a new tab</span>
               </a>
               <span class="muted hint" role="status" data-copied></span>
             </div>
@@ -115,9 +130,15 @@ const pricingText = shortUrl(t.pricing_url);
         </div>
 
         <div class="send-row">
-          <button type="submit" class="btn btn-promo" data-send>Send on GitHub</button>
-          <span class="muted summary" data-summary aria-live="polite">{checkSummary(0, lines.length)}</span>
-          <p class="err" data-empty hidden>Answer at least one line first.</p>
+          <button type="submit" class="btn btn-promo" data-send>
+            Send on GitHub
+          </button>
+          <span class="muted summary" data-summary aria-live="polite">
+            {checkSummary(0, lines.length)}
+          </span>
+          <p class="err" data-empty hidden>
+            Answer at least one line first.
+          </p>
         </div>
       </form>
     </div>
@@ -132,13 +153,21 @@ const pricingText = shortUrl(t.pricing_url);
         </a>
       </p>
       <div class="actions">
-        <a class="btn" href={`/${a.id}`}>Check another label</a>
-        <button type="button" class="btn btn-outline" data-reset>Back to the form</button>
+        <a class="btn" href={`/${a.id}`}>
+          Check another label
+        </a>
+        <button type="button" class="btn btn-outline" data-reset>
+          Back to the form
+        </button>
       </div>
     </div>
 
-    <template data-preview-checked><Label tool={asChecked} now={at} variant="mini" compare={false} link={false} level={2} /></template>
-    <template data-preview-review><Label tool={asReview} now={at} variant="mini" compare={false} link={false} level={2} /></template>
+    <template data-preview-checked>
+      <Label tool={asChecked} now={at} variant="mini" compare={false} link={false} level={2} />
+    </template>
+    <template data-preview-review>
+      <Label tool={asReview} now={at} variant="mini" compare={false} link={false} level={2} />
+    </template>
   </div>
 </Shell>
 

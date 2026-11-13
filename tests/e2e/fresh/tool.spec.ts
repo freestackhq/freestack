@@ -99,9 +99,18 @@ test.describe("tool page, desktop", () => {
     await expect(row).toHaveAttribute("data-state", "unchecked");
     await expect(row.getByRole("heading")).toHaveText("Not checked with Convex yet");
     await expect(row).toContainText("Open their pricing page and check the numbers. Takes two minutes.");
-    await expect(row.getByRole("link", { name: "The numbers hold" })).toHaveAttribute("href", "/databases/convex/check");
-    await expect(row.getByRole("link", { name: "Something changed" })).toHaveAttribute("href", "/databases/convex/check");
-    await expect(row.getByRole("link", { name: "their pricing page" })).toHaveAttribute("href", "https://convex.dev/pricing");
+    await expect(row.getByRole("link", { name: "The numbers hold" })).toHaveAttribute(
+      "href",
+      "/databases/convex/check",
+    );
+    await expect(row.getByRole("link", { name: "Something changed" })).toHaveAttribute(
+      "href",
+      "/databases/convex/check",
+    );
+    await expect(row.getByRole("link", { name: "their pricing page" })).toHaveAttribute(
+      "href",
+      "https://convex.dev/pricing",
+    );
   });
 
   test("check row: overdue", async ({ page }) => {
@@ -109,7 +118,10 @@ test.describe("tool page, desktop", () => {
     const row = checkRow(page);
     await expect(row).toHaveAttribute("data-state", "overdue");
     await expect(row.getByRole("heading")).toHaveText(/^Checked \d+ \w{3}\. Due for a recheck$/);
-    await expect(row.getByRole("link", { name: "The numbers hold" })).toHaveAttribute("href", "/databases/supabase/check");
+    await expect(row.getByRole("link", { name: "The numbers hold" })).toHaveAttribute(
+      "href",
+      "/databases/supabase/check",
+    );
     await expect(row.getByRole("link", { name: "Something changed" })).toBeVisible();
     await expect(page.locator(".side")).not.toContainText("Suggested");
   });
@@ -119,7 +131,10 @@ test.describe("tool page, desktop", () => {
     const row = checkRow(page);
     await expect(row).toHaveAttribute("data-state", "vendor-changed");
     await expect(row.getByRole("heading")).toHaveText(/^Turso changed its pricing page on \d+ \w{3}$/);
-    await expect(row.getByRole("link", { name: "Recheck this label" })).toHaveAttribute("href", "/databases/turso/check");
+    await expect(row.getByRole("link", { name: "Recheck this label" })).toHaveAttribute(
+      "href",
+      "/databases/turso/check",
+    );
   });
 
   test("check row: change waiting for review", async ({ page }) => {
@@ -148,7 +163,10 @@ test.describe("tool page, desktop", () => {
     await expect(crumbs).toContainText("From an awesome list");
     await expect(page.locator("[data-imported]")).toContainText("No numbers yet. From free-for-dev.");
     await expect(page.locator("[data-imported]")).toContainText("Nobody has written its label.");
-    await expect(page.getByRole("link", { name: "Write its label" })).toHaveAttribute("href", /^\/add\?name=Xata%20Lite/);
+    await expect(page.getByRole("link", { name: "Write its label" })).toHaveAttribute(
+      "href",
+      /^\/add\?name=Xata%20Lite/,
+    );
     await expect(page.getByRole("link", { name: /Go to xata\.io/ })).toHaveAttribute("target", "_blank");
     // No made-up decision panel, check row or compare.
     await expect(page.locator("[data-decide]")).toHaveCount(0);
