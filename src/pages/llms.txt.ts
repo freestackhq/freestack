@@ -1,5 +1,5 @@
 import type { APIRoute } from "astro";
-import { SITE_URL } from "../lib/site";
+import { MCP_URL, SITE_URL, siteUrl } from "../lib/site";
 import { aisleCount, aislesByGroup, totalTools } from "../lib/fresh/catalog";
 
 export const prerender = true;
@@ -29,6 +29,10 @@ export const GET: APIRoute = () => {
     `- [Entries](${SITE_URL}/api/entries): every tool with its label fields. Filter with ?aisle=, ?group=, ?q=. The old ?catalog=saas|apis|llm-ai still works.`,
     `- [Catalogs and aisles](${SITE_URL}/api/catalogs): aisle list with counts.`,
     `- [Full text](${SITE_URL}/llms-full.txt): every label in plain text.`,
+    "",
+    "## Agents",
+    "",
+    `- MCP server (read-only, no login): ${MCP_URL} — tools: search_tools, compare, suggest_stack, claim_order. Agent skill: ${siteUrl("/skills/pick-free-stack/SKILL.md")}`,
     "",
     "## Pages",
     "",
