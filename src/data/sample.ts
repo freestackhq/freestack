@@ -618,3 +618,6 @@ export function sampleData(now: Date): { tools: Tool[]; catches: Catch[] } {
   }
   return cache;
 }
+
+/** Tools taken out of the catalog. Their old URLs 301 to the aisle. */
+export const sampleRemovedTools: { id: string; aisle: string }[] = [{ id: "fauna", aisle: "databases" }];

@@ -8,6 +8,7 @@ import {
   sampleAisles,
   sampleData,
   samplePresets,
+  sampleRemovedTools,
   sampleSituations,
 } from "../../data/sample";
 import { aisleMax, labelState, sortForAisle } from "./label";
@@ -134,4 +135,9 @@ export function programsInAisle(aisleId: string): Tool[] {
 /** Labels for a catch's avoid_with ids. Ids missing from the catalog are skipped. */
 export function catchAlternatives(c: Catch): Tool[] {
   return c.avoid_with.map((id) => tool(id)).filter((t): t is Tool => Boolean(t));
+}
+
+/** Tools taken out of the catalog. Their pages 301 to the aisle. */
+export function removedTools(): { id: string; aisle: string }[] {
+  return sampleRemovedTools;
 }

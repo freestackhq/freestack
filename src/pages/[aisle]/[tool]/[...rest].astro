@@ -1,0 +1,20 @@
+---
+/**
+ * Tools removed from the catalog: their old pages (and anything under them,
+ * like /check) 301 to the aisle.
+ *
+ * Server-rendered on purpose. Tool pages are prerendered, so a request for a
+ * tool that has no page reaches the Worker; Astro then falls through from
+ * the prerendered [tool]/index route to this one. Living here (not in
+ * astro.config redirects) keeps the list in the data, so a removal needs no
+ * config change. Anything else is a 404.
+ */
+import { removedTools } from "../../../lib/fresh/catalog";
+
+export const prerender = false;
+
+const { aisle, tool } = Astro.params;
+const gone = removedTools().find((r) => r.id === tool && r.aisle === aisle);
+if (gone) return Astro.redirect(`/${gone.aisle}`, 301);
+return Astro.rewrite("/404");
+---

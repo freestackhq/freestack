@@ -1,0 +1,883 @@
+---
+/**
+ * Compare (Compare.dc.html, PhoneCompare.dc.html; cross-aisle message from
+ * States.dc.html). Server-rendered: every choice lives in the URL.
+ *
+ *   /compare?ids=neon,turso          the comparison (2 to 4 columns)
+ *   &only=differs                    hide rows that are the same
+ *   &add=<id>                        add a column, then redirect
+ *   &swap=<id>&col=<n>               swap column n (1-based), then redirect
+ *
+ * Remove and the cross-aisle choices are plain links. Add, swap and
+ * "Only rows that differ" are GET forms, so all of it works without JS;
+ * the small script below only submits them on change and copies the link.
+ */
+import Shell from "../layouts/Shell.astro";
+import Icon from "../components/fresh/Icon.astro";
+import CompareCell from "../components/fresh/compare/CompareCell.astro";
+import {
+  aisle as getAisle,
+  aislesByGroup,
+  checkHref,
+  now as currentDate,
+  tool as getTool,
+  toolsInAisle,
+} from "../lib/fresh/catalog";
+import { isSuggested, labelState } from "../lib/fresh/label";
+import {
+  MAX_COMPARE,
+  aisleSplit,
+  compareHref,
+  headlineCell,
+  isUnknownCell,
+  listJoin,
+  parseIds,
+  questionFor,
+  resolve,
+  rows as buildRows,
+  withAdded,
+  withRemoved,
+  withSwapped,
+} from "../lib/fresh/compare";
+import type { Tool } from "../lib/fresh/types";
+
+export const prerender = false;
+
+const sp = Astro.url.searchParams;
+const only = sp.get("only") === "differs";
+const asked = parseIds(sp.getAll("ids").join(","));
+
+// No-JS form submits: apply the change, then land on the clean URL.
+if (sp.has("add") || sp.has("swap")) {
+  let next = asked;
+  const add = sp.get("add")?.trim().toLowerCase();
+  if (add) next = withAdded(next, add);
+  const swap = sp.get("swap")?.trim().toLowerCase();
+  const col = Number(sp.get("col"));
+  if (swap && Number.isInteger(col)) next = withSwapped(next, col - 1, swap);
+  return Astro.redirect(compareHref(next, { only }), 303);
+}
+
+const now = currentDate();
+const sel = resolve(asked, getTool);
+const picked = sel.tools;
+const ids = picked.map((t) => t.id);
+const href = (next: string[]) => compareHref(next, { only });
+
+const split = aisleSplit(picked);
+const mainAisle = picked.length ? getAisle(split.main) : undefined;
+const cross = split.others.length > 0;
+
+// Cross-aisle message: "You picked Vercel Hobby from Hosting, but the rest are from Databases."
+const otherAisles = [...new Set(split.others.map((t) => t.aisle))].map((id) => getAisle(id)!);
+const crossPicked = listJoin(
+  otherAisles.map((a) => `${listJoin(split.others.filter((t) => t.aisle === a.id).map((t) => t.name))} from ${a.name}`),
+);
+
+const n = picked.length;
+const canAdd = !cross && n > 0 && n < MAX_COMPARE;
+const aisleTools = mainAisle ? toolsInAisle(mainAisle.id, now) : [];
+const addOptions = aisleTools.filter((t) => !ids.includes(t.id));
+
+/** Options for a column's swap menu: the aisle, plus the tool itself if it is not listed there. */
+function swapOptions(t: Tool): Tool[] {
+  return aisleTools.some((o) => o.id === t.id) ? aisleTools : [t, ...aisleTools];
+}
+
+const allRows = !cross && n > 0 ? buildRows(picked, mainAisle!, now) : [];
+const shownRows = only && n > 1 ? allRows.filter((r) => r.diff || r.noDiff) : allRows;
+const tableRows = shownRows.filter((r) => !r.headline);
+const heads = picked.map((t) => headlineCell(t, mainAisle!));
+
+const anyUnknown = allRows.some((r) => r.cells.some(isUnknownCell)) || heads.some((h) => !h.known);
+const toCheck = picked.find((t) => ["unchecked", "overdue", "vendor-changed"].includes(labelState(t, now)));
+
+const title = n === 0 ? "Compare free tools" : n === 1 ? "Pick one more to compare" : questionFor(picked.map((t) => t.name));
+
+const notices: string[] = [];
+if (sel.dropped.length) {
+  const quoted = listJoin(sel.dropped.map((d) => `"${d}"`));
+  notices.push(
+    sel.dropped.length === 1
+      ? `${quoted} is no longer in the catalog, so we dropped it.`
+      : `${quoted} are no longer in the catalog, so we dropped them.`,
+  );
+}
+if (sel.capped) notices.push(`Up to ${MAX_COMPARE} side by side. We kept the first ${MAX_COMPARE}.`);
+
+const groups = aislesByGroup().filter((g) => g.aisles.length);
+const minW = 180 + n * 240 + (canAdd ? 220 : 0);
+---
+
+<Shell
+  title={`${title} · freestack`}
+  description="Free tools side by side: limits, catches and unknowns."
+  aisle={mainAisle?.id}
+  noindex={n === 0}
+>
+  <div class="wrap page">
+    {
+      mainAisle ? (
+        <a class="back" href={`/${mainAisle.id}`}>
+          <Icon name="back" size={16} />
+          <span>
+            {mainAisle.name}<span class="desk-only"> aisle</span>
+          </span>
+        </a>
+      ) : (
+        <nav aria-label="Breadcrumb" class="crumbs">
+          <a href="/">All aisles</a>
+        </nav>
+      )
+    }
+    <h1 class="title">{title}</h1>
+
+    {
+      notices.length > 0 && (
+        <div class="notice" role="status" data-notice>
+          {notices.map((m) => (
+            <p>{m}</p>
+          ))}
+        </div>
+      )
+    }
+
+    {
+      n === 0 && (
+        <section class="empty" aria-labelledby="pick-h">
+          <h2 id="pick-h" class="lead">
+            Compare works inside one aisle. Pick an aisle, then add up to {MAX_COMPARE} tools.
+          </h2>
+          {groups.map((g) => (
+            <div class="group">
+              <h3 class="expanded group-h">{g.group}</h3>
+              <ul class="aisle-list">
+                {g.aisles.map((a) => (
+                  <li>
+                    <a href={`/${a.id}`}>{a.name}</a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </section>
+      )
+    }
+
+    {
+      cross && (
+        <div class="cross on-ink" role="status" data-cross-aisle>
+          <p>
+            <strong>Compare works inside one aisle.</strong> You picked {crossPicked}, but the rest are from{" "}
+            {mainAisle!.name}.
+          </p>
+          <div class="cross-actions">
+            {otherAisles.map((a, i) => (
+              <a
+                class:list={["btn", i === 0 ? "btn-promo" : "btn-on-ink"]}
+                href={compareHref(split.others.filter((t) => t.aisle === a.id).map((t) => t.id))}
+              >
+                Start a {a.name} compare
+              </a>
+            ))}
+            <a class="btn btn-on-ink" href={compareHref(picked.filter((t) => t.aisle === split.main).map((t) => t.id))}>
+              Keep {mainAisle!.name.toLowerCase()}
+            </a>
+          </div>
+        </div>
+      )
+    }
+
+    {
+      !cross && n > 0 && (
+        <>
+          <div class="phone-only phone-picks">
+            <ul aria-label="Tools in this comparison" class="chips">
+              {picked.map((t) => (
+                <li class:list={{ suggested: isSuggested(t, now) }}>
+                  {t.name}
+                  <a class="chip-x" href={href(withRemoved(ids, t.id))} aria-label={`Remove ${t.name} from comparison`}>
+                    <Icon name="close" size={16} />
+                  </a>
+                </li>
+              ))}
+            </ul>
+            {canAdd && addOptions.length > 0 && (
+              <form method="get" action="/compare" class="phone-add" data-autosubmit>
+                <input type="hidden" name="ids" value={ids.join(",")} />
+                {only && <input type="hidden" name="only" value="differs" />}
+                <div class="select dashed">
+                  <select name="add" aria-label="Add a tool to compare" required>
+                    <option value="" disabled selected>
+                      + Add a tool
+                    </option>
+                    {addOptions.map((o) => (
+                      <option value={o.id}>{o.name}</option>
+                    ))}
+                  </select>
+                  <Icon name="chevron-down" size={16} />
+                </div>
+                <noscript>
+                  <button class="btn btn-outline" type="submit">
+                    Add
+                  </button>
+                </noscript>
+              </form>
+            )}
+          </div>
+
+          <div class="toolbar">
+            {n > 1 && (
+              <form method="get" action="/compare" class="only" data-autosubmit>
+                <input type="hidden" name="ids" value={ids.join(",")} />
+                <label class="check">
+                  <input type="checkbox" name="only" value="differs" checked={only} />
+                  Only rows that differ
+                </label>
+                <noscript>
+                  <button class="btn btn-outline" type="submit">
+                    Apply
+                  </button>
+                </noscript>
+              </form>
+            )}
+            <a class="btn btn-outline copy desk-only" href={compareHref(ids)} data-copy-link>
+              Copy link to this comparison
+            </a>
+          </div>
+
+          {/* ---------- Desktop: one table ---------- */}
+          <div class="table-scroll desk-only">
+            <table data-compare-table style={`min-width: ${minW}px`}>
+              <thead>
+                <tr>
+                  <td class="corner">
+                    Big number: {mainAisle!.label}. All cost $0 a month. Shaded rows differ.
+                  </td>
+                  {picked.map((t, i) => (
+                    <th scope="col" data-col={t.id} class:list={{ suggested: isSuggested(t, now) }}>
+                      <div class="col-top">
+                        <span aria-hidden="true" class="slot">
+                          Tool {i + 1}
+                        </span>
+                        <a class="remove" href={href(withRemoved(ids, t.id))} aria-label={`Remove ${t.name} from comparison`}>
+                          <Icon name="close" size={18} />
+                        </a>
+                      </div>
+                      <form method="get" action="/compare" data-autosubmit>
+                        <input type="hidden" name="ids" value={ids.join(",")} />
+                        <input type="hidden" name="col" value={i + 1} />
+                        {only && <input type="hidden" name="only" value="differs" />}
+                        <div class="select">
+                          <select name="swap" aria-label={`Tool ${i + 1}`}>
+                            {swapOptions(t).map((o) => (
+                              <option value={o.id} selected={o.id === t.id}>
+                                {o.name}
+                              </option>
+                            ))}
+                          </select>
+                          <Icon name="chevron-down" size={16} />
+                        </div>
+                        <noscript>
+                          <button class="btn btn-outline noscript-btn" type="submit">
+                            Swap<span class="sr-only"> tool {i + 1}</span>
+                          </button>
+                        </noscript>
+                      </form>
+                      <span class:list={["big", { unknown: !heads[i].known }]}>{heads[i].big}</span>
+                      {heads[i].sub && <span class="unit">{heads[i].sub}</span>}
+                    </th>
+                  ))}
+                  {canAdd && (
+                    <th scope="col" class="add-col" data-add>
+                      <span aria-hidden="true" class="slot">
+                        Add a tool
+                      </span>
+                      {addOptions.length ? (
+                        <form method="get" action="/compare" data-autosubmit>
+                          <input type="hidden" name="ids" value={ids.join(",")} />
+                          {only && <input type="hidden" name="only" value="differs" />}
+                          <div class="select dashed">
+                            <select name="add" aria-label="Add a tool to compare" required>
+                              <option value="" disabled selected>
+                                Choose…
+                              </option>
+                              {addOptions.map((o) => (
+                                <option value={o.id}>{o.name}</option>
+                              ))}
+                            </select>
+                            <Icon name="chevron-down" size={16} />
+                          </div>
+                          <noscript>
+                            <button class="btn btn-outline noscript-btn" type="submit">
+                              Add
+                            </button>
+                          </noscript>
+                        </form>
+                      ) : (
+                        <p class="add-note">No other tools in {mainAisle!.name} yet.</p>
+                      )}
+                      <span class="add-note">Up to {MAX_COMPARE} side by side</span>
+                    </th>
+                  )}
+                </tr>
+              </thead>
+              <tbody>
+                {tableRows.map((r) => (
+                  <tr data-row={r.label} class:list={{ differs: r.diff, pick: r.noDiff }}>
+                    <th scope="row">
+                      {r.label}
+                      {r.diff && <span class="differs-tag">Differs</span>}
+                    </th>
+                    {r.cells.map((c) => (
+                      <td>
+                        <CompareCell cell={c} />
+                      </td>
+                    ))}
+                    {canAdd && <td class="add-cell" />}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+
+          {/* ---------- Phone: stacked rows ---------- */}
+          <div class="phone-only">
+            <div class="stack">
+              {shownRows.map((r, ri) => (
+                <section
+                  data-phone-row={r.label}
+                  class:list={["prow", { differs: r.diff }]}
+                  aria-labelledby={`prow-${ri}`}
+                >
+                  <div class="prow-head">
+                    <h2 id={`prow-${ri}`}>{r.label}</h2>
+                    {r.diff && <span class="differs-tag">Differs</span>}
+                  </div>
+                  {r.cells.map((c, i) => (
+                    <div class="pline">
+                      <span class="pname">{picked[i].name}</span>
+                      <span class:list={["pval", { "pval-big": c.kind === "text" && c.big }]}>
+                        {r.headline ? (
+                          <span class:list={["big-sm", { unknown: !heads[i].known }]}>{heads[i].big}</span>
+                        ) : (
+                          <CompareCell cell={c} />
+                        )}
+                      </span>
+                    </div>
+                  ))}
+                </section>
+              ))}
+            </div>
+          </div>
+
+          {anyUnknown && toCheck && (
+            <p class="footnote" data-unknown-note>
+              Labels marked unknown have not been checked against the vendor yet.{" "}
+              <a href={checkHref(toCheck)}>Check one</a>
+            </p>
+          )}
+          <div class="phone-only phone-bar">
+            <a class="btn btn-outline btn-block" href={compareHref(ids)} data-copy-link>
+              Copy link to this comparison
+            </a>
+          </div>
+        </>
+      )
+    }
+  </div>
+
+  <div class="toast on-ink" role="status" aria-live="polite" data-toast hidden>
+    <Icon name="check" size={18} />
+    <span class="toast-main">Link copied</span>
+    <span class="toast-sub">Anyone with it sees this comparison.</span>
+    <button type="button" class="toast-x" aria-label="Dismiss" data-toast-dismiss>
+      <Icon name="close" size={16} />
+    </button>
+  </div>
+</Shell>
+
+<script>
+  // Submit the GET forms as soon as a choice changes (they also work without JS).
+  for (const form of document.querySelectorAll<HTMLFormElement>("form[data-autosubmit]")) {
+    form.addEventListener("change", () => form.requestSubmit());
+  }
+
+  // Copy link: copy the clean URL, then say so.
+  const toast = document.querySelector<HTMLElement>("[data-toast]");
+  let timer: number | undefined;
+  const hide = () => {
+    if (toast) toast.hidden = true;
+  };
+  document.querySelector("[data-toast-dismiss]")?.addEventListener("click", hide);
+  for (const link of document.querySelectorAll<HTMLAnchorElement>("a[data-copy-link]")) {
+    link.addEventListener("click", async (e) => {
+      if (!navigator.clipboard) return; // Fall back to following the link.
+      e.preventDefault();
+      try {
+        await navigator.clipboard.writeText(new URL(link.getAttribute("href")!, location.href).href);
+      } catch {
+        location.href = link.href;
+        return;
+      }
+      if (!toast) return;
+      toast.hidden = false;
+      window.clearTimeout(timer);
+      timer = window.setTimeout(hide, 6000);
+    });
+  }
+</script>
+
+<style>
+  .page {
+    padding-block: 40px 96px;
+  }
+  .phone-only {
+    display: none;
+  }
+  .back {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    min-height: var(--target);
+    margin: 0 0 12px -4px;
+    padding: 0 14px 0 8px;
+    border: 2px solid var(--ink);
+    background: var(--label);
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 15px;
+  }
+  .crumbs {
+    margin-bottom: 12px;
+  }
+  .title {
+    margin: 0;
+    font-weight: 900;
+    font-stretch: 62%;
+    font-size: clamp(44px, 6vw, 88px);
+    line-height: 1;
+    max-width: 18ch;
+    overflow-wrap: anywhere;
+  }
+  .notice {
+    margin-top: 20px;
+    padding: 12px 16px;
+    background: var(--label);
+    border-left: 6px solid var(--ink);
+    font-size: 15px;
+  }
+  .notice p {
+    margin: 0;
+  }
+
+  /* ---------- None ---------- */
+  .empty {
+    margin-top: 24px;
+    display: grid;
+    gap: 20px;
+  }
+  .lead {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 500;
+  }
+  .group-h {
+    margin: 0 0 8px;
+    font-size: 15px;
+  }
+  .aisle-list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .aisle-list a {
+    display: inline-flex;
+    align-items: center;
+    min-height: var(--target);
+    padding: 0 16px;
+    background: var(--label);
+    border: 2px solid var(--ink);
+    font-weight: 700;
+    text-decoration: none;
+  }
+
+  /* ---------- Cross-aisle (States.dc.html) ---------- */
+  .cross {
+    margin-top: 28px;
+    max-width: 760px;
+    padding: 20px 24px;
+    display: grid;
+    gap: 14px;
+    background: var(--ink);
+    color: var(--label);
+  }
+  .cross p {
+    margin: 0;
+    font-size: 17px;
+    line-height: 1.45;
+  }
+  .cross-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  /* ---------- Toolbar ---------- */
+  .toolbar {
+    margin-top: 28px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 12px 20px;
+  }
+  .only {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .check {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-height: var(--target);
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+  }
+  .check input {
+    width: 22px;
+    height: 22px;
+    margin: 0;
+    accent-color: var(--ink);
+  }
+  .copy {
+    margin-left: auto;
+  }
+
+  /* ---------- Table ---------- */
+  .table-scroll {
+    margin-top: 24px;
+    overflow-x: auto;
+    background: var(--label);
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
+  }
+  thead tr {
+    vertical-align: top;
+    text-align: left;
+  }
+  .corner {
+    width: 180px;
+    padding: 18px;
+    font-size: 14px;
+    line-height: 1.45;
+    color: var(--muted);
+  }
+  thead th {
+    padding: 18px;
+    border-left: 1px solid var(--shelf);
+    border-top: 8px solid var(--ink);
+    text-align: left;
+    font-weight: 400;
+  }
+  thead th.suggested {
+    border-top-color: var(--promo);
+  }
+  thead th.add-col {
+    width: 220px;
+    border-left: 2px dashed var(--muted);
+    border-top-color: transparent;
+  }
+  .col-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: -6px -6px 6px 0;
+  }
+  .slot {
+    display: block;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--muted);
+  }
+  .add-col .slot {
+    margin-bottom: 6px;
+  }
+  .remove,
+  .chip-x {
+    width: var(--target);
+    height: var(--target);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--ink);
+  }
+  .select {
+    position: relative;
+  }
+  .select select {
+    width: 100%;
+    min-height: var(--target);
+    padding: 0 36px 0 12px;
+    appearance: none;
+    background: var(--label);
+    border: 2px solid var(--ink);
+    border-radius: 0;
+    color: var(--ink);
+    font: 800 18px var(--font);
+    cursor: pointer;
+  }
+  .select :global(svg) {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    pointer-events: none;
+  }
+  .select.dashed select {
+    border-style: dashed;
+    font-weight: 600;
+    font-size: 16px;
+  }
+  .noscript-btn {
+    margin-top: 8px;
+  }
+  .big {
+    display: block;
+    margin-top: 12px;
+    font-weight: 900;
+    font-stretch: 62%;
+    font-size: 68px;
+    line-height: 1;
+  }
+  .big.unknown,
+  .big-sm.unknown {
+    color: var(--muted);
+  }
+  .unit {
+    display: block;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--muted);
+  }
+  .add-note {
+    display: block;
+    margin: 12px 0 0;
+    font-size: 14px;
+    color: var(--muted);
+  }
+  tbody tr {
+    border-top: 1px solid var(--rule);
+    vertical-align: top;
+  }
+  tbody tr.pick {
+    border-top: 2px solid var(--ink);
+  }
+  tbody tr.differs,
+  .prow.differs {
+    background: var(--fill);
+  }
+  tbody th {
+    padding: 16px 18px;
+    text-align: left;
+    font-size: 15px;
+    font-weight: 700;
+  }
+  .differs-tag {
+    display: block;
+    margin-top: 2px;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--muted);
+  }
+  tbody td {
+    padding: 16px 18px;
+    border-left: 1px solid var(--shelf);
+    font-size: 16px;
+    line-height: 1.4;
+  }
+  tbody td.add-cell {
+    border-left: 2px dashed var(--muted);
+  }
+  .footnote {
+    margin: 16px 0 0;
+    font-size: 14px;
+    color: var(--muted);
+  }
+
+  /* ---------- Toast (Edges.dc.html, "Link copied") ---------- */
+  .toast {
+    position: fixed;
+    left: 50%;
+    bottom: calc(24px + env(safe-area-inset-bottom, 0px));
+    transform: translateX(-50%);
+    z-index: 30;
+    width: max-content;
+    max-width: calc(100vw - 2 * var(--gutter));
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 4px 12px;
+    padding: 0 8px 0 18px;
+    min-height: 52px;
+    background: var(--ink);
+    color: var(--label);
+    box-shadow: 0 16px 32px -16px rgba(0, 0, 0, 0.5);
+  }
+  .toast :global(svg) {
+    color: var(--promo);
+  }
+  .toast-main {
+    font-size: 16px;
+    font-weight: 700;
+  }
+  .toast-sub {
+    font-size: 14px;
+    color: var(--on-ink-muted);
+  }
+  .toast-x {
+    margin-left: auto;
+    width: var(--target);
+    height: var(--target);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    border: 0;
+    color: var(--label);
+    cursor: pointer;
+  }
+  .toast-x :global(svg) {
+    color: var(--label);
+  }
+
+  /* ---------- Phone (PhoneCompare.dc.html) ---------- */
+  @media (max-width: 640px) {
+    .page {
+      padding-block: 4px 0;
+    }
+    .desk-only {
+      display: none;
+    }
+    .phone-only {
+      display: block;
+    }
+    .back {
+      margin: 0;
+      padding: 0;
+      border: 0;
+      background: none;
+      font-size: 14px;
+      font-weight: 600;
+      gap: 6px;
+    }
+    .title {
+      font-size: 44px;
+    }
+    .toolbar {
+      margin-top: 8px;
+    }
+    .chips {
+      list-style: none;
+      margin: 12px 0 0;
+      padding: 0;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+    .chips li {
+      display: inline-flex;
+      align-items: center;
+      background: var(--label);
+      border-top: 4px solid var(--ink);
+      font-size: 15px;
+      font-weight: 800;
+      padding-left: 12px;
+    }
+    .chips li.suggested {
+      border-top-color: var(--promo);
+    }
+    .chip-x {
+      width: 40px;
+    }
+    .phone-add {
+      margin-top: 8px;
+    }
+    .stack {
+      margin-top: 4px;
+      display: grid;
+      gap: 6px;
+    }
+    .prow {
+      background: var(--label);
+      padding: 10px 14px 8px;
+    }
+    .prow-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 12px;
+    }
+    .prow h2 {
+      margin: 0 0 4px;
+      font-size: 15px;
+      font-weight: 800;
+    }
+    .prow .differs-tag {
+      margin: 0;
+      font-weight: 600;
+    }
+    .pline {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 12px;
+      padding: 5px 0;
+      border-top: 1px solid var(--shelf);
+    }
+    .pname {
+      flex: 0 0 auto;
+      max-width: 40%;
+      font-size: 14px;
+      color: var(--muted);
+    }
+    .pval {
+      min-width: 0;
+      text-align: right;
+      font-weight: 600;
+    }
+    .big-sm {
+      font-weight: 900;
+      font-stretch: 62%;
+      font-size: 30px;
+      line-height: 1;
+    }
+    .phone-bar {
+      position: sticky;
+      bottom: 0;
+      margin: 16px calc(-1 * var(--gutter)) 0;
+      padding: 12px var(--gutter) calc(16px + env(safe-area-inset-bottom, 0px));
+      background: var(--shelf);
+      border-top: 1px solid var(--rule);
+    }
+    .footnote {
+      margin-bottom: 0;
+    }
+    .cross {
+      padding: 16px;
+    }
+    .cross .btn {
+      flex: 1 1 auto;
+    }
+    .toast {
+      bottom: calc(88px + env(safe-area-inset-bottom, 0px));
+    }
+  }
+</style>
