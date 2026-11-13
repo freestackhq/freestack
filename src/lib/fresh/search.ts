@@ -56,7 +56,10 @@ function score(e: SearchEntry, q: string, qWords: string[]): number {
   return 3;
 }
 
-/** Grouped matches, in group order. Groups with no match are left out. */
+/**
+ * Grouped matches, in group order. Groups with no match are left out.
+ * Catch pages come before a tool's own catch line; then name matches first.
+ */
 export function searchLocal(index: SearchEntry[], query: string): SearchResultGroup[] {
   const q = norm(query);
   if (!q) return [];
@@ -64,7 +67,7 @@ export function searchLocal(index: SearchEntry[], query: string): SearchResultGr
   const scored = index
     .map((e, i) => ({ e, i, s: score(e, q, qWords) }))
     .filter((r) => r.s >= 0)
-    .sort((a, b) => a.s - b.s || a.i - b.i);
+    .sort((a, b) => Number(!a.e.read) - Number(!b.e.read) || a.s - b.s || a.i - b.i);
   return GROUP_ORDER.map((group) => ({
     group,
     label: GROUP_LABEL[group],

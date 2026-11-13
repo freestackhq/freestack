@@ -1,0 +1,486 @@
+---
+/**
+ * Check a label (Verify.dc.html, PhoneVerify.dc.html; failure in Edges.dc.html).
+ * One fieldset per line: Still true or Changed (Changed asks for the new value).
+ * All still true: the label will show "Checked today". Any changed: "A change
+ * is waiting for review". Sending goes through sendLabelCheck, a stub that
+ * sends nothing; `?fail=1` (always) or `?fail=once` simulates a failed
+ * person check so the retry path is testable.
+ */
+import Shell from "../../../layouts/Shell.astro";
+import Icon from "../../../components/fresh/Icon.astro";
+import Label from "../../../components/fresh/Label.astro";
+import { aisle as getAisle, now, tool as getTool, toolHref, tools } from "../../../lib/fresh/catalog";
+import { checkLines, checkSummary } from "../../../lib/fresh/checks";
+import type { Tool } from "../../../lib/fresh/types";
+
+export function getStaticPaths() {
+  return tools()
+    .filter((t) => t.source !== "imported")
+    .map((t) => ({ params: { aisle: t.aisle, tool: t.id } }));
+}
+
+const t = getTool(Astro.params.tool!)!;
+const a = getAisle(t.aisle)!;
+const lines = checkLines(t, a);
+const at = now();
+const today = at.toISOString().slice(0, 10);
+
+const asChecked: Tool = { ...t, verified_at: today, verified_by: null, review_pending: false, vendor_changed_at: null };
+const asReview: Tool = { ...t, review_pending: true };
+
+const pricing = new URL(t.pricing_url);
+const pricingText = `${pricing.hostname.replace(/^www\./, "")}${pricing.pathname.replace(/\/$/, "")}`;
+---
+
+<Shell title={`Check ${t.name}'s label · freestack`} aisle={a.id} noindex>
+  <div class="wrap page" data-check data-tool={t.id} data-name={t.name}>
+    <a class="back" href={toolHref(t)}><Icon name="back" size={16} />{t.name}</a>
+
+    <div data-view="form">
+      <h1 class="h" tabindex="-1">Check {t.name}'s label</h1>
+      <p class="lede">Open {t.name}'s pricing page next to this one. For each line, tell us if it still holds.</p>
+      <a class="btn btn-outline open" href={t.pricing_url} target="_blank" rel="noopener">
+        Open {pricingText}<Icon name="external" size={14} /><span class="sr-only">, opens in a new tab</span>
+      </a>
+
+      <form class="sheet" data-check-form novalidate>
+        {
+          lines.map((l) => (
+            <fieldset class="line" data-line={l.id}>
+              <legend class="sr-only">
+                {l.label}: {l.value}
+              </legend>
+              <div class="what" aria-hidden="true">
+                <p class="lbl">{l.label}</p>
+                <p class="val">{l.value}</p>
+              </div>
+              <div class="choice">
+                <button type="button" class="pick" aria-pressed="false" data-verdict="holds">
+                  Still true
+                </button>
+                <button type="button" class="pick" aria-pressed="false" data-verdict="changed">
+                  Changed
+                </button>
+              </div>
+              <div class="now" data-now hidden>
+                <label for={`${l.id}-now`}>What does it say now?</label>
+                <input
+                  id={`${l.id}-now`}
+                  class="field"
+                  type="text"
+                  placeholder="Write it the way the page does"
+                  aria-describedby={`${l.id}-err`}
+                  autocomplete="off"
+                />
+                <p class="err" id={`${l.id}-err`} hidden>
+                  <Icon name="cross" />
+                  Write what the page says now, or pick Still true.
+                </p>
+              </div>
+            </fieldset>
+          ))
+        }
+
+        <div class="foot">
+          <div class="credit">
+            <label for="check-credit">Your name for credit</label>
+            <input id="check-credit" class="field" type="text" placeholder="Optional" autocomplete="nickname" aria-describedby="check-credit-hint" />
+            <p id="check-credit-hint" class="muted hint">Shown on the label as "Checked by". Leave empty to stay anonymous.</p>
+          </div>
+
+          <div class="alert" role="alert" data-alert hidden>
+            <p class="alert-h">Your check did not send</p>
+            <p data-alert-body>We could not confirm you are a person. Your answers are still here.</p>
+            <button type="button" class="btn btn-promo" data-retry>Try sending again</button>
+          </div>
+        </div>
+
+        <div class="send-row">
+          <button type="submit" class="btn btn-promo" data-send>Send check</button>
+          <span class="muted summary" data-summary aria-live="polite">{checkSummary(0, lines.length)}</span>
+          <p class="err" data-empty hidden>Answer at least one line first.</p>
+        </div>
+      </form>
+    </div>
+
+    <div class="done" data-view="done" role="status" hidden>
+      <h1 class="h" tabindex="-1" data-done-title></h1>
+      <p class="lede" data-done-body></p>
+      <div class="preview" data-preview></div>
+      <div class="actions">
+        <a class="btn" href={`/${a.id}`}>Check another label</a>
+        <button type="button" class="btn btn-outline" data-reset>Back to the form</button>
+      </div>
+    </div>
+
+    <template data-preview-checked><Label tool={asChecked} now={at} variant="mini" compare={false} link={false} level={2} /></template>
+    <template data-preview-review><Label tool={asReview} now={at} variant="mini" compare={false} link={false} level={2} /></template>
+  </div>
+</Shell>
+
+<style>
+  .page {
+    padding-block: 40px 96px;
+  }
+  .back {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    min-height: var(--target);
+    margin: 0 0 12px -4px;
+    padding: 0 14px 0 8px;
+    border: 2px solid var(--ink);
+    background: var(--label);
+    font-weight: 700;
+    font-size: 15px;
+    text-decoration: none;
+  }
+  .h {
+    margin: 0;
+    font-weight: 900;
+    font-stretch: 62%;
+    line-height: 1;
+    font-size: clamp(44px, 7vw, 96px);
+  }
+  .h:focus {
+    outline: 0;
+  }
+  .lede {
+    margin: 14px 0 0;
+    max-width: 52ch;
+    font-size: 18px;
+    line-height: 1.45;
+  }
+  .open {
+    margin-top: 20px;
+  }
+  .sheet {
+    margin-top: 32px;
+    max-width: 820px;
+    background: var(--label);
+    border: 2px solid var(--ink);
+  }
+  .line {
+    margin: 0;
+    padding: 20px 24px;
+    border: 0;
+    border-bottom: 1px solid var(--rule);
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 10px 20px;
+    align-items: center;
+    min-width: 0;
+  }
+  .lbl {
+    margin: 0;
+    font-size: 14px;
+    color: var(--muted);
+  }
+  .val {
+    margin: 2px 0 0;
+    font-weight: 900;
+    font-stretch: 62%;
+    font-size: 36px;
+    line-height: 1;
+    overflow-wrap: anywhere;
+  }
+  .choice {
+    display: flex;
+    gap: 6px;
+  }
+  .pick {
+    min-height: var(--target);
+    padding: 0 14px;
+    border: 2px solid var(--ink);
+    background: var(--label);
+    color: var(--ink);
+    font: 700 15px var(--font);
+    cursor: pointer;
+  }
+  .pick[aria-pressed="true"] {
+    background: var(--ink);
+    color: var(--label);
+  }
+  .now {
+    grid-column: 1 / -1;
+  }
+  .now label,
+  .credit label {
+    display: block;
+    margin: 0 0 6px;
+    font-size: 15px;
+    font-weight: 700;
+  }
+  .field[aria-invalid="true"] {
+    box-shadow: inset 0 0 0 2px var(--recheck);
+  }
+  .err {
+    margin: 8px 0 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 15px;
+    font-weight: 700;
+  }
+  .foot {
+    padding: 20px 24px;
+    display: grid;
+    gap: 16px;
+  }
+  .credit {
+    max-width: 420px;
+  }
+  .hint {
+    margin: 6px 0 0;
+    font-size: 14px;
+  }
+  .send-row {
+    padding: 0 24px 20px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px 12px;
+  }
+  .send-row .err {
+    flex-basis: 100%;
+    margin: 0;
+  }
+  .summary {
+    font-size: 14px;
+  }
+  .alert {
+    padding: 22px 24px;
+    display: grid;
+    gap: 12px;
+    justify-items: start;
+    background: var(--label);
+    border: 1px solid var(--rule);
+    border-top: 8px solid var(--recheck);
+  }
+  .alert p {
+    margin: 0;
+    font-size: 16px;
+    line-height: 1.5;
+  }
+  .alert .alert-h {
+    font-size: 19px;
+    font-weight: 800;
+  }
+
+  .done {
+    max-width: 820px;
+  }
+  .preview {
+    margin-top: 28px;
+    max-width: 360px;
+  }
+  .actions {
+    margin-top: 24px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  @media (max-width: 640px) {
+    .page {
+      padding-block: 4px 0;
+    }
+    .back {
+      margin: 0;
+      padding: 0;
+      border: 0;
+      background: transparent;
+      font-weight: 600;
+      font-size: 14px;
+    }
+    .lede {
+      font-size: 16px;
+    }
+    .open {
+      display: flex;
+      margin-top: 10px;
+    }
+    .sheet {
+      margin-top: 12px;
+    }
+    .line {
+      padding: 12px 14px;
+      grid-template-columns: minmax(0, 1fr);
+      gap: 8px;
+    }
+    .what {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 12px;
+    }
+    .val {
+      margin: 0;
+      font-size: 28px;
+      text-align: right;
+    }
+    .pick {
+      flex: 1;
+    }
+    .foot {
+      padding: 16px 14px;
+    }
+    .send-row {
+      position: sticky;
+      bottom: 0;
+      z-index: 1;
+      padding: 10px 14px calc(10px + env(safe-area-inset-bottom));
+      background: var(--label);
+      border-top: 2px solid var(--ink);
+      flex-direction: column;
+      align-items: stretch;
+    }
+    .send-row .summary {
+      order: -1;
+    }
+    .send-row .btn {
+      width: 100%;
+    }
+    .done {
+      padding-block: 16px 48px;
+    }
+  }
+</style>
+
+<script>
+  import { checkOutcome, checkSummary, type CheckAnswer } from "../../../lib/fresh/checks";
+  import { sendLabelCheck, type StubFail } from "../../../lib/fresh/send";
+
+  const root = document.querySelector<HTMLElement>("[data-check]")!;
+  const form = root.querySelector<HTMLFormElement>("[data-check-form]")!;
+  const formView = root.querySelector<HTMLElement>('[data-view="form"]')!;
+  const doneView = root.querySelector<HTMLElement>('[data-view="done"]')!;
+  const lines = Array.from(form.querySelectorAll<HTMLFieldSetElement>("[data-line]"));
+  const summary = form.querySelector<HTMLElement>("[data-summary]")!;
+  const emptyErr = form.querySelector<HTMLElement>("[data-empty]")!;
+  const alertBox = form.querySelector<HTMLElement>("[data-alert]")!;
+  const send = form.querySelector<HTMLButtonElement>("[data-send]")!;
+  const retry = form.querySelector<HTMLButtonElement>("[data-retry]")!;
+  const credit = form.querySelector<HTMLInputElement>("#check-credit")!;
+  const name = root.dataset.name!;
+
+  const flag = new URLSearchParams(location.search).get("fail");
+  const fail: StubFail | undefined = flag === "once" ? "once" : flag ? "always" : undefined;
+  let attempt = 0;
+
+  function verdict(fs: HTMLFieldSetElement): CheckAnswer["verdict"] | null {
+    const on = fs.querySelector<HTMLButtonElement>('[aria-pressed="true"]');
+    return (on?.dataset.verdict as CheckAnswer["verdict"]) ?? null;
+  }
+
+  function nowInput(fs: HTMLFieldSetElement) {
+    return fs.querySelector<HTMLInputElement>("[data-now] input")!;
+  }
+
+  function setLineError(fs: HTMLFieldSetElement, on: boolean) {
+    const input = nowInput(fs);
+    if (on) input.setAttribute("aria-invalid", "true");
+    else input.removeAttribute("aria-invalid");
+    fs.querySelector<HTMLElement>(".err")!.hidden = !on;
+  }
+
+  function update() {
+    const answered = lines.filter((fs) => verdict(fs)).length;
+    summary.textContent = checkSummary(answered, lines.length);
+    if (answered > 0) emptyErr.hidden = true;
+  }
+
+  lines.forEach((fs) => {
+    fs.querySelectorAll<HTMLButtonElement>("[data-verdict]").forEach((b) =>
+      b.addEventListener("click", () => {
+        fs.querySelectorAll<HTMLButtonElement>("[data-verdict]").forEach((o) =>
+          o.setAttribute("aria-pressed", String(o === b)),
+        );
+        const changed = b.dataset.verdict === "changed";
+        fs.querySelector<HTMLElement>("[data-now]")!.hidden = !changed;
+        if (changed) nowInput(fs).focus();
+        else setLineError(fs, false);
+        update();
+      }),
+    );
+    nowInput(fs).addEventListener("input", () => {
+      if (nowInput(fs).value.trim()) setLineError(fs, false);
+    });
+  });
+
+  function answers(): CheckAnswer[] {
+    return lines.flatMap((fs) => {
+      const v = verdict(fs);
+      if (!v) return [];
+      return [{ id: fs.dataset.line!, verdict: v, ...(v === "changed" ? { now: nowInput(fs).value.trim() } : {}) }];
+    });
+  }
+
+  function showAlert(on: boolean) {
+    alertBox.hidden = !on;
+    // One yellow action at a time.
+    send.hidden = on;
+  }
+
+  function showDone(kind: "checked" | "review", changed: number) {
+    const title = doneView.querySelector<HTMLElement>("[data-done-title]")!;
+    const body = doneView.querySelector<HTMLElement>("[data-done-body]")!;
+    const preview = doneView.querySelector<HTMLElement>("[data-preview]")!;
+    if (kind === "checked") {
+      title.textContent = `Thanks. ${name} is checked.`;
+      body.textContent = "The label now shows it was checked today. Thank you for keeping it honest for everyone after you.";
+    } else {
+      title.textContent = "Thanks. We will review it.";
+      body.textContent = `${changed} ${changed === 1 ? "change" : "changes"} sent. A maintainer confirms it against the source, then the label updates and everyone sees the new number.`;
+    }
+    const tpl = root.querySelector<HTMLTemplateElement>(`[data-preview-${kind}]`)!;
+    preview.replaceChildren(tpl.content.cloneNode(true));
+    formView.hidden = true;
+    doneView.hidden = false;
+    window.scrollTo({ top: 0 });
+    title.focus();
+  }
+
+  async function submit() {
+    const list = answers();
+    const outcome = checkOutcome(list);
+    if (outcome.kind === "empty") {
+      emptyErr.hidden = false;
+      return;
+    }
+    const missing = lines.filter((fs) => verdict(fs) === "changed" && !nowInput(fs).value.trim());
+    lines.forEach((fs) => setLineError(fs, missing.includes(fs)));
+    if (missing.length) {
+      nowInput(missing[0]).focus();
+      return;
+    }
+
+    attempt += 1;
+    send.disabled = retry.disabled = true;
+    const res = await sendLabelCheck(
+      { tool: root.dataset.tool!, answers: list, name: credit.value.trim() },
+      { fail, attempt },
+    );
+    send.disabled = retry.disabled = false;
+    if (!res.ok) {
+      showAlert(true);
+      retry.focus();
+      return;
+    }
+    showAlert(false);
+    showDone(outcome.kind, outcome.changed);
+  }
+
+  form.addEventListener("submit", (e) => {
+    e.preventDefault();
+    submit();
+  });
+  retry.addEventListener("click", submit);
+
+  doneView.querySelector("[data-reset]")!.addEventListener("click", () => {
+    doneView.hidden = true;
+    formView.hidden = false;
+    formView.querySelector<HTMLElement>("h1")!.focus();
+  });
+</script>

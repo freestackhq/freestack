@@ -64,6 +64,16 @@ describe("didYouMean", () => {
   });
 });
 
+describe("catch order", () => {
+  it("puts catch pages before a tool's catch line", () => {
+    const idx: SearchEntry[] = [
+      { group: "catches", title: "Vercel Hobby personal projects only", sub: "", href: "/a", terms: "" },
+      { group: "catches", title: "Can I sell things on Vercel Hobby?", sub: "", href: "/b", terms: "", read: true },
+    ];
+    expect(searchLocal(idx, "vercel")[0].items.map((i) => i.href)).toEqual(["/b", "/a"]);
+  });
+});
+
 describe("distance", () => {
   it("is the edit distance", () => {
     expect(distance("kitten", "sitting")).toBe(3);
