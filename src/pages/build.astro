@@ -336,7 +336,7 @@ const lower = (s: string) => (/^[A-Z]{2}/.test(s) ? s : s.toLowerCase());
         .filter((p) => picks[p.key])
         .map((p) => {
           const t = D.tools[picks[p.key]];
-          return { job: p.label, name: t.name, limits: t.limits, catch: t.catch };
+          return { job: p.label, name: t.name, limits: t.limits, catch: t.catch, checked: t.state === "checked" };
         }),
     };
   }

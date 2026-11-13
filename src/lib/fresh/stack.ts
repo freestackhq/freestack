@@ -23,19 +23,43 @@ function cap(s: string): string {
 }
 
 /**
- * One line of limits: the aisle's headline figure, then the other limits.
- * An unknown headline reads "Requests a day: unknown", never a guess.
+ * The aisle's headline figure as words: "0.5 GB free storage", "50k users a
+ * month". An unknown headline reads "Requests a day: unknown", never a guess.
  */
-export function limitsLine(t: Tool, a: Aisle): string {
+export function headlineText(t: Tool, a: Aisle): string {
   const h = headline(t, a);
-  let first: string;
-  if (isUnlimited(t)) first = t.metric_note ?? "No limit";
-  else if (t.metric === null && t.metric_note && !/^not listed$/i.test(t.metric_note)) first = t.metric_note;
-  else if (!h.known) first = `${cap(metricParts("", a).sub ?? a.label)}: unknown`;
-  else if (h.sub && h.sub !== t.metric_note) first = `${h.big} ${h.sub}`;
-  else first = /^\d/.test(h.big) && a.unit && h.big.endsWith(a.unit) ? `${h.big} ${a.label}` : h.big;
-  const rest = t.limits.filter((l) => !t.catches.includes(l) && l.toLowerCase() !== first.toLowerCase());
-  return [first, ...rest].join(", ");
+  if (isUnlimited(t)) return t.metric_note ?? "No limit";
+  if (t.metric === null && t.metric_note && !/^not listed$/i.test(t.metric_note)) return t.metric_note;
+  if (!h.known) return `${cap(metricParts("", a).sub ?? a.label)}: unknown`;
+  if (h.sub && h.sub !== t.metric_note) return `${h.big} ${h.sub}`;
+  return /^\d/.test(h.big) && a.unit && h.big.endsWith(a.unit) ? `${h.big} ${a.label}` : h.big;
+}
+
+/**
+ * Leading scale figure of a limit ("50k", "1M"), to spot a line that restates
+ * the headline in other words. Plain figures ("5 GB") are left alone: two
+ * different limits often share one.
+ */
+function leadingFigure(s: string): string | null {
+  const m = /^\s*([\d.,]+\s*[kmb])\b/i.exec(s);
+  return m ? m[1].replace(/\s+/g, "").toLowerCase() : null;
+}
+
+/**
+ * The other limits, without the catches and without any line that restates
+ * the headline figure ("50k MRU free" under "50k users a month").
+ */
+export function otherLimits(t: Tool, a: Aisle): string[] {
+  const first = headlineText(t, a);
+  const fig = leadingFigure(first);
+  return t.limits.filter(
+    (l) => !t.catches.includes(l) && l.toLowerCase() !== first.toLowerCase() && !(fig && leadingFigure(l) === fig),
+  );
+}
+
+/** One line of limits: the headline figure, then the other limits. */
+export function limitsLine(t: Tool, a: Aisle): string {
+  return [headlineText(t, a), ...otherLimits(t, a)].join(", ");
 }
 
 export function toStackTool(t: Tool, a: Aisle, href: string, now: Date, part?: string): StackTool {
@@ -157,6 +181,13 @@ export interface CopyRow {
   name: string;
   limits: string;
   catch: string | null;
+  /** False when nobody has checked the label lately: copied text says so. */
+  checked?: boolean;
+}
+
+/** " (not checked yet)" for a row nobody has checked, so pasted text never overstates. */
+function checkNote(r: CopyRow): string {
+  return r.checked === false ? " (not checked yet)" : "";
 }
 
 export interface CopyStackData {
@@ -171,17 +202,20 @@ export interface CopyStackData {
 export function stackMarkdown(s: CopyStackData): string {
   const lines = ["## My free stack (from freestack)", `For: ${s.situation}`, ""];
   for (const r of s.rows) {
-    lines.push(`- ${r.job}: ${r.name}`);
+    lines.push(`- ${r.job}: ${r.name}${checkNote(r)}`);
     lines.push(`  ${r.limits}${r.catch ? `. Catch: ${r.catch}` : ""}`);
   }
-  lines.push("", "Total per month: $0.00", s.url);
+  lines.push("", "Total per month: $0.00");
+  if (s.rows.some((r) => r.checked === false))
+    lines.push("Limits from freestack labels. Confirm on each vendor's page before you launch.");
+  lines.push(s.url);
   return lines.join("\n");
 }
 
 /** A prompt to paste into a coding agent before it scaffolds. */
 export function stackPrompt(s: CopyStackData): string {
   const lines = ["Set up this project on these free tiers:"];
-  for (const r of s.rows) lines.push(`- ${r.job}: ${r.name} (${r.limits})`);
+  for (const r of s.rows) lines.push(`- ${r.job}: ${r.name} (${r.limits})${checkNote(r)}`);
   lines.push("", "Keep within the free limits.");
   const catches = s.rows.filter((r) => r.catch);
   if (catches.length) {

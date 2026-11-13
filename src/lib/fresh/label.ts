@@ -116,7 +116,8 @@ export function strings(tool: Tool, now: Date) {
   const state = labelState(tool, now);
   const days = tool.verified_at ? daysSince(tool.verified_at, now) : null;
   const by = tool.verified_by ? ` by ${tool.verified_by}` : "";
-  const when = days === null ? "" : days === 0 ? "today" : days === 1 ? "yesterday" : `${days} days ago`;
+  // A check dated ahead of the build clock (another time zone) still reads "today".
+  const when = days === null ? "" : days <= 0 ? "today" : days === 1 ? "yesterday" : `${days} days ago`;
   switch (state) {
     case "checked":
       return { state, text: `Checked ${when}${by}`, link: null };

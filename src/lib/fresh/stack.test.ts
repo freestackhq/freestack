@@ -1,7 +1,9 @@
 import { describe, expect, it } from "vitest";
 import {
   cardNote,
+  headlineText,
   limitsLine,
+  otherLimits,
   matchTool,
   parseStack,
   rowState,
@@ -86,6 +88,22 @@ describe("limitsLine", () => {
     expect(limitsLine(make({ metric: null, metric_note: "No limit. Your own disk" }), db)).toBe(
       "No limit. Your own disk",
     );
+  });
+});
+
+describe("headline and fine print", () => {
+  const users = { ...hosting, id: "auth", metric: "monthly_users", unit: "users a month", label: "monthly users" };
+  it("headlineText is the first item of the limits line", () => {
+    const t = make({ metric: 0.5, limits: ["5 GB transfer a month"] });
+    expect(headlineText(t, db)).toBe("0.5 GB free storage");
+  });
+  it("drops a line that restates a scale headline in other words", () => {
+    const clerk = make({ aisle: "auth", metric: 50000, limits: ["50k MRU free", "Then paid"] });
+    expect(otherLimits(clerk, users)).toEqual(["Then paid"]);
+  });
+  it("keeps a different limit that shares a plain figure", () => {
+    const t = make({ metric: 5, limits: ["5 GB transfer a month"] });
+    expect(otherLimits(t, db)).toEqual(["5 GB transfer a month"]);
   });
 });
 
@@ -222,6 +240,23 @@ describe("totals and copy text", () => {
         data.url,
       ].join("\n"),
     );
+  });
+
+  it("copied text says which parts nobody has checked", () => {
+    const mixed = {
+      ...data,
+      rows: [
+        { ...data.rows[0], checked: true },
+        { ...data.rows[1], checked: false },
+      ],
+    };
+    const md = stackMarkdown(mixed);
+    expect(md).toContain("- Hosting: Cloudflare Workers & Pages\n");
+    expect(md).toContain("- Database: Neon (not checked yet)");
+    expect(md).toContain("Confirm on each vendor's page before you launch.");
+    expect(stackPrompt(mixed)).toContain("- Database: Neon (0.5 GB free storage) (not checked yet)");
+    // Rows without a known state (older callers) stay as they were.
+    expect(stackMarkdown(data)).not.toContain("not checked");
   });
 
   it("agent prompt names every part and every catch", () => {

@@ -132,6 +132,8 @@ describe("strings", () => {
       "Checked 3 days ago by Karlo",
     );
     expect(strings(make({ verified_at: "2026-11-13", verified_by: "Karlo" }), NOW).text).toBe("Checked today by Karlo");
+    // Checked in a time zone that is already a day ahead of the build clock.
+    expect(strings(make({ verified_at: "2026-11-14", verified_by: "Karlo" }), NOW).text).toBe("Checked today by Karlo");
     expect(strings(make({ verified_at: "2026-07-24" }), NOW)).toMatchObject({
       text: "Checked 24 Jul. Due for a recheck",
       link: "Recheck it",
