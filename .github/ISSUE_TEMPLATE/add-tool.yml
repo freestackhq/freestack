@@ -1,0 +1,145 @@
+# Add a tool. The site's Add a tool page opens this form prefilled
+# (?template=add-tool.yml&name=...). The add-tool workflow turns it into
+# data/tools/<id>.yaml and opens a pull request. Ids and labels must match
+# src/lib/trust/forms.mjs (ADD_TOOL).
+name: Add a tool
+description: Write the label for a free tool. A maintainer checks the source before it goes live.
+title: "Add: "
+labels: [add-tool]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Easiest from the site: **Add a tool** fills this in for you.
+        Copy numbers exactly as the vendor writes them. Write "unknown" or leave a field empty rather than guess.
+  - type: input
+    id: name
+    attributes:
+      label: Tool name
+      description: As the vendor writes it.
+    validations:
+      required: true
+  - type: input
+    id: id
+    attributes:
+      label: Tool id
+      description: Lowercase letters, digits and dashes. Empty makes one from the name.
+      placeholder: fresh-base
+    validations:
+      required: false
+  - type: input
+    id: url
+    attributes:
+      label: Website
+      placeholder: https://
+    validations:
+      required: true
+  - type: input
+    id: kind
+    attributes:
+      label: What it is
+      description: A few words, like "Serverless Postgres". 40 characters at most.
+    validations:
+      required: false
+  - type: input
+    id: aisle
+    attributes:
+      label: Aisle id
+      description: One of the ids in data/aisles.yaml, like `databases` or `hosting`.
+    validations:
+      required: true
+  - type: input
+    id: figure
+    attributes:
+      label: The big number, as the vendor writes it
+      description: The figure the aisle cares about, like "512 MB". Or "Not listed", or "No limit".
+    validations:
+      required: true
+  - type: input
+    id: metric
+    attributes:
+      label: The big number in the aisle's unit
+      description: Just the number, in the aisle's unit (GB for Databases). Empty when not listed or no limit.
+    validations:
+      required: false
+  - type: input
+    id: metric_note
+    attributes:
+      label: Note on the big number
+      description: Like "Not listed", "No limit" or "per project".
+    validations:
+      required: false
+  - type: input
+    id: pricing_url
+    attributes:
+      label: Pricing page
+      description: The page where you read the numbers. We check every number against it.
+      placeholder: https://
+    validations:
+      required: true
+  - type: textarea
+    id: limits
+    attributes:
+      label: Other limits
+      description: One per line, the way the vendor writes them.
+    validations:
+      required: false
+  - type: input
+    id: who
+    attributes:
+      label: Who can claim it
+      description: "Comma-separated: anyone, student_any_id, student_school_email, startup_proof."
+      placeholder: anyone
+    validations:
+      required: true
+  - type: input
+    id: region
+    attributes:
+      label: Region lock
+      description: Optional, like "US only".
+    validations:
+      required: false
+  - type: input
+    id: sell
+    attributes:
+      label: Can you sell with it
+      description: yes, no or unknown.
+      placeholder: unknown
+    validations:
+      required: false
+  - type: input
+    id: card
+    attributes:
+      label: Credit card at signup
+      description: "yes (card needed), no (not needed) or unknown."
+      placeholder: unknown
+    validations:
+      required: false
+  - type: textarea
+    id: catches
+    attributes:
+      label: Catches
+      description: One per line, a few words each (40 characters at most).
+    validations:
+      required: false
+  - type: textarea
+    id: use_if
+    attributes:
+      label: Use it if
+      description: One reason per line.
+    validations:
+      required: false
+  - type: textarea
+    id: skip_if
+    attributes:
+      label: Skip it if
+      description: "One per line: `reason -> tool id to use instead`. The tool id is optional."
+    validations:
+      required: false
+  - type: textarea
+    id: note
+    attributes:
+      label: Anything else
+      description: Optional. Anything a maintainer should know.
+    validations:
+      required: false

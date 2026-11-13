@@ -3,8 +3,8 @@
  * Add a tool (AddTool.dc.html; edge cases in Edges.dc.html).
  * Prefills from ?name=&url=&aisle= ("Write its label", search "Add it").
  * Rendered on request so the prefill and the "already listed" check work
- * without JavaScript. The form posts to /add/sent, which calls the
- * sendNewTool stub (src/lib/fresh/send.ts). Nothing is sent anywhere.
+ * without JavaScript. The form posts to /add/sent, which shows the pending
+ * label and the "Send on GitHub" link to the prefilled add-tool issue form.
  */
 import Shell from "../../layouts/Shell.astro";
 import Icon from "../../components/fresh/Icon.astro";
@@ -252,14 +252,9 @@ const who = [
         </section>
 
         <div class="sec send">
-          <div class="credit">
-            <label class="lbl" for="f-credit">Your name for credit</label>
-            <input id="f-credit" class="field" type="text" name="credit" placeholder="Optional" autocomplete="nickname" aria-describedby="credit-hint" />
-            <p id="credit-hint" class="hint">Shown on the label as the one who added it. Leave empty to stay anonymous.</p>
-          </div>
           <div class="send-row">
             <button type="submit" class="btn btn-promo">Send for review</button>
-            <span class="hint">We open a pull request on GitHub for you. No GitHub account needed.</span>
+            <span class="hint">Next you see the label, then send it as an issue on GitHub. A bot turns it into a pull request.</span>
           </div>
         </div>
       </form>
@@ -271,7 +266,7 @@ const who = [
           <li><Icon name="check" size={16} /><span>Pick "Not sure" over guessing.</span></li>
           <li><Icon name="check" size={16} /><span>The catch is what you wish you knew on day one.</span></li>
         </ul>
-        <p class="tips-foot">Your name goes on the label as the one who added it, unless you skip it.</p>
+        <p class="tips-foot">You send it from your GitHub account, so your GitHub name shows on the issue and the pull request.</p>
       </aside>
     </div>
   </div>
@@ -539,9 +534,6 @@ const who = [
   }
   .send {
     gap: 16px;
-  }
-  .credit {
-    max-width: 420px;
   }
   .send-row {
     display: flex;

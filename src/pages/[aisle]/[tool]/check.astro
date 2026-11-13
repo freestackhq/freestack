@@ -1,11 +1,12 @@
 ---
 /**
- * Check a label (Verify.dc.html, PhoneVerify.dc.html; failure in Edges.dc.html).
+ * Check a label (Verify.dc.html, PhoneVerify.dc.html).
  * One fieldset per line: Still true or Changed (Changed asks for the new value).
- * All still true: the label will show "Checked today". Any changed: "A change
- * is waiting for review". Sending goes through sendLabelCheck, a stub that
- * sends nothing; `?fail=1` (always) or `?fail=once` simulates a failed
- * person check so the retry path is testable.
+ * "Send on GitHub" opens the label-check issue form prefilled with the answers
+ * (src/lib/fresh/send.ts); the label-check workflow does the rest. All still
+ * true: the label shows "Checked today" once the issue is processed. Any
+ * changed: "A change is waiting for review". A link too long for GitHub
+ * shows the issue body to copy instead (it replaces the old failed-send edge).
  */
 import Shell from "../../../layouts/Shell.astro";
 import Icon from "../../../components/fresh/Icon.astro";
@@ -13,6 +14,7 @@ import Label from "../../../components/fresh/Label.astro";
 import { aisle as getAisle, now, tool as getTool, toolHref, tools } from "../../../lib/fresh/catalog";
 import { checkLines, checkSummary } from "../../../lib/fresh/checks";
 import { shortUrl } from "../../../lib/fresh/url";
+import { GITHUB_REPO } from "../../../lib/site";
 import type { Tool } from "../../../lib/fresh/types";
 
 export function getStaticPaths() {
@@ -34,7 +36,15 @@ const pricingText = shortUrl(t.pricing_url);
 ---
 
 <Shell title={`Check ${t.name}'s label · freestack`} aisle={a.id} noindex>
-  <div class="wrap page" data-check data-tool={t.id} data-name={t.name}>
+  <div
+    class="wrap page"
+    data-check
+    data-repo={GITHUB_REPO}
+    data-tool={t.id}
+    data-name={t.name}
+    data-pricing={t.pricing_url}
+    data-lines={JSON.stringify(lines)}
+  >
     <a class="back" href={toolHref(t)}><Icon name="back" size={16} />{t.name}</a>
 
     <div data-view="form">
@@ -84,20 +94,28 @@ const pricingText = shortUrl(t.pricing_url);
 
         <div class="foot">
           <div class="credit">
-            <label for="check-credit">Your name for credit</label>
-            <input id="check-credit" class="field" type="text" placeholder="Optional" autocomplete="nickname" aria-describedby="check-credit-hint" />
-            <p id="check-credit-hint" class="muted hint">Shown on the label as "Checked by". Leave empty to stay anonymous.</p>
+            <label for="check-note">Anything else <span class="opt">optional</span></label>
+            <textarea id="check-note" class="field" rows="2" aria-describedby="check-note-hint"></textarea>
+            <p id="check-note-hint" class="muted hint">The label credits your GitHub name as "Checked by".</p>
           </div>
 
           <div class="alert" role="alert" data-alert hidden>
-            <p class="alert-h">Your check did not send</p>
-            <p data-alert-body>We could not confirm you are a person. Your answers are still here.</p>
-            <button type="button" class="btn btn-promo" data-retry>Try sending again</button>
+            <p class="alert-h">Too long for a GitHub link</p>
+            <p>Copy this, open a new issue, and paste it as the description. Your answers are still here.</p>
+            <label class="copy-lbl" for="check-body">Issue description</label>
+            <textarea id="check-body" class="field copy" rows="8" readonly data-copy-body></textarea>
+            <div class="copy-row">
+              <button type="button" class="btn btn-outline" data-copy>Copy</button>
+              <a class="btn btn-promo" href="#" target="_blank" rel="noopener" data-new-issue>
+                Open a new issue<Icon name="external" size={14} /><span class="sr-only">, opens GitHub in a new tab</span>
+              </a>
+              <span class="muted hint" role="status" data-copied></span>
+            </div>
           </div>
         </div>
 
         <div class="send-row">
-          <button type="submit" class="btn btn-promo" data-send>Send check</button>
+          <button type="submit" class="btn btn-promo" data-send>Send on GitHub</button>
           <span class="muted summary" data-summary aria-live="polite">{checkSummary(0, lines.length)}</span>
           <p class="err" data-empty hidden>Answer at least one line first.</p>
         </div>
@@ -108,6 +126,11 @@ const pricingText = shortUrl(t.pricing_url);
       <h1 class="h" tabindex="-1" data-done-title></h1>
       <p class="lede" data-done-body></p>
       <div class="preview" data-preview></div>
+      <p class="again">
+        <a href="#" target="_blank" rel="noopener" data-again>
+          GitHub did not open? Open your check on GitHub<span class="sr-only">, opens in a new tab</span>
+        </a>
+      </p>
       <div class="actions">
         <a class="btn" href={`/${a.id}`}>Check another label</a>
         <button type="button" class="btn btn-outline" data-reset>Back to the form</button>
@@ -206,7 +229,8 @@ const pricingText = shortUrl(t.pricing_url);
     grid-column: 1 / -1;
   }
   .now label,
-  .credit label {
+  .credit label,
+  .copy-lbl {
     display: block;
     margin: 0 0 6px;
     font-size: 15px;
@@ -231,6 +255,25 @@ const pricingText = shortUrl(t.pricing_url);
   .credit {
     max-width: 420px;
   }
+  .opt {
+    font-weight: 500;
+    color: var(--muted);
+  }
+  textarea.field {
+    resize: vertical;
+  }
+  .copy {
+    font-size: 14px;
+  }
+  .alert .copy-lbl {
+    margin: 0;
+  }
+  .copy-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px 12px;
+  }
   .hint {
     margin: 6px 0 0;
     font-size: 14px;
@@ -253,7 +296,6 @@ const pricingText = shortUrl(t.pricing_url);
     padding: 22px 24px;
     display: grid;
     gap: 12px;
-    justify-items: start;
     background: var(--label);
     border: 1px solid var(--rule);
     border-top: 8px solid var(--recheck);
@@ -275,8 +317,17 @@ const pricingText = shortUrl(t.pricing_url);
     margin-top: 28px;
     max-width: 360px;
   }
+  .again {
+    margin: 16px 0 0;
+    font-size: 15px;
+  }
+  .again a {
+    display: inline-flex;
+    align-items: center;
+    min-height: var(--target);
+  }
   .actions {
-    margin-top: 24px;
+    margin-top: 16px;
     display: flex;
     flex-wrap: wrap;
     gap: 10px;
@@ -349,8 +400,8 @@ const pricingText = shortUrl(t.pricing_url);
 </style>
 
 <script>
-  import { checkOutcome, checkSummary, type CheckAnswer } from "../../../lib/fresh/checks";
-  import { sendLabelCheck, type StubFail } from "../../../lib/fresh/send";
+  import { checkOutcome, checkSummary, type CheckAnswer, type CheckLine } from "../../../lib/fresh/checks";
+  import { labelCheckLink, type IssueLink } from "../../../lib/fresh/send";
 
   const root = document.querySelector<HTMLElement>("[data-check]")!;
   const form = root.querySelector<HTMLFormElement>("[data-check-form]")!;
@@ -361,13 +412,12 @@ const pricingText = shortUrl(t.pricing_url);
   const emptyErr = form.querySelector<HTMLElement>("[data-empty]")!;
   const alertBox = form.querySelector<HTMLElement>("[data-alert]")!;
   const send = form.querySelector<HTMLButtonElement>("[data-send]")!;
-  const retry = form.querySelector<HTMLButtonElement>("[data-retry]")!;
-  const credit = form.querySelector<HTMLInputElement>("#check-credit")!;
+  const note = form.querySelector<HTMLTextAreaElement>("#check-note")!;
+  const copyBody = form.querySelector<HTMLTextAreaElement>("[data-copy-body]")!;
+  const copied = form.querySelector<HTMLElement>("[data-copied]")!;
   const name = root.dataset.name!;
-
-  const flag = new URLSearchParams(location.search).get("fail");
-  const fail: StubFail | undefined = flag === "once" ? "once" : flag ? "always" : undefined;
-  let attempt = 0;
+  const checkLines = JSON.parse(root.dataset.lines!) as CheckLine[];
+  const tool = { id: root.dataset.tool!, name, pricing_url: root.dataset.pricing! };
 
   function verdict(fs: HTMLFieldSetElement): CheckAnswer["verdict"] | null {
     const on = fs.querySelector<HTMLButtonElement>('[aria-pressed="true"]');
@@ -385,10 +435,12 @@ const pricingText = shortUrl(t.pricing_url);
     fs.querySelector<HTMLElement>(".err")!.hidden = !on;
   }
 
+  // Any edit makes an earlier copy box stale.
   function update() {
     const answered = lines.filter((fs) => verdict(fs)).length;
     summary.textContent = checkSummary(answered, lines.length);
     if (answered > 0) emptyErr.hidden = true;
+    showCopy(null);
   }
 
   lines.forEach((fs) => {
@@ -406,8 +458,10 @@ const pricingText = shortUrl(t.pricing_url);
     );
     nowInput(fs).addEventListener("input", () => {
       if (nowInput(fs).value.trim()) setLineError(fs, false);
+      showCopy(null);
     });
   });
+  note.addEventListener("input", () => showCopy(null));
 
   function answers(): CheckAnswer[] {
     return lines.flatMap((fs) => {
@@ -417,23 +471,39 @@ const pricingText = shortUrl(t.pricing_url);
     });
   }
 
-  function showAlert(on: boolean) {
-    alertBox.hidden = !on;
-    // One yellow action at a time.
-    send.hidden = on;
+  // Too long for a link: the body to paste and a plain new-issue link. One yellow action at a time.
+  function showCopy(link: Extract<IssueLink, { kind: "copy" }> | null) {
+    alertBox.hidden = !link;
+    send.hidden = !!link;
+    copied.textContent = "";
+    if (!link) return;
+    copyBody.value = link.body;
+    form.querySelector<HTMLAnchorElement>("[data-new-issue]")!.href = link.url;
   }
 
-  function showDone(kind: "checked" | "review", changed: number) {
+  form.querySelector("[data-copy]")!.addEventListener("click", async () => {
+    copyBody.select();
+    try {
+      await navigator.clipboard.writeText(copyBody.value);
+      copied.textContent = "Copied";
+    } catch {
+      copied.textContent = "Select the text and copy it";
+    }
+  });
+
+  function showDone(kind: "checked" | "review", changed: number, url: string) {
     const title = doneView.querySelector<HTMLElement>("[data-done-title]")!;
     const body = doneView.querySelector<HTMLElement>("[data-done-body]")!;
     const preview = doneView.querySelector<HTMLElement>("[data-preview]")!;
+    title.textContent = "Thanks. Now submit it on GitHub.";
+    const opened = "Your check opened on GitHub in a new tab. Submit the issue there.";
     if (kind === "checked") {
-      title.textContent = `Thanks. ${name} is checked.`;
-      body.textContent = "The label now shows it was checked today. Thank you for keeping it honest for everyone after you.";
+      body.textContent = `${opened} Once it is processed, ${name}'s label shows it was checked today, with your GitHub name.`;
     } else {
-      title.textContent = "Thanks. We will review it.";
-      body.textContent = `${changed} ${changed === 1 ? "change" : "changes"} sent. A maintainer confirms it against the source, then the label updates and everyone sees the new number.`;
+      const n = `${changed} ${changed === 1 ? "change" : "changes"}`;
+      body.textContent = `${opened} Once it is processed, the label shows "A change is waiting for review" until a maintainer confirms your ${n} against the source.`;
     }
+    doneView.querySelector<HTMLAnchorElement>("[data-again]")!.href = url;
     const tpl = root.querySelector<HTMLTemplateElement>(`[data-preview-${kind}]`)!;
     preview.replaceChildren(tpl.content.cloneNode(true));
     formView.hidden = true;
@@ -442,7 +512,7 @@ const pricingText = shortUrl(t.pricing_url);
     title.focus();
   }
 
-  async function submit() {
+  function submit() {
     const list = answers();
     const outcome = checkOutcome(list);
     if (outcome.kind === "empty") {
@@ -456,27 +526,20 @@ const pricingText = shortUrl(t.pricing_url);
       return;
     }
 
-    attempt += 1;
-    send.disabled = retry.disabled = true;
-    const res = await sendLabelCheck(
-      { tool: root.dataset.tool!, answers: list, name: credit.value.trim() },
-      { fail, attempt },
-    );
-    send.disabled = retry.disabled = false;
-    if (!res.ok) {
-      showAlert(true);
-      retry.focus();
+    const link = labelCheckLink(root.dataset.repo!, { tool, lines: checkLines, answers: list, note: note.value });
+    if (link.kind === "copy") {
+      showCopy(link);
+      copyBody.focus();
       return;
     }
-    showAlert(false);
-    showDone(outcome.kind, outcome.changed);
+    window.open(link.url, "_blank", "noopener");
+    showDone(outcome.kind, outcome.changed, link.url);
   }
 
   form.addEventListener("submit", (e) => {
     e.preventDefault();
     submit();
   });
-  retry.addEventListener("click", submit);
 
   doneView.querySelector("[data-reset]")!.addEventListener("click", () => {
     doneView.hidden = true;

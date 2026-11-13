@@ -1,0 +1,50 @@
+# Check a label. The site's "Send on GitHub" button opens this form
+# prefilled (?template=label-check.yml&tool=...&answers=...). The
+# label-check workflow reads it; ids and labels must match
+# src/lib/trust/forms.mjs (LABEL_CHECK).
+name: Check a label
+description: Tell us whether a tool's label still matches the vendor's pricing page.
+title: "Check: "
+labels: [label-check]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Easiest from the site: open a tool's label, pick **Check it**, and press **Send on GitHub**.
+        All lines "Still true": the label is marked checked today, credited to your GitHub name.
+        Any line "Changed": the label shows "A change is waiting for review" until a maintainer applies it.
+  - type: input
+    id: tool
+    attributes:
+      label: Tool id
+      description: The last part of the tool's address, like `neon` in /databases/neon.
+      placeholder: neon
+    validations:
+      required: true
+  - type: textarea
+    id: answers
+    attributes:
+      label: Answers
+      description: |
+        One line per line of the label: `- <field> | <what it says> | Still true`, or `| Changed: <what the page says now>`.
+        Fields: metric, limits.0, limits.1, catches.0, who, sell, card. Lines you leave out stay as they are.
+      placeholder: |
+        - metric | Free storage: 0.5 GB | Still true
+        - limits.0 | Limit: 5 GB data sent out a month | Changed: 10 GB data sent out a month
+    validations:
+      required: true
+  - type: input
+    id: source
+    attributes:
+      label: Where you checked
+      description: The vendor's page you read the numbers on.
+      placeholder: https://
+    validations:
+      required: true
+  - type: textarea
+    id: note
+    attributes:
+      label: Anything else
+      description: Optional. Anything a maintainer should know.
+    validations:
+      required: false

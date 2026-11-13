@@ -1,0 +1,23 @@
+id: neon
+name: Neon
+kind: Serverless Postgres
+url: https://neon.tech
+aisle: databases
+metric: 0.5          # storage_gb, the Databases aisle metric
+limits:
+  - 5 GB data sent out a month
+  - Sleeps after 5 minutes idle   # since 2024
+who: [anyone]
+region: null
+sell: yes
+card: unknown
+catches:
+  - Sleeps after 5 min idle
+use_if:
+  - You want a normal SQL database
+skip_if:
+  - { reason: Your users are all over the world, use: turso }
+pricing_url: https://neon.tech/pricing
+verified_at: null
+verified_by: null
+source: catalog

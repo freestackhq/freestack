@@ -1,0 +1,46 @@
+# Add a tool issues (ARCHITECTURE.md "Trust loop"). The logic lives in
+# scripts/trust/add-tool.mjs; this file only runs it. Issue text is read
+# from the event file by the script, never pasted into a shell here.
+name: add-tool
+
+on:
+  issues:
+    types: [opened, edited, closed]
+
+permissions:
+  contents: write
+  issues: write
+  pull-requests: write
+
+concurrency:
+  group: add-tool-${{ github.event.issue.number }}
+  cancel-in-progress: false
+
+jobs:
+  process:
+    # Issue-form issues carry the label; a pasted "too long" body carries the marker.
+    if: >-
+      !github.event.issue.pull_request &&
+      (contains(github.event.issue.labels.*.name, 'add-tool') ||
+       contains(github.event.issue.body, '<!-- freestack:add-tool -->'))
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Add the label to a pasted issue
+        if: ${{ !contains(github.event.issue.labels.*.name, 'add-tool') && github.event.action != 'closed' }}
+        run: gh issue edit "$NUMBER" --add-label add-tool
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          NUMBER: ${{ github.event.issue.number }}
+      - run: node scripts/trust/add-tool.mjs
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          # Optional repo variable: links "already listed" replies to the live label.
+          SITE_URL: ${{ vars.SITE_URL }}

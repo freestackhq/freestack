@@ -69,8 +69,8 @@ The canvas is laid out the same way as this file: main pages, side pages and sec
 | Add a tool: sent | `/add/sent` | `AddToolSent.dc.html` | reflows from desktop |
 | Label and page states | component reference | `States.dc.html` | |
 
-- Check a label: Still true / Changed per line. All "Still true": label shows "Checked today". Any "Changed": label shows "A change is waiting for review" until a maintainer applies it. Failed send or Turnstile failure: keep answers, offer "Try sending again".
-- Add a tool: tool already listed (link to its label), a number that isn't a number (ask for the vendor's figure or "Not listed"). After sending: `AddToolSent`, with the pending label preview and a link to the PR.
+- Check a label: Still true / Changed per line. "Send on GitHub" opens the `label-check` issue form prefilled with the answers (sign-in is GitHub's). Nothing answered, or Changed without the new value: not sent. Once the `label-check` workflow processes the issue: all "Still true" shows "Checked today" with the GitHub name; any "Changed" shows "A change is waiting for review" until a maintainer merges or closes its PR. The done view says so and keeps the answers. Link too long for GitHub (over 8,000 characters): keep answers, show the issue body to copy and a plain "Open a new issue" link.
+- Add a tool: tool already listed (link to its label), a number that isn't a number (ask for the vendor's figure or "Not listed"). Works without JavaScript. After "Send for review": `AddToolSent` with the pending label preview, "Send on GitHub" to the prefilled `add-tool` issue form (or the body to copy when too long), and "Follow it on GitHub" to the open add-tool pull requests. The `add-tool` workflow opens the PR.
 
 ## Misc pages
 

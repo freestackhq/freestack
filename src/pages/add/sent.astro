@@ -1,84 +1,97 @@
 ---
 /**
- * Add a tool: sent (AddToolSent.dc.html). Receives the Add a tool form,
- * hands it to the sendNewTool stub (nothing leaves the server), and shows
- * the pending label. Opening it without a form goes back to /add.
+ * Add a tool: sent (AddToolSent.dc.html). Receives the Add a tool form and
+ * shows the pending label with "Send on GitHub": a link to the add-tool
+ * issue form, prefilled from the draft (src/lib/fresh/send.ts). The add-tool
+ * workflow turns the issue into a pull request. A link too long for GitHub
+ * shows the issue body to copy and a plain new-issue link instead. Works
+ * without JavaScript. Opening it without a form goes back to /add.
  */
 import Shell from "../../layouts/Shell.astro";
 import Icon from "../../components/fresh/Icon.astro";
 import Label from "../../components/fresh/Label.astro";
 import { aisle as getAisle, aisles, tools } from "../../lib/fresh/catalog";
 import { readDraft, type DraftErrors } from "../../lib/fresh/addtool";
-import { sendNewTool, type SendToolResult } from "../../lib/fresh/send";
+import { addToolLink, openAdditionsUrl } from "../../lib/fresh/send";
 import { shortUrl } from "../../lib/fresh/url";
+import { GITHUB_REPO } from "../../lib/site";
 
 export const prerender = false;
 
 if (Astro.request.method !== "POST") return Astro.redirect("/add", 303);
 
 const { draft, errors } = readDraft(await Astro.request.formData(), aisles(), tools());
-const result: SendToolResult | null = draft ? await sendNewTool(draft) : null;
+const link = draft ? addToolLink(GITHUB_REPO, draft) : null;
 const t = draft?.tool;
 const a = t ? getAisle(t.aisle) : undefined;
 const missing = Object.values(errors as DraftErrors).filter(Boolean);
 ---
 
-<Shell title={t ? `Sent: ${t.name} · freestack` : "Add a tool · freestack"} noindex>
+<Shell title={t ? `Send ${t.name} · freestack` : "Add a tool · freestack"} noindex>
   {
-    t && a && result ? (
+    t && a && link ? (
       <div class="wrap page">
         <div role="status" class="main">
-          <h1 class="h">Sent. Thanks.</h1>
+          <h1 class="h">One step left.</h1>
           <p class="lede">
-            Your label for {t.name} is waiting for review. Nothing shows on the site until someone checks it.
+            Your label for {t.name} is ready. Send it on GitHub to put it up for review. Nothing shows on the site until
+            someone checks it.
           </p>
+          {link.kind === "url" ? (
+            <div class="send">
+              <a class="btn btn-promo" href={link.url} target="_blank" rel="noopener" data-send>
+                Send on GitHub<Icon name="external" size={14} />
+                <span class="sr-only">, opens in a new tab</span>
+              </a>
+              <span class="muted hint">You need a GitHub account. Your GitHub name shows on the issue.</span>
+            </div>
+          ) : (
+            <div class="send copy-box" data-copy-box>
+              <p class="copy-h">Too long for a GitHub link</p>
+              <p>Copy this, open a new issue, and paste it as the description.</p>
+              <label class="copy-lbl" for="issue-body">Issue description</label>
+              <textarea id="issue-body" class="field copy" rows="10" readonly data-copy-body>{link.body}</textarea>
+              <div class="copy-row">
+                <button type="button" class="btn btn-outline" data-copy hidden>Copy</button>
+                <a class="btn btn-promo" href={link.url} target="_blank" rel="noopener">
+                  Open a new issue<Icon name="external" size={14} />
+                  <span class="sr-only">, opens GitHub in a new tab</span>
+                </a>
+                <span class="muted hint" role="status" data-copied />
+              </div>
+            </div>
+          )}
           <h2 class="next-h">What happens next</h2>
           <ol class="steps">
             <li>
               <span class="n" aria-hidden="true">1</span>
+              <span>
+                <span class="step">You submit the issue on GitHub.</span>
+                <span class="muted">A bot turns it into a pull request with the label.</span>
+              </span>
+            </li>
+            <li>
+              <span class="n" aria-hidden="true">2</span>
               <span>
                 <span class="step">A maintainer compares it with {shortUrl(t.pricing_url)}.</span>
                 <span class="muted">Usually within a week.</span>
               </span>
             </li>
             <li>
-              <span class="n" aria-hidden="true">2</span>
+              <span class="n" aria-hidden="true">3</span>
               <span>
                 <span class="step">It goes live in the {a.name} aisle.</span>
-                <span class="muted">Marked "Checked" with today's date.</span>
+                <span class="muted">Marked "Not checked yet" until someone checks it against the vendor's page.</span>
               </span>
-            </li>
-            <li>
-              <span class="n" aria-hidden="true">3</span>
-              {draft!.credit ? (
-                <span>
-                  <span class="step">Your name goes on it.</span>
-                  <span class="muted">As the one who added it. You left a name, so it shows.</span>
-                </span>
-              ) : (
-                <span>
-                  <span class="step">It stays anonymous.</span>
-                  <span class="muted">You left the name empty, so no name shows.</span>
-                </span>
-              )}
             </li>
           </ol>
           <div class="actions">
             <a class="btn" href="/add">Add another tool</a>
             <a class="btn btn-outline" href={`/${a.id}`}>Back to {a.name}</a>
-            {result.placeholder ? (
-              <span class="pr">
-                <a href={result.prUrl} data-placeholder="true" aria-describedby="pr-note">
-                  Follow it on GitHub
-                </a>
-                <span id="pr-note" class="muted pr-note">Placeholder. Sending is not wired up yet, so there is no pull request.</span>
-              </span>
-            ) : (
-              <a class="pr" href={result.prUrl} target="_blank" rel="noopener">
-                Follow it on GitHub<Icon name="external" size={14} />
-                <span class="sr-only">, opens in a new tab</span>
-              </a>
-            )}
+            <a class="pr" href={openAdditionsUrl(GITHUB_REPO)} target="_blank" rel="noopener">
+              Follow it on GitHub<Icon name="external" size={14} />
+              <span class="sr-only">, opens in a new tab</span>
+            </a>
           </div>
         </div>
         <div class="preview">
@@ -168,22 +181,51 @@ const missing = Object.values(errors as DraftErrors).filter(Boolean);
   }
   .pr {
     display: inline-flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: 2px 8px;
-    font-size: 15px;
-    font-weight: 700;
-  }
-  .pr a,
-  a.pr {
-    display: inline-flex;
     align-items: center;
     gap: 6px;
     min-height: var(--target);
+    font-size: 15px;
+    font-weight: 700;
   }
-  .pr-note {
-    font-size: 13px;
-    font-weight: 500;
+  .send {
+    margin-top: 24px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px 16px;
+  }
+  .hint {
+    font-size: 14px;
+  }
+  .copy-box {
+    display: grid;
+    gap: 10px;
+    padding: 20px 22px;
+    background: var(--label);
+    border: 2px solid var(--ink);
+  }
+  .copy-box p {
+    margin: 0;
+    font-size: 16px;
+    line-height: 1.5;
+  }
+  .copy-box .copy-h {
+    font-size: 19px;
+    font-weight: 800;
+  }
+  .copy-lbl {
+    font-size: 15px;
+    font-weight: 700;
+  }
+  .copy {
+    font-size: 14px;
+    resize: vertical;
+  }
+  .copy-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px 12px;
   }
   .cap {
     margin: 0 0 12px;
@@ -209,3 +251,23 @@ const missing = Object.values(errors as DraftErrors).filter(Boolean);
     }
   }
 </style>
+
+<script>
+  // Copy button for the too-long fallback. Without JavaScript the text stays selectable.
+  const box = document.querySelector<HTMLElement>("[data-copy-box]");
+  if (box) {
+    const btn = box.querySelector<HTMLButtonElement>("[data-copy]")!;
+    const body = box.querySelector<HTMLTextAreaElement>("[data-copy-body]")!;
+    const said = box.querySelector<HTMLElement>("[data-copied]")!;
+    btn.hidden = false;
+    btn.addEventListener("click", async () => {
+      body.select();
+      try {
+        await navigator.clipboard.writeText(body.value);
+        said.textContent = "Copied";
+      } catch {
+        said.textContent = "Select the text and copy it";
+      }
+    });
+  }
+</script>

@@ -1,0 +1,13 @@
+# Fixture: the shape of data/aisles.yaml.
+- id: databases
+  group: Build
+  name: Databases
+  metric: storage_gb
+  unit: GB
+  label: free storage
+- id: hosting
+  group: Build
+  name: Sites and functions
+  metric: bandwidth_gb_month   # transfer
+  unit: GB a month
+  label: transfer
