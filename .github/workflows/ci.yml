@@ -2,11 +2,19 @@ name: CI
 
 on:
   push:
-    branches: [master]
+    branches: [main, master]
   pull_request:
 
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
 jobs:
-  test:
+  # Vitest, including the schema checks on data/.
+  unit:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -19,6 +27,55 @@ jobs:
           cache: pnpm
       - run: pnpm install --frozen-lockfile
       - run: pnpm test
+
+  # Data hygiene: committed snapshot matches data/, Suggested labels are fresh,
+  # plugin files match SITE_URL. Steps whose script is missing are skipped.
+  data:
+    runs-on: ubuntu-latest
+    env:
+      SITE_URL: ${{ vars.SITE_URL || 'https://freestack.example.com' }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10.33.0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - name: Snapshot is up to date
+        run: |
+          if node -e 'process.exit(require("./package.json").scripts?.["catalog:generate"] ? 0 : 1)' && [ -f scripts/generate.mjs ]; then
+            pnpm catalog:generate
+            # generatedAt is a timestamp in the old generator; every other line must match.
+            git diff --exit-code -I '"generatedAt"' -- src/data/catalog.generated.json \
+              || { echo "::error::src/data/catalog.generated.json is stale. Run pnpm catalog:generate and commit it."; exit 1; }
+          else
+            echo "catalog:generate not present, skipping"
+          fi
+      - name: Staleness gate
+        run: pnpm ops:staleness
+      - name: Plugin files match SITE_URL
+        run: |
+          if node -e 'process.exit(require("./package.json").scripts?.["plugin:build"] ? 0 : 1)'; then
+            pnpm plugin:build --check
+          else
+            echo "plugin:build not present, skipping"
+          fi
+
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10.33.0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
       - run: pnpm build
 
   e2e:
