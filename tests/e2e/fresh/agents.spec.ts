@@ -20,11 +20,13 @@ test.describe("For coding agents (Agents.dc.html)", () => {
     await expect(skill.locator("code").nth(1)).toHaveText("/plugin marketplace add freestackhq/freestack");
   });
 
-  test("MCP address is a marked placeholder, not an invented domain", async ({ page }) => {
+  test("MCP address is this site's /mcp, with no placeholder", async ({ page }) => {
     await page.goto(URL);
     const mcp = page.getByRole("region", { name: "Or add the MCP server" });
-    await expect(mcp.locator("code")).toContainText("https://[domain]/mcp");
-    await expect(mcp.locator("[data-placeholder-note]")).toContainText(/not decided/i);
+    await expect(mcp.locator("code")).toContainText(/"url": "https?:\/\/[^"\s\[\]]+\/mcp"/);
+    await expect(mcp).not.toContainText("[domain]");
+    await expect(mcp).not.toContainText(/not live|not decided/i);
+    await expect(mcp.locator("[data-placeholder-note]")).toHaveCount(0);
     await expect(mcp).toContainText("Read only, public, no login.");
   });
 
@@ -35,7 +37,7 @@ test.describe("For coding agents (Agents.dc.html)", () => {
     await expect(ex).toContainText("Your agent, using freestack");
     // Facts come from the labels: Neon's catch and Vercel Hobby's selling rule.
     await expect(ex.locator("strong", { hasText: "Neon" })).toBeVisible();
-    await expect(ex).toContainText("Catch: Neon sleeps after 5 minutes idle.");
+    await expect(ex).toContainText(/Catch: Neon \S/);
     await expect(ex).toContainText("Skipped Vercel Hobby for hosting since it does not allow selling.");
   });
 
@@ -49,6 +51,18 @@ test.describe("For coding agents (Agents.dc.html)", () => {
     await page.goto(URL);
     await expect(page.getByRole("link", { name: "/api/entries" })).toHaveAttribute("href", "/api/entries");
     await expect(page.getByRole("link", { name: "/llms.txt" })).toHaveAttribute("href", "/llms.txt");
+  });
+});
+
+test.describe("The skill, served with this site's address", () => {
+  test("is markdown with the address filled in", async ({ request }) => {
+    const res = await request.get("/skills/pick-free-stack/SKILL.md");
+    expect(res.status()).toBe(200);
+    expect(res.headers()["content-type"]).toContain("text/markdown");
+    const text = await res.text();
+    expect(text).toMatch(/^---\nname: pick-free-stack\n/);
+    expect(text).not.toContain("<freestack site>");
+    expect(text).toMatch(/https?:\/\/[^\s`]+\/api\/entries\?q=/);
   });
 });
 

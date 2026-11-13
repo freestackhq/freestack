@@ -3,14 +3,12 @@
  * For coding agents (Agents.dc.html). The skill, the MCP server, an example
  * reply built from real labels, and what the agent can ask.
  *
- * The MCP domain is an open decision (ARCHITECTURE.md), so the address is a
- * marked placeholder until it is chosen.
+ * The repo and MCP address come from src/lib/site.ts (PUBLIC_GITHUB_REPO and
+ * SITE_URL), so the page follows the deploy.
  */
 import Shell from "../layouts/Shell.astro";
 import { aisles, catches, tool, toolsInAisle } from "../lib/fresh/catalog";
-
-const REPO = "https://github.com/freestackhq/freestack";
-const MCP_URL = "https://[domain]/mcp";
+import { GITHUB_REPO, MCP_URL, REPO_URL } from "../lib/site";
 
 // The example: what the user asks, and which labels the agent looks at.
 const db = tool("neon");
@@ -37,17 +35,14 @@ const compareIds = firstAisle ? toolsInAisle(firstAisle.id).slice(0, 3).map((t) 
       <section class="box" aria-labelledby="i1">
         <h2 id="i1">Install the skill</h2>
         <p class="muted">Claude Code, Cursor, Codex, OpenCode. No setup after this.</p>
-        <code class="cmd">npx skills add {REPO}</code>
+        <code class="cmd">npx skills add {REPO_URL}</code>
         <p class="sub">Claude Code plugin</p>
-        <code class="cmd">/plugin marketplace add freestackhq/freestack</code>
+        <code class="cmd">/plugin marketplace add {GITHUB_REPO}</code>
       </section>
       <section class="box" aria-labelledby="i2">
         <h2 id="i2">Or add the MCP server</h2>
         <p class="muted">Read only, public, no login. Already inside the plugin.</p>
         <code class="cmd">{`{ "mcpServers": { "freestack": {\n  "url": "${MCP_URL}" } } }`}</code>
-        <p class="placeholder" data-placeholder-note>
-          <strong>[domain]</strong> is a placeholder. The address is not decided yet, so this server is not live.
-        </p>
       </section>
     </div>
 
@@ -178,9 +173,6 @@ const compareIds = firstAisle ? toolsInAisle(firstAisle.id).slice(0, 3).map((t) 
     font-weight: 600;
     font-size: 15px;
     line-height: 1.5;
-  }
-  .placeholder {
-    color: var(--muted);
   }
   .block {
     margin-top: 56px;
