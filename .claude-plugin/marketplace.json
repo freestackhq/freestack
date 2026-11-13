@@ -1,0 +1,15 @@
+{
+  "name": "freestack",
+  "description": "freestack: free tiers as shelf labels, for coding agents.",
+  "owner": {
+    "name": "freestack",
+    "url": "https://github.com/freestackhq/freestack"
+  },
+  "plugins": [
+    {
+      "name": "freestack",
+      "source": "./plugins/freestack",
+      "description": "Check free-tier labels (limits, catches, can you sell, card needed) before your agent adds anything paid."
+    }
+  ]
+}

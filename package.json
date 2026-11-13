@@ -12,6 +12,7 @@
     "dev": "astro dev",
     "build": "astro build",
     "deploy:cf": "node scripts/deploy.mjs",
+    "plugin:build": "node scripts/build-plugin.mjs",
     "preview": "astro preview",
     "astro": "astro",
     "catalog:fetch": "node scripts/fetch-catalogs.mjs",
