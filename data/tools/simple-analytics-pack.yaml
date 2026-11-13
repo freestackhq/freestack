@@ -1,0 +1,39 @@
+id: simple-analytics-pack
+name: Simple Analytics (Pack)
+kind: Student offer
+url: https://simpleanalytics.com
+aisle: student-programs
+metric: 12
+metric_note: About
+limits: []
+who:
+  - student_school_email
+region: null
+sell: yes
+card: unknown
+cost: student
+catches: []
+use_if:
+  - You have a portfolio site, blog, or side project and want to know what pages get traffic without selling your visitors' data to Google — Simple Analytics is GDPR-compliant by default, needs no cookie banner, and the dashboard is refreshingly simple.
+skip_if: []
+pricing_url: https://simpleanalytics.com
+verified_at: 2026-07-24
+verified_by: null
+source: catalog
+tagline: Privacy-first analytics — Starter free for a year via Pack.
+about: |-
+  Privacy-first analytics — Starter free for a year via Pack.
+
+  vs Google Analytics / Plausible / Umami: Google Analytics is free forever but requires cookie consent banners and sends visitor data to Google. Plausible is privacy-first but $9/mo with no student deal. Umami is self-hosted and free but needs your own server. Simple Analytics via Pack gives you hosted privacy analytics at zero cost for a year — the easiest ethical choice while you're a student.
+tags:
+  - pack
+  - analytics
+program:
+  order: 25
+  lasts_big: 1 yr
+  lasts_sub: ~1 year Starter via Pack
+  perks:
+    - Privacy-first analytics — Starter free for a year via Pack.
+  needs: A school email
+  lasts: ~1 year Starter via Pack
+  claim_url: https://simpleanalytics.com

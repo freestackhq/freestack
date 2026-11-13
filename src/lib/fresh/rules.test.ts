@@ -1,4 +1,5 @@
 import { readFileSync } from "node:fs";
+import { parse } from "yaml";
 import { describe, expect, it } from "vitest";
 import { RULES, bestSwap, evaluate, fitFor, summary, type RuleTool } from "./rules";
 
@@ -152,14 +153,8 @@ describe("rules engine", () => {
     expect(bestSwap("missing", input, [workers])).toBeNull();
   });
 
-  it("mirrors data/rules.yaml", () => {
-    const yaml = readFileSync(new URL("../../../data/rules.yaml", import.meta.url), "utf8");
-    const ids = [...yaml.matchAll(/^- id: (\S+)/gm)].map((m) => m[1]);
-    expect(RULES.map((r) => r.id)).toEqual(ids);
-    for (const r of RULES) {
-      expect(yaml).toContain(`text: "${r.text}"`);
-      expect(yaml).toContain(`short: "${r.short}"`);
-      expect(yaml).toContain(`level: ${r.level}`);
-    }
+  it("is compiled from data/rules.yaml", () => {
+    const yaml = parse(readFileSync(new URL("../../../data/rules.yaml", import.meta.url), "utf8"));
+    expect(RULES).toEqual(yaml);
   });
 });

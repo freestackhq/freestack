@@ -1,0 +1,30 @@
+id: crowdsec
+name: CrowdSec
+kind: Security tool
+url: https://www.crowdsec.net
+aisle: security
+metric: null
+metric_note: Not listed
+limits:
+  - OSS agent free
+  - Console free tier then paid
+who:
+  - anyone
+region: null
+sell: yes
+card: unknown
+cost: free
+catches: []
+use_if:
+  - You self-host services and want to automatically ban IPs that brute-force SSH, probe admin paths, or spam login forms — using crowd-sourced blocklists from other CrowdSec users running the same stack.
+skip_if:
+  - reason: "Fail2ban: CrowdSec parses the same logs but shares threat intel globally — you benefit from every other operator's bans, not just your own observations. Also faster (Go vs Python) and has a proper API/dashboard. vs Cloudflare WAF: CrowdSec protects origin servers directly (SSH, SMTP, game servers — anything with logs), doesn't require proxying traffic through a third party, and costs $0."
+pricing_url: https://www.crowdsec.net
+verified_at: 2026-07-24
+verified_by: null
+source: catalog
+tagline: Collaborative IDS — block noisy scanners without a WAF invoice.
+about: Collaborative IDS — block noisy scanners without a WAF invoice.
+tags:
+  - ids
+  - oss

@@ -1,0 +1,30 @@
+# TEST FIXTURE, not real data. Copied from the board samples (the old src/data/sample.ts).
+# *_days_ago keys are fixture-only: scripts/generate.mjs turns them into dates at build time.
+id: cf-workers
+name: Cloudflare Workers & Pages
+kind: Edge hosting
+url: https://workers.cloudflare.com
+aisle: hosting
+metric: 100000
+limits:
+  - 10 ms CPU per request
+  - Unlimited static requests
+who:
+  - anyone
+region: null
+sell: yes
+card: no
+catches: []
+use_if: []
+skip_if: []
+pricing_url: https://developers.cloudflare.com/workers/platform/pricing/
+verified_days_ago: 5
+verified_by: Karlo
+source: catalog
+tagline: Static sites plus API routes. No cold starts.
+fits:
+  - school
+  - student
+  - indie
+  - startup
+suggested: true

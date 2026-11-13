@@ -1,0 +1,21 @@
+# TEST FIXTURE, not real data. Copied from the board samples (the old src/data/sample.ts).
+# *_days_ago keys are fixture-only: scripts/generate.mjs turns them into dates at build time.
+id: clerk
+name: Clerk
+kind: Sign-in
+url: https://clerk.com
+aisle: auth
+metric: 10000
+limits: []
+who:
+  - anyone
+region: null
+sell: yes
+card: no
+catches: []
+use_if: []
+skip_if: []
+pricing_url: https://clerk.com/pricing
+verified_days_ago: 12
+verified_by: Karlo
+source: catalog

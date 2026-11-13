@@ -1,0 +1,38 @@
+id: ip-api
+name: ip-api
+kind: Location API
+url: https://ip-api.com/docs
+aisle: geo
+metric: null
+metric_note: 45 requests/min
+limits:
+  - Unlimited for non-commercial use
+  - "Rate limit: 45 requests/min"
+who:
+  - anyone
+region: null
+sell: no
+card: unknown
+cost: free
+catches:
+  - Unlimited for non-commercial use
+  - Non-commercial use only
+use_if:
+  - You need server-side IP geolocation with no key and don't care about HTTPS on the free tier.
+skip_if:
+  - reason: Ip-api is simpler and no signup, but HTTP-only on free. ipinfo gives HTTPS and ASN data but has a monthly cap.
+    use: ipinfo-io
+pricing_url: https://ip-api.com/docs
+verified_at: null
+verified_by: null
+source: catalog
+tagline: IP geolocation returning country, region, city, lat/long, ISP, timezone.
+about: "IP geolocation returning country, region, city, lat/long, ISP, timezone. Fast and no signup. Caveat: free tier is HTTP-only (no TLS), so not suitable for client-side browser calls."
+api:
+  base_url: http://ip-api.com/json
+  docs: https://ip-api.com/docs
+  auth: none
+  cors: no
+  response: JSON, CSV, XML
+  openapi: no
+  status: active

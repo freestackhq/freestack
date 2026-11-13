@@ -1,0 +1,33 @@
+id: overleaf
+name: Overleaf
+kind: LaTeX editor
+url: https://www.overleaf.com
+aisle: team
+metric: null
+metric_note: Not listed
+limits:
+  - Free
+  - Limited collaborators
+  - Campus Pro common
+who:
+  - anyone
+region: null
+sell: unknown
+card: unknown
+cost: free
+catches: []
+use_if:
+  - You write academic papers, theses, or lab reports in LaTeX and want real-time collaboration with groupmates without anyone installing a 4GB TeX distribution locally. Campus Pro licenses often add unlimited collaborators and Git sync.
+skip_if: []
+pricing_url: https://www.overleaf.com
+verified_at: 2026-07-24
+verified_by: null
+source: catalog
+tagline: Collaborative LaTeX — papers and lab reports without local TeX pain.
+about: |-
+  Collaborative LaTeX — papers and lab reports without local TeX pain.
+
+  vs local TeX (VS Code + LaTeX Workshop) / Typst: Local TeX is free and offline but painful to set up and impossible to collaborate on in real-time. Typst is modern and faster to compile, but professors and journals still require `.tex` submissions. Overleaf wins for collaborative academic LaTeX with zero setup.
+tags:
+  - latex
+  - academic

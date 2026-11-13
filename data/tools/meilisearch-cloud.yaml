@@ -1,0 +1,30 @@
+id: meilisearch-cloud
+name: Meilisearch Cloud
+kind: Search service
+url: https://www.meilisearch.com
+aisle: search
+metric: null
+metric_note: Not listed
+limits:
+  - Cloud free tier
+  - Self-host OSS unlimited
+who:
+  - anyone
+region: null
+sell: yes
+card: unknown
+cost: free
+catches: []
+use_if:
+  - You're building a product catalog or docs site and want the fastest path from zero to working search — the dashboard, SDKs, and default relevance just work, and the free cloud tier is generous enough for most indie projects.
+skip_if:
+  - reason: "Meilisearch has a friendlier getting-started experience and better default relevance out of the box; Typesense is stronger once you need custom ranking formulas or multi-node HA. vs Algolia: Meilisearch is OSS and self-hostable with no per-search pricing — you outgrow Algolia's free tier fast, you never outgrow a self-hosted Meilisearch."
+    use: typesense-cloud
+pricing_url: https://www.meilisearch.com
+verified_at: 2026-07-24
+verified_by: null
+source: catalog
+tagline: Fast product/docs search — generous free docs + cloud starter.
+about: Fast product/docs search — generous free docs + cloud starter.
+tags:
+  - search

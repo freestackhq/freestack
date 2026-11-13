@@ -1,0 +1,35 @@
+id: newsapi
+name: NewsAPI
+kind: News API
+url: https://newsapi.org/docs
+aisle: news
+metric: 100
+limits:
+  - "Rate limit: 100 requests a day"
+who:
+  - anyone
+region: null
+sell: no
+card: unknown
+cost: free
+catches:
+  - Non-commercial use only
+use_if:
+  - You're prototyping a news aggregator locally and plan to upgrade for production.
+skip_if:
+  - reason: Similar scope but NewsAPI has more sources; however GNews's free tier works in production while NewsAPI's does not.
+    use: gnews
+pricing_url: https://newsapi.org/docs
+verified_at: null
+verified_by: null
+source: catalog
+tagline: Search 80,000+ news sources worldwide.
+about: "Search 80,000+ news sources worldwide. Headlines, everything search, and source listing. Major caveat: free tier only works from localhost/development — production requires paid plan."
+api:
+  base_url: https://newsapi.org/v2
+  docs: https://newsapi.org/docs
+  auth: api-key
+  cors: no
+  response: JSON
+  openapi: no
+  status: active

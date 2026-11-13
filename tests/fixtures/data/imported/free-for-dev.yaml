@@ -1,0 +1,15 @@
+# TEST FIXTURE, not real data. Copied from the board samples (the old src/data/sample.ts).
+# *_days_ago keys are fixture-only: scripts/generate.mjs turns them into dates at build time.
+list:
+  id: free-for-dev
+  name: free-for-dev
+  url: https://github.com/ripienaar/free-for-dev
+  license: CC0-1.0
+  license_url: https://github.com/ripienaar/free-for-dev/blob/master/LICENSE
+  commit: fixture
+  fetched_at: 2026-11-01T00:00:00.000Z
+entries:
+  - id: xata-lite
+    name: Xata Lite
+    url: https://xata.io
+    aisle: databases

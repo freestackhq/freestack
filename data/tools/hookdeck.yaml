@@ -1,0 +1,27 @@
+id: hookdeck
+name: Hookdeck
+kind: Webhook inbox
+url: https://hookdeck.com
+aisle: jobs
+metric: null
+metric_note: 100k events a month
+limits:
+  - 100k events a month
+  - 3-day retention
+who:
+  - anyone
+region: null
+sell: yes
+card: unknown
+cost: free
+catches: []
+use_if:
+  - You receive webhooks from Stripe/Clerk/GitHub and need guaranteed delivery without writing your own retry queue. Hookdeck sits in front of your endpoint, buffers events, retries failures with backoff, and gives you a replay UI — 100 k events/mo free is plenty for indie SaaS webhook traffic.
+skip_if:
+  - reason: "rolling your own: A custom Bull/Redis queue gives you full control but costs a VPS and maintenance. Hookdeck is zero-infra: point the provider's webhook URL at Hookdeck, point Hookdeck at your app, and get retries + observability for free. Pick Hookdeck until your event volume or latency needs outgrow the managed tier."
+pricing_url: https://hookdeck.com
+verified_at: null
+verified_by: null
+source: catalog
+tagline: Webhook ingest with retries and queues.
+about: Webhook ingest with retries and queues.

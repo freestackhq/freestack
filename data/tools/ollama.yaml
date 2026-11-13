@@ -1,0 +1,48 @@
+id: ollama
+name: Ollama
+kind: Local model runner
+url: https://ollama.com
+aisle: local-models
+metric: null
+metric_note: Not listed
+limits:
+  - OSS
+  - Your GPU/CPU
+  - Model licenses vary
+  - Completely free, unlimited, open source
+  - 100+ open-weight models
+who:
+  - anyone
+region: null
+sell: yes
+card: unknown
+cost: free
+catches: []
+use_if:
+  - "You want zero-cost, fully private inference on your own hardware — no API keys, no rate limits, no data leaving your machine — and you're fine with open-weight model quality. vs Groq: Ollama is truly free with no quotas but limited by your local GPU; Groq is faster and runs larger models but has rate limits and requires internet. vs LM Studio: Ollama is CLI-first and daemon-based (great for scripts, CI, and server use); LM Studio adds a GUI for model browsing and chat — use both together."
+  - You want the easiest path to local LLMs with zero configuration and OpenAI SDK compatibility.
+skip_if:
+  - reason: Ollama is CLI-first and scriptable; LM Studio is GUI-first with a nice chat interface. Both expose the same OpenAI-compatible server.
+    use: lm-studio
+pricing_url: https://ollama.com
+verified_at: 2026-07-24
+verified_by: null
+source: catalog
+tagline: Local LLMs on your machine — true $0 inference for drafts and offline work.
+about: |-
+  Local LLMs on your machine — true $0 inference for drafts and offline work.
+
+  The simplest way to run LLMs locally. One binary, `ollama pull llama3.3` and you're inferencing. Manages model downloads, quantization selection, and exposes an OpenAI-compatible API. Works on macOS (Metal), Linux (CUDA/CPU), Windows.
+tags:
+  - llm
+  - local
+  - oss
+api:
+  base_url: http://localhost:11434/v1
+  docs: https://github.com/ollama/ollama/blob/main/docs/api.md
+  auth: none
+  models: Llama 3.3, Qwen 2.5, Mistral, Phi-4, DeepSeek, Gemma 3, CodeLlama, etc.
+  openai_compatible: yes
+  streaming: yes
+  self_host: yes (it IS self-hosted)
+  status: active

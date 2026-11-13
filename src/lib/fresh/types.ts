@@ -1,9 +1,10 @@
 /**
  * Shapes for the fresh shelf-label UI.
  *
- * `Tool` mirrors schema/tool.schema.json. Fields marked "UI-only" are not in
- * the schema yet: the trust loop (D1, cron) or the generator will supply them
- * in phase 0. Until then src/data/sample.ts fills them with placeholder data.
+ * `Tool` mirrors schema/tool.schema.json. Fields marked "UI-only" are curated
+ * in data/ but only the UI reads them; fields marked "Generated" are set by
+ * scripts/generate.mjs from data/state/*.yaml, data/imported/*.yaml or the
+ * aisle's numbers.
  */
 
 export type Who = "anyone" | "student_any_id" | "student_school_email" | "startup_proof";
@@ -28,6 +29,10 @@ export interface Aisle {
   types?: { id: string; label: string }[];
   /** Where related tools live instead. UI-only. */
   seeAlso?: { text: string; aisle: string; name: string };
+  /** Lede for Claim Once pages. UI-only. */
+  intro?: string;
+  /** Biggest known headline value among labeled tools. Generated. */
+  max?: number;
 }
 
 export interface SkipIf {
@@ -76,6 +81,37 @@ export interface Tool {
   vendor_changed_at?: string | null;
   /** Awesome list it came from, for imported entries. UI-only. */
   imported_from?: string;
+
+  /** Longer plain description. */
+  about?: string;
+  tags?: string[];
+  /** free forever, signup credit, free while a student, or a discount. */
+  cost?: "free" | "credits" | "student" | "discount";
+  /** Facts for API entries, as the vendor states them. */
+  api?: {
+    base_url?: string;
+    docs?: string;
+    auth?: string;
+    cors?: YesNoUnknown;
+    response?: string;
+    openapi?: YesNoUnknown;
+    models?: string;
+    openai_compatible?: YesNoUnknown;
+    streaming?: YesNoUnknown;
+    self_host?: string;
+    status?: string;
+  };
+  /** GitHub issue number of the open "Changed" report. Generated. */
+  review_issue?: number | null;
+  /** When that report was opened (ISO date). Generated. */
+  review_opened?: string | null;
+  /** Id of the awesome list an imported entry came from. Generated. */
+  imported_list?: string;
+  /** 5-step scale against the aisle's biggest value. Generated. */
+  scale?:
+    | { kind: "step"; step: 1 | 2 | 3 | 4 | 5; word: string }
+    | { kind: "unknown"; word: "Not listed" }
+    | { kind: "unlimited"; word: string };
 
   /** Claim Once programs only. UI-only. */
   program?: {

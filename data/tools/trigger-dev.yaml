@@ -1,0 +1,27 @@
+id: trigger-dev
+name: Trigger.dev
+kind: Background jobs
+url: https://trigger.dev
+aisle: jobs
+metric: null
+metric_note: Not listed
+limits:
+  - Generous free tier
+who:
+  - anyone
+region: null
+sell: yes
+card: unknown
+cost: free
+catches: []
+use_if:
+  - Your background jobs are compute-heavy or long-running (AI inference, video processing, multi-step pipelines) and you want a proper serverless runtime with the v3 SDK's built-in observability, log streaming, and retries — without managing workers or VMs.
+skip_if:
+  - reason: Trigger.dev gives you a full execution environment (think "serverless Sidekiq") so jobs can run for minutes/hours; Inngest caps individual steps and is better for short, event-driven orchestrations. Choose Trigger.dev when job duration or custom dependencies matter more than declarative step graphs.
+    use: inngest
+pricing_url: https://trigger.dev
+verified_at: null
+verified_by: null
+source: catalog
+tagline: Long-running Node jobs with observability.
+about: Long-running Node jobs with observability.

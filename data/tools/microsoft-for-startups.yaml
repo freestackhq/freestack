@@ -1,0 +1,38 @@
+id: microsoft-for-startups
+name: Microsoft for Startups
+kind: Startup credit
+url: https://www.microsoft.com/en-us/startups
+aisle: startup-programs
+metric: null
+metric_note: Not listed
+limits:
+  - Application + eligibility
+  - Credit packages vary
+who:
+  - startup_proof
+region: null
+sell: yes
+card: unknown
+cost: credits
+catches: []
+use_if:
+  - "Your product depends on OpenAI models (GPT-4, embeddings) or your customers live in Microsoft-land (Teams integrations, Entra ID SSO). The bundled GitHub Enterprise + Azure OpenAI access is uniquely valuable for AI-first startups that need production-grade rate limits day one. vs AWS Activate: Azure credits are smaller on average but the OpenAI + GitHub bundle is unmatched; AWS wins on raw infra breadth and community tooling. vs Google for Startups: pick Azure when you need GPT-family models or .NET hosting; pick GCP when your differentiator is data/ML pipelines on Vertex."
+skip_if: []
+pricing_url: https://www.microsoft.com/en-us/startups
+verified_at: null
+verified_by: null
+source: catalog
+tagline: Azure credits + GitHub/OpenAI perks for accepted startups.
+about: Azure credits + GitHub/OpenAI perks for accepted startups.
+tags:
+  - credits
+program:
+  order: 3
+  lasts_big: "?"
+  lasts_sub: Not listed
+  perks:
+    - Application + eligibility
+    - Credit packages vary
+  needs: An application as a startup
+  lasts: Not listed
+  claim_url: https://www.microsoft.com/en-us/startups

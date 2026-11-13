@@ -1,0 +1,28 @@
+id: notion-team
+name: Notion (team)
+kind: Team tool
+url: https://www.notion.so
+aisle: team
+metric: null
+metric_note: Not listed
+limits:
+  - Free plan solid
+  - Student Plus via Edu
+who:
+  - anyone
+region: null
+sell: yes
+card: unknown
+cost: free
+catches: []
+use_if:
+  - "You need one place for specs, meeting notes, onboarding docs, and lightweight project tracking — and your team already thinks in Notion. The free plan is generous for small teams; students get Plus via .edu email. vs Confluence: Confluence is Jira's sidekick — if you're not on Atlassian, there's zero reason to use it. Notion is faster to write in, prettier to read, and doesn't require an admin cert to configure. vs Slite/Coda: Slite is simpler but less powerful; Coda is more powerful but harder to learn. Notion sits in the sweet spot for 90% of startup wiki needs. Don't overthink this one."
+skip_if: []
+pricing_url: https://www.notion.so
+verified_at: null
+verified_by: null
+source: catalog
+tagline: Docs + wiki — Free/Plus until you need SAML; don't buy Enterprise early.
+about: Docs + wiki — Free/Plus until you need SAML; don't buy Enterprise early.
+tags:
+  - ops

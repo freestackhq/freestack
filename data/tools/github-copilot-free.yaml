@@ -1,0 +1,27 @@
+id: github-copilot-free
+name: GitHub Copilot Free
+kind: AI code assistant
+url: https://github.com/features/copilot
+aisle: coding
+metric: 2000
+limits:
+  - 2,000 completions + 50 chat messages a month
+  - Pro $10 a month unlimited
+who:
+  - anyone
+region: null
+sell: yes
+card: no
+cost: free
+catches: []
+use_if:
+  - "You want AI completions with zero friction — sign in with GitHub, get 2,000 completions and 50 chat messages/month for free, no app switch required. The lowest barrier to AI-assisted coding. vs Cursor: Copilot Free stays inside VS Code with no context switching; Cursor is a separate app but has deeper agentic features. Copilot Pro at $10/mo is also half the price of Cursor Pro. vs Continue.dev: Copilot is polish and convenience (zero setup); Continue is freedom and flexibility (any model, any backend, open-source)."
+skip_if: []
+pricing_url: https://github.com/features/copilot
+verified_at: 2026-08-01
+verified_by: null
+source: catalog
+tagline: AI pair programmer in VS Code — no credit card, just a GitHub account.
+about: AI pair programmer in VS Code — no credit card, just a GitHub account.
+tags:
+  - ide

@@ -2,7 +2,7 @@
  * Markdown catalog parser (dependency-free).
  *
  * Parses a category file into structured data. Handles the format shared by
- * the freestack catalog repos (see catalogs.config.mjs):
+ * the old freestack catalog repos (used once by scripts/migrate-catalogs.mjs):
  *
  *   ---
  *   category: Databases & Management

@@ -1,0 +1,28 @@
+id: cal-com
+name: Cal.com
+kind: Team tool
+url: https://cal.com
+aisle: team
+metric: null
+metric_note: Not listed
+limits:
+  - Free cloud plan
+  - Self-host unlimited
+who:
+  - anyone
+region: null
+sell: yes
+card: unknown
+cost: free
+catches: []
+use_if:
+  - "You book demos, interviews, or support calls and refuse to pay $12+/seat/mo for what is essentially a calendar link. Cal.com's free tier covers one calendar + one event type per user, and self-hosting removes all limits. vs Calendly: Cal.com is open-source with identical core features (round-robin, collective, workflows) — Calendly only wins on polished integrations (Salesforce, HubSpot) that you don't need pre-PMF. vs SavvyCal: SavvyCal has prettier recipient-side UX but no free tier and no self-host option; pick it only if scheduling UX is your competitive moat (it isn't)."
+skip_if: []
+pricing_url: https://cal.com
+verified_at: null
+verified_by: null
+source: catalog
+tagline: Scheduling without Calendly tax — self-host or free cloud seats.
+about: Scheduling without Calendly tax — self-host or free cloud seats.
+tags:
+  - ops

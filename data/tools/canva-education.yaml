@@ -1,0 +1,41 @@
+id: canva-education
+name: Canva Education
+kind: Student plan
+url: https://www.canva.com/education/
+aisle: student-programs
+metric: null
+metric_note: While verified edu
+limits:
+  - While verified edu
+  - Not a commercial design seat
+who:
+  - student_school_email
+region: null
+sell: no
+card: unknown
+cost: student
+catches:
+  - School use only
+use_if:
+  - You need quick social media graphics, slide decks, or print posters without learning Figma or Illustrator. The drag-and-drop template library is unmatched for non-designers who still want polished output.
+skip_if:
+  - reason: Figma is a precision UI/UX tool for developers and designers building interfaces. Canva is a marketing/content tool for fast visual assets. If you're designing app screens, use Figma; if you're making an event flyer in 10 minutes, use Canva.
+    use: figma-education
+pricing_url: https://www.canva.com/education/
+verified_at: 2026-07-24
+verified_by: null
+source: catalog
+tagline: Canva Pro features free for verified students and teachers.
+about: Canva Pro features free for verified students and teachers.
+tags:
+  - edu
+program:
+  order: 10
+  lasts_big: Enrolled
+  lasts_sub: lasts while you study
+  perks:
+    - While verified edu
+    - Not a commercial design seat
+  needs: A school email
+  lasts: While verified edu
+  claim_url: https://www.canva.com/education/

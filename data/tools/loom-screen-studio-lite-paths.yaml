@@ -1,0 +1,28 @@
+id: loom-screen-studio-lite-paths
+name: Loom / Screen Studio lite paths
+kind: Team tool
+url: https://www.loom.com
+aisle: team
+metric: null
+metric_note: Or OBS + R2 for $0 hosting
+limits:
+  - Loom free caps
+  - Or OBS + R2 for $0 hosting
+who:
+  - anyone
+region: null
+sell: unknown
+card: unknown
+cost: free
+catches: []
+use_if:
+  - "You close deals or resolve support tickets faster with a 2-minute screen recording than a 30-minute call. Loom's free tier (25 videos, 5 min each) covers early sales; for polished product demos, Screen Studio (macOS, one-time $89) gives you Apple-keynote-quality zoom animations without After Effects. vs writing a doc: a 90-second Loom replaces a 500-word email and gets watched 3x more often. Use it for anything where \"let me show you\" beats \"let me explain.\" vs OBS + R2 self-host: $0 but no viewer analytics, no comments, no auto-transcripts. Fine for internal walkthroughs; use Loom when you need to know if the prospect actually watched."
+skip_if: []
+pricing_url: https://www.loom.com
+verified_at: null
+verified_by: null
+source: catalog
+tagline: Async demos for sales and support without a video team.
+about: Async demos for sales and support without a video team.
+tags:
+  - ops

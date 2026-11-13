@@ -1,0 +1,34 @@
+id: boot-dev-pack
+name: Boot.dev (Pack)
+kind: Course platform
+url: https://www.boot.dev
+aisle: learning
+metric: 3
+limits: []
+who:
+  - student_school_email
+region: null
+sell: yes
+card: unknown
+cost: student
+catches: []
+use_if:
+  - You want a gamified, opinionated backend path (Go, Python, SQL, Docker, CI/CD) that feels like a game with XP and streaks — and you specifically want backend/infra skills, not frontend. The curriculum is tight and builds toward "deploy a real service" not "pass a quiz."
+skip_if:
+  - reason: "The Odin Project: Boot.dev is structured and gamified with a single language path; Odin is community-driven, broader (full-stack), and free forever but requires more self-direction."
+  - reason: "freeCodeCamp: Boot.dev focuses on backend/systems (Go, algorithms, Linux); freeCodeCamp is frontend-heavy (HTML/CSS/JS/React) with backend as an afterthought."
+pricing_url: https://www.boot.dev
+verified_at: null
+verified_by: null
+source: catalog
+tagline: Backend / DevOps learning path.
+about: Backend / DevOps learning path.
+program:
+  order: 4
+  lasts_big: 3 mo
+  lasts_sub: 3 months full membership
+  perks:
+    - Backend / DevOps learning path.
+  needs: A school email
+  lasts: 3 months full membership
+  claim_url: https://www.boot.dev

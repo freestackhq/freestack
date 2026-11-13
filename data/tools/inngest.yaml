@@ -1,0 +1,27 @@
+id: inngest
+name: Inngest
+kind: Background jobs
+url: https://www.inngest.com
+aisle: jobs
+metric: null
+metric_note: ~50k steps a month
+limits:
+  - ~50k steps a month
+who:
+  - anyone
+region: null
+sell: yes
+card: unknown
+cost: free
+catches: []
+use_if:
+  - Your app needs durable background functions with automatic retries, cron scheduling, or fan-out — and you refuse to manage Redis or a separate queue. Ship `inngest.createFunction()` alongside your Next.js/Remix app and get step-level observability for free (~50k steps/mo).
+skip_if:
+  - reason: "Inngest is higher-level: you declare steps and it handles retries/replay; Trigger.dev gives you a full serverless runtime for long-running jobs with more control over execution. Pick Inngest when you want zero-infra orchestration; pick Trigger.dev when your jobs run minutes-long or need custom Docker images."
+    use: trigger-dev
+pricing_url: https://www.inngest.com
+verified_at: null
+verified_by: null
+source: catalog
+tagline: Durable functions, retries, cron — no Redis babysitting.
+about: Durable functions, retries, cron — no Redis babysitting.

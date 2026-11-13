@@ -1,0 +1,35 @@
+id: datacamp-pack
+name: DataCamp (Pack)
+kind: Course platform
+url: https://www.datacamp.com
+aisle: learning
+metric: 3
+limits:
+  - Other seats via vendor donate partners
+who:
+  - student_school_email
+region: null
+sell: yes
+card: unknown
+cost: student
+catches: []
+use_if:
+  - You need structured ramp-up on pandas, SQL, ML basics, or stats — and you learn best by doing exercises in a notebook-style environment rather than watching lectures. Great as a supplement alongside a CS degree, not a replacement.
+skip_if:
+  - reason: "Kaggle Learn: DataCamp has longer guided paths and career tracks; Kaggle Learn is micro-courses (2–4 hrs) best for quick refreshers. DataCamp wins on breadth, Kaggle on speed."
+  - reason: "Coursera ML Specialization: Andrew Ng goes deeper on theory; DataCamp gets you writing sklearn/pandas code faster with less math preamble."
+pricing_url: https://www.datacamp.com
+verified_at: null
+verified_by: null
+source: catalog
+tagline: Data and ML course supplement.
+about: Data and ML course supplement.
+program:
+  order: 3
+  lasts_big: 3 mo
+  lasts_sub: 3 months individual via Pack
+  perks:
+    - Other seats via vendor donate partners
+  needs: A school email
+  lasts: 3 months individual via Pack
+  claim_url: https://www.datacamp.com

@@ -1,0 +1,29 @@
+id: together-ai
+name: Together AI
+kind: Inference API
+url: https://www.together.ai
+aisle: inference
+metric: null
+metric_note: Not listed
+limits:
+  - PAYG
+  - Occasional free credits via promos
+who:
+  - anyone
+region: null
+sell: yes
+card: unknown
+cost: credits
+catches:
+  - Credits, not a free tier
+use_if:
+  - "You want to run Llama, Mixtral, or other open-weight models via API today with an escape hatch to self-host the same weights on your own GPUs later — no vendor lock-in on the model itself. vs Fireworks AI: Together has a wider open-model catalog and fine-tuning support; Fireworks optimizes harder for raw latency on fewer models. vs OpenRouter: Together gives you direct open-weight hosting with fine-tune capability; OpenRouter is an aggregator that can't fine-tune or guarantee which backend serves you."
+skip_if: []
+pricing_url: https://www.together.ai
+verified_at: null
+verified_by: null
+source: catalog
+tagline: Open-weight hosting when you want control without self-hosting GPUs.
+about: Open-weight hosting when you want control without self-hosting GPUs.
+tags:
+  - llm

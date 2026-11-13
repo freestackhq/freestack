@@ -1,0 +1,31 @@
+id: milvus
+name: Milvus
+kind: Self-hosted vector database
+url: https://milvus.io
+aisle: vectors
+metric: null
+metric_note: Not listed
+limits:
+  - OSS
+  - You pay infra
+  - Or use Zilliz Cloud free cluster
+who:
+  - anyone
+region: null
+sell: yes
+card: unknown
+cost: free
+catches: []
+use_if:
+  - "You need a battle-tested open-source vector database you can self-host for full data control, with proven scale to billions of vectors and GPU-accelerated indexing. vs Pinecone: Milvus is OSS with no vendor lock-in and unlimited namespaces; Pinecone is easier to start but proprietary and charges for features Milvus gives free. vs pgvector: Milvus is purpose-built for vector workloads with better indexing algorithms (IVF, HNSW, DiskANN) and throughput; pgvector is \"good enough\" when your dataset fits in Postgres and you don't want another dependency."
+skip_if: []
+pricing_url: https://milvus.io
+verified_at: 2026-07-24
+verified_by: null
+source: catalog
+tagline: Open-source vector DB for RAG at scale — self-host when cloud bills scare you.
+about: Open-source vector DB for RAG at scale — self-host when cloud bills scare you.
+tags:
+  - vector
+  - rag
+  - oss

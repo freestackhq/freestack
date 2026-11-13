@@ -9,7 +9,7 @@
     "name": { "type": "string" },
     "kind": { "type": "string", "maxLength": 40 },
     "url": { "type": "string", "format": "uri" },
-    "aisle": { "type": "string" },
+    "aisle": { "type": "string", "pattern": "^[a-z0-9-]+$" },
     "metric": { "type": ["number", "null"], "description": "Value in the aisle's headline unit. null means not listed." },
     "metric_note": { "type": "string", "description": "Required when metric is null or qualified, e.g. 'per database', 'no limit'." },
     "limits": { "type": "array", "items": { "type": "string" } },
@@ -23,6 +23,49 @@
     "pricing_url": { "type": "string", "format": "uri" },
     "verified_at": { "type": ["string", "null"], "format": "date" },
     "verified_by": { "type": ["string", "null"] },
-    "source": { "enum": ["catalog", "submitted", "imported"] }
+    "source": { "enum": ["catalog", "submitted", "imported"] },
+
+    "tagline": { "type": "string", "description": "One-line summary for the tool page." },
+    "about": { "type": "string", "description": "Longer plain description (API, llms-full.txt). Not shown on the label." },
+    "catch_detail": { "type": "array", "items": { "type": "string" }, "description": "Longer catch sentences for the tool page." },
+    "type": { "type": "string", "pattern": "^[a-z0-9-]+$", "description": "Filter chip id inside the aisle (matches the aisle's types)." },
+    "fits": { "type": "array", "items": { "enum": ["school", "student", "indie", "startup"] }, "description": "Situations this tool fits." },
+    "suggested": { "type": "boolean", "description": "Curator pick. Only shown while the label is checked (90 days)." },
+    "imported_from": { "type": "string", "description": "Awesome list name, for imported entries." },
+    "tags": { "type": "array", "items": { "type": "string" } },
+    "cost": { "enum": ["free", "credits", "student", "discount"], "description": "free = free forever, credits = trial or signup credit, student = free while a student, discount = paid, cheaper." },
+    "api": {
+      "type": "object",
+      "description": "Facts for API entries (open data and AI APIs). Plain strings as the vendor states them.",
+      "additionalProperties": false,
+      "properties": {
+        "base_url": { "type": "string" },
+        "docs": { "type": "string" },
+        "auth": { "type": "string" },
+        "cors": { "enum": ["yes", "no", "unknown"] },
+        "response": { "type": "string" },
+        "openapi": { "enum": ["yes", "no", "unknown"] },
+        "models": { "type": "string" },
+        "openai_compatible": { "enum": ["yes", "no", "unknown"] },
+        "streaming": { "enum": ["yes", "no", "unknown"] },
+        "self_host": { "type": "string" },
+        "status": { "type": "string" }
+      }
+    },
+    "program": {
+      "type": "object",
+      "description": "Claim Once aisles only.",
+      "required": ["order", "lasts_big", "lasts_sub", "perks", "needs", "lasts", "claim_url"],
+      "additionalProperties": false,
+      "properties": {
+        "order": { "type": "integer", "minimum": 1 },
+        "lasts_big": { "type": "string", "description": "Big number, e.g. '2 yrs' or 'Enrolled'." },
+        "lasts_sub": { "type": "string" },
+        "perks": { "type": "array", "items": { "type": "string" } },
+        "needs": { "type": "string" },
+        "lasts": { "type": "string" },
+        "claim_url": { "type": "string", "format": "uri" }
+      }
+    }
   }
 }

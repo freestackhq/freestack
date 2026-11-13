@@ -1,0 +1,31 @@
+id: pgvector
+name: pgvector
+kind: Postgres extension
+url: https://github.com/pgvector/pgvector
+aisle: vectors
+metric: null
+metric_note: Not listed
+limits:
+  - OSS extension
+  - Limited by your Postgres plan storage/CPU
+who:
+  - anyone
+region: null
+sell: yes
+card: unknown
+cost: free
+catches: []
+use_if:
+  - "You already run Postgres (Neon, Supabase, RDS) and want vector search without adding another service — your embeddings live in the same DB as your app data, with transactions and joins for free. vs Pinecone/Qdrant: pgvector avoids a new dependency and bill; dedicated vector DBs outperform it past ~1 M vectors or when you need advanced indexing (IVF-PQ, DiskANN). vs Chroma: pgvector keeps everything in one database you already operate; Chroma is better for rapid local prototyping when you don't have Postgres set up yet."
+skip_if: []
+pricing_url: https://github.com/pgvector/pgvector
+verified_at: 2026-07-24
+verified_by: null
+source: catalog
+tagline: Vectors inside Postgres — keep RAG next to Neon/Supabase until you outgrow it.
+about: Vectors inside Postgres — keep RAG next to Neon/Supabase until you outgrow it.
+tags:
+  - vector
+  - rag
+  - postgres
+  - oss

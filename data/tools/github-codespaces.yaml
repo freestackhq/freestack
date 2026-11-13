@@ -1,0 +1,37 @@
+id: github-codespaces
+name: GitHub Codespaces
+kind: Student offer
+url: https://github.com/features/codespaces
+aisle: student-programs
+metric: null
+metric_note: ~180 core hours a month
+limits:
+  - ~180 core hours a month
+who:
+  - student_school_email
+region: null
+sell: yes
+card: unknown
+cost: student
+catches: []
+use_if:
+  - Your local machine is underpowered, shared, or locked-down — Codespaces gives you a full Linux dev box in seconds from any browser or thin client. Also ideal when you switch between machines (library desktop → laptop → tablet) and want identical environments without dotfile gymnastics.
+skip_if: []
+pricing_url: https://github.com/features/codespaces
+verified_at: null
+verified_by: null
+source: catalog
+tagline: Cloud dev environments on your personal account.
+about: |-
+  Cloud dev environments on your personal account.
+
+  vs Gitpod / local Docker: Gitpod's free tier is stingier on hours and lacks the native GitHub integration (PR codespaces, deep linking). Local Docker is free but requires a capable machine and setup time. Codespaces trades hours-per-month for zero-config parity across devices.
+program:
+  order: 13
+  lasts_big: "?"
+  lasts_sub: Not listed
+  perks:
+    - ~180 core hours a month
+  needs: A school email
+  lasts: Not listed
+  claim_url: https://github.com/features/codespaces

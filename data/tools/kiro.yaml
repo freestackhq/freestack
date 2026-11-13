@@ -1,0 +1,30 @@
+id: kiro
+name: Kiro
+kind: AI code editor
+url: https://kiro.dev
+aisle: coding
+metric: null
+metric_note: 50 credits a month free
+limits:
+  - 50 credits a month free
+  - Pro $20 a month 1,000 credits
+  - 500 bonus on first 14d
+who:
+  - anyone
+region: null
+sell: yes
+card: unknown
+cost: free
+catches: []
+use_if:
+  - "You want spec-driven development with an AI agent that follows structured requirements (specs, hooks, steering files) rather than ad-hoc chat — 50 free interactions/month gets you started on real projects. vs Cursor: Kiro is spec-driven and structured (requirements → design → implementation); Cursor is more free-form chat-and-edit. Kiro suits teams that want reproducible AI workflows. vs Amazon Q Developer: Kiro is a standalone IDE with agentic autonomy; Q Developer is an assistant *inside* your existing IDE — different philosophies on who drives."
+skip_if: []
+pricing_url: https://kiro.dev
+verified_at: 2026-08-01
+verified_by: null
+source: catalog
+tagline: AWS agentic IDE — spec-driven dev with autopilot hooks and steering files.
+about: AWS agentic IDE — spec-driven dev with autopilot hooks and steering files.
+tags:
+  - ide
+  - agents

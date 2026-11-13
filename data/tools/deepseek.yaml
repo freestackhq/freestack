@@ -1,0 +1,46 @@
+id: deepseek
+name: DeepSeek API
+kind: Inference API
+url: https://platform.deepseek.com
+aisle: inference
+metric: null
+metric_note: Not listed
+limits:
+  - Low PAYG rates
+  - Occasional promo credit
+  - Check ToS region
+  - Low cost PAYG / occasional signup promo credits
+who:
+  - anyone
+region: null
+sell: yes
+card: unknown
+cost: credits
+catches:
+  - Credits, not a free tier
+use_if:
+  - "You want GPT-4-class reasoning and code generation at a fraction of OpenAI's price — DeepSeek's models punch well above their cost tier and work great as a default for agent inner loops. vs OpenAI API: DeepSeek is 10–50× cheaper per token with competitive quality on code/reasoning; OpenAI has better ecosystem tooling and more consistent uptime. vs Groq on Llama: DeepSeek's own models (V3, R1) are stronger than Llama-hosted-on-Groq for complex tasks; Groq is faster but limited to models it supports."
+  - You want state-of-the-art reasoning (R1) or general-purpose chat (V3) at near-zero per-token API cost or wish to prototype against open-weight frontier models.
+skip_if:
+  - reason: DeepSeek API provides native first-party checkpoints directly; Groq offers faster LPU inference on hosted open weights with daily free ceilings.
+    use: groq
+pricing_url: https://platform.deepseek.com
+verified_at: 2026-07-24
+verified_by: null
+source: catalog
+tagline: Cheap capable chat/code models — strong budget default for agents.
+about: |-
+  Cheap capable chat/code models — strong budget default for agents.
+
+  Direct API from DeepSeek offering industry-leading price-to-performance on open-weight foundation models. Full OpenAI-compatible chat completions endpoint supporting standard system prompts, structured tool use, and streaming. Open weights allow identical execution locally or on third-party hosters.
+tags:
+  - llm
+api:
+  base_url: https://api.deepseek.com/v1
+  docs: https://platform.deepseek.com/api-docs
+  auth: api-key
+  models: deepseek-chat (V3), deepseek-reasoner (R1)
+  openai_compatible: yes
+  streaming: yes
+  self_host: yes (open weights on HuggingFace / Ollama)
+  status: active

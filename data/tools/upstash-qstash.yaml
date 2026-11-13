@@ -1,0 +1,27 @@
+id: upstash-qstash
+name: Upstash QStash
+kind: Background jobs
+url: https://upstash.com/qstash
+aisle: jobs
+metric: null
+metric_note: 500 messages a day
+limits:
+  - 500 messages a day
+who:
+  - anyone
+region: null
+sell: yes
+card: unknown
+cost: free
+catches: []
+use_if:
+  - "You just need a reliable HTTP message queue to wake serverless endpoints on a schedule or after an event — no SDK lock-in, no runtime to deploy. QStash is the lightest option here: POST a message, it delivers with retries and delay. Ideal for Vercel/Cloudflare apps that can't hold open connections (500 msg/day free)."
+skip_if:
+  - reason: QStash is a dumb pipe (deliver this HTTP request later with retries); Inngest is a smart orchestrator (run this multi-step function). Pick QStash when your logic already lives in an endpoint and you just need guaranteed delivery; pick Inngest when you need step-level state, fan-out, or cron built in.
+    use: inngest
+pricing_url: https://upstash.com/qstash
+verified_at: null
+verified_by: null
+source: catalog
+tagline: HTTP queue that wakes serverless endpoints.
+about: HTTP queue that wakes serverless endpoints.

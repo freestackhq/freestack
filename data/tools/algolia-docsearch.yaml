@@ -1,0 +1,30 @@
+id: algolia-docsearch
+name: Algolia DocSearch
+kind: Search service
+url: https://docsearch.algolia.com
+aisle: search
+metric: null
+metric_note: Not listed
+limits:
+  - Free for qualifying open-source docs
+  - Paid for product search
+who:
+  - anyone
+region: null
+sell: unknown
+card: unknown
+cost: free
+catches: []
+use_if:
+  - You maintain open-source documentation and want a polished, zero-config search modal that Algolia crawls, indexes, and hosts for free — you literally apply, get accepted, paste a snippet.
+skip_if:
+  - reason: "Meilisearch/Typesense: DocSearch is zero-ops (Algolia runs everything), but you give up control — you can't customize ranking, and it only works for public docs. vs self-hosted search: If your docs are open-source and public, DocSearch saves you running infrastructure entirely; the moment you need search in a private app or product, switch to Typesense/Meilisearch."
+pricing_url: https://docsearch.algolia.com
+verified_at: 2026-07-24
+verified_by: null
+source: catalog
+tagline: Free search for open-source documentation sites (DocSearch program).
+about: Free search for open-source documentation sites (DocSearch program).
+tags:
+  - search
+  - docs

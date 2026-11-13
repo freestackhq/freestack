@@ -23,19 +23,12 @@ pnpm deploy:cf        # build and deploy to Cloudflare Workers
 
 ## Catalogs & Content
 
-Catalogs live directly in-repo under [`catalogs/`](catalogs/).
+Data lives in [`data/`](data/): one YAML file per tool in [`data/tools/`](data/tools/) (validated by [`schema/tool.schema.json`](schema/tool.schema.json)), aisles and their headline metric in [`data/aisles.yaml`](data/aisles.yaml), stack rules in [`data/rules.yaml`](data/rules.yaml), unlabeled entries from awesome lists in [`data/imported/`](data/imported/), and trust-loop state in [`data/state/`](data/state/). The old Markdown catalogs were migrated once; see [`docs/migration-report.md`](docs/migration-report.md).
 
-| Catalog | Source | Scope | Entries |
-|---|---|---|---|
-| **SaaS** | [`catalogs/saas/`](catalogs/saas/) | Free developer SaaS tiers & student unlocks | 187 across 17 categories |
-| **APIs** | [`catalogs/apis/`](catalogs/apis/) | Free public APIs with auth & rate limits | 18 across 6 categories |
-| **LLM & AI** | [`catalogs/llm-ai/`](catalogs/llm-ai/) | Free inference, embeddings, local models | 17 across 5 categories |
+### Adding or Updating Tools
 
-### Adding or Updating Entries
-
-1. Edit the category file in [`catalogs/<catalog>/`](catalogs/) or copy [`catalogs/_template.md`](catalogs/_template.md) for new categories.
-2. Ensure standard structure: YAML frontmatter, comparison table, entry fields (`URL`, `Cost`, `Limits`, `Commercial`), and `Pick this if` criteria.
-3. Run `pnpm catalog:update` to regenerate the committed snapshot.
+1. Edit or add `data/tools/<id>.yaml` (or use the site's "Add a tool" form). Numbers are the vendor's own figures; unknown is `null` with a `metric_note`.
+2. Run `pnpm catalog:generate` to rebuild the committed snapshot, then `pnpm test`.
 
 ---
 
@@ -46,10 +39,11 @@ Base URL: `https://freestack.kuyacarlo.dev` (CORS open).
 | Endpoint | Method | Purpose |
 |---|---|---|
 | `/llms.txt` | `GET` | Standard LLM navigation and catalog manifest |
-| `/llms-full.txt` | `GET` | Full plain-text digest of all 222 tools for AI ingestion |
+| `/llms-full.txt` | `GET` | Every label in plain text, for AI ingestion |
 | `/api/health` | `GET` | Service status, version, and catalog counts |
 | `/api/catalogs` | `GET` | Catalog metadata, categories, and entry counts |
-| `/api/entries` | `GET, POST` | Filter and search entries (`catalog`, `category`, `q`, fields, `limit`) |
+| `/api/entries` | `GET, POST` | Filter and search tools (`aisle`, `group`, `q`, fields, `limit`; old `catalog`/`category` ids still work) |
+| `/api/tools`, `/api/tools/<id>`, `/api/claim` | `GET` | Flat tool list, one tool, and a claim plan (used by the CLI) |
 | `/api/openapi.json` | `GET` | OpenAPI 3.1.0 specification |
 | [`/docs`](https://freestack.kuyacarlo.dev/docs) | `GET` | Interactive Scalar API documentation |
 
@@ -57,11 +51,10 @@ Base URL: `https://freestack.kuyacarlo.dev` (CORS open).
 
 ## Architecture & Data Pipeline
 
-Data is compiled from Markdown into a committed snapshot ([`src/data/catalog.generated.json`](src/data/catalog.generated.json)) so builds and test suites run offline without runtime network dependencies.
+`data/` is compiled into a committed snapshot ([`src/data/catalog.generated.json`](src/data/catalog.generated.json)) so builds and tests run offline. Tests use their own data in `tests/fixtures/data` (`FREESTACK_DATA`), which never overwrites the snapshot.
 
 ```bash
-pnpm catalog:generate   # parse local catalogs/ into src/data/catalog.generated.json
-pnpm catalog:update     # refresh and generate in one step
+pnpm catalog:generate   # data/ -> src/data/catalog.generated.json (fails on bad data)
 ```
 
 ---

@@ -1,0 +1,45 @@
+id: lm-studio
+name: LM Studio
+kind: Local model app
+url: https://lmstudio.ai
+aisle: local-models
+metric: null
+metric_note: Not listed
+limits:
+  - Free app
+  - Model licenses vary
+  - Free application, unlimited local inference
+who:
+  - anyone
+region: null
+sell: unknown
+card: unknown
+cost: free
+catches: []
+use_if:
+  - "You want a desktop GUI to browse, download, and chat with local models *plus* an OpenAI-compatible local server your apps can hit at `localhost:1234` — ideal for non-CLI teammates or visual model comparison. vs Ollama: LM Studio has a polished GUI and model discovery UX; Ollama is lighter, scriptable, and better for headless/server environments. Use LM Studio for interactive exploration, Ollama for automation. vs cloud APIs: LM Studio is $0 forever with full privacy, but quality caps at whatever fits in your VRAM."
+  - You prefer a GUI for model management and want to easily compare different models in a chat interface.
+skip_if:
+  - reason: Better UX for exploration and comparing models; Ollama is better for scripting, automation, and server deployments.
+    use: ollama
+pricing_url: https://lmstudio.ai
+verified_at: 2026-07-24
+verified_by: null
+source: catalog
+tagline: GUI local models + OpenAI-compatible server — good teammate to Ollama.
+about: |-
+  GUI local models + OpenAI-compatible server — good teammate to Ollama.
+
+  Desktop GUI for running local LLMs. Browse/download models from HuggingFace, adjust parameters visually, and run an OpenAI-compatible local server. Nice for experimentation and non-CLI users.
+tags:
+  - llm
+  - local
+api:
+  base_url: http://localhost:1234/v1
+  docs: https://lmstudio.ai/docs
+  auth: none
+  models: any GGUF model from HuggingFace (browse + download in-app)
+  openai_compatible: yes
+  streaming: yes
+  self_host: yes
+  status: active

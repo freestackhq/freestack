@@ -1,0 +1,29 @@
+id: stripe-atlas
+name: Stripe Atlas
+kind: Team tool
+url: https://stripe.com/atlas
+aisle: team
+metric: null
+metric_note: Not listed
+limits:
+  - One-time fee
+  - Not a free tier
+who:
+  - anyone
+region: null
+sell: yes
+card: unknown
+cost: discount
+catches:
+  - A discount, not a free tier
+use_if:
+  - "You're a non-US founder (or just hate paperwork) and want a Delaware C-Corp + bank account + payment processing live in under two weeks without hiring a lawyer. The $500 one-time fee pays for itself in avoided legal hours. vs Firstbase/Doola: Atlas is tighter integrated with Stripe payments and has the largest partner-perk network (AWS credits, Notion, etc.); competitors offer more hand-holding on tax filings but cost more annually. vs DIY (Clerky + Mercury): DIY is cheaper upfront if you already have a US address and can self-file; Atlas wins on speed and bundled perks when you're moving fast."
+skip_if: []
+pricing_url: https://stripe.com/atlas
+verified_at: null
+verified_by: null
+source: catalog
+tagline: Incorporate + bank + Stripe in one path — not free, but fewer lawyers early.
+about: Incorporate + bank + Stripe in one path — not free, but fewer lawyers early.
+tags:
+  - ops

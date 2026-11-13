@@ -1,0 +1,31 @@
+id: bitwarden
+name: Bitwarden
+kind: Security tool
+url: https://bitwarden.com
+aisle: security
+metric: null
+metric_note: Not listed
+limits:
+  - Personal free
+  - Unlimited items/devices
+  - Orgs paid
+who:
+  - anyone
+region: null
+sell: yes
+card: unknown
+cost: free
+catches: []
+use_if:
+  - You need a team or personal password vault that works across every platform, syncs securely, and doesn't lock your data behind a proprietary format. Self-host with Vaultwarden for full control at zero cost.
+skip_if:
+  - reason: "1Password: Bitwarden is open-source and has a real free tier (unlimited items, unlimited devices). 1Password has better UX polish but costs $3+/mo and is closed-source. vs KeePass: Bitwarden syncs natively across devices with a proper server component. KeePass requires you to rig your own sync (Dropbox/Syncthing) and the UX hasn't been updated since 2005."
+pricing_url: https://bitwarden.com
+verified_at: 2026-07-24
+verified_by: null
+source: catalog
+tagline: OSS password manager — personal free forever, self-host when you want.
+about: OSS password manager — personal free forever, self-host when you want.
+tags:
+  - oss
+  - secrets

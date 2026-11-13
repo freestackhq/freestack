@@ -1,0 +1,32 @@
+id: intercom
+name: Intercom
+kind: Team tool
+url: https://www.intercom.com
+aisle: team
+metric: null
+metric_note: Anti-reco for day-0
+limits:
+  - Limited free/trial
+  - Expensive at seat scale
+  - Anti-reco for day-0
+who:
+  - anyone
+region: null
+sell: yes
+card: unknown
+cost: discount
+catches:
+  - Limited free/trial
+  - A discount, not a free tier
+use_if:
+  - "You have PMF, paying customers, and a support team of 3+ — and you need AI bots, product tours, in-app messaging, and a help center in one integrated platform. Intercom is genuinely good *at scale*; it's just wildly expensive and overpowered for a pre-revenue startup. Do not start here on day zero. vs Chatwoot/Crisp: Chatwoot at $0 covers 95% of what you need pre-Series A. Switch to Intercom when you need AI resolution bots, proactive messaging campaigns, or your support volume justifies the $39+/seat/mo cost. vs Zendesk: both are enterprise-grade; Intercom is more product-led (in-app messenger), Zendesk is more ticket-led (email/phone). Neither belongs in your stack until you have revenue to burn."
+skip_if: []
+pricing_url: https://www.intercom.com
+verified_at: 2026-07-24
+verified_by: null
+source: catalog
+tagline: Support suite — free crumbs exist; paywall hits fast.
+about: Support suite — free crumbs exist; paywall hits fast. Prefer Chatwoot early.
+tags:
+  - support
+  - anti-reco

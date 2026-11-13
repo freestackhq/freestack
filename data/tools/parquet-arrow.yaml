@@ -1,0 +1,30 @@
+id: parquet-arrow
+name: Parquet + Arrow
+kind: Open file formats
+url: https://parquet.apache.org
+aisle: storage
+metric: null
+metric_note: Storage = your disk/R2 bill
+limits:
+  - Open formats
+  - Storage = your disk/R2 bill
+who:
+  - anyone
+region: null
+sell: yes
+card: unknown
+cost: free
+catches: []
+use_if:
+  - You want a zero-cost, future-proof datalake format — dump events/logs as Parquet to R2 or local disk, query with DuckDB now, and swap in ClickHouse or Snowflake later without reformatting anything.
+skip_if:
+  - reason: "CSV/JSON: Parquet is columnar and compressed — 10× smaller files, 100× faster analytical queries, and schema-aware so you catch type bugs at write time. vs a managed warehouse: Parquet + DuckDB gives you the same query power at $0 until your data or concurrency demands a running server; it's the cheapest possible starting point for analytics."
+pricing_url: https://parquet.apache.org
+verified_at: 2026-07-24
+verified_by: null
+source: catalog
+tagline: Columnar files as your cheap datalake — pair with DuckDB, skip Snowflake early.
+about: Columnar files as your cheap datalake — pair with DuckDB, skip Snowflake early.
+tags:
+  - datalake
+  - oss

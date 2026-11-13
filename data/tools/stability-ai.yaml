@@ -1,0 +1,31 @@
+id: stability-ai
+name: Stability AI
+kind: Image generation API
+url: https://stability.ai
+aisle: inference
+metric: null
+metric_note: 25 free credits on signup
+limits:
+  - 25 free credits on signup
+  - Then PAYG
+  - Self-host open weights free
+who:
+  - anyone
+region: null
+sell: unknown
+card: unknown
+cost: credits
+catches:
+  - Credits, not a free tier
+use_if:
+  - "You need image generation via API (product shots, illustrations, variations) and want both a managed API with signup credits *and* the option to self-host the same open weights for free on your own GPU. vs Replicate: Stability's API is first-party with latest SD models immediately; Replicate hosts community forks that may lag or diverge. vs DALL·E (OpenAI): Stability is cheaper per image, open-weight (self-host escape hatch), and offers more control (ControlNet, inpainting, upscaling); DALL·E is simpler and better at prompt adherence for non-technical users."
+skip_if: []
+pricing_url: https://stability.ai
+verified_at: 2026-08-01
+verified_by: null
+source: catalog
+tagline: Stable Diffusion API for image gen — signup credits to start.
+about: Stable Diffusion API for image gen — signup credits to start.
+tags:
+  - image
+  - diffusion

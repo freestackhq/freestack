@@ -1,7 +1,7 @@
 # Compatibility rules for Build a stack, Check my stack and the MCP suggest_stack tool.
 # level: problem (orange, blocks "Works") or watch (listed, does not block)
 # short: a few words for the Build a stack picker's fit column
-# Mirrored in src/lib/fresh/rules.ts until the build gets a YAML loader. Change both.
+# Compiled into src/data/rules.generated.json by pnpm catalog:generate.
 - id: no-selling
   level: problem
   when: { situation: [indie, startup], tool: { sell: no } }

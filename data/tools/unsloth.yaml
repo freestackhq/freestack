@@ -1,0 +1,29 @@
+id: unsloth
+name: Unsloth
+kind: Fine-tuning library
+url: https://unsloth.ai
+aisle: ai-tooling
+metric: null
+metric_note: Runs on free Colab T4 class GPUs
+limits:
+  - OSS
+  - Runs on free Colab T4 class GPUs
+who:
+  - anyone
+region: null
+sell: yes
+card: unknown
+cost: free
+catches: []
+use_if:
+  - "You want to fine-tune open-weight LLMs (Llama, Mistral, Gemma) 2× faster with 60 % less VRAM — runs on free Colab T4 GPUs, making fine-tuning accessible without paying for A100s. vs Modal: Unsloth is an optimization library you run anywhere (Colab, local, Modal); Modal is the compute platform. Use Unsloth *on* Modal for the best of both. vs full-fat HuggingFace Trainer: Unsloth patches the training loop for dramatic speed/memory gains with zero code changes to your existing training scripts."
+skip_if: []
+pricing_url: https://unsloth.ai
+verified_at: 2026-07-24
+verified_by: null
+source: catalog
+tagline: Fast low-memory LLM fine-tuning — Colab-friendly open weights path.
+about: Fast low-memory LLM fine-tuning — Colab-friendly open weights path.
+tags:
+  - oss
+  - finetune

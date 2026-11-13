@@ -1,0 +1,29 @@
+id: hugging-face-spaces
+name: Hugging Face Spaces
+kind: ML demo hosting
+url: https://huggingface.co/spaces
+aisle: hosting
+metric: null
+metric_note: Not listed
+limits:
+  - Free CPU
+  - Limited inference
+who:
+  - anyone
+region: null
+sell: yes
+card: unknown
+cost: free
+catches: []
+use_if:
+  - You want to deploy a Gradio/Streamlit ML demo that anyone can try via a URL — no server setup, no Docker, no cloud billing. Perfect for thesis demos, portfolio projects, and "try my model" links on your resume.
+skip_if:
+  - reason: "Google Colab: Spaces gives you a persistent public URL others can visit; Colab requires the notebook to be running and shared. Spaces for demos, Colab for experimentation."
+  - reason: Replicate is pay-per-prediction for production inference; HF Spaces is free for CPU demos. Use Spaces to prototype, Replicate when you need GPU scale.
+    use: replicate
+pricing_url: https://huggingface.co/spaces
+verified_at: null
+verified_by: null
+source: catalog
+tagline: Prototype ML demos on free CPU Spaces.
+about: Prototype ML demos on free CPU Spaces.

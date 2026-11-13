@@ -1,0 +1,36 @@
+id: aws-educate
+name: AWS Educate
+kind: Cloud credit
+url: https://aws.amazon.com/education/awseducate/
+aisle: cloud-credits
+metric: null
+metric_note: Not listed
+limits:
+  - Lab credits vary by path
+who:
+  - anyone
+region: null
+sell: no
+card: unknown
+cost: credits
+catches:
+  - School use only
+use_if:
+  - You want to learn AWS services (Lambda, S3, DynamoDB, EC2) hands-on in sandboxed labs without risking a surprise bill. The badges look good on LinkedIn and the labs teach real console workflows — but you can't deploy your own production app here.
+skip_if:
+  - reason: "DigitalOcean/Heroku credits: Those give you real hosting for real projects. AWS Educate is a classroom — you learn the AWS way, but you don't get a public URL you can put in a portfolio. Use Educate for learning, DO/Heroku for shipping."
+pricing_url: https://aws.amazon.com/education/awseducate/
+verified_at: null
+verified_by: null
+source: catalog
+tagline: Learning paths, badges, sandboxed labs.
+about: Learning paths, badges, sandboxed labs.
+program:
+  order: 4
+  lasts_big: "?"
+  lasts_sub: Not listed
+  perks:
+    - Lab credits vary by path
+  needs: Nothing. Open to anyone
+  lasts: Not listed
+  claim_url: https://aws.amazon.com/education/awseducate/

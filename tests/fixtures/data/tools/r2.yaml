@@ -1,0 +1,22 @@
+# TEST FIXTURE, not real data. Copied from the board samples (the old src/data/sample.ts).
+# *_days_ago keys are fixture-only: scripts/generate.mjs turns them into dates at build time.
+id: r2
+name: Cloudflare R2
+kind: Object storage
+url: https://developers.cloudflare.com/r2/
+aisle: storage
+metric: 10
+limits:
+  - No fees for data sent out
+who:
+  - anyone
+region: null
+sell: yes
+card: yes
+catches: []
+use_if: []
+skip_if: []
+pricing_url: https://developers.cloudflare.com/r2/pricing/
+verified_at: null
+verified_by: null
+source: catalog

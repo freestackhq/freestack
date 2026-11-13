@@ -1,0 +1,32 @@
+# TEST FIXTURE, not real data. Copied from the board samples (the old src/data/sample.ts).
+# *_days_ago keys are fixture-only: scripts/generate.mjs turns them into dates at build time.
+id: jetbrains-edu
+name: JetBrains All Products
+kind: Student license
+url: https://www.jetbrains.com/community/education/
+aisle: student-programs
+metric: 12
+limits: []
+who:
+  - student_school_email
+region: null
+sell: no
+card: no
+catches:
+  - Not for paid work
+use_if: []
+skip_if: []
+pricing_url: https://www.jetbrains.com/community/education/
+verified_at: null
+verified_by: null
+source: catalog
+program:
+  order: 2
+  lasts_big: 1 yr
+  lasts_sub: then renew
+  perks:
+    - IntelliJ, PyCharm, WebStorm
+    - Rider, CLion and the rest
+  needs: School email
+  lasts: While you are a student
+  claim_url: https://www.jetbrains.com/community/education/

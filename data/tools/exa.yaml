@@ -1,0 +1,29 @@
+id: exa
+name: Exa
+kind: Web search for agents
+url: https://exa.ai
+aisle: ai-tooling
+metric: null
+metric_note: Not listed
+limits:
+  - Free signup credits
+  - Then PAYG
+who:
+  - anyone
+region: null
+sell: yes
+card: unknown
+cost: free
+catches: []
+use_if:
+  - 'You need semantic web search — find pages by *meaning* rather than keyword match — which is ideal for RAG pipelines, research agents, and "find similar" features where traditional search returns irrelevant noise. vs Tavily: Exa uses neural embeddings for semantic matching (better for conceptual queries); Tavily is closer to traditional search (better for factual lookups like "current price of X"). vs building your own scraper + embeddings: Exa indexes the web for you and returns content — no crawling, no chunking, no vector DB needed for web knowledge.'
+skip_if: []
+pricing_url: https://exa.ai
+verified_at: 2026-07-24
+verified_by: null
+source: catalog
+tagline: Neural web search for RAG/agents when keyword search is too dumb.
+about: Neural web search for RAG/agents when keyword search is too dumb.
+tags:
+  - agents
+  - search

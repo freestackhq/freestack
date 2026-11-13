@@ -1,0 +1,36 @@
+id: rest-countries
+name: REST Countries
+kind: Reference data API
+url: https://restcountries.com
+aisle: reference
+metric: null
+metric_note: Not listed
+limits:
+  - Unlimited, open source
+  - "Rate limit: fair use (no hard limit)"
+who:
+  - anyone
+region: null
+sell: unknown
+card: unknown
+cost: free
+catches: []
+use_if:
+  - You need country metadata (flags, currencies, capitals) for dropdowns, forms, or reference data.
+skip_if:
+  - reason: REST Countries is structured data for country facts; Wikipedia is prose/articles for general knowledge.
+    use: wikipedia-rest
+pricing_url: https://restcountries.com
+verified_at: null
+verified_by: null
+source: catalog
+tagline: "Country data: name, capital, population, area, currencies, languages, timezones, borders, flags (SVG/PNG)."
+about: "Country data: name, capital, population, area, currencies, languages, timezones, borders, flags (SVG/PNG). Filter by region, subregion, language, currency."
+api:
+  base_url: https://restcountries.com/v3.1
+  docs: https://restcountries.com
+  auth: none
+  cors: yes
+  response: JSON
+  openapi: no
+  status: active

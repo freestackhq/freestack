@@ -3,11 +3,11 @@
  * suggest_stack tool). Pure functions, no DOM and no data imports, so the
  * same code runs at build time and in the browser.
  *
- * RULES mirrors data/rules.yaml. The build has no YAML loader yet, so the
- * rules are embedded here as a typed array; rules.test.ts fails if the two
- * drift apart. When the data phase adds a loader, generate this array from
- * the YAML instead.
+ * RULES comes from data/rules.yaml, compiled by `pnpm catalog:generate`
+ * into src/data/rules.generated.json (a small file, so the browser bundle
+ * does not carry the whole catalog).
  */
+import compiled from "../../data/rules.generated.json" with { type: "json" };
 import type { SituationId, Who, YesNoUnknown } from "./types";
 
 export type Level = "problem" | "watch";
@@ -77,51 +77,8 @@ export interface Result {
   watch: Finding[];
 }
 
-// Keep in step with data/rules.yaml.
-export const RULES: Rule[] = [
-  {
-    id: "no-selling",
-    level: "problem",
-    when: { situation: ["indie", "startup"], tool: { sell: "no" } },
-    text: "{tool} does not allow selling, and you are building to sell. Swap {aisle}.",
-    short: "Clashes: no selling",
-  },
-  {
-    id: "d1-needs-workers",
-    level: "problem",
-    when: { tool: { id: "d1" }, missing: { aisle: "hosting", id: "cf-workers" } },
-    text: "Cloudflare D1 only runs inside Cloudflare Workers. Pair it with Cloudflare hosting.",
-    short: "Needs Cloudflare hosting",
-  },
-  {
-    id: "school-email-only",
-    level: "problem",
-    when: { situation_not: ["school"], tool: { who_only: "student_school_email" } },
-    text: "{tool}'s free plan needs a school email.",
-    short: "Needs a school email",
-  },
-  {
-    id: "card-needed",
-    level: "watch",
-    when: { tool: { card: "yes" } },
-    text: "{tool} asks for a credit card at signup.",
-    short: "Card needed at signup",
-  },
-  {
-    id: "auth-built-in",
-    level: "watch",
-    when: { tool: { id: "supabase" }, has: { aisle: "auth" } },
-    text: "Supabase already has sign-in built in. You may not need {other}.",
-    short: "Has sign-in built in",
-  },
-  {
-    id: "sleeps",
-    level: "watch",
-    when: { tool: { catches_contains: "Sleeps" } },
-    text: "{tool}: {catch}. The first visit after a break is slow.",
-    short: "Sleeps when idle",
-  },
-];
+/** The rules from data/rules.yaml. */
+export const RULES: Rule[] = compiled as Rule[];
 
 function matchTool(m: ToolMatch, t: RuleTool): { ok: boolean; catch?: string } {
   if (m.id !== undefined && t.id !== m.id) return { ok: false };

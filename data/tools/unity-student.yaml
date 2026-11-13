@@ -1,0 +1,39 @@
+id: unity-student
+name: Unity Student
+kind: Student license
+url: https://unity.com/products/unity-student
+aisle: student-programs
+metric: null
+metric_note: Not listed
+limits:
+  - SheerID
+  - Personal machines
+who:
+  - student_any_id
+region: null
+sell: unknown
+card: unknown
+cost: student
+catches:
+  - Needs a SheerID check
+use_if:
+  - You're building games or interactive 3D experiences and want the Pro runtime features (dark theme aside — splash screen removal, runtime profiling, and priority bug fixes) without the $2k/yr price tag. Essential for game dev courses and portfolio pieces.
+skip_if: []
+pricing_url: https://unity.com/products/unity-student
+verified_at: null
+verified_by: null
+source: catalog
+tagline: Unity Pro Editor for verified students 16+.
+about: |-
+  Unity Pro Editor for verified students 16+.
+
+  vs Godot / Unreal Engine: Godot is fully free and open-source but has a smaller asset ecosystem and weaker console export. Unreal is free until $1M revenue but demands beefy hardware and C++ comfort. Unity Student hits the sweet spot for 2D/mobile/VR prototyping on modest hardware with the largest tutorial ecosystem.
+program:
+  order: 7
+  lasts_big: "?"
+  lasts_sub: Not listed
+  perks:
+    - Unity Pro editor
+  needs: Proof you are a student
+  lasts: Not listed
+  claim_url: https://unity.com/products/unity-student

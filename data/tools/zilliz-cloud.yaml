@@ -1,0 +1,30 @@
+id: zilliz-cloud
+name: Zilliz Cloud
+kind: Managed Milvus
+url: https://zilliz.com/cloud
+aisle: vectors
+metric: 5
+limits:
+  - Free cluster
+  - 2.5M vCU a month
+  - 5 collections
+who:
+  - anyone
+region: null
+sell: yes
+card: unknown
+cost: free
+catches: []
+use_if:
+  - "You want Milvus's power (scale, hybrid search, GPU indexing) without operating etcd, MinIO, and the coordinator services yourself — a free cluster gets you started with 5 GB. vs self-hosted Milvus: same engine, zero ops; you trade cost control for convenience. vs Pinecone: Zilliz gives you the full Milvus API (richer filtering, partition keys, GPU index) with an OSS escape hatch; Pinecone is simpler but proprietary."
+skip_if: []
+pricing_url: https://zilliz.com/cloud
+verified_at: 2026-07-24
+verified_by: null
+source: catalog
+tagline: Managed Milvus — vector search without running etcd/minio yourself.
+about: Managed Milvus — vector search without running etcd/minio yourself.
+tags:
+  - vector
+  - rag
+  - milvus

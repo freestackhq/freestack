@@ -1,0 +1,34 @@
+id: frontend-masters-pack
+name: Frontend Masters (Pack)
+kind: Course platform
+url: https://frontendmasters.com
+aisle: learning
+metric: 6
+limits: []
+who:
+  - student_school_email
+region: null
+sell: yes
+card: unknown
+cost: student
+catches: []
+use_if:
+  - You want to mass-level frontend skills (React, TypeScript, performance) or go deep on systems (Rust, compilers, networking) with video courses taught by actual library authors — not random YouTubers.
+skip_if:
+  - reason: "Udemy/Coursera: FM is curated and opinionated — 200 courses from working engineers, not 200k courses of variable quality. No certificates, but real skill."
+  - reason: "Pluralsight: FM's instructors ship frameworks you actually use (Webpack, Vite, Svelte). Pluralsight skews enterprise/.NET."
+pricing_url: https://frontendmasters.com
+verified_at: null
+verified_by: null
+source: catalog
+tagline: Deep frontend and systems courses.
+about: Deep frontend and systems courses.
+program:
+  order: 1
+  lasts_big: 6 mo
+  lasts_sub: 6 months via Pack
+  perks:
+    - Deep frontend and systems courses.
+  needs: A school email
+  lasts: 6 months via Pack
+  claim_url: https://frontendmasters.com

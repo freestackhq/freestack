@@ -1,0 +1,34 @@
+id: d1
+name: Cloudflare D1
+kind: SQLite on Workers
+url: https://developers.cloudflare.com/d1/
+aisle: databases
+metric: 5
+metric_note: Per database
+limits:
+  - 5M rows read a day on free Workers
+who:
+  - anyone
+region: null
+sell: yes
+card: unknown
+cost: free
+catches:
+  - Only runs inside Workers
+use_if:
+  - You're already on Cloudflare Workers and want a database that's a first-class binding — zero network hop, zero connection overhead, deployed alongside your code at the edge.
+skip_if:
+  - reason: Both are edge SQLite. Pick D1 when your compute is Workers (native binding, no SDK needed). Pick Turso when you deploy elsewhere (Vercel, Fly, Deno) or need embedded replicas inside your app process.
+    use: turso
+  - reason: Pick D1 for simple schemas and edge-speed reads on Workers. Pick Neon when you need full Postgres (complex joins, extensions, large write throughput) or when your app lives outside the Cloudflare ecosystem.
+    use: neon
+pricing_url: https://developers.cloudflare.com/d1/
+verified_at: null
+verified_by: null
+source: catalog
+tagline: SQLite at the edge on Workers.
+about: SQLite at the edge on Workers.
+type: sqlite
+tags:
+  - sqlite
+  - edge

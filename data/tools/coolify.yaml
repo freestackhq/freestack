@@ -1,0 +1,30 @@
+id: coolify
+name: Coolify
+kind: Self-hosted platform
+url: https://coolify.io
+aisle: servers
+metric: null
+metric_note: Not listed
+limits:
+  - OSS
+  - Unlimited apps on your infra
+who:
+  - anyone
+region: null
+sell: yes
+card: unknown
+cost: free
+catches: []
+use_if:
+  - You already have a VPS (Oracle Always Free, Hetzner, etc.) and want a Heroku-like UI for deploying unlimited apps without per-service fees. Coolify handles git deploys, SSL, databases, and backups — you own the entire stack.
+skip_if:
+  - reason: "Railway/Render: Those charge per service or impose free-tier limits; Coolify is free and unlimited — you only pay for the underlying VM. vs Oracle Cloud alone: Oracle gives you the VM but no deployment tooling; Coolify turns that raw VM into a one-click PaaS with auto-SSL and Docker Compose support."
+pricing_url: https://coolify.io
+verified_at: 2026-07-24
+verified_by: null
+source: catalog
+tagline: Self-hosted PaaS — Heroku/Render shape on your VPS.
+about: Self-hosted PaaS — Heroku/Render shape on your VPS.
+tags:
+  - oss
+  - paas

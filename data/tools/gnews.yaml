@@ -1,0 +1,34 @@
+id: gnews
+name: GNews
+kind: News API
+url: https://gnews.io/docs
+aisle: news
+metric: 100
+limits:
+  - "Rate limit: 100 requests a day"
+who:
+  - anyone
+region: null
+sell: unknown
+card: unknown
+cost: free
+catches: []
+use_if:
+  - You need a production-ready news API on the free tier with global coverage.
+skip_if:
+  - reason: Fewer sources but the free tier actually works in production; NewsAPI locks free to localhost only.
+    use: newsapi
+pricing_url: https://gnews.io/docs
+verified_at: null
+verified_by: null
+source: catalog
+tagline: Global news search and top headlines from Google News sources.
+about: Global news search and top headlines from Google News sources. Supports language/country filtering. Free tier works in production (unlike NewsAPI).
+api:
+  base_url: https://gnews.io/api/v4
+  docs: https://gnews.io/docs
+  auth: api-key
+  cors: yes
+  response: JSON
+  openapi: no
+  status: active

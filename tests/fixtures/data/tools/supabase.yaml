@@ -1,0 +1,33 @@
+# TEST FIXTURE, not real data. Copied from the board samples (the old src/data/sample.ts).
+# *_days_ago keys are fixture-only: scripts/generate.mjs turns them into dates at build time.
+id: supabase
+name: Supabase
+kind: Postgres plus auth
+url: https://supabase.com
+aisle: databases
+metric: 0.5
+limits:
+  - 1 GB file storage
+  - Pauses after 1 week idle
+who:
+  - anyone
+region: null
+sell: yes
+card: no
+catches:
+  - Pauses after 1 week idle
+use_if:
+  - You need a database, logins and file uploads in one place.
+skip_if:
+  - reason: You only need a database.
+    use: neon
+pricing_url: https://supabase.com/pricing
+verified_days_ago: 120
+verified_by: Karlo
+source: catalog
+tagline: Postgres with sign-in and file uploads built in.
+type: postgres
+fits:
+  - school
+  - student
+  - indie

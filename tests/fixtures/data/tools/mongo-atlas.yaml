@@ -1,0 +1,24 @@
+# TEST FIXTURE, not real data. Copied from the board samples (the old src/data/sample.ts).
+# *_days_ago keys are fixture-only: scripts/generate.mjs turns them into dates at build time.
+id: mongo-atlas
+name: MongoDB Atlas M0
+kind: Document database
+url: https://www.mongodb.com/atlas
+aisle: databases
+metric: 0.5
+limits:
+  - Shared cluster
+  - 100 operations a second
+who:
+  - anyone
+region: null
+sell: yes
+card: no
+catches: []
+use_if: []
+skip_if: []
+pricing_url: https://www.mongodb.com/pricing
+verified_at: null
+verified_by: null
+source: catalog
+type: documents

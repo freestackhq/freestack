@@ -1,0 +1,40 @@
+id: github-student-pack
+name: GitHub Student Developer Pack
+kind: Student bundle
+url: https://education.github.com/pack
+aisle: student-programs
+metric: 24
+metric_note: About
+limits:
+  - Partner offers rotate
+who:
+  - student_school_email
+region: null
+sell: unknown
+card: unknown
+cost: student
+catches:
+  - Partner offers rotate
+use_if:
+  - You do one admin task per semester and forget about it — this single verification cascades into Copilot, domains, cloud credits, and dozens of tools without separate applications. Claim it on day one; everything else in this list gets easier after.
+skip_if: []
+pricing_url: https://education.github.com/pack
+verified_at: null
+verified_by: null
+source: catalog
+tagline: One verification unlocks 80+ partner offers + Pro/Copilot/Codespaces.
+about: |-
+  One verification unlocks 80+ partner offers + Pro/Copilot/Codespaces.
+
+  vs applying to each vendor individually: one GitHub verification unlocks the majority of Pack-tagged entries below in minutes, while applying separately means repeating SheerID / .edu email flows per service and missing offers you didn't know existed.
+tags:
+  - must-claim
+program:
+  order: 1
+  lasts_big: 2 yrs
+  lasts_sub: then verify again
+  perks:
+    - GitHub Pro, Copilot, Codespaces
+  needs: School email or proof of enrollment
+  lasts: About 2 years, then re-verify
+  claim_url: https://education.github.com/pack

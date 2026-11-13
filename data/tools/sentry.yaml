@@ -1,0 +1,30 @@
+id: sentry
+name: Sentry
+kind: Monitoring
+url: https://sentry.io
+aisle: observability
+metric: null
+metric_note: ~5k errors a month public
+limits:
+  - ~5k errors a month public
+  - "Pack: ~50k + Team features"
+who:
+  - anyone
+region: null
+sell: yes
+card: unknown
+cost: free
+catches: []
+use_if:
+  - Your app ships JS/TS bundles and you need stack traces that point to *your* source lines, not minified garbage. The 5k errors/mo free tier covers side projects; the GitHub Student Pack bumps you to ~50k + Team features for serious staging environments.
+skip_if:
+  - reason: PostHog shows what users *did*; Sentry shows what *broke*. Install both — they complement, not compete.
+    use: posthog
+  - reason: Better Stack alerts you the endpoint is down; Sentry tells you the exact unhandled promise rejection on line 42 that caused it.
+    use: better-stack
+pricing_url: https://sentry.io
+verified_at: null
+verified_by: null
+source: catalog
+tagline: Error tracking with source maps.
+about: Error tracking with source maps. Boosted via Pack.

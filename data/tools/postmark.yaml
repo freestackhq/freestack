@@ -1,0 +1,33 @@
+id: postmark
+name: Postmark
+kind: Email service
+url: https://postmarkapp.com
+aisle: email
+metric: null
+metric_note: Not listed
+limits:
+  - Free trial / approval
+  - Not forever-free
+who:
+  - anyone
+region: null
+sell: yes
+card: unknown
+cost: credits
+catches:
+  - Free trial / approval
+  - Not forever-free
+  - Credits, not a free tier
+use_if:
+  - "Inbox placement is non-negotiable — invoices, security alerts, or anything where \"check your spam folder\" is unacceptable. Postmark's entire business model is deliverability-first (they reject bulk marketing senders). The catch: there's no forever-free tier, so use it once your product earns revenue or when you graduate from Resend/SendGrid's free caps."
+skip_if:
+  - reason: Postmark has years of deliverability reputation data and dedicated IPs at lower volumes; Resend is newer but the free tier and DX are better for pre-revenue. vs SendGrid — Postmark's sending reputation is pristine because they refuse marketing mail; SendGrid's shared IPs are diluted by everyone else's newsletters.
+    use: resend
+pricing_url: https://postmarkapp.com
+verified_at: 2026-07-24
+verified_by: null
+source: catalog
+tagline: Transactional email with serious deliverability — trial then paid.
+about: Transactional email with serious deliverability — trial then paid.
+tags:
+  - transactional

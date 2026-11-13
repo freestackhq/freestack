@@ -1,0 +1,30 @@
+id: workos
+name: WorkOS
+kind: Sign-in
+url: https://workos.com
+aisle: auth
+metric: null
+metric_note: Not listed
+limits:
+  - Free up to active-user thresholds
+  - Then usage
+who:
+  - anyone
+region: null
+sell: yes
+card: unknown
+cost: free
+catches: []
+use_if:
+  - Your first enterprise customer asks "do you support SAML SSO?" and you need to say yes by next sprint. WorkOS handles the gnarly SAML/SCIM plumbing so you don't read XML at 2 AM.
+skip_if:
+  - reason: "Auth0 Organizations: WorkOS is purpose-built for B2B SSO/directory sync and charges nothing until your customers are actually paying you. Auth0 charges per-MAU from the start. vs building it yourself: SAML is a spec from 2005 that punishes you for reading it. WorkOS abstracts the IdP zoo (Okta, Entra, Google Workspace) behind one normalized API."
+pricing_url: https://workos.com
+verified_at: 2026-07-24
+verified_by: null
+source: catalog
+tagline: Enterprise SSO/SCIM when a B2B customer asks — free until you have orgs paying.
+about: Enterprise SSO/SCIM when a B2B customer asks — free until you have orgs paying.
+tags:
+  - sso
+  - b2b

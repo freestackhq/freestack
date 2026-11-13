@@ -1,0 +1,28 @@
+id: langsmith
+name: LangSmith
+kind: LLM tracing
+url: https://www.langchain.com/langsmith
+aisle: ai-tooling
+metric: null
+metric_note: Not listed
+limits:
+  - Free Developer plan with trace caps
+who:
+  - anyone
+region: null
+sell: yes
+card: unknown
+cost: free
+catches: []
+use_if:
+  - "You're already using LangChain/LangGraph and want first-party tracing, prompt playgrounds, and evaluation datasets with zero integration friction — the free Developer plan covers solo projects. vs Langfuse: LangSmith has tighter LangChain integration and a more polished eval UI; Langfuse is framework-agnostic, open-source, and self-hostable. vs Helicone: LangSmith goes deeper on evals and datasets; Helicone is lighter-weight and provider-agnostic (just a proxy swap)."
+skip_if: []
+pricing_url: https://www.langchain.com/langsmith
+verified_at: 2026-07-24
+verified_by: null
+source: catalog
+tagline: LangChain tracing/evals — free developer seat before you need org plans.
+about: LangChain tracing/evals — free developer seat before you need org plans.
+tags:
+  - observability
+  - agents

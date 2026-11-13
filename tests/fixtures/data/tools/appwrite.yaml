@@ -1,0 +1,24 @@
+# TEST FIXTURE, not real data. Copied from the board samples (the old src/data/sample.ts).
+# *_days_ago keys are fixture-only: scripts/generate.mjs turns them into dates at build time.
+id: appwrite
+name: Appwrite Cloud
+kind: Backend as a service
+url: https://appwrite.io
+aisle: databases
+metric: null
+metric_note: Not listed
+limits:
+  - 75,000 monthly users
+who:
+  - anyone
+region: null
+sell: unknown
+card: unknown
+catches: []
+use_if: []
+skip_if: []
+pricing_url: https://appwrite.io/pricing
+verified_at: null
+verified_by: null
+source: catalog
+type: documents

@@ -1,0 +1,45 @@
+id: google-ai-studio
+name: Google AI Studio
+kind: Inference API
+url: https://aistudio.google.com
+aisle: inference
+metric: 1500
+metric_note: Flash
+limits:
+  - Free quota for experimentation
+  - Check commercial ToS
+  - 1500 requests a day (Flash), 50 requests a day (Pro)
+who:
+  - anyone
+region: null
+sell: unknown
+card: unknown
+cost: free
+catches: []
+use_if:
+  - "You need multimodal (text + image + video + audio) in one API call, a 1 M-token context window for large-doc RAG, or simply the most generous free tier among frontier-class models. vs OpenAI API: Gemini's free tier lets you prototype without spending a cent; OpenAI has no forever-free option. vs Anthropic API: Gemini wins on context length (1 M vs 200 K) and multimodal breadth; Claude wins on agentic tool use and structured reasoning."
+  - You need multimodal (image/video understanding), long context (1M tokens), or the most generous free daily quota.
+skip_if:
+  - reason: Gemini is multimodal and has longer context; Groq is faster for text-only chat. Gemini free tier is more generous per day.
+    use: groq
+pricing_url: https://aistudio.google.com
+verified_at: null
+verified_by: null
+source: catalog
+tagline: Gemini API for prototypes — often the cheapest path to a capable model.
+about: |-
+  Gemini API for prototypes — often the cheapest path to a capable model.
+
+  Google's AI models via API. Gemini Flash is fast and cheap (generous free tier). Supports multimodal (images, audio, video), function calling, and structured output. The OpenAI-compatible endpoint means you can use the OpenAI SDK.
+tags:
+  - llm
+  - gemini
+api:
+  base_url: https://generativelanguage.googleapis.com/v1beta/openai
+  docs: https://ai.google.dev/docs
+  auth: api-key
+  models: gemini-3-flash, gemini-3.5-flash-lite, gemma-3-27b-it
+  openai_compatible: yes
+  streaming: yes
+  self_host: no
+  status: active

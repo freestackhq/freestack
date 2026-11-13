@@ -1,0 +1,40 @@
+id: github-copilot-student
+name: GitHub Copilot Student
+kind: Student offer
+url: https://docs.github.com/en/copilot
+aisle: student-programs
+metric: null
+metric_note: While verified
+limits:
+  - While verified
+  - Offer sometimes pauses
+who:
+  - student_school_email
+region: null
+sell: yes
+card: unknown
+cost: student
+catches:
+  - Offer sometimes pauses
+use_if:
+  - You're writing code daily and want inline completions that cut boilerplate in half — especially repetitive tests, data transformations, and API glue. The student tier is the same Pro product; no feature gates.
+skip_if: []
+pricing_url: https://docs.github.com/en/copilot
+verified_at: null
+verified_by: null
+source: catalog
+tagline: AI pair programmer free via GitHub Education.
+about: |-
+  AI pair programmer free via GitHub Education.
+
+  vs Codeium / Tabnine free tiers: Copilot has deeper context awareness (whole-repo indexing on Pro) and tighter VS Code/JetBrains integration. Free alternatives are fine for occasional use, but Copilot's multi-file context wins when your project has 50+ files.
+program:
+  order: 12
+  lasts_big: Enrolled
+  lasts_sub: lasts while you study
+  perks:
+    - While verified
+    - Offer sometimes pauses
+  needs: A school email
+  lasts: While verified
+  claim_url: https://docs.github.com/en/copilot

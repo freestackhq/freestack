@@ -1,10 +1,12 @@
 ---
 /**
  * Component reference for the label (States.dc.html). Not linked from the site.
+ * The named tools are the test fixtures' state examples; with real data a
+ * state is skipped when its example tool is not in the catalog.
  */
 import Shell from "../../layouts/Shell.astro";
 import Label from "../../components/fresh/Label.astro";
-import { tool, toolsInAisle } from "../../lib/fresh/catalog";
+import { tool, toolsInAisle, unlabeledInAisle } from "../../lib/fresh/catalog";
 
 const states = [
   { title: "Checked within 90 days", id: "neon" },
@@ -13,9 +15,12 @@ const states = [
   { title: "Change waiting for review", id: "d1" },
   { title: "Vendor page changed", id: "turso" },
   { title: "From an awesome list", id: "xata-lite" },
-].map((s) => ({ ...s, t: tool(s.id)! }));
+].flatMap((s) => {
+  const t = tool(s.id);
+  return t ? [{ ...s, t }] : [];
+});
 
-const full = [...toolsInAisle("databases"), tool("xata-lite")!];
+const full = [...toolsInAisle("databases"), ...unlabeledInAisle("databases").slice(0, 1)];
 ---
 
 <Shell title="Label states · freestack" noindex>

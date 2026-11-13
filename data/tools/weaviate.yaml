@@ -1,0 +1,31 @@
+id: weaviate
+name: Weaviate
+kind: Vector database
+url: https://weaviate.io
+aisle: vectors
+metric: null
+metric_note: Not listed
+limits:
+  - Self-host free
+  - Cloud sandbox/trial then paid
+who:
+  - anyone
+region: null
+sell: yes
+card: unknown
+cost: free
+catches:
+  - Cloud sandbox/trial then paid
+use_if:
+  - "You need hybrid search (vector + BM25 keyword) in one query and want an open-source core with built-in vectorization modules that call embedding APIs for you. vs Qdrant: Weaviate has native hybrid search and auto-vectorization modules; Qdrant requires you to generate embeddings externally and is pure vector. vs Milvus: Weaviate is friendlier for small teams (single binary, GraphQL API, module ecosystem); Milvus scales harder for billion-vector workloads."
+skip_if: []
+pricing_url: https://weaviate.io
+verified_at: 2026-07-24
+verified_by: null
+source: catalog
+tagline: Hybrid vector + keyword search — OSS core, cloud for zero-ops.
+about: Hybrid vector + keyword search — OSS core, cloud for zero-ops.
+tags:
+  - vector
+  - rag
+  - oss

@@ -1,0 +1,30 @@
+id: browserbase
+name: Browserbase
+kind: Hosted browsers
+url: https://www.browserbase.com
+aisle: ai-tooling
+metric: null
+metric_note: Not listed
+limits:
+  - Free trial / starter caps
+  - Then usage
+who:
+  - anyone
+region: null
+sell: yes
+card: unknown
+cost: credits
+catches:
+  - Free trial / starter caps
+  - Credits, not a free tier
+use_if:
+  - "Your AI agents need to browse, scrape, or interact with real web pages and you don't want to manage Playwright infrastructure, proxy rotation, or headless Chrome scaling yourself. vs Browserless: Browserbase is built specifically for AI agent workflows (session replay, stealth mode, built-in proxies); Browserless is a more general headless Chrome API for PDFs and screenshots. vs self-hosted Playwright: Browserbase handles anti-bot evasion, IP rotation, and scaling to hundreds of concurrent sessions — things that take weeks to build reliably on your own infra."
+skip_if: []
+pricing_url: https://www.browserbase.com
+verified_at: null
+verified_by: null
+source: catalog
+tagline: Hosted browsers for agent scraping/automation without Playwright ops.
+about: Hosted browsers for agent scraping/automation without Playwright ops.
+tags:
+  - agents

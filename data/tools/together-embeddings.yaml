@@ -1,0 +1,45 @@
+id: together-embeddings
+name: Together Embeddings
+kind: Embeddings API
+url: https://www.together.ai
+aisle: embeddings
+metric: null
+metric_note: Not listed
+limits:
+  - PAYG
+  - Promo credits sometimes
+  - Promo credits on signup
+who:
+  - anyone
+region: null
+sell: yes
+card: unknown
+cost: credits
+catches:
+  - Credits, not a free tier
+use_if:
+  - "You want good embeddings at low cost with the guarantee that you can download the same open weights and self-host later — no vendor lock-in on your vector pipeline. vs Voyage AI: Together embeddings are cheaper and open-weight (self-host escape hatch); Voyage has higher retrieval quality on benchmarks but is proprietary and pricier. vs OpenAI ada-002: Together's open models (e.g., BGE, E5) often match or beat ada-002 on retrieval tasks at lower per-token cost, and you own the weights."
+  - You want OpenAI-compatible embeddings from open-weight models with an escape hatch to self-host.
+skip_if:
+  - reason: Lower quality ceiling but open models mean you can self-host; Voyage is proprietary but higher quality.
+    use: voyage-ai
+pricing_url: https://www.together.ai
+verified_at: 2026-07-24
+verified_by: null
+source: catalog
+tagline: Open-weight embeddings via Together — cheaper RAG than closed APIs.
+about: |-
+  Open-weight embeddings via Together — cheaper RAG than closed APIs.
+
+  Open-weight embedding models hosted. Because the models are open (BGE, E5), you can self-host later without vendor lock-in. OpenAI SDK compatible.
+tags:
+  - embeddings
+api:
+  base_url: https://api.together.xyz/v1
+  docs: https://docs.together.ai/reference/embeddings
+  auth: api-key
+  models: BAAI/bge-large-en-v1.5, intfloat/e5-mistral-7b-instruct
+  openai_compatible: yes
+  streaming: no
+  self_host: no (but models are open-weight)
+  status: active

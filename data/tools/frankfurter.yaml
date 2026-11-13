@@ -1,0 +1,36 @@
+id: frankfurter
+name: Frankfurter
+kind: Finance API
+url: https://www.frankfurter.app/docs
+aisle: finance
+metric: null
+metric_note: Not listed
+limits:
+  - Unlimited, open source
+  - "Rate limit: fair use (no hard limit published)"
+who:
+  - anyone
+region: null
+sell: unknown
+card: unknown
+cost: free
+catches: []
+use_if:
+  - You need reliable FX rates with zero auth, backed by ECB data, and you can self-host if needed.
+skip_if:
+  - reason: Both are keyless but Frankfurter is open-source and self-hostable; ExchangeRate-API has more currencies (150+).
+    use: exchangerate-api
+pricing_url: https://www.frankfurter.app/docs
+verified_at: null
+verified_by: null
+source: catalog
+tagline: Foreign exchange rates published by the European Central Bank.
+about: Foreign exchange rates published by the European Central Bank. Covers 30+ currencies. Historical data from 1999. Open-source, self-hostable, no key needed.
+api:
+  base_url: https://api.frankfurter.app
+  docs: https://www.frankfurter.app/docs
+  auth: none
+  cors: yes
+  response: JSON
+  openapi: no
+  status: active

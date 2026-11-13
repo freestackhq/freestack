@@ -1,0 +1,44 @@
+id: langfuse
+name: Langfuse
+kind: LLM tracing
+url: https://langfuse.com
+aisle: ai-tooling
+metric: null
+metric_note: Not listed
+limits:
+  - Generous free cloud
+  - Self-host free
+  - Generous free cloud tier, self-host unlimited
+who:
+  - anyone
+region: null
+sell: yes
+card: unknown
+cost: free
+catches: []
+use_if:
+  - "You want full-stack LLM observability (traces, token costs, prompt versioning, evals) with an open-source core you can self-host when data residency matters. vs Helicone: Langfuse gives you deeper eval/dataset tooling and self-host option; Helicone is simpler to adopt (one URL swap) but cloud-only and shallower on evals. vs LangSmith: Langfuse is framework-agnostic and open-source; LangSmith is tightly coupled to LangChain and closed-source."
+  - You want full LLM observability (traces + costs + evals) and the option to self-host.
+skip_if:
+  - reason: Langfuse is deeper (evals, datasets, prompt versioning); Helicone is simpler (proxy + dashboard).
+    use: helicone
+pricing_url: https://langfuse.com
+verified_at: null
+verified_by: null
+source: catalog
+tagline: LLM observability — traces, costs, evals before your bill surprises you.
+about: |-
+  LLM observability — traces, costs, evals before your bill surprises you.
+
+  Open-source LLM observability: traces, cost tracking, latency, prompt management, evaluations, and datasets. Integrates with LangChain, OpenAI SDK, Vercel AI SDK, and more. Self-host for free or use their cloud.
+tags:
+  - observability
+api:
+  base_url: https://cloud.langfuse.com/api
+  docs: https://langfuse.com/docs
+  auth: api-key
+  models: N/A (observability layer)
+  openai_compatible: yes
+  streaming: yes
+  self_host: yes
+  status: active

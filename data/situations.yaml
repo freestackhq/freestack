@@ -1,0 +1,7 @@
+# Who is building. Home's picker and Build a stack's ?as= read this list.
+default: student
+list:
+  - { id: school, label: Student with school email }
+  - { id: student, label: Student }
+  - { id: indie, label: Indie builder }
+  - { id: startup, label: Startup }

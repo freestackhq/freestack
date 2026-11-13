@@ -1,0 +1,42 @@
+id: helicone
+name: Helicone
+kind: LLM proxy and tracing
+url: https://www.helicone.ai
+aisle: ai-tooling
+metric: null
+metric_note: Not listed
+limits:
+  - Free tier with request caps
+who:
+  - anyone
+region: null
+sell: yes
+card: unknown
+cost: free
+catches: []
+use_if:
+  - "You want instant cost visibility and response caching across all your LLM calls by swapping a single base URL — zero SDK changes, works with any OpenAI-compatible provider. vs Langfuse: Helicone is faster to set up (proxy approach, no SDK instrumentation) and adds caching out of the box; Langfuse is deeper on evals, datasets, and self-hosting. vs building your own logging: Helicone gives you dashboards, alerts, rate limiting, and user tracking for free — shipping that yourself burns a sprint."
+  - You want the simplest possible LLM cost/usage visibility — change one URL and get a dashboard.
+skip_if:
+  - reason: Simpler setup (just a proxy URL) but less depth; Langfuse has evals, datasets, and self-hosting.
+    use: langfuse
+pricing_url: https://www.helicone.ai
+verified_at: null
+verified_by: null
+source: catalog
+tagline: Proxy for LLM APIs — caching + spend visibility with one base URL swap.
+about: |-
+  Proxy for LLM APIs — caching + spend visibility with one base URL swap.
+
+  One-line integration: swap your OpenAI base URL to Helicone's proxy and get cost tracking, caching, rate limiting, and request logs. Zero code change beyond the base URL.
+tags:
+  - observability
+api:
+  base_url: https://oai.helicone.ai/v1 (proxy)
+  docs: https://docs.helicone.ai
+  auth: api-key
+  models: N/A (proxy layer)
+  openai_compatible: yes
+  streaming: yes
+  self_host: no
+  status: active

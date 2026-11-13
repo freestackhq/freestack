@@ -1,0 +1,29 @@
+id: llamaindex
+name: LlamaIndex
+kind: RAG framework
+url: https://www.llamaindex.ai
+aisle: ai-tooling
+metric: null
+metric_note: Not listed
+limits:
+  - OSS framework free
+  - You pay model/vector backends
+who:
+  - anyone
+region: null
+sell: yes
+card: unknown
+cost: free
+catches: []
+use_if:
+  - "You're building a RAG pipeline and want a framework that handles document loading, chunking, indexing, retrieval, and synthesis — batteries-included with 150+ data connectors. vs Vercel AI SDK: LlamaIndex is for the *data/retrieval* layer (ingestion, indexing, querying); Vercel AI SDK is for the *UI/streaming* layer. They complement each other. vs LangChain: LlamaIndex is more opinionated and data-focused (better for RAG); LangChain is broader and more flexible (better for complex agent graphs and arbitrary chains)."
+skip_if: []
+pricing_url: https://www.llamaindex.ai
+verified_at: 2026-07-24
+verified_by: null
+source: catalog
+tagline: Data framework for RAG — wire docs/DBs into LLMs without reinventing chunking.
+about: Data framework for RAG — wire docs/DBs into LLMs without reinventing chunking.
+tags:
+  - rag
+  - oss

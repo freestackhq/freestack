@@ -1,0 +1,34 @@
+id: pocketbase
+name: PocketBase
+kind: Self-hosted SQLite
+url: https://pocketbase.io
+aisle: databases
+metric: null
+metric_note: Not listed
+limits:
+  - OSS
+  - You pay VPS/Oracle/Koyeb only
+who:
+  - anyone
+region: null
+sell: yes
+card: unknown
+cost: free
+catches: []
+use_if:
+  - You want the simplest possible self-hosted backend — one binary, no Docker required, zero monthly cost on a free-tier VPS — and your app is small-to-medium scale where SQLite's single-writer model is fine.
+skip_if:
+  - reason: Pick PocketBase when you want total ownership with no cloud dependency and your traffic fits one machine. Pick Supabase when you need horizontal scale, managed infra, and Postgres features.
+    use: supabase
+  - reason: "Appwrite: Both are open-source BaaS. Pick PocketBase for radical simplicity (single Go binary, embed in your app). Pick Appwrite for a richer feature set (multiple function runtimes, team collaboration, managed cloud option)."
+pricing_url: https://pocketbase.io
+verified_at: 2026-07-24
+verified_by: null
+source: catalog
+tagline: Single-binary BaaS — SQLite, auth, files, realtime without a cloud bill.
+about: Single-binary BaaS — SQLite, auth, files, realtime without a cloud bill.
+type: sqlite
+tags:
+  - oss
+  - baas
+  - sqlite

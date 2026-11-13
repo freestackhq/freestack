@@ -1,0 +1,29 @@
+id: uptimerobot
+name: UptimeRobot
+kind: Monitoring
+url: https://uptimerobot.com
+aisle: observability
+metric: null
+metric_note: 50 monitors
+limits:
+  - 50 monitors
+who:
+  - anyone
+region: null
+sell: yes
+card: unknown
+cost: free
+catches: []
+use_if:
+  - You just want "is it up?" pings for up to 50 endpoints with email/Slack/webhook alerts — nothing more. Zero config, zero learning curve. Set it and forget it on day one; graduate to Better Stack when you need logs or a public status page.
+skip_if:
+  - reason: Better Stack does uptime *plus* logs *plus* status pages, but UptimeRobot's free tier gives you 5× more monitors (50 vs 10). Start here if monitoring count matters more than features.
+    use: better-stack
+  - reason: New Relic Synthetics can ping URLs too, but it's a sledgehammer for a nail. UptimeRobot is the right tool when all you need is "ping and alert."
+    use: new-relic
+pricing_url: https://uptimerobot.com
+verified_at: null
+verified_by: null
+source: catalog
+tagline: Know when the free PaaS fell asleep.
+about: Know when the free PaaS fell asleep.

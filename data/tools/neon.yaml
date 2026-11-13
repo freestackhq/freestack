@@ -3,24 +3,47 @@ name: Neon
 kind: Serverless Postgres
 url: https://neon.tech
 aisle: databases
-metric: 0.5          # storage_gb, the Databases aisle metric
+metric: 0.5
 limits:
-  - 5 GB data sent out a month
-  - Sleeps after 5 minutes idle
-who: [anyone]
+  - 5 GB egress a month
+  - Scale-to-zero after 5m
+who:
+  - anyone
 region: null
 sell: yes
 card: unknown
+cost: free
 catches:
-  - Sleeps after 5 min idle
+  - Sleeps after 5 minutes idle
 use_if:
-  - You want a normal SQL database
-  - You want a test copy for every preview
+  - You want a normal SQL database.
+  - You want a test copy for every preview.
+  - "Your app is mostly text: users, posts, orders."
+  - A slow first load after a break is fine.
 skip_if:
-  - { reason: You also need logins and file uploads, use: supabase }
-  - { reason: Your users are all over the world, use: turso }
-  - { reason: You are already on Cloudflare Workers, use: d1 }
-pricing_url: https://neon.tech/pricing
+  - reason: You also need logins and file uploads.
+    use: supabase
+  - reason: Your users are all over the world.
+    use: turso
+  - reason: You are already on Cloudflare Workers.
+    use: d1
+  - reason: You will have tons of data, like logs.
+    use: turso
+pricing_url: https://neon.tech
 verified_at: null
 verified_by: null
 source: catalog
+tagline: Postgres that sleeps when nobody is using it.
+about: Serverless Postgres that scales to zero.
+catch_detail:
+  - Sleeps after 5 minutes of no traffic. The next visit is slow.
+  - Storage is small. Fine for users, posts and orders, not for files.
+  - Heavy dashboards can burn the monthly data allowance.
+type: postgres
+fits:
+  - school
+  - student
+  - indie
+  - startup
+tags:
+  - postgres

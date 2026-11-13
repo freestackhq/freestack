@@ -1,0 +1,29 @@
+id: snyk
+name: Snyk Free
+kind: Security tool
+url: https://snyk.io
+aisle: security
+metric: null
+metric_note: Not listed
+limits:
+  - Free for open source / limited private tests
+  - Check current Free caps
+who:
+  - anyone
+region: null
+sell: yes
+card: unknown
+cost: free
+catches: []
+use_if:
+  - You want a GitHub-integrated scanner that flags vulnerable dependencies in PRs and tells you which version fixes it. One `snyk test` in CI catches what `npm audit` misses.
+skip_if:
+  - reason: 'GitHub Dependabot: Snyk covers more ecosystems (containers, IaC) and gives prioritized fix PRs with reachability analysis, not just "this dep has a CVE somewhere." vs Socket.dev: Snyk finds *known* CVEs in existing packages; Socket finds *malicious* packages and supply-chain anomalies. Run both — they solve different problems.'
+pricing_url: https://snyk.io
+verified_at: 2026-07-24
+verified_by: null
+source: catalog
+tagline: Dependency + container vuln scanning in CI before you ship known CVEs.
+about: Dependency + container vuln scanning in CI before you ship known CVEs.
+tags:
+  - sca

@@ -1,0 +1,34 @@
+id: namecheap-me-pack
+name: Namecheap .me (Pack)
+kind: Free domain
+url: https://www.namecheap.com
+aisle: student-programs
+metric: 12
+limits:
+  - Renew paid later
+who:
+  - student_school_email
+region: null
+sell: yes
+card: unknown
+cost: student
+catches: []
+use_if:
+  - You want `yourname.me` pointing at your portfolio site today — zero cost for 12 months with SSL included. A custom domain makes Vercel/Netlify/GitHub Pages deploys look professional instead of living on a `.vercel.app` subdomain.
+skip_if:
+  - reason: "Cloudflare Registrar: Cloudflare sells domains at cost with free DNS/proxy, but doesn't offer a free year. Namecheap's Pack deal gives you the first year free — grab it now, then transfer to Cloudflare at renewal if you want cheaper long-term pricing and built-in CDN."
+pricing_url: https://www.namecheap.com
+verified_at: null
+verified_by: null
+source: catalog
+tagline: Free domain year for a portfolio.
+about: Free domain year for a portfolio.
+program:
+  order: 8
+  lasts_big: 1 yr
+  lasts_sub: 1 yr .me + SSL
+  perks:
+    - Renew paid later
+  needs: A school email
+  lasts: 1 yr .me + SSL
+  claim_url: https://www.namecheap.com

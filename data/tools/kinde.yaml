@@ -1,0 +1,26 @@
+id: kinde
+name: Kinde
+kind: Sign-in
+url: https://kinde.com
+aisle: auth
+metric: 10500
+metric_note: About
+limits: []
+who:
+  - anyone
+region: null
+sell: yes
+card: unknown
+cost: free
+catches: []
+use_if:
+  - You need auth, enterprise SSO, and feature flags from one vendor so you're not duct-taping Clerk + LaunchDarkly together. Kinde's free tier (~10.5 k MAU) is lower than Clerk's, but the bundled flags and RBAC make it the better consolidated choice for B2B SaaS that will need "is this feature enabled for org X?" logic from day one.
+skip_if:
+  - reason: Kinde trades Clerk's polished UI kit for built-in feature flags, roles, and SSO — fewer vendors, but you'll style your own login screens. Pick Kinde when your app needs gating and org-level access control early; pick Clerk when pixel-perfect auth UX matters more than bundled infra.
+    use: clerk
+pricing_url: https://kinde.com
+verified_at: null
+verified_by: null
+source: catalog
+tagline: Auth with SSO and feature flags.
+about: Auth with SSO and feature flags.

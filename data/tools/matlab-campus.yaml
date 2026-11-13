@@ -1,0 +1,40 @@
+id: matlab-campus
+name: MATLAB Campus-Wide / Online
+kind: School license
+url: https://matlab.mathworks.com
+aisle: student-programs
+metric: null
+metric_note: 100+ academic toolboxes
+limits:
+  - Via university email
+  - 100+ academic toolboxes
+who:
+  - student_school_email
+region: null
+sell: no
+card: unknown
+cost: student
+catches:
+  - Only if your school pays for it
+use_if:
+  - Your coursework requires Simulink, Signal Processing, or Control Systems toolboxes that cost thousands commercially — the campus license bundles them all at zero cost. Also essential if professors hand out `.m` homework files with no alternative accepted.
+skip_if: []
+pricing_url: https://matlab.mathworks.com
+verified_at: null
+verified_by: null
+source: catalog
+tagline: Full toolbox suite + browser MATLAB if your uni licenses it.
+about: |-
+  Full toolbox suite + browser MATLAB if your uni licenses it.
+
+  vs Python (NumPy/SciPy) / GNU Octave: Python is free forever and more employable in industry, but won't run Simulink models or satisfy professors who grade `.m` files. Octave is syntax-compatible for basics but lacks toolboxes. Use MATLAB when the curriculum demands it; learn Python in parallel for career portability.
+program:
+  order: 5
+  lasts_big: "?"
+  lasts_sub: Not listed
+  perks:
+    - MATLAB and Simulink
+    - 100+ academic toolboxes
+  needs: Your school must have it
+  lasts: Not listed
+  claim_url: https://matlab.mathworks.com

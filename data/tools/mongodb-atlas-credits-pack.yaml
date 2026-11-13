@@ -1,0 +1,35 @@
+id: mongodb-atlas-credits-pack
+name: MongoDB Atlas Credits (Pack)
+kind: Cloud credit
+url: https://www.mongodb.com/cloud/atlas
+aisle: cloud-credits
+metric: null
+metric_note: $50 credits + free University cert path
+limits:
+  - $50 credits + free University cert path
+who:
+  - student_school_email
+region: null
+sell: yes
+card: unknown
+cost: credits
+catches: []
+use_if:
+  - Your app speaks MongoDB (Mongoose, Motor, or the native driver) and you want a managed cluster with backups, search indexes, and Charts without paying until $50 runs out. The free University cert is a résumé line that actually signals competence.
+skip_if:
+  - reason: "Supabase/Neon free tiers: Those are relational (Postgres). Atlas wins if your data is document-shaped (nested JSON, variable schemas). If you need joins and strict types, use a relational free tier instead."
+pricing_url: https://www.mongodb.com/cloud/atlas
+verified_at: null
+verified_by: null
+source: catalog
+tagline: Stacks on top of free M0 forever tier.
+about: Stacks on top of free M0 forever tier.
+program:
+  order: 3
+  lasts_big: "?"
+  lasts_sub: Not listed
+  perks:
+    - $50 credits + free University cert path
+  needs: A school email
+  lasts: Not listed
+  claim_url: https://www.mongodb.com/cloud/atlas

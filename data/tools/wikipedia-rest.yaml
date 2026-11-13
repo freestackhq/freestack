@@ -1,0 +1,36 @@
+id: wikipedia-rest
+name: Wikipedia REST
+kind: Reference data API
+url: https://en.wikipedia.org/api/rest_v1/
+aisle: reference
+metric: null
+metric_note: Not listed
+limits:
+  - Unlimited (follow User-Agent policy)
+  - "Rate limit: fair use (set a User-Agent)"
+who:
+  - anyone
+region: null
+sell: unknown
+card: unknown
+cost: free
+catches: []
+use_if:
+  - You need general knowledge summaries, random facts, or "on this day" content for apps.
+skip_if:
+  - reason: Different scope. Wikipedia is general knowledge; REST Countries is structured country metadata.
+    use: rest-countries
+pricing_url: https://en.wikipedia.org/api/rest_v1/
+verified_at: null
+verified_by: null
+source: catalog
+tagline: "Wikipedia content via REST: page summaries, full HTML, media, on-this-day, featured content, and random articles."
+about: "Wikipedia content via REST: page summaries, full HTML, media, on-this-day, featured content, and random articles. Set a descriptive User-Agent header per Wikimedia policy."
+api:
+  base_url: https://en.wikipedia.org/api/rest_v1
+  docs: https://en.wikipedia.org/api/rest_v1/
+  auth: none
+  cors: yes
+  response: JSON, HTML
+  openapi: yes
+  status: active

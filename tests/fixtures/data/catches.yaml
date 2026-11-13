@@ -1,0 +1,22 @@
+# TEST FIXTURE, not real data. Copied from the board samples (the old src/data/sample.ts).
+# *_days_ago keys are fixture-only: scripts/generate.mjs turns them into dates at build time.
+- slug: can-i-sell-on-vercel-hobby
+  aisle: hosting
+  tool: vercel-hobby
+  question: Can I sell things on Vercel Hobby?
+  answer: No.
+  detail: Hobby is for personal projects only. Anything that makes money for anyone needs a paid plan.
+  includes:
+    - Taking payments, even a tip button
+    - A site for your business or your services
+    - Client work you are paid for
+  still_fine: Portfolios, school projects, side projects that earn nothing
+  source_name: Vercel's Fair Use Guidelines
+  source_url: https://vercel.com/docs/limits/fair-use-guidelines
+  avoid_with:
+    - cf-workers
+    - koyeb
+  plan: Hobby
+  vendor: Vercel
+  avoid_heading: Free hosts that let you sell
+  checked_days_ago: 0

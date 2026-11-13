@@ -1,0 +1,15 @@
+---
+/**
+ * The old catalog pages (/catalogs, /catalogs/<catalog>, /catalogs/<catalog>/<category>,
+ * /catalogs/<catalog>/<category>/<entry>) 301 to their aisle or tool page.
+ * The map is data/legacy.yaml, written by the catalog migration.
+ */
+import { legacyPath } from "../../lib/catalog";
+
+export const prerender = false;
+
+const parts = (Astro.params.path ?? "").split("/").filter(Boolean);
+const target = legacyPath(parts);
+if (target) return Astro.redirect(target, 301);
+return Astro.rewrite("/404");
+---

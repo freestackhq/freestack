@@ -1,0 +1,30 @@
+id: codechum
+name: CodeChum
+kind: Campus tool
+url: https://www.codechum.com
+aisle: campus
+metric: null
+metric_note: Not listed
+limits:
+  - Institutional licenses
+  - Student access via class
+who:
+  - anyone
+region: null
+sell: unknown
+card: unknown
+cost: discount
+catches:
+  - A discount, not a free tier
+use_if:
+  - Your CS classes already use it (you probably don't have a choice) — but also if you teach or TA and need a Filipino-context auto-grader that your students already know. It's the de-facto PH college coding platform.
+skip_if:
+  - reason: "HackerRank/LeetCode: CodeChum is institutionally integrated — profs assign via it and grades flow through it. HackerRank is for interview prep; CodeChum is for classroom survival."
+pricing_url: https://www.codechum.com
+verified_at: 2026-07-24
+verified_by: null
+source: catalog
+tagline: PH auto-grader ubiquitous in college CS — know it even if you don't love it.
+about: PH auto-grader ubiquitous in college CS — know it even if you don't love it.
+tags:
+  - campus

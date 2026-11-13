@@ -1,0 +1,25 @@
+# TEST FIXTURE, not real data. Copied from the board samples (the old src/data/sample.ts).
+# *_days_ago keys are fixture-only: scripts/generate.mjs turns them into dates at build time.
+id: turso
+name: Turso
+kind: Edge SQLite
+url: https://turso.tech
+aisle: databases
+metric: 5
+limits:
+  - 500 databases
+  - 1 billion row reads a month
+who:
+  - anyone
+region: null
+sell: yes
+card: no
+catches: []
+use_if: []
+skip_if: []
+pricing_url: https://turso.tech/pricing
+verified_days_ago: 40
+verified_by: Karlo
+source: catalog
+tagline: SQLite copies close to your users.
+type: sqlite

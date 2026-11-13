@@ -1,0 +1,28 @@
+id: cron-job-org
+name: Cron-job.org
+kind: External cron
+url: https://cron-job.org
+aisle: jobs
+metric: null
+metric_note: Not listed
+limits:
+  - Free external cron jobs
+who:
+  - anyone
+region: null
+sell: yes
+card: unknown
+cost: free
+catches: []
+use_if:
+  - Your free-tier Render/Railway app sleeps after 15 minutes of inactivity and you need it awake for demos, interviews, or monitoring. Set a 14-minute ping and your app never cold-starts in front of someone important.
+skip_if:
+  - reason: UptimeRobot monitors and alerts when things are *down*; cron-job.org proactively *prevents* sleep by pinging on a schedule. UptimeRobot for observability, cron-job.org for keep-alive.
+    use: uptimerobot
+  - reason: "GitHub Actions scheduled workflow: Cron-job.org has 1-minute granularity and doesn't burn Actions minutes. It's also simpler — paste a URL, set an interval, done."
+pricing_url: https://cron-job.org
+verified_at: null
+verified_by: null
+source: catalog
+tagline: External cron — ping sleeping Render apps before demos.
+about: External cron — ping sleeping Render apps before demos.

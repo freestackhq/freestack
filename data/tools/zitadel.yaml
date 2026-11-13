@@ -1,0 +1,30 @@
+id: zitadel
+name: Zitadel
+kind: Sign-in
+url: https://zitadel.com
+aisle: auth
+metric: 25000
+metric_note: About
+limits:
+  - OSS self-host unlimited
+who:
+  - anyone
+region: null
+sell: yes
+card: unknown
+cost: free
+catches: []
+use_if:
+  - You want a full identity provider (OIDC/SAML/passkeys) you can self-host long-term without per-MAU pricing cliffs. Zitadel's free cloud gives you 25 k MAU to validate, and the OSS binary means you can move to your own infra when margins matter — no rewrite, same API.
+skip_if:
+  - reason: Zitadel is an IdP you own; Clerk is a widget you rent. Clerk ships faster (drag-and-drop UI), but Zitadel gives you protocol-level control (custom OIDC scopes, SAML federation, machine-to-machine tokens) and no hard vendor ceiling. Pick Zitadel for multi-tenant B2B that will eventually need self-hosted auth; pick Clerk if you want login done in a day and won't self-host.
+    use: clerk
+pricing_url: https://zitadel.com
+verified_at: 2026-07-24
+verified_by: null
+source: catalog
+tagline: Cloud-native IdP with passkeys and multi-tenancy — Clerk alternative.
+about: Cloud-native IdP with passkeys and multi-tenancy — Clerk alternative.
+tags:
+  - oss
+  - idp

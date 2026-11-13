@@ -1,0 +1,27 @@
+id: motherduck
+name: MotherDuck
+kind: Cloud DuckDB
+url: https://motherduck.com
+aisle: databases
+metric: 10
+metric_note: About
+limits: []
+who:
+  - anyone
+region: null
+sell: yes
+card: unknown
+cost: free
+catches: []
+use_if:
+  - You have ~1–10 GB of CSVs/Parquet and want SQL analytics without provisioning Postgres, BigQuery, or Snowflake. Local DuckDB + cloud sync means you develop on your laptop and share dashboards without infra.
+skip_if:
+  - reason: "Supabase (for analytics): MotherDuck is columnar and designed for analytical queries on flat files; Supabase/Postgres is row-oriented and better for CRUD apps. Don't use Postgres for 5GB event aggregations."
+  - reason: "BigQuery free tier: BigQuery gives 1TB/mo query but has cold-start latency and requires GCP. MotherDuck is instant, local-first, and the free 10GB is actual storage not just query volume."
+pricing_url: https://motherduck.com
+verified_at: null
+verified_by: null
+source: catalog
+tagline: DuckDB in the cloud — analytics without a warehouse.
+about: DuckDB in the cloud — analytics without a warehouse.
+type: analytics

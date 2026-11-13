@@ -1,0 +1,29 @@
+id: cloudflare-turnstile
+name: Cloudflare Turnstile
+kind: Security tool
+url: https://www.cloudflare.com/products/turnstile/
+aisle: security
+metric: null
+metric_note: Not listed
+limits:
+  - Free widget
+  - Generous request caps on free plan
+who:
+  - anyone
+region: null
+sell: yes
+card: unknown
+cost: free
+catches: []
+use_if:
+  - You need bot protection on forms or login without making real users solve puzzles. Invisible by default, free forever, and drops in with a few lines of JS.
+skip_if:
+  - reason: "reCAPTCHA: No Google tracking, no image grids, no user friction. Turnstile is invisible-first and doesn't sell attention to an ad network. vs hCaptcha: Both are privacy-friendlier than reCAPTCHA, but Turnstile is fully free (hCaptcha's publisher model pays *you* to annoy users) and requires zero user interaction in most cases."
+pricing_url: https://www.cloudflare.com/products/turnstile/
+verified_at: 2026-07-24
+verified_by: null
+source: catalog
+tagline: CAPTCHA alternative — bot checks without the UX tax.
+about: CAPTCHA alternative — bot checks without the UX tax.
+tags:
+  - bots

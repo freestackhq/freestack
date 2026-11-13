@@ -1,0 +1,34 @@
+# TEST FIXTURE, not real data. Copied from the board samples (the old src/data/sample.ts).
+# *_days_ago keys are fixture-only: scripts/generate.mjs turns them into dates at build time.
+id: figma-education
+name: Figma Education
+kind: Student plan
+url: https://www.figma.com/education/
+aisle: student-programs
+metric: null
+metric_note: While enrolled
+limits: []
+who:
+  - student_school_email
+  - student_any_id
+region: null
+sell: no
+card: no
+catches:
+  - Not for client work
+use_if: []
+skip_if: []
+pricing_url: https://www.figma.com/education/
+verified_at: null
+verified_by: null
+source: catalog
+program:
+  order: 4
+  lasts_big: Enrolled
+  lasts_sub: lasts while you study
+  perks:
+    - Figma Professional plan
+    - Team files
+  needs: Higher-ed verification
+  lasts: While enrolled
+  claim_url: https://www.figma.com/education/

@@ -1,0 +1,44 @@
+id: groq
+name: Groq
+kind: Fast inference
+url: https://console.groq.com
+aisle: inference
+metric: null
+metric_note: Not listed
+limits:
+  - Free quota then PAYG
+  - Rate limits apply
+  - Generous daily token limits (varies by model)
+who:
+  - anyone
+region: null
+sell: unknown
+card: unknown
+cost: free
+catches: []
+use_if:
+  - "Your feature is latency-bound (chat loops, tool-calling agents, real-time UX) and you need sub-200 ms TTFT on open models at zero cost during development. vs OpenRouter: Groq's custom LPU hardware is faster for the models it supports, but you're limited to its model list; OpenRouter gives breadth. vs Cerebras: similar speed story — Groq has a more generous free tier and broader SDK support today."
+  - You need the fastest token generation and your use case fits within daily free limits.
+skip_if:
+  - reason: Both are speed-focused. Groq has more model variety; Cerebras is similarly fast but with fewer models.
+    use: cerebras
+pricing_url: https://console.groq.com
+verified_at: null
+verified_by: null
+source: catalog
+tagline: Very fast inference — good for chat/tool loops before you need GPT-class quality.
+about: |-
+  Very fast inference — good for chat/tool loops before you need GPT-class quality.
+
+  Fastest inference available — LPU hardware delivers tokens at 500+ tok/sec for Llama 70B. Free tier has daily token/request caps but is extremely fast. Ideal for real-time chat and tool-calling loops.
+tags:
+  - llm
+api:
+  base_url: https://api.groq.com/openai/v1
+  docs: https://console.groq.com/docs
+  auth: api-key
+  models: llama-3.3-70b-versatile, deepseek-r1-distill-llama-70b, qwen/qwen-qwq-32b
+  openai_compatible: yes
+  streaming: yes
+  self_host: no
+  status: active

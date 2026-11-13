@@ -1,0 +1,31 @@
+id: gitleaks
+name: Gitleaks
+kind: Security tool
+url: https://gitleaks.io
+aisle: security
+metric: null
+metric_note: Not listed
+limits:
+  - OSS CLI free
+  - Gitleaks Cloud optional paid
+who:
+  - anyone
+region: null
+sell: yes
+card: unknown
+cost: free
+catches: []
+use_if:
+  - You want a fast, single-binary scanner that catches leaked API keys, tokens, and passwords in pre-commit hooks (before they hit the remote) *and* in CI (to block PRs that slip through).
+skip_if:
+  - reason: "Gitleaks is lighter and faster for pre-commit hooks — it's the gate. TruffleHog is heavier, verifies secrets against live APIs, and is better for deep audits of existing history. Use Gitleaks to prevent, TruffleHog to discover. vs GitHub Secret Scanning: GitHub only scans after push and only for partner-pattern secrets. Gitleaks catches everything locally before it ever leaves your machine."
+    use: trufflehog
+pricing_url: https://gitleaks.io
+verified_at: 2026-07-24
+verified_by: null
+source: catalog
+tagline: Secret scanning in git history — run in pre-commit and CI.
+about: Secret scanning in git history — run in pre-commit and CI.
+tags:
+  - secrets
+  - oss

@@ -1,0 +1,40 @@
+id: working-copy-pack
+name: Working Copy (Pack)
+kind: Student offer
+url: https://workingcopy.app
+aisle: student-programs
+metric: null
+metric_note: While Pack active
+limits:
+  - Pro while Pack active
+who:
+  - student_school_email
+region: null
+sell: yes
+card: unknown
+cost: student
+catches: []
+use_if:
+  - You code or review PRs from an iPad/iPhone and want full Git operations (clone, branch, push, conflict resolution) with a native iOS UI — especially useful for iPad-as-laptop workflows with Shortcuts and Files integration.
+skip_if: []
+pricing_url: https://workingcopy.app
+verified_at: 2026-07-24
+verified_by: null
+source: catalog
+tagline: iOS Git client Pro unlocked via GitHub Student Pack.
+about: |-
+  iOS Git client Pro unlocked via GitHub Student Pack.
+
+  vs GitHub Mobile / web editor: GitHub Mobile lets you review and merge PRs but can't do local branching, rebasing, or work offline. The web editor is limited to single-file edits. Working Copy is a real Git client — pick it if you genuinely develop on iOS, skip it if your iPad is just for reading.
+tags:
+  - pack
+  - ios
+program:
+  order: 23
+  lasts_big: Enrolled
+  lasts_sub: lasts while you study
+  perks:
+    - Pro while Pack active
+  needs: A school email
+  lasts: While Pack active
+  claim_url: https://workingcopy.app

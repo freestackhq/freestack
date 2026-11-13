@@ -1,0 +1,33 @@
+# TEST FIXTURE, not real data. Copied from the board samples (the old src/data/sample.ts).
+# *_days_ago keys are fixture-only: scripts/generate.mjs turns them into dates at build time.
+id: matlab-campus
+name: MATLAB Campus-Wide
+kind: School license
+url: https://www.mathworks.com/academia/tah-support-program.html
+aisle: student-programs
+metric: null
+metric_note: While enrolled
+limits: []
+who:
+  - student_school_email
+region: null
+sell: unknown
+card: unknown
+catches:
+  - Only if your school pays for it
+use_if: []
+skip_if: []
+pricing_url: https://www.mathworks.com/academia/tah-support-program.html
+verified_at: null
+verified_by: null
+source: catalog
+program:
+  order: 6
+  lasts_big: Enrolled
+  lasts_sub: lasts while you study
+  perks:
+    - MATLAB and Simulink
+    - 100+ academic toolboxes
+  needs: Your school must have it
+  lasts: While enrolled
+  claim_url: https://www.mathworks.com/academia/tah-support-program.html

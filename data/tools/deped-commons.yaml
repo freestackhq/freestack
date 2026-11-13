@@ -1,0 +1,29 @@
+id: deped-commons
+name: DepEd Commons
+kind: Campus tool
+url: https://commons.deped.gov.ph/
+aisle: campus
+metric: null
+metric_note: Not listed
+limits:
+  - Free content
+  - Gov platform
+who:
+  - anyone
+region: null
+sell: unknown
+card: unknown
+cost: free
+catches: []
+use_if:
+  - You're building an EdTech product targeting Filipino K-12 students or teachers and need curriculum-aligned content. It's also the canonical source if you're tutoring and want to match what students are actually studying.
+skip_if:
+  - reason: "Khan Academy: DepEd Commons is aligned to the Philippine K-12 curriculum (MELC); Khan Academy follows US Common Core. For PH students, DepEd modules match their actual exams."
+pricing_url: https://commons.deped.gov.ph/
+verified_at: 2026-07-24
+verified_by: null
+source: catalog
+tagline: National SLMs / modules — useful if you build for K-12 or tutors.
+about: National SLMs / modules — useful if you build for K-12 or tutors.
+tags:
+  - k12

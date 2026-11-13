@@ -2,9 +2,13 @@
 /**
  * Home (Home.dc.html, PhoneHome.dc.html).
  *
- * Static page. Every situation's stack panel is rendered at build time; a
- * small script reads ?as= on load and shows the matching one, so the choice
- * stays in the URL. Presets come from catalog.preset().
+ * Every situation's stack panel is rendered on the server; a small script
+ * reads ?as= on load and shows the matching one, so the choice stays in the
+ * URL. Presets come from catalog.preset().
+ *
+ * Server-rendered (not prerendered) so old links (/?hint=<category>,
+ * /?catalog=<id>) can answer with a real 301. Static assets are served before
+ * the Worker, so a prerendered page could never see its query string.
  */
 import Shell from "../layouts/Shell.astro";
 import Facts from "../components/fresh/Facts.astro";
@@ -26,7 +30,13 @@ import {
   toolsInAisle,
   totalTools,
 } from "../lib/fresh/catalog";
+import { legacyHomeRedirect } from "../lib/catalog";
 import { cardNote, limitsLine, rowState, stackSearch, type CopyStackData } from "../lib/fresh/stack";
+
+export const prerender = false;
+
+const moved = legacyHomeRedirect(Astro.url.searchParams);
+if (moved) return Astro.redirect(moved, 301);
 
 const at = now();
 const total = totalTools();

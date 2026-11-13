@@ -1,0 +1,31 @@
+id: university-edu-email
+name: University Edu Email
+kind: Campus tool
+url: https://education.github.com/pack
+aisle: campus
+metric: null
+metric_note: Not listed
+limits:
+  - While enrolled
+  - Alumni retention varies by school
+  - Google/Microsoft Workspace
+who:
+  - anyone
+region: null
+sell: unknown
+card: unknown
+cost: free
+catches: []
+use_if:
+  - You haven't yet activated your university email's hidden perks — GitHub Pro, Azure $100/yr, JetBrains IDEs, Figma Education, and 1TB OneDrive are all gated behind it. Do this on day one of enrollment.
+skip_if:
+  - reason: "personal Gmail for signups: Your .edu email auto-qualifies you for student tiers that personal emails can't access. Some (GitHub Student Pack, Azure) verify via .edu domain alone — no paperwork."
+pricing_url: https://education.github.com/pack
+verified_at: 2026-08-01
+verified_by: null
+source: catalog
+tagline: Your .edu / institutional email unlocks student packs, cloud credits, and pro tools.
+about: Your .edu / institutional email unlocks student packs, cloud credits, and pro tools.
+tags:
+  - campus
+  - email

@@ -1,0 +1,24 @@
+# TEST FIXTURE, not real data. Copied from the board samples (the old src/data/sample.ts).
+# *_days_ago keys are fixture-only: scripts/generate.mjs turns them into dates at build time.
+id: vercel-hobby
+name: Vercel Hobby
+kind: Frontend hosting
+url: https://vercel.com
+aisle: hosting
+metric: null
+metric_note: Not listed
+limits:
+  - 100 GB transfer a month
+who:
+  - anyone
+region: null
+sell: no
+card: no
+catches:
+  - Personal projects only
+use_if: []
+skip_if: []
+pricing_url: https://vercel.com/pricing
+verified_days_ago: 30
+verified_by: Karlo
+source: catalog

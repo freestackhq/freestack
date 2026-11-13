@@ -1,0 +1,33 @@
+id: tigris
+name: Tigris
+kind: Object storage
+url: https://www.tigrisdata.com
+aisle: storage
+metric: 5
+metric_note: About
+limits:
+  - Egress caps on free
+  - Check current
+who:
+  - anyone
+region: null
+sell: yes
+card: unknown
+cost: free
+catches: []
+use_if:
+  - Your compute runs on Fly.io and you want object storage that automatically replicates to the regions where your app instances run — no CDN configuration, no cache invalidation logic. Globally distributed by default with an S3-compatible API, so migration from R2 or AWS S3 is a find-and-replace on the endpoint.
+skip_if:
+  - reason: Both are S3-compatible with free tiers, but Tigris is built for multi-region replication out of the box while R2 serves from a single location (fronted by Cloudflare's CDN). If you're on Fly, Tigris gives lower latency without extra config. If you're on Cloudflare Workers, R2's native bindings win.
+    use: r2
+  - reason: Tigris is hot storage with edge caching; B2 is cold archive. Tigris costs more per GB but delivers faster reads globally. Use B2 for data you rarely access; use Tigris for assets your users fetch on every page load.
+    use: backblaze-b2
+pricing_url: https://www.tigrisdata.com
+verified_at: 2026-07-24
+verified_by: null
+source: catalog
+tagline: S3-compatible object storage with edge caching — pairs cleanly with Fly.
+about: S3-compatible object storage with edge caching — pairs cleanly with Fly.
+tags:
+  - s3
+  - edge

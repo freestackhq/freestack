@@ -1,0 +1,23 @@
+# TEST FIXTURE, not real data. Copied from the board samples (the old src/data/sample.ts).
+# *_days_ago keys are fixture-only: scripts/generate.mjs turns them into dates at build time.
+id: doppler
+name: Doppler
+kind: Secrets
+url: https://doppler.com
+aisle: auth
+metric: null
+metric_note: Not listed
+limits: []
+who:
+  - student_school_email
+region: null
+sell: unknown
+card: no
+catches:
+  - Ends when you graduate
+use_if: []
+skip_if: []
+pricing_url: https://doppler.com/pricing
+verified_at: null
+verified_by: null
+source: catalog

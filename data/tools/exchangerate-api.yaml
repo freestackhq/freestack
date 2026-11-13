@@ -1,0 +1,36 @@
+id: exchangerate-api
+name: ExchangeRate-API
+kind: Finance API
+url: https://www.exchangerate-api.com/docs
+aisle: finance
+metric: null
+metric_note: 1500 requests/month on open endpoint
+limits:
+  - 1500 requests/month on open endpoint
+  - "Rate limit: fair use"
+who:
+  - anyone
+region: null
+sell: unknown
+card: unknown
+cost: free
+catches: []
+use_if:
+  - You need more currencies than Frankfurter (150+ vs 30+) and daily refresh is fine.
+skip_if:
+  - reason: More currencies but not open-source; Frankfurter is ECB-sourced and self-hostable.
+    use: frankfurter
+pricing_url: https://www.exchangerate-api.com/docs
+verified_at: null
+verified_by: null
+source: catalog
+tagline: Exchange rates for 150+ currencies.
+about: Exchange rates for 150+ currencies. The open endpoint requires no key but refreshes daily. Paid tiers add more update frequency and pair conversion endpoints.
+api:
+  base_url: https://open.er-api.com/v6
+  docs: https://www.exchangerate-api.com/docs
+  auth: none (open endpoint)
+  cors: yes
+  response: JSON
+  openapi: no
+  status: active

@@ -1,0 +1,31 @@
+id: clickhouse-cloud
+name: ClickHouse Cloud
+kind: Analytics warehouse
+url: https://clickhouse.com/cloud
+aisle: databases
+metric: null
+metric_note: Not listed
+limits:
+  - Development free tier
+  - Then usage
+who:
+  - anyone
+region: null
+sell: yes
+card: unknown
+cost: free
+catches: []
+use_if:
+  - You have event/log/time-series data that outgrows Postgres and you want sub-second aggregations over billions of rows without managing Spark clusters or paying Snowflake prices.
+skip_if:
+  - reason: "ClickHouse is for always-on, multi-user analytics dashboards; DuckDB is for single-user, ad-hoc laptop queries. Choose ClickHouse when your app serves live charts to users. vs BigQuery/Snowflake: ClickHouse's free dev tier and usage pricing make it practical for indie projects; the big warehouses price you out before you have revenue."
+    use: duckdb
+pricing_url: https://clickhouse.com/cloud
+verified_at: 2026-07-24
+verified_by: null
+source: catalog
+tagline: Analytics warehouse without babysitting shards — free tier for experiments.
+about: Analytics warehouse without babysitting shards — free tier for experiments.
+type: analytics
+tags:
+  - analytics

@@ -1,0 +1,42 @@
+id: datadog-pack
+name: Datadog (Pack)
+kind: Student offer
+url: https://www.datadoghq.com
+aisle: student-programs
+metric: 24
+metric_note: About
+limits:
+  - Pro
+  - ~10 hosts
+who:
+  - student_school_email
+region: null
+sell: unknown
+card: unknown
+cost: student
+catches:
+  - ~2 years via Pack (offer rotates)
+use_if:
+  - You run services (homelab, side projects, cloud VMs) and want real APM, log aggregation, and dashboards to understand what's happening in production — the kind of observability stack companies pay $20k+/yr for, handed to you free for learning.
+skip_if: []
+pricing_url: https://www.datadoghq.com
+verified_at: 2026-07-24
+verified_by: null
+source: catalog
+tagline: Pro monitoring via GitHub Student Pack — don't leave it unclaimed.
+about: |-
+  Pro monitoring via GitHub Student Pack — don't leave it unclaimed.
+
+  vs Grafana Cloud Free / Uptime Kuma: Grafana Cloud free gives you metrics + logs but limited retention and no APM traces. Uptime Kuma is self-hosted ping monitoring only. Datadog Pro gives you full distributed tracing, error tracking, and infra maps — overkill for a single container, perfect for learning enterprise observability patterns.
+tags:
+  - pack
+program:
+  order: 19
+  lasts_big: 2 yrs
+  lasts_sub: ~2 years via Pack (offer rotates)
+  perks:
+    - Pro
+    - ~10 hosts
+  needs: A school email
+  lasts: ~2 years via Pack (offer rotates)
+  claim_url: https://www.datadoghq.com

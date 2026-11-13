@@ -1,0 +1,29 @@
+id: twilio-sendgrid
+name: Twilio SendGrid
+kind: Email service
+url: https://sendgrid.com
+aisle: email
+metric: 100
+metric_note: About
+limits:
+  - Verify current Free plan
+who:
+  - anyone
+region: null
+sell: yes
+card: unknown
+cost: free
+catches: []
+use_if:
+  - You want a permanent free floor (~100 emails/day) for transactional sends and don't mind an older dashboard. SendGrid's free plan has survived multiple Twilio policy changes — verify it still exists before onboarding — but it works if you just need password resets and don't want to think about billing.
+skip_if:
+  - reason: SendGrid has more email volume on free (100/day vs Resend's 100/day but 3k/mo cap), but Resend's developer experience, logging, and template tooling are dramatically better. vs Postmark — SendGrid is free; Postmark is paid. If you don't yet have revenue and can tolerate shared-IP reputation risk, SendGrid costs nothing.
+    use: resend
+pricing_url: https://sendgrid.com
+verified_at: 2026-07-24
+verified_by: null
+source: catalog
+tagline: Legacy free forever email tier — still useful, watch reputation limits.
+about: Legacy free forever email tier — still useful, watch reputation limits.
+tags:
+  - transactional

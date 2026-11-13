@@ -1,0 +1,39 @@
+id: notion-education
+name: Notion Education
+kind: Student offer
+url: https://www.notion.so/product/notion-for-education
+aisle: student-programs
+metric: null
+metric_note: While student
+limits:
+  - While student
+  - School email / Pack
+who:
+  - student_school_email
+region: null
+sell: yes
+card: unknown
+cost: student
+catches: []
+use_if:
+  - You organize everything — notes, project boards, reading lists, job applications — in one tool and want the Plus plan's unlimited blocks, file uploads, and AI features without paying $10/mo. School email verification is instant.
+skip_if: []
+pricing_url: https://www.notion.so/product/notion-for-education
+verified_at: null
+verified_by: null
+source: catalog
+tagline: Plus-class notes; Pack adds extra AI responses.
+about: |-
+  Plus-class notes; Pack adds extra AI responses.
+
+  vs Obsidian / Logseq (free, local-first): Obsidian is free forever with no vendor lock-in and works offline, but lacks real-time collaboration and requires plugin setup for databases/kanban. Notion wins if you collaborate on group projects or prefer structured databases; Obsidian wins if you want ownership of your `.md` files post-graduation.
+program:
+  order: 14
+  lasts_big: Enrolled
+  lasts_sub: lasts while you study
+  perks:
+    - While student
+    - School email / Pack
+  needs: A school email
+  lasts: While student
+  claim_url: https://www.notion.so/product/notion-for-education

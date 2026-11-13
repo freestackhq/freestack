@@ -1,0 +1,36 @@
+id: open-meteo
+name: Open-Meteo
+kind: Weather API
+url: https://open-meteo.com/en/docs
+aisle: weather
+metric: 10000
+metric_note: Non-commercial
+limits:
+  - Unlimited requests for non-commercial use
+who:
+  - anyone
+region: null
+sell: no
+card: unknown
+cost: free
+catches:
+  - Non-commercial use only
+use_if:
+  - You want weather data with zero signup, no key management, and generous limits for side projects.
+skip_if:
+  - reason: Open-Meteo needs no key and has better free limits, but OpenWeatherMap has longer history and more integrations.
+    use: openweathermap
+pricing_url: https://open-meteo.com/en/docs
+verified_at: null
+verified_by: null
+source: catalog
+tagline: Open-source weather API with no API key required.
+about: Open-source weather API with no API key required. Provides current weather, hourly/daily forecasts up to 16 days, historical data, and marine/air quality endpoints. Data sourced from national weather services (DWD, NOAA, MeteoFrance, etc.).
+api:
+  base_url: https://api.open-meteo.com/v1
+  docs: https://open-meteo.com/en/docs
+  auth: none
+  cors: yes
+  response: JSON
+  openapi: yes
+  status: active

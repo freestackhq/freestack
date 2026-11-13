@@ -1,0 +1,38 @@
+id: google-for-startups-cloud
+name: Google for Startups Cloud
+kind: Startup credit
+url: https://cloud.google.com/startup
+aisle: startup-programs
+metric: null
+metric_note: Not listed
+limits:
+  - Program credits vary
+  - Application required
+who:
+  - startup_proof
+region: null
+sell: yes
+card: unknown
+cost: credits
+catches: []
+use_if:
+  - "You're building on BigQuery, Vertex AI, or Cloud Run and want $2k–$200k in credits without needing an accelerator sponsor. Google's application is friendlier to solo founders and pre-revenue teams than AWS Activate's partner path. vs AWS Activate: easier solo application, but GCP's managed-service catalog is thinner outside data/ML; if you're mostly running containers + Postgres, AWS has more battle-tested defaults. vs Azure: GCP wins for data pipelines and ML-native workloads; Azure wins for enterprise identity (Entra ID) and OpenAI API access bundled in."
+skip_if: []
+pricing_url: https://cloud.google.com/startup
+verified_at: null
+verified_by: null
+source: catalog
+tagline: GCP credits for eligible startups — pair with Skills Boost for learning.
+about: GCP credits for eligible startups — pair with Skills Boost for learning.
+tags:
+  - credits
+program:
+  order: 2
+  lasts_big: "?"
+  lasts_sub: Not listed
+  perks:
+    - Program credits vary
+    - Application required
+  needs: An application as a startup
+  lasts: Not listed
+  claim_url: https://cloud.google.com/startup

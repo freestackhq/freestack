@@ -1,0 +1,29 @@
+id: cloudinary
+name: Cloudinary
+kind: Object storage
+url: https://cloudinary.com
+aisle: storage
+metric: null
+metric_note: 25 credits a month
+limits:
+  - 25 credits a month
+who:
+  - anyone
+region: null
+sell: yes
+card: unknown
+cost: free
+catches: []
+use_if:
+  - Your app is image-heavy or video-heavy and you need resize, crop, format conversion, watermarking, or adaptive streaming without running your own pipeline. The URL-based transform API means zero server code for media manipulation. 25 credits/mo covers a surprising number of transformations for a small SaaS.
+skip_if:
+  - reason: R2 stores bytes; Cloudinary transforms them. If you just need a bucket, R2 is cheaper and simpler. If you need `?w=300&h=300&fit=crop` in a URL, Cloudinary does it out of the box while R2 requires you to build (or buy) an image resizing layer.
+    use: r2
+  - reason: UploadThing handles the upload flow; Cloudinary handles post-upload processing. For a media-rich app you might use both — UploadThing for the upload UX and Cloudinary as the CDN/transform layer — but if you must pick one, Cloudinary is the choice when transforms are a core feature.
+    use: uploadthing
+pricing_url: https://cloudinary.com
+verified_at: null
+verified_by: null
+source: catalog
+tagline: On-the-fly image and video transforms.
+about: On-the-fly image and video transforms.

@@ -1,0 +1,41 @@
+id: azure-students
+name: Azure for Students
+kind: Cloud credit
+url: https://azure.microsoft.com/en-us/free/students/
+aisle: student-programs
+metric: 12
+limits:
+  - $100 / 12 mo
+  - 25+ free services
+who:
+  - student_school_email
+region: null
+sell: no
+card: no
+cost: credits
+catches:
+  - Credit runs out if you leave VMs on
+use_if:
+  - You need real cloud VMs, databases, or Azure-specific services (Cosmos DB, Functions, AKS) for coursework or personal projects and want to learn enterprise cloud without bill anxiety. The no-credit-card requirement means zero risk of surprise charges.
+skip_if: []
+pricing_url: https://azure.microsoft.com/en-us/free/students/
+verified_at: null
+verified_by: null
+source: catalog
+tagline: $100 credit/year, no credit card, renewable while enrolled.
+about: |-
+  $100 credit/year, no credit card, renewable while enrolled.
+
+  vs AWS Free Tier / GCP Credits: AWS free tier is perpetual but thin (t2.micro only), and requires a credit card. GCP student credits exist but are harder to find and one-shot. Azure renews annually with no card — the safest "learn cloud" sandbox for students who forget to tear down resources.
+tags:
+  - must-claim
+program:
+  order: 3
+  lasts_big: 1 yr
+  lasts_sub: $100 credit, renews while enrolled
+  perks:
+    - $100 credit a year
+    - 25+ free services, no credit card
+  needs: School email
+  lasts: Renews while enrolled
+  claim_url: https://azure.microsoft.com/en-us/free/students/

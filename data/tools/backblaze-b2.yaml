@@ -1,0 +1,27 @@
+id: backblaze-b2
+name: Backblaze B2
+kind: Object storage
+url: https://www.backblaze.com/b2/cloud-storage.html
+aisle: storage
+metric: 10
+limits: []
+who:
+  - anyone
+region: null
+sell: yes
+card: unknown
+cost: free
+catches: []
+use_if:
+  - You have cold data (backups, exports, user archives) that's written once and rarely read — and you want the absolute cheapest $/GB at rest. Pair it with a Cloudflare CDN zone to get free egress via the Bandwidth Alliance.
+skip_if:
+  - reason: B2 is cheaper per GB stored ($0.005 vs $0.015), but R2's zero egress is unconditional and doesn't require CDN fronting. If you read files frequently, R2 wins on total cost. B2 is the budget cold-storage play.
+    use: r2
+  - reason: B2 has no edge replication or smart caching — it's a single-region bucket. Tigris is better if latency matters; B2 is better if you just want a cheap vault.
+    use: tigris
+pricing_url: https://www.backblaze.com/b2/cloud-storage.html
+verified_at: null
+verified_by: null
+source: catalog
+tagline: Cheap archive storage; egress waived via Cloudflare.
+about: Cheap archive storage; egress waived via Cloudflare.

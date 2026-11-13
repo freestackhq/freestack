@@ -1,0 +1,28 @@
+id: val-town
+name: Val Town
+kind: Serverless functions
+url: https://www.val.town
+aisle: hosting
+metric: null
+metric_note: Not listed
+limits:
+  - Free tier vals
+who:
+  - anyone
+region: null
+sell: unknown
+card: unknown
+cost: free
+catches: []
+use_if:
+  - You need a quick API endpoint, cron job, or webhook handler and don't want to set up a repo, deploy pipeline, or hosting. Each "val" is a self-contained function with a URL — perfect for glue code, bots, and prototypes.
+skip_if:
+  - reason: Workers are production-grade with KV/D1/R2 bindings; Val Town is for quick-and-dirty scripts you write in a browser tab. Use Workers for real apps, Val Town for "I need this webhook in 2 minutes."
+    use: cf-workers
+  - reason: "GitHub Actions (scheduled): Val Town runs on its own infra with HTTP endpoints; Actions require a repo and are slower to iterate on for simple cron tasks."
+pricing_url: https://www.val.town
+verified_at: null
+verified_by: null
+source: catalog
+tagline: Serverless JS as shareable vals — cron + HTTP.
+about: Serverless JS as shareable vals — cron + HTTP.

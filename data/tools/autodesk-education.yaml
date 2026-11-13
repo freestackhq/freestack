@@ -1,0 +1,36 @@
+id: autodesk-education
+name: Autodesk Education
+kind: Student license
+url: https://www.autodesk.com/education
+aisle: student-programs
+metric: 12
+limits:
+  - Non-commercial
+who:
+  - student_school_email
+region: null
+sell: no
+card: unknown
+cost: student
+catches:
+  - Non-commercial
+  - School use only
+use_if:
+  - Your coursework requires parametric CAD (mechanical parts in Fusion 360), architectural BIM (Revit), or film-grade 3D animation (Maya). These are industry-standard desktop apps with no browser equivalent.
+skip_if:
+  - reason: "Blender: Blender covers organic modeling and animation for free, but lacks parametric CAD constraints and BIM workflows. If your professor specifies Revit drawings or STEP exports, Autodesk is the only free path."
+pricing_url: https://www.autodesk.com/education
+verified_at: null
+verified_by: null
+source: catalog
+tagline: AutoCAD, Fusion 360, Maya, Revit — renewable yearly.
+about: AutoCAD, Fusion 360, Maya, Revit — renewable yearly.
+program:
+  order: 6
+  lasts_big: 1 yr
+  lasts_sub: 1-year renewable
+  perks:
+    - Non-commercial
+  needs: A school email
+  lasts: 1-year renewable
+  claim_url: https://www.autodesk.com/education

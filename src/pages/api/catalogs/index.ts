@@ -1,26 +1,28 @@
 import type { APIRoute } from "astro";
-import { CATALOGS, GENERATED_AT } from "../../../lib/catalog";
+import { GENERATED_AT, catalogsMeta } from "../../../lib/catalog";
+import { snapshot } from "../../../lib/fresh/catalog";
 import { json, options } from "../../../lib/http";
 
 export const prerender = false;
 
 export const OPTIONS: APIRoute = () => options();
 
-export const GET: APIRoute = () =>
-  json({
+/** The old catalogs (saas, apis, llm-ai) as aliases for the aisle groups, plus the aisles themselves. */
+export const GET: APIRoute = () => {
+  const snap = snapshot();
+  return json({
     ok: true,
     generatedAt: GENERATED_AT,
-    catalogs: CATALOGS.map((c) => ({
-      id: c.id,
-      label: c.label,
-      description: c.description,
-      repo: `${c.owner}/${c.repo}`,
-      branch: c.branch,
-      categories: c.categories.map((cat) => ({
-        id: cat.id,
-        label: cat.label,
-        count: cat.entries.length,
-      })),
-      count: c.categories.reduce((n, cat) => n + cat.entries.length, 0),
+    catalogs: catalogsMeta(),
+    aisles: snap.aisles.map((a) => ({
+      id: a.id,
+      group: a.group,
+      name: a.name,
+      metric: a.metric,
+      unit: a.unit,
+      label: a.label,
+      count: snap.tools.filter((t) => t.aisle === a.id).length,
     })),
+    lists: snap.lists,
   });
+};

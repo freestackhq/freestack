@@ -1,0 +1,16 @@
+# TEST FIXTURE, not real data. Copied from the board samples (the old src/data/sample.ts).
+# *_days_ago keys are fixture-only: scripts/generate.mjs turns them into dates at build time.
+catalogs:
+  saas: /#aisles-h
+  apis: /#aisles-h
+  llm-ai: /inference
+categories:
+  saas/databases: /databases
+  saas/hosting: /hosting
+  saas/student: /student-programs
+  llm-ai/inference: /inference
+entries:
+  saas/databases/neon: /databases/neon
+  saas/databases/cloudflare-d1: /databases/d1
+  saas/hosting/cloudflare-workers-and-pages: /hosting/cf-workers
+  llm-ai/inference/groq: /inference/groq

@@ -1,0 +1,28 @@
+id: htmx-go-python-ssr
+name: HTMX + Go/Python SSR
+kind: Architecture pattern
+url: https://htmx.org
+aisle: hosting
+metric: null
+metric_note: Not listed
+limits:
+  - Open source
+  - Pairs with Cloudflare/Koyeb/Oracle
+who:
+  - anyone
+region: null
+sell: yes
+card: unknown
+cost: free
+catches: []
+use_if:
+  - "Your app is CRUD-heavy (dashboards, admin panels, internal tools) and you'd rather ship features than fight React hydration, bundle splitting, and state management. HTMX gives you dynamic UI with server-rendered HTML — no build step, no node_modules, no client-side router. Pair with Go (fast, single binary) or Python/Django (fast iteration, batteries included). vs Next.js/React SPA: SPAs win when you need rich offline interactions, real-time collaborative editing, or complex client state (Figma, Notion). For 80% of B2B SaaS, HTMX + SSR is faster to build, faster to load, and cheaper to host. vs Laravel/Rails: same philosophy (server-rendered, productive) — pick Go/Python HTMX if you want lighter deployments (single binary or container) without a full framework's opinions."
+skip_if: []
+pricing_url: https://htmx.org
+verified_at: 2026-07-24
+verified_by: null
+source: catalog
+tagline: Skip SPA tax until product-market fit — fewer JS bundles, cheaper hosting.
+about: Skip SPA tax until product-market fit — fewer JS bundles, cheaper hosting.
+tags:
+  - architecture

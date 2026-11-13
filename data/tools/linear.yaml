@@ -1,0 +1,28 @@
+id: linear
+name: Linear
+kind: Team tool
+url: https://linear.app
+aisle: team
+metric: null
+metric_note: Not listed
+limits:
+  - Free for small teams
+  - Startup programs exist
+who:
+  - anyone
+region: null
+sell: yes
+card: unknown
+cost: free
+catches: []
+use_if:
+  - "Your team has 2–10 engineers and you want issue tracking that's fast enough that people actually update tickets instead of ignoring them. Linear's keyboard-first UX and opinionated workflows (cycles, triage) reduce process overhead to near zero. vs Jira: Jira is where velocity goes to die — it's configurable to the point of paralysis and optimized for enterprise reporting, not shipping. Linear is the anti-Jira. vs GitHub Issues/Projects: fine for OSS or solo devs, but GitHub Projects lacks cycles, priorities, triage queues, and the speed that makes Linear sticky for teams. Graduate to Linear once you have >1 person."
+skip_if: []
+pricing_url: https://linear.app
+verified_at: null
+verified_by: null
+source: catalog
+tagline: Issue tracking that teams actually use — free for small startups.
+about: Issue tracking that teams actually use — free for small startups.
+tags:
+  - ops

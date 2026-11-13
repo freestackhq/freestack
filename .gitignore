@@ -30,7 +30,7 @@ pnpm-debug.log*
 # local agent scratch
 tmp/
 
-# scraped catalog repos (regenerate with pnpm catalog:fetch)
+# old scraped catalog repos
 .catalogs/
 
 # playwright
@@ -38,3 +38,7 @@ test-results/
 playwright-report/
 blob-report/
 
+
+# fixture snapshot (FREESTACK_DATA=tests/fixtures/data pnpm catalog:generate)
+.generated/
+dist-*/

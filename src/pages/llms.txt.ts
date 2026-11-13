@@ -1,45 +1,48 @@
 import type { APIRoute } from "astro";
-import { SITE_URL } from "../lib/site";
-import { CATALOGS } from "../lib/catalog";
+import { MCP_URL, SITE_URL, siteUrl } from "../lib/site";
+import { aisleCount, aislesByGroup, totalTools } from "../lib/fresh/catalog";
 
 export const prerender = true;
 
+/** Index for language models: every aisle, the API, and the full dump. Regenerated from the snapshot. */
 export const GET: APIRoute = () => {
   const lines: string[] = [
     "# freestack",
     "",
-    "> Directory of free developer tools, student unlocks, free APIs, and self-hosted software — with hard limits, eligibility, and commercial notes.",
-    "",
-    "## Catalogs",
+    `> ${totalTools()} free developer tools, student and startup programs, and free APIs, shown as shelf labels: the one limit that matters, who can claim it, whether you can sell with it, whether signup asks for a card, the catch, and when someone last checked it. Unknown means unknown.`,
     "",
   ];
 
-  for (const c of CATALOGS) {
-    const total = c.categories.reduce((n, cat) => n + cat.entries.length, 0);
-    lines.push(`- [${c.label}](${SITE_URL}/catalogs/${c.id}): ${c.description} (${total} entries across ${c.categories.length} categories)`);
+  for (const { group, aisles } of aislesByGroup()) {
+    if (!aisles.length) continue;
+    lines.push(`## ${group}`, "");
+    for (const a of aisles) {
+      lines.push(`- [${a.name}](${SITE_URL}/${a.id}): ${aisleCount(a.id)} labels. Headline: ${a.label}${a.unit ? ` (${a.unit})` : ""}.`);
+    }
+    lines.push("");
   }
 
   lines.push(
+    "## API",
     "",
-    "## API Endpoints",
+    `- [OpenAPI spec](${SITE_URL}/api/openapi.json): machine-readable OpenAPI 3.1 definition.`,
+    `- [Entries](${SITE_URL}/api/entries): every tool with its label fields. Filter with ?aisle=, ?group=, ?q=. The old ?catalog=saas|apis|llm-ai still works.`,
+    `- [Catalogs and aisles](${SITE_URL}/api/catalogs): aisle list with counts.`,
+    `- [Full text](${SITE_URL}/llms-full.txt): every label in plain text.`,
     "",
-    `- [OpenAPI Spec](${SITE_URL}/api/openapi.json): Machine-readable OpenAPI 3.1.0 definition.`,
-    `- [All Entries API](${SITE_URL}/api/entries): Query entries across all catalogs with filters.`,
-    `- [Catalogs API](${SITE_URL}/api/catalogs): List of available catalogs, categories, and entry counts.`,
-    `- [Full Text Dump](${SITE_URL}/llms-full.txt): Complete Markdown dump of all entries for LLMs.`,
+    "## Agents",
     "",
-    "## Guides",
+    `- MCP server (read-only, no login): ${MCP_URL} — tools: search_tools, compare, suggest_stack, claim_order. Agent skill: ${siteUrl("/skills/pick-free-stack/SKILL.md")}`,
     "",
-    `- [Claim Order Guide](${SITE_URL}/guides/claim-order): Optimal claiming order for student & developer credits.`,
-    `- [Startup Guide](${SITE_URL}/guides/startup): Zero-cost stack architecture guide for startups.`,
-    `- [Stacks Guide](${SITE_URL}/guides/stacks): Recommended developer stacks with free tiers.`,
-    ""
+    "## Pages",
+    "",
+    `- [Build a stack](${SITE_URL}/build): pick parts and see what clashes.`,
+    `- [Check my stack](${SITE_URL}/check): paste the tools you use.`,
+    `- [Startup guide](${SITE_URL}/guides/startup): a zero-cost stack for a new company.`,
+    "",
   );
 
   return new Response(lines.join("\n"), {
-    headers: {
-      "content-type": "text/plain; charset=utf-8",
-      "cache-control": "public, max-age=3600",
-    },
+    headers: { "content-type": "text/plain; charset=utf-8", "cache-control": "public, max-age=3600" },
   });
 };
