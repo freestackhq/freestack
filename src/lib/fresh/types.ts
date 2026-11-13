@@ -116,6 +116,12 @@ export interface Catch {
   checked_at: string | null;
   /** Tool ids that avoid the catch. */
   avoid_with: string[];
+  /** Plan name for "Already on Hobby?". Falls back to the tool name. UI-only. */
+  plan?: string;
+  /** Who to ask "when in doubt". Falls back to the tool name. UI-only. */
+  vendor?: string;
+  /** Heading over the avoid_with labels ("Free hosts that let you sell"). UI-only. */
+  avoid_heading?: string;
 }
 
 export type LabelState =

@@ -123,3 +123,15 @@ export function catches(): Catch[] {
 export function catchBySlug(slug: string): Catch | undefined {
   return data().catches.find((c) => c.slug === slug);
 }
+
+/** Claim Once programs in an aisle, in claim order. */
+export function programsInAisle(aisleId: string): Tool[] {
+  return data()
+    .tools.filter((t) => t.aisle === aisleId && t.program)
+    .sort((a, b) => a.program!.order - b.program!.order);
+}
+
+/** Labels for a catch's avoid_with ids. Ids missing from the catalog are skipped. */
+export function catchAlternatives(c: Catch): Tool[] {
+  return c.avoid_with.map((id) => tool(id)).filter((t): t is Tool => Boolean(t));
+}
