@@ -4,9 +4,12 @@ default: student
 list:
   - id: school
     label: Student with school email
+    note: Unlocks the GitHub Student Pack and other edu perks.
   - id: student
     label: Student
   - id: indie
     label: Indie builder
   - id: startup
     label: Startup
+    note: Free now. Claim cloud credits once you have users.
+    claim: [student-programs]

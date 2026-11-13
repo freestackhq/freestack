@@ -1,6 +1,8 @@
-# Home stack presets per situation. Only checked tools count: a preset with
-# any tool that is not checked (within 90 days) is not shown, and Home lists
-# the aisles instead. job matches a label in parts.yaml.
+# Home stack presets per situation. job matches a label in parts.yaml.
+# A preset may hold tools nobody has checked yet: Home shows it as a "starter
+# stack", says how many parts are checked, marks each row's state, and copied
+# text says "not checked yet" for those parts. An empty list shows the
+# situation's fallback (core parts and its Claim Once aisles).
 school:
   - { job: Hosting, tool: cf-workers }
   - { job: Database, tool: neon }

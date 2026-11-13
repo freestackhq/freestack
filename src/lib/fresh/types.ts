@@ -132,6 +132,10 @@ export interface Tool {
 export interface Situation {
   id: SituationId;
   label: string;
+  /** One line on Home saying why this stack fits. */
+  note?: string;
+  /** Claim Once aisle ids to point at when the situation has no stack. */
+  claim?: string[];
 }
 
 export interface PresetRow {

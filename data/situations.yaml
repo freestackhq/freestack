@@ -1,7 +1,21 @@
 # Who is building. Home's picker and Build a stack's ?as= read this list.
+# note: one line under the picker on Home saying why this stack fits (Home.dc.html).
+# claim: Claim Once aisles worth pointing at when this situation has no stack.
 default: student
 list:
-  - { id: school, label: Student with school email }
-  - { id: student, label: Student }
-  - { id: indie, label: Indie builder }
-  - { id: startup, label: Startup }
+  - id: school
+    label: Student with school email
+    note: Unlocks the GitHub Student Pack and other edu perks.
+    claim: [student-programs, learning]
+  - id: student
+    label: Student
+    note: No school email needed. Everything here is open to anyone.
+    claim: [student-programs]
+  - id: indie
+    label: Indie builder
+    note: Free tiers you can keep once it earns money. Vercel Hobby left out.
+    claim: []
+  - id: startup
+    label: Startup
+    note: Free now. Claim cloud credits once you have users.
+    claim: [startup-programs, cloud-credits]

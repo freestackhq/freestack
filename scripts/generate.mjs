@@ -207,6 +207,12 @@ for (const t of tools) {
 // ---------- Situations, parts, presets, catches, removed, legacy ----------
 const situations = load("situations.yaml");
 const situationIds = new Set(situations.list.map((s) => s.id));
+for (const s of situations.list) {
+  for (const id of s.claim ?? []) {
+    if (aisleById.get(id)?.group !== "Claim Once")
+      fail(`situations.yaml: ${s.id} claims ${id}, which is not a Claim Once aisle`);
+  }
+}
 const parts = load("parts.yaml");
 for (const p of parts) if (!aisleById.has(p.aisle)) fail(`parts.yaml: ${p.key} has unknown aisle ${p.aisle}`);
 
