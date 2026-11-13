@@ -12,6 +12,7 @@ import Icon from "../../../components/fresh/Icon.astro";
 import Label from "../../../components/fresh/Label.astro";
 import { aisle as getAisle, now, tool as getTool, toolHref, tools } from "../../../lib/fresh/catalog";
 import { checkLines, checkSummary } from "../../../lib/fresh/checks";
+import { shortUrl } from "../../../lib/fresh/url";
 import type { Tool } from "../../../lib/fresh/types";
 
 export function getStaticPaths() {
@@ -29,8 +30,7 @@ const today = at.toISOString().slice(0, 10);
 const asChecked: Tool = { ...t, verified_at: today, verified_by: null, review_pending: false, vendor_changed_at: null };
 const asReview: Tool = { ...t, review_pending: true };
 
-const pricing = new URL(t.pricing_url);
-const pricingText = `${pricing.hostname.replace(/^www\./, "")}${pricing.pathname.replace(/\/$/, "")}`;
+const pricingText = shortUrl(t.pricing_url);
 ---
 
 <Shell title={`Check ${t.name}'s label · freestack`} aisle={a.id} noindex>

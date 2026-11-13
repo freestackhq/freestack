@@ -6,8 +6,8 @@
  * stores the check in D1; sendNewTool posts to a Worker whose GitHub App
  * opens a pull request. Until then they return canned answers.
  */
+import type { ToolDraft } from "./addtool";
 import type { CheckAnswer } from "./checks";
-import type { Tool } from "./types";
 
 /** How a stubbed send should fail, for testing (the page maps `?fail=1` / `?fail=once`). */
 export type StubFail = "always" | "once";
@@ -35,19 +35,15 @@ export async function sendLabelCheck(
 /** Placeholder: no pull request is opened yet. */
 export const PLACEHOLDER_PR_URL = "#pull-request-placeholder";
 
-export interface NewToolDraft {
-  tool: Tool;
-  /** The headline figure as the person wrote it ("512 MB"). */
-  figure: string;
-  /** Name for credit. Empty stays anonymous. */
-  credit: string;
+export interface SendToolResult {
+  ok: true;
+  prUrl: string;
+  /** True while this is a stub: the link goes nowhere. */
+  placeholder: boolean;
 }
 
-export type SendToolResult = { ok: true; prUrl: string; placeholder: boolean } | { ok: false; reason: "network" };
-
-/** STUB. Sends a new tool for review. */
-export async function sendNewTool(draft: NewToolDraft, opts: { fail?: StubFail } = {}): Promise<SendToolResult> {
+/** STUB. Sends a new tool for review. Called by /add/sent on the server. */
+export async function sendNewTool(draft: ToolDraft): Promise<SendToolResult> {
   void draft;
-  if (opts.fail) return { ok: false, reason: "network" };
   return { ok: true, prUrl: PLACEHOLDER_PR_URL, placeholder: true };
 }

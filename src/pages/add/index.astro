@@ -1,0 +1,857 @@
+---
+/**
+ * Add a tool (AddTool.dc.html; edge cases in Edges.dc.html).
+ * Prefills from ?name=&url=&aisle= ("Write its label", search "Add it").
+ * Rendered on request so the prefill and the "already listed" check work
+ * without JavaScript. The form posts to /add/sent, which calls the
+ * sendNewTool stub (src/lib/fresh/send.ts). Nothing is sent anywhere.
+ */
+import Shell from "../../layouts/Shell.astro";
+import Icon from "../../components/fresh/Icon.astro";
+import { aisles as allAisles, checkHref, tools as allTools } from "../../lib/fresh/catalog";
+import { findListed, resolveAisle } from "../../lib/fresh/addtool";
+
+export const prerender = false;
+
+const q = Astro.url.searchParams;
+const name = (q.get("name") ?? "").slice(0, 200);
+const url = (q.get("url") ?? "").slice(0, 500);
+const aisles = allAisles();
+const tools = allTools();
+const picked = resolveAisle(aisles, q.get("aisle") ?? "");
+const listed = findListed(tools, { name, url });
+const listedFull = listed ? tools.find((t) => t.id === listed.id) : undefined;
+const imported = tools.find(
+  (t) => t.source === "imported" && ((name && t.name.toLowerCase() === name.toLowerCase()) || (url && t.url === url)),
+);
+
+const capFirst = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
+function figureLabel(a: (typeof aisles)[number] | undefined) {
+  if (!a) return { main: "The big number", unit: "" };
+  return { main: capFirst(a.label), unit: a.unit === "GB" ? "" : a.unit };
+}
+const fl = figureLabel(picked);
+
+const clientAisles = aisles.map((a) => ({ id: a.id, name: a.name, group: a.group, label: a.label, unit: a.unit, metric: a.metric }));
+const clientTools = tools.map((t) => ({ id: t.id, name: t.name, url: t.url, source: t.source, aisle: t.aisle, check: checkHref(t) }));
+const json = JSON.stringify({ aisles: clientAisles, tools: clientTools }).replace(/</g, "\\u003c");
+
+const who = [
+  { v: "anyone", t: "Anyone" },
+  { v: "student_any_id", t: "Students, any ID" },
+  { v: "student_school_email", t: "Students, school email" },
+  { v: "startup_proof", t: "Startups, with proof" },
+];
+---
+
+<Shell title="Add a tool · freestack" description="Write the label for a free tool. A maintainer checks the source before it goes live.">
+  <div class="wrap page">
+    <h1 class="h">Add a tool</h1>
+    <p class="lede">Fill in its label. A maintainer checks the source before it goes live.</p>
+
+    <div class="cols">
+      <form class="sheet" method="post" action="/add/sent" novalidate data-add-form>
+        <div role="note" class="note">
+          {
+            imported ? (
+              <>
+                We prefilled {imported.name}'s name and link from {imported.imported_from ?? "the list it came from"}.
+              </>
+            ) : (
+              <>Writing a label for a tool from the unlabeled bin? We prefill the name and link from the list it came from.</>
+            )
+          }
+        </div>
+
+        <section class="sec first" aria-labelledby="h-basics">
+          <h2 id="h-basics" class="h2">The basics</h2>
+          <div class="two">
+            <div>
+              <label class="lbl" for="f-name">Tool name</label>
+              <input
+                id="f-name"
+                class="field"
+                type="text"
+                name="name"
+                value={name}
+                placeholder="As the vendor writes it"
+                autocomplete="off"
+                aria-describedby="dup-note err-name"
+                aria-invalid={listed ? "true" : undefined}
+              />
+              <p class="err" id="err-name" data-error-for="name" hidden></p>
+            </div>
+            <div>
+              <label class="lbl" for="f-url">Website</label>
+              <input
+                id="f-url"
+                class="field"
+                type="text"
+                inputmode="url"
+                name="url"
+                value={url}
+                placeholder="https://"
+                autocomplete="off"
+                aria-describedby="dup-note err-url"
+              />
+              <p class="err" id="err-url" data-error-for="url" hidden></p>
+            </div>
+          </div>
+          <p id="dup-note" class="dup" role="status" data-dup>
+            {
+              listedFull && (
+                <>
+                  <strong>{listedFull.name} is already on freestack.</strong>
+                  <a href={checkHref(listedFull)}>Check its label instead</a>
+                </>
+              )
+            }
+          </p>
+
+          <div>
+            <label class="lbl" for="f-kind">What it is <span class="opt">a few words</span></label>
+            <input id="f-kind" class="field" type="text" name="kind" placeholder="Like Serverless Postgres" autocomplete="off" />
+          </div>
+
+          <div class="combo" data-combo>
+            <label class="lbl" for="aisle-in">Aisle</label>
+            <div class="combo-box">
+              <Icon name="search" size={16} />
+              <input
+                id="aisle-in"
+                type="text"
+                name="aisle_text"
+                role="combobox"
+                aria-expanded="false"
+                aria-controls="aisle-list"
+                aria-autocomplete="list"
+                aria-describedby="aisle-hint err-aisle"
+                autocomplete="off"
+                value={picked?.name ?? ""}
+                placeholder="Type to find an aisle"
+              />
+              <input type="hidden" name="aisle" value={picked?.id ?? ""} data-aisle-id />
+            </div>
+            <ul id="aisle-list" class="combo-list" role="listbox" aria-label="Matching aisles" hidden></ul>
+            <p id="aisle-hint" class="hint">The aisle decides the big number on the label.</p>
+            <p class="err" id="err-aisle" data-error-for="aisle" hidden></p>
+          </div>
+        </section>
+
+        <section class="sec" aria-labelledby="h-numbers">
+          <h2 id="h-numbers" class="h2">The numbers</h2>
+          <div class="two">
+            <div>
+              <label class="lbl" for="f-figure" data-figure-label>
+                <span data-figure-main>{fl.main}</span>{" "}<span class="opt" data-figure-unit>{fl.unit}</span>
+              </label>
+              <input
+                id="f-figure"
+                class="field"
+                type="text"
+                name="figure"
+                placeholder="However the vendor writes it"
+                autocomplete="off"
+                aria-describedby="figure-hint err-figure"
+              />
+              <p id="figure-hint" class="hint" data-figure-hint>Copy it exactly, units and all.</p>
+              <p class="err" id="err-figure" data-error-for="figure" hidden></p>
+              <div class="quick">
+                <button type="button" class="quick-btn" data-figure-set="No limit">No limit</button>
+                <button type="button" class="quick-btn" data-figure-set="Not listed">Not listed</button>
+                <button type="button" class="quick-btn" data-figure-add="per project">Per project</button>
+              </div>
+            </div>
+            <div>
+              <label class="lbl" for="f-pricing">Pricing page</label>
+              <input
+                id="f-pricing"
+                class="field"
+                type="text"
+                inputmode="url"
+                name="pricing_url"
+                placeholder="Link where you read the numbers"
+                autocomplete="off"
+                aria-describedby="pricing-hint err-pricing_url"
+              />
+              <p id="pricing-hint" class="hint">Required. We check every number against it.</p>
+              <p class="err" id="err-pricing_url" data-error-for="pricing_url" hidden></p>
+            </div>
+          </div>
+          <div>
+            <label class="lbl" for="f-limits">Other limits</label>
+            <textarea id="f-limits" class="field" name="limits" rows="3" placeholder="One per line, the way the vendor writes them"></textarea>
+          </div>
+        </section>
+
+        <section class="sec" aria-labelledby="h-bottom">
+          <h2 id="h-bottom" class="h2">The bottom line</h2>
+          <fieldset class="fs" aria-describedby="err-who">
+            <legend class="lbl">Who can claim it</legend>
+            <div class="chips">
+              {
+                who.map((w) => (
+                  <label class="chip pick">
+                    <input type="checkbox" name="who" value={w.v} checked={w.v === "anyone"} />
+                    {w.t}
+                  </label>
+                ))
+              }
+            </div>
+            <p class="err" id="err-who" data-error-for="who" hidden></p>
+            <div class="region">
+              <label class="lbl small" for="f-region">Region lock <span class="opt">optional</span></label>
+              <input id="f-region" class="field" type="text" name="region" placeholder="Like US only" autocomplete="off" />
+            </div>
+          </fieldset>
+          <fieldset class="fs">
+            <legend class="lbl">Can you sell with it?</legend>
+            <div class="chips">
+              <label class="chip pick"><input type="radio" name="sell" value="yes" />Yes</label>
+              <label class="chip pick"><input type="radio" name="sell" value="no" />No</label>
+              <label class="chip pick"><input type="radio" name="sell" value="unknown" checked />Not sure</label>
+            </div>
+          </fieldset>
+          <fieldset class="fs">
+            <legend class="lbl">Credit card at signup?</legend>
+            <div class="chips">
+              <label class="chip pick"><input type="radio" name="card" value="no" />Not needed</label>
+              <label class="chip pick"><input type="radio" name="card" value="yes" />Needed</label>
+              <label class="chip pick"><input type="radio" name="card" value="unknown" checked />Not sure</label>
+            </div>
+          </fieldset>
+        </section>
+
+        <section class="sec" aria-labelledby="h-catch">
+          <h2 id="h-catch" class="h2">The catch, and when to skip it</h2>
+          <p class="sub">This is what makes a label worth reading. Someone should know in one look if this tool is for them.</p>
+          <fieldset class="fs list" data-list="catch">
+            <legend class="lbl">Catches</legend>
+            <input class="field" type="text" name="catch" aria-label="Catch 1" placeholder="A catch, a few words" />
+            <input class="field" type="text" name="catch" aria-label="Catch 2" placeholder="Another catch, a few words" />
+            <button type="button" class="more" data-more>+ Add a catch</button>
+          </fieldset>
+          <fieldset class="fs list" data-list="use_if">
+            <legend class="lbl">Use it if</legend>
+            <input class="field" type="text" name="use_if" aria-label="Use it if, reason 1" placeholder="A reason to pick it" />
+            <input class="field" type="text" name="use_if" aria-label="Use it if, reason 2" placeholder="Another reason" />
+            <button type="button" class="more" data-more>+ Add a reason</button>
+          </fieldset>
+          <fieldset class="fs list" data-list="skip_if">
+            <legend class="lbl">Skip it if, and what to use instead</legend>
+            {
+              [1, 2].map((n) => (
+                <div class="pair">
+                  <input class="field" type="text" name="skip_if" aria-label={`Skip it if, reason ${n}`} placeholder={n === 1 ? "A reason to skip it" : "Another reason to skip it"} />
+                  <input class="field alt" type="text" name="use_instead" aria-label={`Use instead, for reason ${n}`} placeholder="Use instead" />
+                </div>
+              ))
+            }
+            <button type="button" class="more" data-more>+ Add a reason</button>
+          </fieldset>
+        </section>
+
+        <div class="sec send">
+          <div class="credit">
+            <label class="lbl" for="f-credit">Your name for credit</label>
+            <input id="f-credit" class="field" type="text" name="credit" placeholder="Optional" autocomplete="nickname" aria-describedby="credit-hint" />
+            <p id="credit-hint" class="hint">Shown on the label as the one who added it. Leave empty to stay anonymous.</p>
+          </div>
+          <div class="send-row">
+            <button type="submit" class="btn btn-promo">Send for review</button>
+            <span class="hint">We open a pull request on GitHub for you. No GitHub account needed.</span>
+          </div>
+        </div>
+      </form>
+
+      <aside class="tips" aria-labelledby="h-tips">
+        <h2 id="h-tips" class="tips-h">Good labels</h2>
+        <ul>
+          <li><Icon name="check" size={16} /><span>Copy numbers exactly as the vendor writes them.</span></li>
+          <li><Icon name="check" size={16} /><span>Pick "Not sure" over guessing.</span></li>
+          <li><Icon name="check" size={16} /><span>The catch is what you wish you knew on day one.</span></li>
+        </ul>
+        <p class="tips-foot">Your name goes on the label as the one who added it, unless you skip it.</p>
+      </aside>
+    </div>
+  </div>
+  <script type="application/json" id="add-data" set:html={json} />
+</Shell>
+
+<style>
+  .page {
+    padding-block: 48px 96px;
+  }
+  .h {
+    margin: 0;
+    font-weight: 900;
+    font-stretch: 62%;
+    line-height: 1;
+    font-size: clamp(56px, 8vw, 104px);
+  }
+  .lede {
+    margin: 14px 0 0;
+    max-width: 50ch;
+    font-size: 19px;
+    line-height: 1.45;
+  }
+  .cols {
+    margin-top: 32px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 32px;
+    align-items: flex-start;
+  }
+  .sheet {
+    flex: 999 1 560px;
+    min-width: 0;
+    max-width: 820px;
+    background: var(--label);
+    border: 2px solid var(--ink);
+  }
+  .note {
+    padding: 14px 28px;
+    background: var(--fill);
+    font-size: 15px;
+    line-height: 1.45;
+  }
+  .sec {
+    padding: 24px 28px;
+    border-top: 2px solid var(--ink);
+    display: grid;
+    gap: 20px;
+    min-width: 0;
+  }
+  .sec.first {
+    border-top: 0;
+  }
+  .h2 {
+    margin: 0;
+    font-weight: 900;
+    font-stretch: 62%;
+    font-size: 36px;
+    line-height: 1;
+  }
+  .sub {
+    margin: -8px 0 0;
+    font-size: 15px;
+    line-height: 1.45;
+    color: var(--muted);
+  }
+  .two {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 16px;
+  }
+  .lbl {
+    display: block;
+    margin: 0 0 6px;
+    padding: 0;
+    font-size: 15px;
+    font-weight: 700;
+  }
+  .lbl.small {
+    font-size: 14px;
+  }
+  .opt {
+    font-weight: 500;
+    color: var(--muted);
+  }
+  .hint {
+    margin: 6px 0 0;
+    font-size: 14px;
+    color: var(--muted);
+  }
+  .hint :global(strong) {
+    color: var(--ink);
+  }
+  textarea.field {
+    resize: vertical;
+  }
+  .field[aria-invalid="true"] {
+    box-shadow: inset 0 0 0 2px var(--recheck);
+  }
+  .err {
+    margin: 8px 0 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 15px;
+    font-weight: 700;
+  }
+  .dup:empty {
+    display: none;
+  }
+  .dup {
+    margin: -8px 0 0;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 4px 12px;
+    padding: 10px 12px;
+    background: var(--shelf);
+    font-size: 15px;
+  }
+  .dup :global(a) {
+    display: inline-flex;
+    align-items: center;
+    min-height: var(--target);
+    font-weight: 700;
+  }
+
+  .combo {
+    position: relative;
+  }
+  .combo-box {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-height: var(--target);
+    padding: 0 12px;
+    box-shadow: inset 0 0 0 2px var(--ink);
+    background: var(--label);
+  }
+  .combo-box:focus-within {
+    outline: 3px solid var(--focus);
+    outline-offset: 2px;
+  }
+  .combo-box input {
+    flex: 1;
+    min-width: 0;
+    min-height: var(--target);
+    border: 0;
+    background: transparent;
+    color: var(--ink);
+    font: 500 16px var(--font);
+  }
+  .combo-box input:focus-visible {
+    outline: 0;
+  }
+  .combo-list {
+    list-style: none;
+    margin: 0;
+    padding: 4px 0;
+    border: 2px solid var(--ink);
+    border-top: 0;
+    background: var(--label);
+  }
+  .combo-list :global([role="option"]) {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 2px 12px;
+    min-height: var(--target);
+    align-items: center;
+    padding: 8px 12px;
+    cursor: pointer;
+  }
+  .combo-list :global([role="option"][aria-selected="true"]) {
+    background: color-mix(in srgb, var(--promo) 22%, var(--label));
+    box-shadow: inset 4px 0 0 var(--ink);
+  }
+  .combo-list :global(.what) {
+    font-size: 14px;
+    color: var(--muted);
+  }
+  .combo-list :global(.none) {
+    padding: 10px 12px;
+    border-top: 1px solid var(--shelf);
+    font-size: 14px;
+    color: var(--muted);
+  }
+
+  .quick {
+    margin-top: 8px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+  .quick-btn {
+    min-height: var(--target);
+    padding: 0 12px;
+    background: var(--label);
+    border: 1px solid var(--ink);
+    color: var(--ink);
+    font: 600 14px var(--font);
+    cursor: pointer;
+  }
+
+  .fs {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    min-width: 0;
+  }
+  .chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+  .pick {
+    gap: 8px;
+    font-weight: 700;
+  }
+  .pick input {
+    width: 18px;
+    height: 18px;
+    margin: 0;
+    accent-color: var(--ink);
+  }
+  .pick:has(input:checked) {
+    background: var(--ink);
+    color: var(--label);
+  }
+  .pick:has(input:checked) input {
+    accent-color: var(--label);
+  }
+  .pick:has(input:focus-visible) {
+    outline: 3px solid var(--focus);
+    outline-offset: 2px;
+  }
+  .region {
+    margin-top: 10px;
+  }
+  .list {
+    display: grid;
+    gap: 8px;
+  }
+  .pair {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 220px;
+    gap: 8px;
+  }
+  .field.alt {
+    background: var(--fill);
+    font-weight: 700;
+  }
+  .more {
+    justify-self: start;
+    min-height: var(--target);
+    padding: 0 12px;
+    margin-left: -12px;
+    background: transparent;
+    border: 0;
+    color: var(--ink);
+    font: 700 15px var(--font);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    cursor: pointer;
+  }
+  .send {
+    gap: 16px;
+  }
+  .credit {
+    max-width: 420px;
+  }
+  .send-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 12px;
+  }
+  .send-row .hint {
+    margin: 0;
+  }
+
+  .tips {
+    flex: 1 1 300px;
+    display: grid;
+    gap: 16px;
+  }
+  .tips-h {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 800;
+  }
+  .tips ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: grid;
+    gap: 12px;
+    font-size: 15px;
+    line-height: 1.5;
+  }
+  .tips li {
+    display: flex;
+    gap: 10px;
+  }
+  .tips li :global(svg) {
+    flex: 0 0 auto;
+    margin-top: 3px;
+  }
+  .tips-foot {
+    margin: 0;
+    padding-top: 14px;
+    border-top: 1px solid var(--rule);
+    font-size: 14px;
+    line-height: 1.5;
+    color: var(--muted);
+  }
+
+  @media (max-width: 640px) {
+    .page {
+      padding-block: 24px 48px;
+    }
+    .lede {
+      font-size: 17px;
+    }
+    .cols {
+      margin-top: 20px;
+      gap: 24px;
+    }
+    .sheet {
+      flex-basis: 100%;
+    }
+    .note,
+    .sec {
+      padding-inline: 16px;
+    }
+    .pair {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+</style>
+
+<script>
+  import { figureError, findListed, parseFigure, readDraft, type DraftErrors } from "../../lib/fresh/addtool";
+  import type { Aisle, Tool } from "../../lib/fresh/types";
+
+  type ClientTool = Pick<Tool, "id" | "name" | "url" | "source" | "aisle"> & { check: string };
+  const data = JSON.parse(document.getElementById("add-data")!.textContent || "{}") as {
+    aisles: Aisle[];
+    tools: ClientTool[];
+  };
+  const form = document.querySelector<HTMLFormElement>("[data-add-form]")!;
+  const $ = <T extends HTMLElement = HTMLElement>(sel: string) => form.querySelector<T>(sel)!;
+
+  const nameIn = $<HTMLInputElement>("#f-name");
+  const urlIn = $<HTMLInputElement>("#f-url");
+  const dup = $("[data-dup]");
+  const aisleIn = $<HTMLInputElement>("#aisle-in");
+  const aisleId = $<HTMLInputElement>("[data-aisle-id]");
+  const aisleList = $<HTMLUListElement>("#aisle-list");
+  const figureIn = $<HTMLInputElement>("#f-figure");
+  const figureHint = $("[data-figure-hint]");
+  const defaultHint = figureHint.textContent ?? "";
+
+  const esc = (s: string) =>
+    s.replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]!);
+  const capFirst = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
+
+  function currentAisle(): Aisle | undefined {
+    return data.aisles.find((a) => a.id === aisleId.value);
+  }
+
+  // ---------- Errors ----------
+  const FIELD: Record<keyof DraftErrors, string> = {
+    name: "#f-name",
+    url: "#f-url",
+    aisle: "#aisle-in",
+    figure: "#f-figure",
+    pricing_url: "#f-pricing",
+    who: 'input[name="who"]',
+  };
+
+  function setError(key: keyof DraftErrors, msg: string | null) {
+    const p = $(`[data-error-for="${key}"]`);
+    p.hidden = !msg;
+    p.textContent = msg ?? "";
+    const el = form.querySelector<HTMLInputElement>(FIELD[key]);
+    if (key === "who") return;
+    if (msg) el?.setAttribute("aria-invalid", "true");
+    else el?.removeAttribute("aria-invalid");
+  }
+
+  // ---------- Already listed ----------
+  function checkListed() {
+    const t = findListed(data.tools, { name: nameIn.value, url: urlIn.value }) as ClientTool | undefined;
+    if (t) {
+      dup.innerHTML = `<strong>${esc(t.name)} is already on freestack.</strong><a href="${esc(t.check)}">Check its label instead</a>`;
+      nameIn.setAttribute("aria-invalid", "true");
+    } else {
+      dup.innerHTML = "";
+      if ($('[data-error-for="name"]').hidden) nameIn.removeAttribute("aria-invalid");
+    }
+    return t;
+  }
+  nameIn.addEventListener("input", () => {
+    if (nameIn.value.trim()) setError("name", null);
+    checkListed();
+  });
+  urlIn.addEventListener("input", () => {
+    setError("url", null);
+    checkListed();
+  });
+
+  // ---------- Figure ----------
+  function renderFigure(strict: boolean) {
+    const a = currentAisle();
+    const f = parseFigure(figureIn.value, a);
+    if (f.kind === "number" || f.kind === "unlimited" || f.kind === "text") {
+      figureHint.innerHTML = `Shows on the label as <strong>${esc(f.display)}</strong>`;
+      setError("figure", null);
+    } else if (f.kind === "none") {
+      figureHint.innerHTML = `Shows on the label as <strong>?</strong> with "Not listed"`;
+      setError("figure", null);
+    } else {
+      figureHint.textContent = defaultHint;
+      if (strict && f.kind === "invalid") setError("figure", figureError(f, a));
+      if (f.kind === "empty") setError("figure", null);
+    }
+  }
+  figureIn.addEventListener("input", () => renderFigure(false));
+  figureIn.addEventListener("blur", () => renderFigure(true));
+  form.querySelectorAll<HTMLButtonElement>("[data-figure-set]").forEach((b) =>
+    b.addEventListener("click", () => {
+      figureIn.value = b.dataset.figureSet!;
+      renderFigure(true);
+    }),
+  );
+  form.querySelectorAll<HTMLButtonElement>("[data-figure-add]").forEach((b) =>
+    b.addEventListener("click", () => {
+      const add = b.dataset.figureAdd!;
+      if (!new RegExp(`\\b${add}$`, "i").test(figureIn.value)) figureIn.value = `${figureIn.value.trim()} ${add}`.trim();
+      renderFigure(true);
+      figureIn.focus();
+    }),
+  );
+
+  function setFigureLabel(a: Aisle | undefined) {
+    $("[data-figure-main]").textContent = a ? capFirst(a.label) : "The big number";
+    $("[data-figure-unit]").textContent = a && a.unit !== "GB" ? a.unit : "";
+  }
+
+  // ---------- Aisle combobox ----------
+  let options: { a: Aisle; el: HTMLElement }[] = [];
+  let active = -1;
+
+  function mark(text: string, q: string): string {
+    const i = q ? text.toLowerCase().indexOf(q.toLowerCase()) : -1;
+    if (i < 0) return esc(text);
+    return `${esc(text.slice(0, i))}<strong>${esc(text.slice(i, i + q.length))}</strong>${esc(text.slice(i + q.length))}`;
+  }
+
+  function setActive(i: number) {
+    if (!options.length) {
+      active = -1;
+      aisleIn.removeAttribute("aria-activedescendant");
+      return;
+    }
+    active = (i + options.length) % options.length;
+    options.forEach((o, n) => o.el.setAttribute("aria-selected", String(n === active)));
+    aisleIn.setAttribute("aria-activedescendant", options[active].el.id);
+    options[active].el.scrollIntoView({ block: "nearest" });
+  }
+
+  function openList() {
+    const q = aisleIn.value.trim();
+    const matches = data.aisles.filter(
+      (a) => !q || a.name.toLowerCase().includes(q.toLowerCase()) || a.group.toLowerCase().includes(q.toLowerCase()),
+    );
+    aisleList.innerHTML =
+      matches
+        .map((a) => {
+          const what = `${a.group}. Big number: ${[a.label, a.unit === "GB" ? "" : a.unit].filter(Boolean).join(" ")}`;
+          return `<li role="option" id="aisle-opt-${a.id}" aria-selected="false" data-id="${a.id}"><span>${mark(a.name, q)}</span><span class="what">${esc(what)}</span></li>`;
+        })
+        .join("") + `<li role="presentation" class="none">None fit? Pick the closest. A maintainer can move it.</li>`;
+    options = matches.map((a) => ({ a, el: aisleList.querySelector<HTMLElement>(`#aisle-opt-${a.id}`)! }));
+    aisleList.hidden = false;
+    aisleIn.setAttribute("aria-expanded", "true");
+    setActive(0);
+  }
+
+  function closeList() {
+    aisleList.hidden = true;
+    aisleIn.setAttribute("aria-expanded", "false");
+    aisleIn.removeAttribute("aria-activedescendant");
+    active = -1;
+  }
+
+  function choose(a: Aisle) {
+    aisleIn.value = a.name;
+    aisleId.value = a.id;
+    setError("aisle", null);
+    setFigureLabel(a);
+    closeList();
+    if (figureIn.value.trim()) renderFigure(true);
+  }
+
+  aisleIn.addEventListener("input", () => {
+    const exact = data.aisles.find((a) => a.name.toLowerCase() === aisleIn.value.trim().toLowerCase());
+    aisleId.value = exact?.id ?? "";
+    setFigureLabel(exact);
+    openList();
+  });
+  aisleIn.addEventListener("focus", () => {
+    if (!aisleId.value) openList();
+  });
+  aisleIn.addEventListener("keydown", (e) => {
+    if (e.key === "ArrowDown") {
+      e.preventDefault();
+      if (aisleList.hidden) openList();
+      else setActive(active + 1);
+    } else if (e.key === "ArrowUp") {
+      e.preventDefault();
+      if (aisleList.hidden) openList();
+      else setActive(active - 1);
+    } else if (e.key === "Enter") {
+      if (!aisleList.hidden && options[active]) {
+        e.preventDefault();
+        choose(options[active].a);
+      }
+    } else if (e.key === "Escape") {
+      if (!aisleList.hidden) {
+        e.preventDefault();
+        e.stopPropagation();
+        closeList();
+      }
+    }
+  });
+  aisleList.addEventListener("mousedown", (e) => e.preventDefault());
+  aisleList.addEventListener("click", (e) => {
+    const li = (e.target as HTMLElement).closest<HTMLElement>('[role="option"]');
+    const a = li && data.aisles.find((x) => x.id === li.dataset.id);
+    if (a) choose(a);
+  });
+  aisleIn.addEventListener("blur", () => {
+    // Leave the typed text; an exact name still counts.
+    setTimeout(closeList, 0);
+  });
+
+  // ---------- Add another field ----------
+  form.querySelectorAll<HTMLButtonElement>("[data-more]").forEach((btn) =>
+    btn.addEventListener("click", () => {
+      const fs = btn.closest<HTMLFieldSetElement>("fieldset")!;
+      const kind = fs.dataset.list;
+      const rows = Array.from(fs.children).filter((c) => c !== btn && c.tagName !== "LEGEND");
+      const n = rows.length + 1;
+      const copy = rows[rows.length - 1].cloneNode(true) as HTMLElement;
+      const inputs = copy.matches("input") ? [copy as HTMLInputElement] : Array.from(copy.querySelectorAll("input"));
+      inputs.forEach((i) => {
+        i.value = "";
+        const label = i.getAttribute("aria-label") ?? "";
+        i.setAttribute("aria-label", label.replace(/\d+$/, String(n)));
+      });
+      if (kind === "catch") inputs[0].placeholder = "Another catch, a few words";
+      btn.before(copy);
+      inputs[0].focus();
+    }),
+  );
+
+  // ---------- Submit ----------
+  form.addEventListener("submit", (e) => {
+    const { errors, listed } = readDraft(new FormData(form), data.aisles, data.tools);
+    const keys = Object.keys(FIELD) as (keyof DraftErrors)[];
+    keys.forEach((k) => setError(k, k === "name" && listed ? null : (errors[k] ?? null)));
+    if (listed) checkListed();
+    const first = keys.find((k) => errors[k]);
+    if (!first) return;
+    e.preventDefault();
+    form.querySelector<HTMLElement>(FIELD[first])?.focus();
+  });
+
+  // Prefilled aisle: name the big number.
+  setFigureLabel(currentAisle());
+</script>
