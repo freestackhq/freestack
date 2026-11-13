@@ -59,7 +59,8 @@ export async function missingFocusRings(page: Page, max = 60): Promise<string[]>
       };
       // A field may show focus on its wrapper (:focus-within) instead.
       const wrap = el.matches("input, textarea") ? [el.parentElement, el.parentElement?.parentElement] : [];
-      const ring = ringed(el, true) || wrap.some((n) => n && ringed(n, false));
+      const wrapRing = wrap.some((n) => n && ringed(n, false));
+      const ring = ringed(el, true) || wrapRing;
       // The ring must contrast with what is around it: blue on light, yellow on navy.
       let bg = "";
       const inset = parseFloat(getComputedStyle(el).outlineOffset) < 0;
@@ -68,7 +69,7 @@ export async function missingFocusRings(page: Page, max = 60): Promise<string[]>
         if (c !== "rgba(0, 0, 0, 0)" && c !== "transparent") bg = c;
       }
       const oc = getComputedStyle(el).outlineColor;
-      const clash = (bg === "rgb(28, 35, 64)" && oc === FOCUS[0]) || (bg !== "rgb(28, 35, 64)" && bg !== "" && oc === FOCUS[1] && getComputedStyle(el).outlineStyle !== "none");
+      const clash = !wrapRing && ((bg === "rgb(28, 35, 64)" && oc === FOCUS[0]) || (bg !== "rgb(28, 35, 64)" && bg !== "" && oc === FOCUS[1] && getComputedStyle(el).outlineStyle !== "none"));
       const id = el.outerHTML.slice(0, 80);
       const name = `${el.tagName.toLowerCase()} "${(el.getAttribute("aria-label") || el.textContent || "").trim().replace(/\s+/g, " ").slice(0, 40)}"`;
       return { ring, clash, name, id };
