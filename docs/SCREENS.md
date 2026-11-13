@@ -18,7 +18,7 @@ The canvas is laid out the same way as this file: main pages, side pages and sec
 
 ### Home
 - Situation picker: Student with school email, Student, Indie builder, Startup. Default: Student. Choice goes in the URL (`?as=`).
-- Stack panel: one row per part with limits, catch, can sell, card. Total `$0.00`. "Copy this stack" copies the stack (Markdown) and opens the Copy dialog showing "Copied", to switch to the link or the agent prompt. "Swap parts in Build a stack" opens `/build` with the same picks.
+- Stack panel: one row per part with limits, catch, can sell, card. Total `$0.00`. "Copy this stack" copies the stack (Markdown) and opens the Copy dialog, to switch to the link or the agent prompt. Each copy button says "✓ Copied" on its own label for 2 seconds; a blocked clipboard shows a visible message and selects the text. "Swap parts in Build a stack" opens `/build` with the same picks.
 - Presets come from data, not from the page. Only checked tools can be presets.
 - States: a preset tool goes overdue (show it, drop it from presets at the next build). Situation has no valid preset (show the aisle list instead of an empty panel).
 

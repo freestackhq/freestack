@@ -495,7 +495,8 @@ const lower = (s: string) => (/^[A-Z]{2}/.test(s) ? s : s.toLowerCase());
     }
 
     // The dialog's own copy button also carries data-copy: leave it to the dialog.
-    if (el.closest("[data-copy]") && !el.closest("dialog")) return openCopyStack(copyData());
+    const copier = el.closest<HTMLElement>("[data-copy]");
+    if (copier && !el.closest("dialog")) return openCopyStack(copyData(), "md", copier);
     if (el.closest("[data-share]")) return shareStack(copyData());
 
     const sit = el.closest<HTMLElement>("[data-sit]");

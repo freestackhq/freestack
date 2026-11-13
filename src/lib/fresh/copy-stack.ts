@@ -10,9 +10,12 @@ export const SHARE_EVENT = "copy-stack:share";
 
 export type CopyFormat = "md" | "link" | "agent";
 
-/** Open the dialog with this stack and copy it in that format right away. */
-export function openCopyStack(data: CopyStackData, format: CopyFormat = "md"): void {
-  document.dispatchEvent(new CustomEvent(OPEN_EVENT, { detail: { data, format } }));
+/**
+ * Open the dialog with this stack and copy it in that format right away.
+ * `opener` is the button clicked; it says "Copied" for a moment.
+ */
+export function openCopyStack(data: CopyStackData, format: CopyFormat = "md", opener?: HTMLElement | null): void {
+  document.dispatchEvent(new CustomEvent(OPEN_EVENT, { detail: { data, format, opener: opener ?? undefined } }));
 }
 
 /** Copy the share link right away and show the "Link copied" toast. */

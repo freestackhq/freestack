@@ -379,16 +379,21 @@ const data = { labeled, unlabeled, catchPages, situations: situations(), fallbac
       render();
       return;
     }
-    if (t.closest("[data-copy-fixed]")) {
+    const copier = t.closest<HTMLElement>("[data-copy-fixed]");
+    if (copier) {
       const sitLabel = D.situations.find((s) => s.id === situation)!.label;
       const url = new URL("/check", location.origin);
       url.searchParams.set("as", situation);
       url.searchParams.set("tools", fixed.map((f) => f.id).join(","));
-      openCopyStack({
-        situation: sitLabel,
-        url: url.href,
-        rows: fixed.map((f) => ({ job: f.part ?? f.aisle, name: f.name, limits: f.limits, catch: f.catch })),
-      });
+      openCopyStack(
+        {
+          situation: sitLabel,
+          url: url.href,
+          rows: fixed.map((f) => ({ job: f.part ?? f.aisle, name: f.name, limits: f.limits, catch: f.catch })),
+        },
+        "md",
+        copier,
+      );
     }
   });
 

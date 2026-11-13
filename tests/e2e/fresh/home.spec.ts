@@ -136,14 +136,23 @@ test.describe("Copy this stack (CopyStack.dc.html)", () => {
     await expect(text).toContainText("## My free stack (from freestack)");
     await expect(text).toContainText("For: Indie builder");
 
-    // The button does what it says: the stack is already copied.
+    // The button does what it says: the stack is already copied, and both
+    // copy buttons say so on their own label for a moment.
     await expect(dialog.getByRole("status")).toHaveText("Copied");
     expect(await page.evaluate(() => navigator.clipboard.readText())).toContain("For: Indie builder");
+    const copyText = dialog.locator("[data-copy]");
+    await expect(copyText).toHaveText("Copied");
+    // Found by attribute: while it says "Copied" its accessible name changes.
+    const openerBtn = panel(page).locator("[data-copy-stack]");
+    await expect(openerBtn).toHaveText("Copied");
+    await expect(dialog.locator("[data-status]")).toHaveClass(/sr-only/);
+    await expect(copyText).toHaveText("Copy text", { timeout: 4000 });
+    await expect(opener).toHaveText("Copy this stack");
 
-    // Copying again from the dialog still works.
+    // Copying again from the dialog flashes that button.
     await page.evaluate(() => navigator.clipboard.writeText(""));
     await dialog.getByRole("button", { name: "Copy text" }).click();
-    await expect(dialog.getByRole("status")).toHaveText("Copied");
+    await expect(copyText).toHaveText("Copied");
     expect(await page.evaluate(() => navigator.clipboard.readText())).toContain("For: Indie builder");
 
     // Arrow keys move between tabs.
@@ -178,8 +187,10 @@ test.describe("Copy this stack (CopyStack.dc.html)", () => {
     await page.goto("/");
     await panel(page).getByRole("button", { name: "Copy this stack" }).click();
     const dialog = page.getByRole("dialog", { name: "Copy your stack" });
-    // The copy on open fails the same way as the button.
+    // The copy on open fails the same way as the button, and says so visibly.
     await expect(dialog.getByRole("status")).toContainText("Could not copy");
+    await expect(dialog.getByRole("status")).toBeVisible();
+    await expect(dialog.locator("[data-copy]")).toHaveText("Copy text");
     expect(await page.evaluate(() => window.getSelection()?.toString() ?? "")).toContain("My free stack");
     await dialog.getByRole("button", { name: "Close" }).click();
     await expect(dialog).toBeHidden();
