@@ -1,0 +1,76 @@
+---
+/**
+ * Component reference for the label (States.dc.html). Not linked from the site.
+ */
+import Shell from "../../layouts/Shell.astro";
+import Label from "../../components/fresh/Label.astro";
+import { tool, toolsInAisle } from "../../lib/fresh/catalog";
+
+const states = [
+  { title: "Checked within 90 days", id: "neon" },
+  { title: "Never checked", id: "convex" },
+  { title: "Over 90 days", id: "supabase" },
+  { title: "Change waiting for review", id: "d1" },
+  { title: "Vendor page changed", id: "turso" },
+  { title: "From an awesome list", id: "xata-lite" },
+].map((s) => ({ ...s, t: tool(s.id)! }));
+
+const full = [...toolsInAisle("databases"), tool("xata-lite")!];
+---
+
+<Shell title="Label states · freestack" noindex>
+  <div class="wrap page">
+    <section>
+      <h1 class="title-lg">Label states</h1>
+      <div class="mini-grid">
+        {
+          states.map((s) => (
+            <div class="cell" data-state-cell={s.id}>
+              <p class="cap">{s.title}</p>
+              <Label tool={s.t} variant="mini" compare={false} />
+            </div>
+          ))
+        }
+      </div>
+    </section>
+    <section>
+      <h2 class="title-md">Full labels</h2>
+      <div class="grid">
+        {full.map((t) => <Label tool={t} />)}
+      </div>
+    </section>
+  </div>
+</Shell>
+
+<style>
+  .page {
+    padding-block: 48px 96px;
+    display: grid;
+    gap: 56px;
+  }
+  .page h1,
+  .page h2 {
+    margin-bottom: 24px;
+  }
+  .mini-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 18px;
+  }
+  .cell {
+    display: grid;
+    gap: 8px;
+    align-content: start;
+  }
+  .cap {
+    margin: 0;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--muted);
+  }
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 280px), 1fr));
+    gap: 28px 20px;
+  }
+</style>

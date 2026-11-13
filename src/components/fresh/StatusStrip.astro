@@ -1,0 +1,140 @@
+---
+/**
+ * The label's status strip. One of six states (DESIGN.md "Label states").
+ * Every strip is at least 44px tall.
+ */
+import Icon from "./Icon.astro";
+import { strings } from "../../lib/fresh/label";
+import { now as currentDate, checkHref, writeLabelHref } from "../../lib/fresh/catalog";
+import type { Tool } from "../../lib/fresh/types";
+
+interface Props {
+  tool: Tool;
+  now?: Date;
+}
+const { tool, now = currentDate() } = Astro.props;
+const s = strings(tool, now);
+const href = s.state === "imported" ? writeLabelHref(tool) : checkHref(tool);
+---
+
+<div class:list={["strip", `strip-${s.state}`]} data-state={s.state}>
+  {
+    s.state === "checked" && (
+      <p class="row on-ink">
+        <Icon name="check" />
+        {s.text}
+      </p>
+    )
+  }
+  {
+    (s.state === "unchecked" || s.state === "overdue") && (
+      <p class="row split">
+        <span>{s.text}</span>
+        <a href={href}>
+          {s.link}
+          <span class="sr-only"> {tool.name}</span>
+        </a>
+      </p>
+    )
+  }
+  {
+    s.state === "review" && (
+      <p class="row">
+        <Icon name="wrench" />
+        {s.text}
+      </p>
+    )
+  }
+  {
+    s.state === "vendor-changed" && (
+      <>
+        <p class="row on-ink pad">
+          <Icon name="wrench" />
+          {s.text}
+        </p>
+        <a class="below" href={href}>
+          {s.link}
+        </a>
+      </>
+    )
+  }
+  {
+    s.state === "imported" && (
+      <>
+        <p class="row pad">{s.text}</p>
+        <a class="below" href={href}>
+          {s.link}
+          <span class="sr-only"> for {tool.name}</span>
+        </a>
+      </>
+    )
+  }
+</div>
+
+<style>
+  .row {
+    margin: 0;
+    padding: 0 18px;
+    min-height: var(--target);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+    font-weight: 700;
+  }
+  .row.pad {
+    min-height: 0;
+    padding-block: 10px;
+  }
+  .split {
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 0 10px;
+  }
+  .split a {
+    display: inline-flex;
+    align-items: center;
+    min-height: var(--target);
+  }
+  .on-ink {
+    background: var(--ink);
+    color: var(--label);
+  }
+  .on-ink :global(svg) {
+    color: var(--promo);
+  }
+  .strip-unchecked .row {
+    border-top: 1px solid var(--shelf);
+    font-weight: 400;
+  }
+  .strip-unchecked .row span {
+    color: var(--muted);
+  }
+  .strip-unchecked a {
+    font-weight: 700;
+  }
+  .strip-overdue .row {
+    background: var(--recheck);
+  }
+  .strip-review .row {
+    background: var(--fill);
+  }
+  .strip-imported .row {
+    background: var(--fill);
+    color: var(--muted);
+    font-weight: 400;
+  }
+  .below {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: var(--target);
+    font-weight: 700;
+    font-size: 14px;
+    background: var(--label);
+    color: var(--ink);
+  }
+  .strip-imported .below {
+    border-top: 1px solid var(--shelf);
+  }
+</style>

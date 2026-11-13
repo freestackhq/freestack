@@ -1,0 +1,57 @@
+---
+/**
+ * Page shell for the fresh shelf-label UI: fonts, tokens, header, search,
+ * footer. Legacy pages keep using Layout.astro until the migration removes it.
+ */
+import "../styles/fresh.css";
+import SiteHeader from "../components/fresh/SiteHeader.astro";
+import SiteFooter from "../components/fresh/SiteFooter.astro";
+import SearchDialog from "../components/fresh/SearchDialog.astro";
+
+interface Props {
+  title: string;
+  description?: string;
+  /** Current aisle id, marked in the Aisles menu. */
+  aisle?: string;
+  /** Hide the footer (full-screen pages such as dialogs on phone). */
+  footer?: boolean;
+  noindex?: boolean;
+}
+
+const {
+  title,
+  description = "Free tools, student perks and APIs. Limits and catches up front.",
+  aisle,
+  footer = true,
+  noindex = false,
+} = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content={description} />
+    <meta name="theme-color" content="#1C2340" />
+    {noindex && <meta name="robots" content="noindex" />}
+    <link rel="icon" href="/brand/favicon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&display=swap"
+      rel="stylesheet"
+    />
+    <title>{title}</title>
+    <slot name="head" />
+  </head>
+  <body>
+    <SiteHeader current={aisle} />
+    <main id="main">
+      <slot />
+    </main>
+    {footer && <SiteFooter />}
+    <SearchDialog />
+    <slot name="end" />
+  </body>
+</html>

@@ -1,0 +1,282 @@
+/*
+ * freestack "fresh shelf labels" design system.
+ * Tokens come from DESIGN.md. Do not add colors or fonts here without
+ * changing DESIGN.md first. Component layout lives in each component's
+ * scoped <style>; this file holds tokens, base rules and the few
+ * primitives every page shares (buttons, chips, titles, wrap).
+ */
+
+:root {
+  /* DESIGN.md tokens */
+  --ink: #1c2340;
+  --shelf: #e7e9ec;
+  --label: #ffffff;
+  --promo: #ffd23f;
+  --recheck: #ffb27a;
+  --muted: #545b73;
+  --focus: #2f45e0;
+
+  /* Neutrals the boards use for rules, fills and skeletons */
+  --rule: #c9cdd4;
+  --fill: #f3f4f6;
+  --skeleton: #d6d9de;
+  --promo-shadow: #c9a21e;
+  --ink-line: #3a4060;
+  --on-ink-muted: #c9cdd4;
+
+  --font: "Archivo", system-ui, sans-serif;
+  --wrap: 1240px;
+  --gutter: 32px;
+  --target: 44px;
+}
+
+@media (max-width: 640px) {
+  :root {
+    --gutter: 16px;
+  }
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  background: var(--shelf);
+  color: var(--ink);
+  font-family: var(--font);
+  font-stretch: 100%;
+  font-size: 16px;
+  line-height: 1.45;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+body > main {
+  flex: 1 0 auto;
+}
+
+a {
+  color: var(--ink);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+}
+
+a:hover {
+  text-decoration-thickness: 2px;
+}
+
+:focus-visible {
+  outline: 3px solid var(--focus);
+  outline-offset: 2px;
+}
+
+/* Yellow focus inside navy areas */
+.on-ink :focus-visible,
+header :focus-visible {
+  outline-color: var(--promo);
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+  color: inherit;
+}
+
+img,
+svg {
+  max-width: 100%;
+}
+
+[hidden] {
+  display: none !important;
+}
+
+/* ---------- Layout ---------- */
+
+.wrap {
+  max-width: var(--wrap);
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+/* ---------- Type ---------- */
+
+/* Extra Condensed Black: limits and page titles. Line height never under 1. */
+.condensed {
+  font-weight: 900;
+  font-stretch: 62%;
+  line-height: 1;
+}
+
+/* Expanded Black: wordmark and group headers */
+.expanded {
+  font-weight: 800;
+  font-stretch: 125%;
+}
+
+.title-xl {
+  margin: 0;
+  font-weight: 900;
+  font-stretch: 62%;
+  line-height: 1;
+  font-size: clamp(56px, 9vw, 120px);
+}
+
+.title-lg {
+  margin: 0;
+  font-weight: 900;
+  font-stretch: 62%;
+  line-height: 1;
+  font-size: clamp(40px, 5vw, 72px);
+}
+
+.title-md {
+  margin: 0;
+  font-weight: 900;
+  font-stretch: 62%;
+  line-height: 1;
+  font-size: clamp(32px, 3.5vw, 44px);
+}
+
+.muted {
+  color: var(--muted);
+}
+
+.crumbs {
+  margin: 0 0 8px;
+  font-size: 15px;
+}
+
+.crumbs [aria-hidden] {
+  color: var(--muted);
+}
+
+/* ---------- Buttons ---------- */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: var(--target);
+  padding: 0 18px;
+  border: 2px solid var(--ink);
+  background: var(--ink);
+  color: var(--label);
+  font: 700 15px var(--font);
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.btn:hover {
+  text-decoration: none;
+}
+
+.btn-outline {
+  background: var(--label);
+  color: var(--ink);
+  padding: 0 16px;
+}
+
+/* One main action per screen. Nothing else is yellow. */
+.btn-promo {
+  background: var(--promo);
+  border-color: var(--promo);
+  color: var(--ink);
+  font-weight: 800;
+}
+
+/* Outline button on a navy area */
+.btn-on-ink {
+  background: transparent;
+  border-color: var(--label);
+  color: var(--label);
+}
+
+.btn-block {
+  width: 100%;
+}
+
+/* ---------- Chips (filters, situation picker) ---------- */
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: var(--target);
+  padding: 8px 14px;
+  border: 2px solid var(--ink);
+  background: var(--label);
+  color: var(--ink);
+  font: 600 15px var(--font);
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.chip[aria-pressed="true"],
+.chip[aria-checked="true"],
+.chip[aria-current="true"] {
+  background: var(--ink);
+  color: var(--label);
+}
+
+/* An unknown tool in a stack: dashed */
+.chip-dashed {
+  border-style: dashed;
+  color: var(--muted);
+}
+
+/* ---------- Panels ---------- */
+
+.panel {
+  background: var(--label);
+}
+
+.panel-raised {
+  background: var(--label);
+  box-shadow:
+    0 1px 0 var(--rule),
+    0 24px 48px -24px rgba(28, 35, 64, 0.35);
+}
+
+/* ---------- Form fields ---------- */
+
+.field {
+  width: 100%;
+  min-height: var(--target);
+  padding: 10px 12px;
+  background: var(--label);
+  border: 2px solid var(--ink);
+  border-radius: 0;
+  color: var(--ink);
+  font: 500 16px var(--font);
+}
+
+kbd {
+  font: 600 12px var(--font);
+  color: var(--ink);
+  background: var(--shelf);
+  border-bottom: 2px solid var(--rule);
+  padding: 2px 7px;
+}

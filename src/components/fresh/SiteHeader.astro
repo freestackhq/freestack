@@ -1,0 +1,504 @@
+---
+/**
+ * Header: wordmark, centered search trigger (Ctrl K), "Aisles" menu, "Add a tool".
+ * Boards: AislesMenu.dc.html, PhoneMenu.dc.html.
+ *
+ * The search trigger dispatches `fs:search-open` on window; SearchDialog
+ * listens for it. Ctrl K, ⌘K and "/" also open search (handled there).
+ */
+import Icon from "./Icon.astro";
+import LogoMark from "./LogoMark.astro";
+import { aislesByGroup, aisleCount, totalTools } from "../../lib/fresh/catalog";
+
+interface Props {
+  /** Current aisle id, to mark it in the menu. */
+  current?: string;
+}
+const { current } = Astro.props;
+const groups = aislesByGroup();
+const total = totalTools();
+---
+
+<header class="site-header">
+  <nav aria-label="Main" class="bar wrap">
+    <a href="/" class="wordmark"><LogoMark size={30} />freestack</a>
+
+    <button
+      type="button"
+      class="search-trigger"
+      data-search-open
+      aria-haspopup="dialog"
+      aria-keyshortcuts="Control+K Meta+K /"
+      aria-label={`Search ${total} tools`}
+    >
+      <Icon name="search" size={18} />
+      <span class="grow">Search {total} tools</span>
+      <span aria-hidden="true" class="keys"><kbd>Ctrl</kbd><kbd>K</kbd></span>
+    </button>
+
+    <div class="right">
+      <button
+        type="button"
+        class="aisles-btn"
+        aria-haspopup="true"
+        aria-expanded="false"
+        aria-controls="aisles-menu"
+        data-aisles-open
+      >
+        Aisles<Icon name="chevron-down" size={14} />
+      </button>
+      <a href="/add" class="add">Add a tool</a>
+    </div>
+
+    <div class="phone-actions">
+      <button type="button" class="icon-btn" data-search-open aria-label="Search">
+        <Icon name="search" size={22} />
+      </button>
+      <button
+        type="button"
+        class="icon-btn"
+        data-aisles-open
+        aria-label="Menu"
+        aria-haspopup="dialog"
+        aria-expanded="false"
+        aria-controls="aisles-menu"
+      >
+        <Icon name="menu" size={22} />
+      </button>
+    </div>
+  </nav>
+
+  <div class="scrim" data-aisles-scrim hidden></div>
+  <div id="aisles-menu" class="menu" data-aisles-menu hidden role="dialog" aria-label="Aisles menu">
+    <div class="phone-top">
+      <a href="/" class="wordmark small"><LogoMark size={26} />freestack</a>
+      <button type="button" class="icon-btn" data-aisles-close aria-label="Close menu">
+        <Icon name="close" size={22} />
+      </button>
+    </div>
+    <nav aria-label="Aisles" class="menu-inner wrap">
+      <p class="phone-label">Aisles</p>
+      <div class="groups">
+        {
+          groups.map(({ group, aisles }, gi) => (
+            <div class="group">
+              <h2 class="group-h expanded">
+                <button type="button" class="group-toggle" aria-expanded={gi === 0 ? "true" : "false"} data-group-toggle>
+                  {group}
+                  <Icon name="chevron-down" size={14} />
+                </button>
+                <span class="group-label">{group}</span>
+              </h2>
+              <ul class:list={["aisle-list", { collapsed: gi !== 0 }]}>
+                {aisles.length === 0 && <li class="empty">Coming soon</li>}
+                {aisles.map((a) => (
+                  <li>
+                    <a href={`/${a.id}`} aria-current={a.id === current ? "page" : undefined}>
+                      {a.name}
+                      <span class="count">{aisleCount(a.id)}</span>
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))
+        }
+      </div>
+      <div class="menu-foot">
+        <span class="muted know">Already know what you need?</span>
+        <a href="/build">Build a stack</a>
+        <a href="/check">Check my stack</a>
+        <a href="/agents">For coding agents</a>
+        <span class="esc muted"><kbd>Esc</kbd> close</span>
+      </div>
+    </nav>
+  </div>
+</header>
+
+<style>
+  .site-header {
+    position: relative;
+    z-index: 20;
+    background: var(--ink);
+    color: var(--label);
+  }
+  .bar {
+    padding-block: 12px;
+    display: grid;
+    grid-template-columns: minmax(max-content, 1fr) minmax(260px, 520px) minmax(max-content, 1fr);
+    align-items: center;
+    gap: 24px;
+  }
+  .wordmark {
+    justify-self: start;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    min-height: var(--target);
+    color: var(--label);
+    text-decoration: none;
+    font-weight: 900;
+    font-stretch: 125%;
+    font-size: 22px;
+    letter-spacing: -0.01em;
+  }
+  .wordmark.small {
+    font-size: 19px;
+    gap: 8px;
+  }
+  .search-trigger {
+    width: 100%;
+    height: var(--target);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 0 8px 0 14px;
+    background: var(--label);
+    border: 0;
+    color: var(--muted);
+    font: 500 15px var(--font);
+    text-align: left;
+    cursor: pointer;
+  }
+  .grow {
+    flex: 1;
+  }
+  .keys {
+    display: inline-flex;
+    gap: 4px;
+  }
+  .right {
+    justify-self: end;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .aisles-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    min-height: var(--target);
+    padding: 0 12px;
+    background: transparent;
+    border: 0;
+    color: var(--label);
+    font: 600 15px var(--font);
+    cursor: pointer;
+  }
+  .aisles-btn[aria-expanded="true"] {
+    box-shadow: inset 0 -4px 0 var(--promo);
+  }
+  .add {
+    display: inline-flex;
+    align-items: center;
+    min-height: var(--target);
+    padding: 0 14px;
+    border: 2px solid var(--label);
+    color: var(--label);
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 15px;
+  }
+  .phone-actions,
+  .phone-top,
+  .phone-label,
+  .group-toggle {
+    display: none;
+  }
+  .icon-btn {
+    width: var(--target);
+    height: var(--target);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    border: 0;
+    color: var(--label);
+    cursor: pointer;
+  }
+
+  /* ----- Desktop menu panel ----- */
+  .scrim {
+    position: fixed;
+    inset: 0;
+    top: var(--header-h, 68px);
+    background: rgba(28, 35, 64, 0.55);
+    z-index: 1;
+  }
+  .menu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    z-index: 2;
+    background: var(--label);
+    color: var(--ink);
+    box-shadow: 0 30px 60px -20px rgba(0, 0, 0, 0.45);
+  }
+  .menu-inner {
+    padding-block: 28px 24px;
+  }
+  .groups {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 28px;
+  }
+  .group-h {
+    margin: 0 0 8px;
+    padding: 8px 12px;
+    background: var(--ink);
+    color: var(--label);
+    font-size: 15px;
+  }
+  .aisle-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .aisle-list a {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    align-items: center;
+    min-height: var(--target);
+    padding: 0 12px;
+    text-decoration: none;
+    font-size: 16px;
+    font-weight: 600;
+  }
+  .aisle-list a:hover,
+  .aisle-list a[aria-current="page"] {
+    background: var(--shelf);
+  }
+  .count {
+    font-weight: 500;
+    color: var(--muted);
+  }
+  .empty {
+    padding: 10px 12px;
+    color: var(--muted);
+    font-size: 15px;
+  }
+  .menu-foot {
+    margin-top: 24px;
+    padding-top: 16px;
+    border-top: 1px solid var(--shelf);
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px 20px;
+    font-size: 15px;
+  }
+  .menu-foot a {
+    display: inline-flex;
+    align-items: center;
+    min-height: var(--target);
+    font-weight: 700;
+  }
+  .esc {
+    margin-left: auto;
+    font-size: 14px;
+  }
+
+  /* ----- Phone ----- */
+  @media (max-width: 760px) {
+    .bar {
+      display: flex;
+      gap: 4px;
+      padding: 6px 8px 6px 16px;
+    }
+    .wordmark {
+      margin-right: auto;
+      font-size: 19px;
+      gap: 8px;
+    }
+    .search-trigger,
+    .right {
+      display: none;
+    }
+    .phone-actions {
+      display: flex;
+    }
+    .scrim {
+      display: none;
+    }
+    .menu {
+      position: fixed;
+      inset: 0;
+      overflow-y: auto;
+      background: var(--ink);
+      color: var(--label);
+      box-shadow: none;
+    }
+    .phone-top {
+      display: flex;
+      align-items: center;
+      height: 56px;
+      padding: 0 8px 0 16px;
+    }
+    .phone-top .wordmark {
+      margin-right: auto;
+    }
+    .menu-inner {
+      padding: 4px 16px 24px;
+    }
+    .phone-label {
+      display: block;
+      margin: 8px 0 6px;
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--on-ink-muted);
+    }
+    .groups {
+      display: block;
+      border-bottom: 1px solid var(--ink-line);
+    }
+    .group {
+      border-top: 1px solid var(--ink-line);
+    }
+    .group-h {
+      margin: 0;
+      padding: 0;
+      background: transparent;
+    }
+    .group-label {
+      display: none;
+    }
+    .group-toggle {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      min-height: 52px;
+      padding: 0 4px;
+      background: transparent;
+      border: 0;
+      color: var(--label);
+      font: 800 17px var(--font);
+      font-stretch: 125%;
+      cursor: pointer;
+      text-align: left;
+    }
+    .group-toggle[aria-expanded="true"] :global(svg) {
+      transform: rotate(180deg);
+    }
+    .aisle-list {
+      margin: 0 0 8px;
+    }
+    .aisle-list.collapsed {
+      display: none;
+    }
+    .aisle-list a {
+      padding: 0 4px 0 16px;
+      color: var(--label);
+    }
+    .aisle-list a:hover,
+    .aisle-list a[aria-current="page"] {
+      background: transparent;
+      text-decoration: underline;
+    }
+    .count,
+    .empty,
+    .menu-foot .muted {
+      color: var(--on-ink-muted);
+    }
+    .menu-foot {
+      margin-top: 16px;
+      border: 0;
+      padding: 0;
+      display: grid;
+      gap: 2px;
+    }
+    .menu-foot a {
+      color: var(--label);
+      font-size: 16px;
+    }
+    .know,
+    .esc {
+      display: none;
+    }
+    .menu :focus-visible {
+      outline-color: var(--promo);
+    }
+  }
+</style>
+
+<script>
+  const menu = document.querySelector<HTMLElement>("[data-aisles-menu]");
+  const scrim = document.querySelector<HTMLElement>("[data-aisles-scrim]");
+  const openers = Array.from(document.querySelectorAll<HTMLButtonElement>("[data-aisles-open]"));
+  const phone = window.matchMedia("(max-width: 760px)");
+  let lastOpener: HTMLButtonElement | null = null;
+
+  function focusables(): HTMLElement[] {
+    if (!menu) return [];
+    return Array.from(menu.querySelectorAll<HTMLElement>("a[href], button:not([disabled])")).filter(
+      (el) => el.offsetParent !== null,
+    );
+  }
+
+  function setOpen(open: boolean, opener?: HTMLButtonElement) {
+    if (!menu) return;
+    menu.hidden = !open;
+    if (scrim) scrim.hidden = !open;
+    openers.forEach((b) => b.setAttribute("aria-expanded", String(open)));
+    document.documentElement.style.overflow = open && phone.matches ? "hidden" : "";
+    if (open) {
+      lastOpener = opener ?? null;
+      const header = document.querySelector<HTMLElement>(".site-header");
+      if (header) document.documentElement.style.setProperty("--header-h", `${header.offsetHeight}px`);
+      focusables()[0]?.focus();
+    } else {
+      lastOpener?.focus();
+    }
+  }
+
+  openers.forEach((b) =>
+    b.addEventListener("click", (e) => {
+      e.stopPropagation();
+      setOpen(menu?.hidden ?? true, b);
+    }),
+  );
+  document.querySelector("[data-aisles-close]")?.addEventListener("click", () => setOpen(false));
+  scrim?.addEventListener("click", () => setOpen(false));
+
+  document.addEventListener("click", (e) => {
+    if (!menu || menu.hidden) return;
+    if (!menu.contains(e.target as Node)) setOpen(false);
+  });
+
+  document.addEventListener("keydown", (e) => {
+    if (!menu || menu.hidden) return;
+    if (e.key === "Escape") {
+      e.preventDefault();
+      setOpen(false);
+      return;
+    }
+    // Trap focus on phone, where the menu is full screen.
+    if (e.key === "Tab" && phone.matches) {
+      const els = focusables();
+      if (!els.length) return;
+      const first = els[0];
+      const last = els[els.length - 1];
+      if (e.shiftKey && document.activeElement === first) {
+        e.preventDefault();
+        last.focus();
+      } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault();
+        first.focus();
+      }
+    }
+  });
+
+  document.querySelectorAll<HTMLButtonElement>("[data-group-toggle]").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const open = btn.getAttribute("aria-expanded") !== "true";
+      btn.setAttribute("aria-expanded", String(open));
+      btn.closest(".group")?.querySelector(".aisle-list")?.classList.toggle("collapsed", !open);
+    });
+  });
+
+  document.querySelectorAll<HTMLButtonElement>("[data-search-open]").forEach((b) =>
+    b.addEventListener("click", () => window.dispatchEvent(new CustomEvent("fs:search-open"))),
+  );
+</script>

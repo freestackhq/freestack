@@ -1,0 +1,61 @@
+---
+/** Word plus the 5-step scale against the aisle maximum. */
+import type { ScaleResult } from "../../lib/fresh/label";
+
+interface Props {
+  scale: ScaleResult;
+  /** Bar height in px. */
+  bar?: number;
+}
+const { scale, bar = 12 } = Astro.props;
+const filled = scale.kind === "step" ? scale.step : scale.kind === "unlimited" ? 5 : 0;
+const aria =
+  scale.kind === "step"
+    ? `${scale.word}: ${scale.step} of 5 on this aisle's scale`
+    : scale.kind === "unlimited"
+      ? "No limit. Your own disk"
+      : "Not listed";
+---
+
+<div class="scale" data-scale={scale.kind === "step" ? scale.step : scale.kind}>
+  <p aria-hidden="true" class:list={["word", { muted: scale.kind !== "step" }]}>{scale.word}</p>
+  {
+    scale.kind === "unknown" ? (
+      <span class="sr-only">Not listed</span>
+    ) : (
+      <span role="img" aria-label={aria} class="steps">
+        {[1, 2, 3, 4, 5].map((i) => (
+          <span class:list={["step", { on: i <= filled }]} style={`height: ${bar}px`} />
+        ))}
+      </span>
+    )
+  }
+</div>
+
+<style>
+  .scale {
+    padding-bottom: 6px;
+  }
+  .word {
+    margin: 0 0 6px;
+    font-size: 15px;
+    font-weight: 800;
+    line-height: 1.1;
+    white-space: nowrap;
+  }
+  .word.muted {
+    color: var(--muted);
+    font-weight: 700;
+  }
+  .steps {
+    display: flex;
+    gap: 3px;
+  }
+  .step {
+    flex: 1;
+    background: var(--shelf);
+  }
+  .step.on {
+    background: var(--ink);
+  }
+</style>

@@ -1,0 +1,54 @@
+---
+/** Footer: disclaimer plus For coding agents, Check my stack, Source on GitHub. */
+---
+
+<footer class="site-footer">
+  <div class="wrap inner">
+    <p class="note">
+      Free tiers change without notice. Every label links the page it was read from. Not legal advice, and not
+      affiliated with any vendor.
+    </p>
+    <p class="links">
+      <a href="/agents">For coding agents</a>
+      <span aria-hidden="true">/</span>
+      <a href="/check">Check my stack</a>
+      <span aria-hidden="true">/</span>
+      <a href="https://github.com/freestackhq/freestack">Source on GitHub</a>
+    </p>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    border-top: 2px solid var(--ink);
+  }
+  .inner {
+    padding-block: 28px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px 32px;
+    font-size: 14px;
+    color: var(--muted);
+  }
+  .note {
+    margin: 0;
+    max-width: 60ch;
+  }
+  .links {
+    margin: 0 0 0 auto;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0 8px;
+  }
+  .links a {
+    display: inline-flex;
+    align-items: center;
+    min-height: var(--target);
+  }
+  @media (max-width: 640px) {
+    .links {
+      margin: 0;
+    }
+  }
+</style>

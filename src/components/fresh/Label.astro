@@ -1,0 +1,265 @@
+---
+/**
+ * The shelf label (DESIGN.md "The label"). Top to bottom: name and kind,
+ * headline number plus scale, fine print, facts line, catch, status strip,
+ * and the "+ Compare" toggle.
+ *
+ * Compare toggles are plain buttons with data-compare-toggle; the page that
+ * hosts a tray wires them up.
+ */
+import Icon from "./Icon.astro";
+import Facts from "./Facts.astro";
+import Scale from "./Scale.astro";
+import StatusStrip from "./StatusStrip.astro";
+import { headline, isSuggested, scaleStep } from "../../lib/fresh/label";
+import { now as currentDate, aisle as getAisle, maxForAisle, toolHref, writeLabelHref } from "../../lib/fresh/catalog";
+import type { Tool } from "../../lib/fresh/types";
+
+interface Props {
+  tool: Tool;
+  now?: Date;
+  /** Show the "+ Compare" toggle. */
+  compare?: boolean;
+  /** "full" for grids; "mini" for name, number and strip only (States sheet, previews). */
+  variant?: "full" | "mini";
+  /** Heading level for the tool name. */
+  level?: 2 | 3 | 4;
+  /** Link the name to the tool page. */
+  link?: boolean;
+}
+
+const { tool, now = currentDate(), compare = true, variant = "full", level = 3, link = true } = Astro.props;
+const aisle = getAisle(tool.aisle)!;
+const head = headline(tool, aisle);
+const scale = scaleStep(tool, maxForAisle(tool.aisle));
+const suggested = isSuggested(tool, now);
+const imported = tool.source === "imported";
+const H = `h${level}` as const;
+const href = imported ? writeLabelHref(tool) : toolHref(tool);
+const catchLine = tool.catches[0];
+---
+
+<article
+  class:list={["label", variant, { suggested }]}
+  data-tool={tool.id}
+  data-aisle={tool.aisle}
+  data-type={tool.type}
+  data-sell={tool.sell}
+  data-card={tool.card}
+  data-who={tool.who.join(" ")}
+  data-suggested={suggested ? "true" : undefined}
+>
+  {suggested && <span class="tag">Suggested</span>}
+  <div class="name">
+    <H class="title">
+      {link ? <a href={href}>{tool.name}</a> : tool.name}
+    </H>
+    {variant === "full" && <span class="kind">{tool.kind}</span>}
+  </div>
+
+  {
+    variant === "full" && !imported && !tool.program ? (
+      <div class="headline">
+        <p class:list={["big", { unknown: !head.known, long: head.big.length > 6 }]}>
+          {head.big}
+          {head.sub && head.known && scale.kind !== "unlimited" && <span class="unit">{head.sub}</span>}
+        </p>
+        <Scale scale={scale} />
+      </div>
+    ) : (
+      <p class:list={["big", "solo", { unknown: !head.known }]}>
+        {head.big}
+        {variant === "full" && head.sub && <span class="unit">{head.sub}</span>}
+      </p>
+    )
+  }
+
+  {
+    variant === "full" && (
+      <>
+        {tool.limits.length > 0 ? (
+          <ul class="fine">
+            {tool.limits.map((l) => (
+              <li>{l}</li>
+            ))}
+          </ul>
+        ) : (
+          <div class="fine-spacer" />
+        )}
+        {!imported && <Facts tool={tool} class="facts-row" />}
+        {catchLine && !imported && (
+          <p class="catch">
+            <Icon name="wrench" />
+            {catchLine}
+          </p>
+        )}
+      </>
+    )
+  }
+
+  <StatusStrip tool={tool} now={now} />
+
+  {
+    variant === "full" && compare && !imported && (
+      <button type="button" class="compare" aria-pressed="false" data-compare-toggle={tool.id} data-name={tool.name}>
+        <span data-off>+ Compare</span>
+        <span data-on hidden>✓ Comparing</span>
+        <span class="sr-only"> {tool.name}</span>
+      </button>
+    )
+  }
+</article>
+
+<style>
+  .label {
+    position: relative;
+    background: var(--label);
+    border-top: 8px solid var(--ink);
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+  }
+  .label.suggested {
+    border-top-color: var(--promo);
+  }
+  .tag {
+    position: absolute;
+    top: -10px;
+    right: 16px;
+    background: var(--promo);
+    color: var(--ink);
+    font-weight: 800;
+    font-size: 14px;
+    padding: 8px 12px 6px;
+    box-shadow: 0 2px 0 var(--promo-shadow);
+  }
+  .mini .tag {
+    right: 12px;
+    font-size: 13px;
+    padding: 6px 10px 5px;
+  }
+  .name {
+    padding: 16px 18px 0;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 4px 12px;
+  }
+  .label.suggested .name {
+    padding-right: 120px;
+  }
+  .mini .name {
+    padding: 14px 16px 2px;
+  }
+  .title {
+    margin: 0;
+    font-size: 19px;
+    font-weight: 800;
+  }
+  .mini .title {
+    font-size: 18px;
+  }
+  .title a {
+    color: var(--ink);
+    text-decoration: none;
+  }
+  .title a:hover {
+    text-decoration: underline;
+  }
+  .kind {
+    font-size: 13px;
+    color: var(--muted);
+  }
+  .headline {
+    margin: 6px 18px 0;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 88px;
+    gap: 14px;
+    align-items: end;
+  }
+  .big {
+    margin: 0;
+    font-weight: 900;
+    font-stretch: 62%;
+    font-size: 80px;
+    line-height: 1;
+    overflow-wrap: anywhere;
+  }
+  .big.solo {
+    margin: 6px 18px 0;
+  }
+  .mini .big {
+    margin: 0 16px 12px;
+    font-size: 52px;
+  }
+  .big.unknown {
+    color: var(--muted);
+  }
+  .big.long {
+    font-size: 60px;
+  }
+  .fine-spacer {
+    flex: 1;
+    min-height: 14px;
+  }
+  .unit {
+    display: block;
+    font-size: 15px;
+    font-weight: 700;
+    font-stretch: 100%;
+    line-height: 1.2;
+    color: var(--ink);
+  }
+  .fine {
+    flex: 1;
+    margin: 12px 18px 0;
+    padding: 10px 0 0;
+    border-top: 1px solid var(--ink);
+    list-style: none;
+    font-size: 15px;
+    display: grid;
+    align-content: start;
+    gap: 3px;
+  }
+  .label :global(.facts-row) {
+    margin-top: 14px;
+    padding: 10px 18px;
+    background: var(--fill);
+  }
+  .catch {
+    margin: 0;
+    padding: 8px 18px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+    font-weight: 700;
+    border-top: 1px solid var(--shelf);
+  }
+  .label :global(.strip) {
+    margin-top: auto;
+  }
+  .fine + :global(.strip) {
+    margin-top: 14px;
+  }
+  .compare {
+    width: 100%;
+    min-height: var(--target);
+    border: 0;
+    border-top: 1px solid var(--shelf);
+    background: var(--label);
+    color: var(--ink);
+    font: 700 15px var(--font);
+    cursor: pointer;
+  }
+  .compare[aria-pressed="true"] {
+    background: var(--ink);
+    color: var(--label);
+  }
+  @media (max-width: 640px) {
+    .big {
+      font-size: 64px;
+    }
+  }
+</style>

@@ -1,0 +1,74 @@
+---
+/**
+ * The label's bottom line: who can claim it, selling, card.
+ * A check is always good news. Each item carries one full sentence for
+ * screen readers.
+ */
+import Icon from "./Icon.astro";
+import type { Tool } from "../../lib/fresh/types";
+
+interface Props {
+  tool: Tool;
+  /** Hide "Open to all" (e.g. on the Home stack panel). */
+  hideWho?: boolean;
+  class?: string;
+}
+const { tool, hideWho = false, class: cls } = Astro.props;
+
+type Item = { icon: "check" | "cross" | "unknown" | "card" | "card-none" | "card-unknown" | null; text: string; sr: string; muted: boolean };
+
+function who(t: Tool): Item {
+  if (t.who.includes("anyone")) return { icon: "check", text: "Open to all", sr: "Anyone can claim it.", muted: false };
+  if (t.who.includes("student_any_id")) return { icon: null, text: "Students", sr: "Needs a student ID.", muted: true };
+  if (t.who.includes("student_school_email")) return { icon: null, text: "School email", sr: "Needs a school email.", muted: true };
+  return { icon: null, text: "Startups", sr: "Needs proof you are a startup.", muted: true };
+}
+
+function sell(t: Tool): Item {
+  if (t.sell === "yes") return { icon: "check", text: "Can sell", sr: "You can sell with it.", muted: false };
+  if (t.sell === "no") return { icon: "cross", text: "No selling", sr: "Selling with it is not allowed.", muted: false };
+  return { icon: "unknown", text: "Selling: check terms", sr: "Check the terms before selling with it.", muted: true };
+}
+
+function card(t: Tool): Item {
+  if (t.card === "no") return { icon: "card-none", text: "No card", sr: "No credit card needed.", muted: false };
+  if (t.card === "yes") return { icon: "card", text: "Card needed", sr: "Needs a credit card at signup.", muted: false };
+  return { icon: "card-unknown", text: "Card unknown", sr: "Not known if it needs a credit card.", muted: true };
+}
+
+const items = [...(hideWho ? [] : [who(tool)]), sell(tool), card(tool)];
+---
+
+<p class:list={["facts", cls]}>
+  {
+    items.map((i) => (
+      <span class:list={["fact", { muted: i.muted }]} data-fact={i.text}>
+        {i.icon && <Icon name={i.icon} size={i.icon.startsWith("card") ? 15 : 14} />}
+        <span aria-hidden="true">{i.text}</span>
+        <span class="sr-only">{i.sr}</span>
+      </span>
+    ))
+  }
+</p>
+
+<style>
+  .facts {
+    margin: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px 16px;
+    font-size: 13px;
+    font-weight: 600;
+    line-height: 1.3;
+  }
+  .fact {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    white-space: nowrap;
+  }
+  .fact.muted {
+    color: var(--muted);
+  }
+</style>
