@@ -17,6 +17,7 @@
     "catalog:fetch": "node scripts/fetch-catalogs.mjs",
     "catalog:generate": "node scripts/generate.mjs",
     "catalog:update": "node scripts/fetch-catalogs.mjs && node scripts/generate.mjs",
+    "import:lists": "node scripts/import-lists.mjs",
     "test": "vitest run",
     "test:e2e": "playwright test",
     "dns:freestack": "bash scripts/dns-freestack.sh",
