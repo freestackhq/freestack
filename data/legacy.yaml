@@ -1,7 +1,7 @@
 # Old /catalogs/... URLs and their new pages (301). Written by scripts/migrate-catalogs.mjs.
 catalogs:
-  saas: /
-  apis: /
+  saas: /#aisles-h
+  apis: /#aisles-h
   llm-ai: /inference
 categories:
   saas/ai: /inference

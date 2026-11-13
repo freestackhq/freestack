@@ -2,120 +2,144 @@ import { describe, expect, it } from "vitest";
 
 import {
   CATALOGS,
-  allEntries,
-  entryId,
-  filterOptions,
-  getCatalog,
-  getEntry,
-  queryCategories,
+  aisleForCategory,
+  buildClaimPlan,
+  catalogsMeta,
+  findTool,
+  legacyHomeRedirect,
+  legacyPath,
   queryEntries,
+  queryTools,
 } from "./catalog";
+import { snapshot } from "./fresh/catalog";
 
-describe("catalog data layer (snapshot)", () => {
-  it("loads catalogs from the generated snapshot", () => {
-    expect(CATALOGS.length).toBe(3);
+const snap = snapshot();
+
+describe("old catalogs as aliases for the aisle groups", () => {
+  it("keeps the three catalog ids", () => {
     expect(CATALOGS.map((c) => c.id)).toEqual(["saas", "apis", "llm-ai"]);
+    expect(catalogsMeta().reduce((n, c) => n + c.count, 0)).toBe(snap.tools.length);
   });
 
-  it("getCatalog resolves by id", () => {
-    expect(getCatalog("saas")?.label).toBe("SaaS");
-    expect(getCatalog("nope")).toBeNull();
+  it("?catalog= filters to that catalog's groups", () => {
+    const ai = queryEntries({ catalog: "llm-ai" });
+    expect(ai.count).toBeGreaterThan(0);
+    for (const e of ai.entries) expect(e.group).toBe("AI");
+    const apis = queryEntries({ catalog: "apis" });
+    for (const e of apis.entries) expect(e.group).toBe("Free and Open Data");
+    expect(queryEntries({ catalog: "nope" }).count).toBe(0);
   });
 
-  it("saas catalog preserves original tool ids", () => {
-    const c = getCatalog("saas")!;
-    const total = c.categories.reduce((n, cat) => n + cat.entries.length, 0);
-    expect(total).toBeGreaterThanOrEqual(150);
-    const neon = c.categories.find((x) => x.id === "databases")?.entries.find((e) => e.slug === "neon");
-    expect(neon?.fields.Limits).toBeTruthy();
-  });
-
-  it("apis catalog has categories and entries", () => {
-    const c = getCatalog("apis")!;
-    expect(c.categories.length).toBe(6);
-    const weather = c.categories.find((x) => x.id === "weather");
-    expect(weather?.entries.some((e) => e.slug === "open-meteo")).toBe(true);
-  });
-
-  it("getEntry resolves a full path", () => {
-    expect(getEntry("saas", "databases", "neon")?.name).toBe("Neon");
-    expect(getEntry("saas", "databases", "missing")).toBeNull();
-  });
-
-  it("entryId builds stable global ids", () => {
-    expect(entryId("saas", "databases", "neon")).toBe("saas/databases/neon");
-  });
-
-  it("allEntries flattens with catalog+category context", () => {
-    const rows = allEntries();
-    expect(rows.length).toBeGreaterThanOrEqual(200);
-    const neon = rows.find((r) => r.entry.slug === "neon" && r.catalog.id === "saas");
-    expect(neon?.category.id).toBe("databases");
+  it("?category= takes an aisle id or an old category id", () => {
+    expect(aisleForCategory("databases")).toBe("databases");
+    expect(aisleForCategory("student")).toBe("student-programs");
+    expect(aisleForCategory("startup")).toBe("team");
+    const db = queryEntries({ catalog: "saas", category: "databases", q: "neon" });
+    expect(db.entries.map((e) => e.tool)).toContain("neon");
   });
 });
 
-describe("filterOptions", () => {
-  it("derives distinct single-select values", () => {
-    const c = getCatalog("saas")!;
-    const costs = filterOptions(c, "cost", "single");
-    expect(costs).toEqual(["credits", "discount", "free forever", "student free"]);
+describe("entry shape", () => {
+  const neon = queryEntries({ q: "neon", aisle: "databases" }).entries.find((e) => e.tool === "neon")!;
+
+  it("keeps the old fields", () => {
+    expect(neon.id).toBe("saas/databases/neon");
+    expect(neon.catalog).toBe("saas");
+    expect(neon.category).toBe("databases");
+    expect(neon.name).toBe("Neon");
+    expect(neon.url).toMatch(/^https:/);
+    expect(neon.fields.Limits).toContain("0.5 GB");
+    expect(neon.fields.Commercial).toBe("commercial ok");
+    expect(neon.fields.Cost).toBe("free forever");
+    expect(Array.isArray(neon.prose)).toBe(true);
+    expect(Array.isArray(neon.alternatives)).toBe(true);
   });
 
-  it("derives distinct filter options for apis", () => {
-    const c = getCatalog("apis")!;
-    const auth = filterOptions(c, "auth", "single");
-    expect(auth).toContain("api-key");
-    expect(auth).toContain("none");
+  it("adds the label fields", () => {
+    expect(neon.metric).toBe(0.5);
+    expect(neon.metric_key).toBe("storage_gb");
+    expect(neon.href).toBe("/databases/neon");
+    expect(neon.sell).toBe("yes");
+    expect(["checked", "unchecked", "overdue", "review", "vendor-changed"]).toContain(neon.label_state);
   });
-});
 
-describe("queryEntries", () => {
-  it("searches across catalogs by query", () => {
-    const r = queryEntries({ q: "neon" });
+  it("old field filters still work", () => {
+    const r = queryEntries({ catalog: "saas", filters: { cost: ["free forever"], commercial: ["commercial ok"] } });
     expect(r.count).toBeGreaterThan(0);
-    expect(r.entries.some((e) => e.id === "saas/databases/neon")).toBe(true);
-    expect(r.entries.some((e) => e.name === "Neon")).toBe(true);
+    for (const e of r.entries) expect(e.fields.Cost).toBe("free forever");
   });
 
-  it("filters by catalog and category", () => {
-    const r = queryEntries({ catalog: "saas", category: "databases" });
-    expect(r.entries.length).toBeGreaterThan(0);
-    expect(r.entries.every((e) => e.catalog === "saas" && e.category === "databases")).toBe(true);
+  it("applies a limit and keeps the full count", () => {
+    const r = queryEntries({ catalog: "saas", limit: 5 });
+    expect(r.entries).toHaveLength(5);
+    expect(r.count).toBeGreaterThan(5);
   });
 
-  it("filters on field values (single-select)", () => {
-    const r = queryEntries({
-      catalog: "saas",
-      filters: { cost: ["free forever"], commercial: ["commercial ok"] },
-    });
-    expect(r.count).toBeGreaterThan(0);
-    expect(r.entries.every((e) => e.fields.Cost === "free forever")).toBe(true);
-  });
-
-  it("applies a limit", () => {
-    const r = queryEntries({ catalog: "saas", limit: 3 });
-    expect(r.entries).toHaveLength(3);
-    expect(r.count).toBeGreaterThan(3);
-  });
-
-  it("combines query + filters", () => {
-    const r = queryEntries({ catalog: "saas", q: "neon", filters: { cost: ["free forever"] } });
-    expect(r.entries.some((e) => e.name === "Neon")).toBe(true);
-  });
-
-  it("returns empty for a miss", () => {
-    const r = queryEntries({ q: "zzzzzz-nothing-here" });
-    expect(r.count).toBe(0);
-    expect(r.entries).toEqual([]);
+  it("imported entries carry no numbers", () => {
+    const imported = queryEntries({}).entries.filter((e) => e.source === "imported");
+    for (const e of imported) {
+      expect(e.metric).toBeNull();
+      expect(e.limits).toEqual([]);
+      expect(e.imported_from).toBeTruthy();
+    }
   });
 });
 
-describe("queryCategories", () => {
-  it("returns categories with entry counts", () => {
-    const cats = queryCategories("saas");
-    expect(cats.length).toBe(17);
-    expect(cats[0].label).toBe("Databases");
-    expect(cats[0].entryCount).toBeGreaterThan(0);
-    expect(queryCategories("nope")).toEqual([]);
+describe("old URLs", () => {
+  it("maps every old catalog page to a page that exists", () => {
+    const aisles = new Set(snap.aisles.map((a) => a.id));
+    const tools = new Set(snap.tools.map((t) => `${t.aisle}/${t.id}`));
+    expect(legacyPath([])).toBe("/");
+    for (const [key, path] of Object.entries(snap.legacy.entries)) {
+      expect(legacyPath(key.split("/"))).toBe(path);
+      expect(tools.has(path.slice(1)), key).toBe(true);
+    }
+    for (const [key, path] of Object.entries(snap.legacy.categories)) {
+      expect(legacyPath(key.split("/"))).toBe(path);
+      expect(aisles.has(path.slice(1)), key).toBe(true);
+    }
+    expect(legacyPath(["saas", "databases", "not-a-tool"])).toBeNull();
+  });
+
+  it("every migrated catalog entry has a redirect", () => {
+    expect(Object.keys(snap.legacy.entries).length).toBe(223);
+  });
+
+  it("/?hint= and /?catalog= go to the matching aisle", () => {
+    expect(legacyHomeRedirect(new URLSearchParams("hint=ai"))).toBe("/inference");
+    expect(legacyHomeRedirect(new URLSearchParams("hint=startup"))).toBe("/team");
+    expect(legacyHomeRedirect(new URLSearchParams("catalog=llm-ai"))).toBe("/inference");
+    expect(legacyHomeRedirect(new URLSearchParams("catalog=saas"))).toBe("/#aisles-h");
+    expect(legacyHomeRedirect(new URLSearchParams("as=student"))).toBeNull();
+    expect(legacyHomeRedirect(new URLSearchParams("hint=nope"))).toBeNull();
+  });
+});
+
+describe("CLI endpoints (@kuyacarlo/freestack 0.1)", () => {
+  it("tools: flat shape the CLI prints", () => {
+    const r = queryTools(new URLSearchParams("category=databases&commercial=yes&limit=3"));
+    expect(r.tools.length).toBeLessThanOrEqual(3);
+    for (const t of r.tools) {
+      expect(typeof t.blurb).toBe("string");
+      expect(typeof t.limits).toBe("string");
+      expect(t.commercial).toBe("commercial ok");
+      expect(t.aisle).toBe("databases");
+    }
+  });
+
+  it("tool by new id or old slug", () => {
+    expect(findTool("neon")?.id).toBe("neon");
+    expect(findTool("cloudflare-d1")?.id).toBe("d1");
+    expect(findTool("nope")).toBeUndefined();
+  });
+
+  it("claim plan lists Claim Once programs in order", () => {
+    const plan = buildClaimPlan({ student: true, commercial: false, ph: false, ai: false }, "https://example.test");
+    expect(plan.steps[0].title).toBe("Student programs");
+    expect(plan.steps[0].href).toBe("https://example.test/student-programs");
+    expect(plan.steps[0].tools[0].name).toBeTruthy();
+    const selling = buildClaimPlan({ student: true, commercial: true, ph: false, ai: false }, "https://example.test");
+    const names = selling.steps.flatMap((s) => s.tools.map((t) => t.id));
+    for (const id of names) expect(snap.tools.find((t) => t.id === id)!.sell).not.toBe("no");
   });
 });

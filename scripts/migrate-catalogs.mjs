@@ -763,7 +763,7 @@ for (const t of tools) {
 
 // Old catalog URLs -> new pages. The generator compiles this into the redirects.
 const legacy = {
-  catalogs: { saas: "/", apis: "/", "llm-ai": "/inference" },
+  catalogs: { saas: "/#aisles-h", apis: "/#aisles-h", "llm-ai": "/inference" },
   categories: {},
   entries: {},
 };
