@@ -1,6 +1,5 @@
 import { describe, expect, it } from "vitest";
 import { checkLines, checkOutcome, checkSummary, type CheckAnswer } from "./checks";
-import { sendLabelCheck } from "./send";
 import type { Aisle, Tool } from "./types";
 
 const db: Aisle = { id: "databases", group: "Build", name: "Databases", metric: "storage_gb", unit: "GB", label: "free storage" };
@@ -46,6 +45,8 @@ describe("checkLines", () => {
       ["Credit card at signup", "Not listed"],
     ]);
     expect(new Set(lines.map((l) => l.id)).size).toBe(lines.length);
+    // Each line names where it lives in the tool file, for the issue form.
+    expect(lines.map((l) => l.field)).toEqual(["metric", "limits.0", "limits.1", "catches.1", "who", "sell", "card"]);
   });
 
   it("writes the unit after a non-inline number and admits an unknown one", () => {
@@ -61,7 +62,8 @@ describe("checkLines", () => {
       program: { order: 1, lasts_big: "2 yrs", lasts_sub: "then verify again", perks: ["Copilot"], needs: "School email", lasts: "", claim_url: "" },
     });
     const lines = checkLines(t, programs);
-    expect(lines[0]).toMatchObject({ label: "How long it lasts", value: "2 yrs, then verify again" });
+    expect(lines[0]).toMatchObject({ field: "program.lasts", label: "How long it lasts", value: "2 yrs, then verify again" });
+    expect(lines[1]).toMatchObject({ field: "program.perks.0", value: "Copilot" });
     expect(lines.map((l) => l.label)).toContain("What you need");
     expect(lines.find((l) => l.label === "Who can claim it")?.value).toBe("Students with a school email");
   });
@@ -86,17 +88,5 @@ describe("checkOutcome", () => {
 describe("checkSummary", () => {
   it("counts answers", () => {
     expect(checkSummary(2, 4)).toBe("2 of 4 answered. Unanswered lines stay as they are.");
-  });
-});
-
-describe("sendLabelCheck (stub)", () => {
-  const payload = { tool: "neon", answers: [{ id: "l", verdict: "holds" as const }], name: "" };
-
-  it("answers ok without touching the network", async () => {
-    expect(await sendLabelCheck(payload)).toEqual({ ok: true });
-  });
-
-  it("can simulate a failed person check", async () => {
-    expect(await sendLabelCheck(payload, { fail: "always" })).toEqual({ ok: false, reason: "person" });
   });
 });
