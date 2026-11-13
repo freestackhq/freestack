@@ -1018,6 +1018,18 @@ const binNoun = bin.length === 1 ? one(noun) : noun;
       margin-top: 40px;
       padding: 16px;
     }
+    /* Long real names and hosts: stack name, host, source the same way every row. */
+    .bin-list li {
+      display: grid;
+      gap: 0;
+      padding-top: 10px;
+    }
+    .bin-list li > span {
+      overflow-wrap: anywhere;
+    }
+    .bin-from {
+      margin-left: 0;
+    }
     .tray-list {
       display: none;
     }
