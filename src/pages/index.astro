@@ -170,7 +170,7 @@ const sample = toolsInAisle("databases", at)[0];
                       </li>
                     ))}
                 </ul>
-                <a class="swap" href={p.buildHref}>
+                <a class="btn empty-cta" href={p.buildHref}>
                   Start one in Build a stack
                 </a>
               </div>
@@ -500,8 +500,11 @@ const sample = toolsInAisle("databases", at)[0];
     font-weight: 600;
     text-decoration: none;
   }
-  .empty .swap {
-    justify-content: flex-start;
+  /* The only action when there is no preset: a real button, not a link. */
+  .empty-cta {
+    margin-top: 8px;
+    min-height: 52px;
+    font-size: 16px;
   }
 
   .h2 {

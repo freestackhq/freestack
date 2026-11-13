@@ -88,10 +88,11 @@ test.describe("Home (Home.dc.html)", () => {
     await expect(p.locator(".row")).toHaveCount(0);
     await expect(p.locator("[data-empty]")).toContainText("No ready-made stack here yet.");
     await expect(p.getByRole("link", { name: /Databases/ })).toHaveAttribute("href", "/databases");
-    await expect(p.getByRole("link", { name: "Start one in Build a stack" })).toHaveAttribute(
-      "href",
-      "/build?as=startup",
-    );
+    const start = p.getByRole("link", { name: "Start one in Build a stack" });
+    await expect(start).toHaveAttribute("href", "/build?as=startup");
+    // The only action here, so it looks like one.
+    await expect(start).toHaveClass(/\bbtn\b/);
+    expect((await start.boundingBox())!.height).toBeGreaterThanOrEqual(44);
     await expect(p.getByRole("button", { name: "Copy this stack" })).toHaveCount(0);
   });
 
