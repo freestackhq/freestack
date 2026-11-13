@@ -3,3 +3,7 @@ packages:
 
 onlyBuiltDependencies:
   - workerd
+
+# lefthook ships its binary as an optional dependency; `pnpm prepare` installs the hooks.
+ignoredBuiltDependencies:
+  - lefthook
