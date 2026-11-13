@@ -34,7 +34,7 @@ test.describe("label states (States.dc.html)", () => {
   test("scale, unknown and no limit", async ({ page }) => {
     await page.goto("/dev/states/");
     const full = page.locator(".grid");
-    await expect(full.locator('[data-tool="neon"] [role="img"]')).toHaveAttribute("aria-label", "Small: 1 of 5 on this aisle's scale");
+    await expect(full.locator('[data-tool="neon"] [role="img"]')).toHaveAttribute("aria-label", "Small: 1 of 5 on this aisle's scale.");
     await expect(full.locator('[data-tool="appwrite"]')).toContainText("?");
     await expect(full.locator('[data-tool="appwrite"]')).toContainText("Not listed");
     await expect(full.locator('[data-tool="pocketbase"]')).toContainText("No limit");

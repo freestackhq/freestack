@@ -32,7 +32,7 @@ const full = [...toolsInAisle("databases"), ...unlabeledInAisle("databases").sli
           states.map((s) => (
             <div class="cell" data-state-cell={s.id}>
               <p class="cap">{s.title}</p>
-              <Label tool={s.t} variant="mini" compare={false} />
+              <Label tool={s.t} variant="mini" compare={false} level={2} />
             </div>
           ))
         }
