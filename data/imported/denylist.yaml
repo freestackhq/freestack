@@ -1,0 +1,37 @@
+# Imported entries the importer skips because the vendor or product is dead.
+# Matched on the entry id (name slug) or its exact listed URL, in every list.
+# Evidence comes from the link check (scripts/ops/link-check.mjs) plus a manual
+# look at the page. Remove a line if the vendor comes back.
+# Fields: id, url (as the list has it), reason, date (YYYY-MM-DD).
+- id: elephantsql
+  url: https://www.elephantsql.com/
+  reason: Service discontinued. The homepage is an "Epilog" shutdown notice.
+  date: 2026-11-13
+- id: fauna
+  url: https://fauna.com/
+  reason: Fauna shut down its database service in 2025. fauna.com no longer answers (connect timeout).
+  date: 2026-11-13
+- id: kluster-ai
+  url: https://platform.kluster.ai/apikeys
+  reason: kluster.ai redirects to www.kluster.ai, which has no DNS record. The console host does not resolve either.
+  date: 2026-11-13
+- id: openshift-mongodb
+  url: https://developers.openshift.com/databases/mongodb.html
+  reason: Redirects to Red Hat's OpenShift Online life cycle page, which says the service reached end of life.
+  date: 2026-11-13
+- id: pepipost
+  url: https://pepipost.com/
+  reason: Connection refused on http and https. The vendor was folded into Netcore.
+  date: 2026-11-13
+- id: sawo-labs
+  url: https://sawolabs.com/
+  reason: The domain redirects to an unrelated product (trybrowserling.com).
+  date: 2026-11-13
+- id: serverless-cloud
+  url: https://www.serverless.com/cloud
+  reason: 404. Serverless Cloud was discontinued; the page is gone.
+  date: 2026-11-13
+- id: visual-studio-mobile-center
+  url: https://docs.microsoft.com/en-us/mobile-center/general/pricing
+  reason: Visual Studio Mobile Center became App Center, which Microsoft retired. The link lands on App Center's retirement docs.
+  date: 2026-11-13
