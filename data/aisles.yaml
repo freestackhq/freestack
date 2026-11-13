@@ -1,5 +1,6 @@
 # One headline metric per aisle. Every tool in the aisle shows this number.
-# DRAFT: Karlo approves the ones marked "decide".
+# Each aisle measures what its tools actually list, so aisles that measure
+# different things never share a metric.
 - id: databases
   group: Build
   name: Databases
@@ -14,10 +15,16 @@
   label: commands
 - id: hosting
   group: Build
-  name: Hosting
-  metric: requests_per_day   # decide: Koyeb (1 service), Render (750 hrs) and Oracle (VMs) don't fit this. Option: split into "Sites and functions" and "Always-on servers".
-  unit: a day
-  label: requests
+  name: Sites and functions
+  metric: bandwidth_gb_month   # static sites, serverless and edge functions list transfer
+  unit: GB a month
+  label: transfer
+- id: servers
+  group: Build
+  name: Always-on servers
+  metric: ram_gb               # VMs and containers that stay up (Koyeb, Render, Oracle) list memory
+  unit: GB
+  label: memory
 - id: auth
   group: Build
   name: Auth and secrets
@@ -27,8 +34,8 @@
 - id: email
   group: Build
   name: Email
-  metric: emails_per_month   # decide: confirm against the email catalog
-  unit: a month
+  metric: emails_per_day     # the email catalog lists daily send caps (Resend 100, Brevo 300)
+  unit: a day
   label: emails
 - id: storage
   group: Build
@@ -39,7 +46,7 @@
 - id: inference
   group: AI
   name: Inference APIs
-  metric: requests_per_day   # decide: some list tokens a minute instead
+  metric: requests_per_day   # providers that list only tokens get null and a metric_note
   unit: a day
   label: requests
 - id: student
