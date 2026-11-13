@@ -90,9 +90,12 @@ describe("old URLs", () => {
     const aisles = new Set(snap.aisles.map((a) => a.id));
     const tools = new Set(snap.tools.map((t) => `${t.aisle}/${t.id}`));
     expect(legacyPath([])).toBe("/");
+    // A removed tool's old page goes straight to its aisle.
+    const removed = new Set(snap.removed.map((r) => r.id));
     for (const [key, path] of Object.entries(snap.legacy.entries)) {
       expect(legacyPath(key.split("/"))).toBe(path);
-      expect(tools.has(path.slice(1)), key).toBe(true);
+      const ok = tools.has(path.slice(1)) || (removed.has(key.split("/").pop() ?? "") && aisles.has(path.slice(1)));
+      expect(ok, key).toBe(true);
     }
     for (const [key, path] of Object.entries(snap.legacy.categories)) {
       expect(legacyPath(key.split("/"))).toBe(path);

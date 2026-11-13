@@ -19,8 +19,8 @@ Both have a first strike (`failing_since: 2026-11-13`). The next weekly run sets
 
 | Tool | Link | Evidence | Proposal |
 |---|---|---|---|
-| `abakada` (campus) | https://github.com/Abakada-org/abakada | 404. The `Abakada-org` org exists, but its only public repo is `abakada-site` (last push 2026-03-20). | Find the new home. If it moved, update `url`/`pricing_url` and recheck the label. If it's gone, remove the tool and add `{ id: abakada, aisle: campus }` to `data/removed.yaml` so `/campus/abakada` 301s to the aisle. |
-| `deped-commons` (campus) | https://commons.deped.gov.ph/ | DNS: no record for `commons.deped.gov.ph`. `www.deped.gov.ph` is up. | Check whether DepEd moved Commons. If not found, remove it and add `{ id: deped-commons, aisle: campus }` to `data/removed.yaml`. |
+| `abakada` (campus) — **removed 2026-11-13**, 301s to /campus | https://github.com/Abakada-org/abakada | 404. The `Abakada-org` org exists, but its only public repo is `abakada-site` (last push 2026-03-20). | Find the new home. If it moved, update `url`/`pricing_url` and recheck the label. If it's gone, remove the tool and add `{ id: abakada, aisle: campus }` to `data/removed.yaml` so `/campus/abakada` 301s to the aisle. |
+| `deped-commons` (campus) — **removed 2026-11-13**, 301s to /campus | https://commons.deped.gov.ph/ | DNS: no record for `commons.deped.gov.ph`. `www.deped.gov.ph` is up. | Check whether DepEd moved Commons. If not found, remove it and add `{ id: deped-commons, aisle: campus }` to `data/removed.yaml`. |
 
 ## Labeled tools that moved (alive, for a recheck)
 

@@ -10018,50 +10018,6 @@
       }
     },
     {
-      "id": "abakada",
-      "name": "Abakada",
-      "kind": "Campus tool",
-      "url": "https://github.com/Abakada-org/abakada",
-      "aisle": "campus",
-      "metric": null,
-      "metric_note": "Not listed",
-      "limits": [
-        "Free",
-        "Open source"
-      ],
-      "who": [
-        "anyone"
-      ],
-      "region": null,
-      "sell": "yes",
-      "card": "unknown",
-      "cost": "free",
-      "catches": [],
-      "use_if": [
-        "You want a single offline-capable hub to discover free student tools without Googling each one. Think of it as a curated app store for Filipino learners — pre-filtered for \"actually free\" and \"works in PH.\""
-      ],
-      "skip_if": [
-        {
-          "reason": "Abakada is a PWA with a browseable UI aimed at students/teachers directly; Awesome PH EdTech is a GitHub markdown list aimed at developers/researchers mapping the space.",
-          "use": "awesome-ph-edtech"
-        }
-      ],
-      "pricing_url": "https://github.com/Abakada-org/abakada",
-      "verified_at": "2026-07-24",
-      "verified_by": null,
-      "source": "catalog",
-      "tagline": "PWA directory of 1000+ free tools for Filipino students/teachers — offline UI.",
-      "about": "PWA directory of 1000+ free tools for Filipino students/teachers — offline UI.",
-      "tags": [
-        "list",
-        "oss"
-      ],
-      "scale": {
-        "kind": "unknown",
-        "word": "Not listed"
-      }
-    },
-    {
       "id": "awesome-ph-edtech",
       "name": "Awesome PH EdTech",
       "kind": "Campus tool",
@@ -10184,48 +10140,6 @@
       "about": "PH auto-grader ubiquitous in college CS — know it even if you don't love it.",
       "tags": [
         "campus"
-      ],
-      "scale": {
-        "kind": "unknown",
-        "word": "Not listed"
-      }
-    },
-    {
-      "id": "deped-commons",
-      "name": "DepEd Commons",
-      "kind": "Campus tool",
-      "url": "https://commons.deped.gov.ph/",
-      "aisle": "campus",
-      "metric": null,
-      "metric_note": "Not listed",
-      "limits": [
-        "Free content",
-        "Gov platform"
-      ],
-      "who": [
-        "anyone"
-      ],
-      "region": null,
-      "sell": "unknown",
-      "card": "unknown",
-      "cost": "free",
-      "catches": [],
-      "use_if": [
-        "You're building an EdTech product targeting Filipino K-12 students or teachers and need curriculum-aligned content. It's also the canonical source if you're tutoring and want to match what students are actually studying."
-      ],
-      "skip_if": [
-        {
-          "reason": "Khan Academy: DepEd Commons is aligned to the Philippine K-12 curriculum (MELC); Khan Academy follows US Common Core. For PH students, DepEd modules match their actual exams."
-        }
-      ],
-      "pricing_url": "https://commons.deped.gov.ph/",
-      "verified_at": "2026-07-24",
-      "verified_by": null,
-      "source": "catalog",
-      "tagline": "National SLMs / modules — useful if you build for K-12 or tutors.",
-      "about": "National SLMs / modules — useful if you build for K-12 or tutors.",
-      "tags": [
-        "k12"
       ],
       "scale": {
         "kind": "unknown",
@@ -12458,7 +12372,16 @@
       "avoid_heading": "Free hosts that let you sell"
     }
   ],
-  "removed": [],
+  "removed": [
+    {
+      "id": "abakada",
+      "aisle": "campus"
+    },
+    {
+      "id": "deped-commons",
+      "aisle": "campus"
+    }
+  ],
   "legacy": {
     "catalogs": {
       "saas": "/#aisles-h",
@@ -12636,8 +12559,8 @@
       "saas/ph/awesome-ph-edtech": "/campus/awesome-ph-edtech",
       "saas/ph/awesome-ph-student-life": "/campus/awesome-ph-student-life",
       "saas/ph/codechum": "/campus/codechum",
-      "saas/ph/deped-commons": "/campus/deped-commons",
-      "saas/ph/abakada": "/campus/abakada",
+      "saas/ph/deped-commons": "/campus",
+      "saas/ph/abakada": "/campus",
       "saas/ph/university-edu-email": "/campus/university-edu-email",
       "saas/search/typesense-cloud": "/search/typesense-cloud",
       "saas/search/meilisearch-cloud": "/search/meilisearch-cloud",

@@ -1,2 +1,4 @@
 # Tools taken out of the catalog: { id, aisle }. Their pages 301 to the aisle.
-[]
+# abakada: repo returns 404; deped-commons: domain no longer resolves (docs/link-report.md, 2026-11-13).
+- { id: abakada, aisle: campus }
+- { id: deped-commons, aisle: campus }

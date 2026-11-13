@@ -173,8 +173,8 @@ entries:
   saas/ph/awesome-ph-edtech: /campus/awesome-ph-edtech
   saas/ph/awesome-ph-student-life: /campus/awesome-ph-student-life
   saas/ph/codechum: /campus/codechum
-  saas/ph/deped-commons: /campus/deped-commons
-  saas/ph/abakada: /campus/abakada
+  saas/ph/deped-commons: /campus
+  saas/ph/abakada: /campus
   saas/ph/university-edu-email: /campus/university-edu-email
   saas/search/typesense-cloud: /search/typesense-cloud
   saas/search/meilisearch-cloud: /search/meilisearch-cloud

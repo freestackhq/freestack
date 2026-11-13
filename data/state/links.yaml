@@ -6,13 +6,6 @@
   checked_at: 2026-11-13
   failing_since: null
   dead_since: null
-abakada:
-  url_status: client_error:404
-  pricing_status: client_error:404
-  final_url: https://github.com/Abakada-org/abakada
-  checked_at: 2026-11-13
-  failing_since: 2026-11-13
-  dead_since: null
 adobe-creative-cloud-student:
   url_status: ok
   pricing_status: ok
@@ -544,13 +537,6 @@ deno-deploy:
   final_url: https://deno.com/deploy
   checked_at: 2026-11-13
   failing_since: null
-  dead_since: null
-deped-commons:
-  url_status: dns
-  pricing_status: dns
-  final_url: null
-  checked_at: 2026-11-13
-  failing_since: 2026-11-13
   dead_since: null
 descope:
   url_status: ok
