@@ -78,7 +78,7 @@ test.describe("tool page, desktop", () => {
   test("empty sections admit it instead of guessing", async ({ page }) => {
     await page.goto("/databases/convex/");
     // Convex has no tagline: the kind stands in.
-    await expect(page.getByText("Reactive backend.", { exact: true })).toBeVisible();
+    await expect(page.locator(".tagline")).toContainText("Reactive backend.");
     await expect(page.locator("[data-use-if]")).toContainText("Not written yet");
     await expect(page.locator("[data-skip-if]")).toContainText("Not written yet");
     await expect(page.locator("[data-catch]")).toContainText("None listed");

@@ -1,0 +1,661 @@
+---
+/**
+ * Tool page (Tool.dc.html, PhoneTool.dc.html). Imported tools render the
+ * "Tool from an awesome list" state from Edges.dc.html. Removed tools 301
+ * to their aisle from [...rest].astro.
+ */
+import Shell from "../../../layouts/Shell.astro";
+import Label from "../../../components/fresh/Label.astro";
+import Scale from "../../../components/fresh/Scale.astro";
+import Icon from "../../../components/fresh/Icon.astro";
+import {
+  aisle as getAisle,
+  checkHref,
+  maxForAisle,
+  now as currentDate,
+  situations,
+  tool as getTool,
+  toolHref,
+  tools,
+  toolsInAisle,
+  writeLabelHref,
+} from "../../../lib/fresh/catalog";
+import { headline, longDate, scaleStep, strings } from "../../../lib/fresh/label";
+import { capitalize, compareHref, listJoin } from "../../../lib/fresh/compare";
+import type { Tool } from "../../../lib/fresh/types";
+
+export function getStaticPaths() {
+  return tools().map((t) => ({ params: { aisle: t.aisle, tool: t.id } }));
+}
+
+const now = currentDate();
+const t = getTool(Astro.params.tool!)!;
+const aisle = getAisle(t.aisle)!;
+const imported = t.source === "imported";
+const domain = new URL(t.url).hostname.replace(/^www\./, "");
+const aisleHref = `/${aisle.id}`;
+
+// Headline for the phone summary line ("0.5 GB free storage.").
+const head = headline(t, aisle);
+const scale = scaleStep(t, maxForAisle(t.aisle));
+const summary = !head.known
+  ? `${capitalize(aisle.label)}: not listed.`
+  : scale.kind === "unlimited"
+    ? `${t.metric_note ?? head.big}.`
+    : `${head.big} ${head.sub ?? aisle.label}.`;
+const tagline = t.tagline ?? `${t.kind}.`;
+
+// Skip it if: link each reason to the tool to use instead, when it exists.
+const skips = t.skip_if.map((s) => ({ reason: s.reason, alt: s.use ? getTool(s.use) : undefined }));
+
+// The catch: the long sentences, else the short ones.
+const catchLines = t.catch_detail?.length ? t.catch_detail : t.catches;
+
+// Fits: situations from data.
+const fits = situations().filter((s) => t.fits?.includes(s.id));
+
+// Compare with the tools this one sends people to, then the rest of the aisle.
+const others: Tool[] = [];
+for (const s of skips) {
+  if (s.alt && s.alt.aisle === t.aisle && s.alt.id !== t.id && s.alt.source !== "imported" && !others.includes(s.alt)) {
+    others.push(s.alt);
+  }
+}
+for (const o of toolsInAisle(t.aisle, now)) {
+  if (others.length >= 2) break;
+  if (o.id !== t.id && !others.includes(o)) others.push(o);
+}
+const compareWith = others.slice(0, 2);
+
+const status = strings(t, now);
+const check = checkHref(t);
+const addToCompare = compareHref([t.id]);
+---
+
+<Shell title={`${t.name}: ${t.kind} · freestack`} description={tagline} aisle={aisle.id} noindex={imported}>
+  <div class="wrap page" data-tool-page={t.id}>
+    <nav aria-label="Breadcrumb" class="crumbs desk-only">
+      <a href="/">All aisles</a> <span aria-hidden="true">/</span> <a href={aisleHref}>{aisle.name}</a>{" "}
+      <span aria-hidden="true">/</span>{" "}
+      {imported ? "From an awesome list" : <span aria-current="page">{t.name}</span>}
+    </nav>
+    <a href={aisleHref} class="phone-back phone-only"><Icon name="back" size={16} />{aisle.name}</a>
+
+    {
+      imported ? (
+        <section class="imported panel" data-imported aria-labelledby="tool-h">
+          <h1 id="tool-h" class="title-lg">{t.name}</h1>
+          <p class="imp-num">
+            <span class="q" aria-hidden="true">?</span>
+            <span class="muted">No numbers yet. From {t.imported_from ?? "an awesome list"}.</span>
+          </p>
+          <p class="imp-copy">
+            Nobody has written its label. Until someone does, it shows up in search only, not in filters or stacks.
+          </p>
+          <div class="actions">
+            <a class="btn" href={writeLabelHref(t)}>Write its label</a>
+            <a class="btn btn-outline" href={t.url} target="_blank" rel="noopener noreferrer">
+              Go to {domain}
+              <span class="sr-only"> (opens in a new tab)</span>
+            </a>
+          </div>
+        </section>
+      ) : (
+        <div class="layout">
+          <div class="main-col">
+            <div class="phone-head">
+              <h1 class="title-xl">{t.name}</h1>
+              <div class="phone-only phone-scale">
+                <Scale scale={scale} bar={10} />
+              </div>
+            </div>
+            <p class="tagline">
+              <span class="phone-summary phone-only">{summary} </span>
+              {tagline}
+            </p>
+
+            <div class="decide panel" data-decide>
+              <section aria-labelledby="decide-h" class="decide-grid">
+                <h2 id="decide-h" class="sr-only">
+                  Should you use {t.name}?
+                </h2>
+                <div class="cell" data-use-if>
+                  <h3 class="sub">Use it if</h3>
+                  {t.use_if.length ? (
+                    <ul class="ticks">
+                      {t.use_if.map((u) => (
+                        <li>
+                          <Icon name="check" size={18} />
+                          <span>{u}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  ) : (
+                    <p class="muted">Not written yet.</p>
+                  )}
+                </div>
+                <div class="cell" data-skip-if>
+                  <h3 class="sub">Skip it if</h3>
+                  {skips.length ? (
+                    <ul class="ticks">
+                      {skips.map((s) => (
+                        <li>
+                          <Icon name="cross" size={18} />
+                          <span>
+                            {s.reason}{" "}
+                            {s.alt && (
+                              <a class="use" href={toolHref(s.alt)}>
+                                Use {s.alt.name}
+                              </a>
+                            )}
+                          </span>
+                        </li>
+                      ))}
+                    </ul>
+                  ) : (
+                    <p class="muted">Not written yet.</p>
+                  )}
+                </div>
+              </section>
+              <section aria-labelledby="catch-h" class="cell catch" data-catch>
+                <h2 id="catch-h" class="sub">The catch</h2>
+                {catchLines.length ? (
+                  <ul class="ticks">
+                    {catchLines.map((c) => (
+                      <li>
+                        <Icon name="wrench" size={18} />
+                        <span>{c}</span>
+                      </li>
+                    ))}
+                  </ul>
+                ) : (
+                  <p class="muted">None listed.</p>
+                )}
+              </section>
+              <div class="cell fits" data-fits>
+                <span class="fits-h">Fits</span>
+                {fits.length ? (
+                  fits.map((f) => (
+                    <span class="fit">
+                      <Icon name="check" size={16} />
+                      {f.label}
+                    </span>
+                  ))
+                ) : (
+                  <span class="muted">Unknown</span>
+                )}
+                {compareWith.length > 0 && (
+                  <a class="compare-with" href={compareHref([t.id, ...compareWith.map((o) => o.id)])}>
+                    Compare with {listJoin(compareWith.map((o) => o.name))}
+                  </a>
+                )}
+              </div>
+            </div>
+
+            <div class="rows">
+              <section aria-labelledby="check-h" class="row" data-check-row data-state={status.state}>
+                <div class="row-text">
+                  {status.state === "unchecked" && (
+                    <>
+                      <h2 id="check-h">Not checked with {t.name} yet</h2>
+                      <p>
+                        Open{" "}
+                        <a href={t.pricing_url} target="_blank" rel="noopener noreferrer">
+                          their pricing page
+                        </a>{" "}
+                        and check the numbers. Takes two minutes.
+                      </p>
+                    </>
+                  )}
+                  {status.state === "checked" && (
+                    <>
+                      <h2 id="check-h">{status.text}</h2>
+                      <p>
+                        The numbers matched{" "}
+                        <a href={t.pricing_url} target="_blank" rel="noopener noreferrer">
+                          their pricing page
+                        </a>{" "}
+                        on {longDate(t.verified_at!)}. Seen something different?
+                      </p>
+                    </>
+                  )}
+                  {status.state === "overdue" && (
+                    <>
+                      <h2 id="check-h">{status.text}</h2>
+                      <p>
+                        That was over 90 days ago. Open{" "}
+                        <a href={t.pricing_url} target="_blank" rel="noopener noreferrer">
+                          their pricing page
+                        </a>{" "}
+                        and check the numbers. Takes two minutes.
+                      </p>
+                    </>
+                  )}
+                  {status.state === "vendor-changed" && (
+                    <>
+                      <h2 id="check-h">{status.text}</h2>
+                      <p>
+                        The numbers here may be out of date. Open{" "}
+                        <a href={t.pricing_url} target="_blank" rel="noopener noreferrer">
+                          their pricing page
+                        </a>{" "}
+                        and check them. Takes two minutes.
+                      </p>
+                    </>
+                  )}
+                  {status.state === "review" && (
+                    <>
+                      <h2 id="check-h">{status.text}</h2>
+                      <p>
+                        Someone marked a number as changed. The label stays like this until a maintainer applies or
+                        rejects it.
+                      </p>
+                    </>
+                  )}
+                </div>
+                {(status.state === "unchecked" || status.state === "overdue") && (
+                  <div class="row-actions">
+                    <a class="btn" href={check}>
+                      The numbers hold
+                    </a>
+                    <a class="btn btn-outline" href={check}>
+                      Something changed
+                    </a>
+                  </div>
+                )}
+                {status.state === "checked" && (
+                  <div class="row-actions">
+                    <a class="btn btn-outline" href={check}>
+                      Something changed
+                    </a>
+                  </div>
+                )}
+                {status.state === "vendor-changed" && (
+                  <div class="row-actions">
+                    <a class="btn" href={check}>
+                      Recheck this label
+                    </a>
+                  </div>
+                )}
+              </section>
+
+              <section aria-labelledby="agent-h" class="row" data-agent>
+                <div class="row-text">
+                  <h2 id="agent-h">Ask your coding agent</h2>
+                  <p>With the freestack skill, it answers from this label.</p>
+                </div>
+                <code class="prompt">Is {t.name}'s free tier enough for my app?</code>
+              </section>
+            </div>
+          </div>
+
+          <div class="side">
+            <div class="label-wrap">
+              <Label tool={t} now={now} compare={false} link={false} level={2} />
+              <a class="add-compare desk-only" href={addToCompare}>
+                <Icon name="plus" size={16} />
+                Add to compare
+              </a>
+            </div>
+            <a class="visit desk-only" href={t.url} target="_blank" rel="noopener noreferrer">
+              Go to {domain}
+              <span class="sr-only"> (opens in a new tab)</span>
+            </a>
+          </div>
+
+          <div class="phone-bar phone-only">
+            <a class="btn btn-outline" href={addToCompare}>
+              + Compare
+            </a>
+            <a class="btn" href={t.url} target="_blank" rel="noopener noreferrer">
+              Go to {domain}
+              <span class="sr-only"> (opens in a new tab)</span>
+            </a>
+          </div>
+        </div>
+      )
+    }
+  </div>
+</Shell>
+
+<style>
+  .page {
+    padding-block: 40px 96px;
+  }
+  .crumbs {
+    margin: 0 0 24px;
+  }
+  .phone-only {
+    display: none;
+  }
+
+  /* ---------- Layout: label left, decision right ---------- */
+  .layout {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 48px;
+    align-items: flex-start;
+  }
+  .side {
+    order: 1;
+    flex: 1 1 400px;
+    max-width: 460px;
+    display: grid;
+    gap: 14px;
+  }
+  .main-col {
+    order: 2;
+    flex: 999 1 480px;
+    min-width: 0;
+    max-width: 760px;
+  }
+
+  /* The tool page shows the label's number bigger than the grid does. */
+  .label-wrap :global(.label .headline .big) {
+    font-size: 160px;
+  }
+  .label-wrap :global(.label .headline .big.long) {
+    font-size: 112px;
+  }
+  .add-compare {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-height: var(--target);
+    padding: 0 18px;
+    background: var(--label);
+    border-top: 1px solid var(--shelf);
+    font-size: 14px;
+    font-weight: 700;
+    text-decoration: none;
+  }
+  .add-compare:hover {
+    text-decoration: underline;
+  }
+  .visit {
+    display: block;
+    text-align: center;
+    padding: 16px;
+    background: var(--ink);
+    color: var(--label);
+    text-decoration: none;
+    font-weight: 800;
+    font-size: 17px;
+  }
+  .visit:hover {
+    text-decoration: underline;
+  }
+  .visit:focus-visible {
+    outline-color: var(--focus);
+  }
+
+  .tagline {
+    margin: 12px 0 0;
+    font-size: 22px;
+    line-height: 1.4;
+    font-weight: 500;
+  }
+
+  /* ---------- The decision panel ---------- */
+  .decide {
+    margin-top: 32px;
+    border: 2px solid var(--ink);
+  }
+  .decide-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 2px;
+    background: var(--ink);
+  }
+  .decide-grid .cell {
+    background: var(--label);
+  }
+  .cell {
+    padding: 24px 28px;
+  }
+  .catch,
+  .fits {
+    border-top: 2px solid var(--ink);
+  }
+  .sub {
+    margin: 0 0 14px;
+    font-weight: 900;
+    font-stretch: 62%;
+    font-size: 36px;
+    line-height: 1;
+  }
+  .ticks {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: grid;
+    gap: 12px;
+  }
+  .ticks li {
+    display: flex;
+    gap: 10px;
+    font-size: 16px;
+    line-height: 1.45;
+  }
+  .ticks li :global(svg) {
+    margin-top: 3px;
+  }
+  .cell > .muted {
+    margin: 0;
+  }
+  .use {
+    font-weight: 800;
+    white-space: nowrap;
+  }
+  .fits {
+    padding-block: 16px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px 20px;
+    font-size: 15px;
+  }
+  .fits-h {
+    font-weight: 800;
+  }
+  .fit {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .compare-with {
+    margin-left: auto;
+    font-weight: 700;
+    display: inline-flex;
+    align-items: center;
+    min-height: var(--target);
+  }
+
+  /* ---------- Check row and agent row ---------- */
+  .rows {
+    margin-top: 24px;
+    border-bottom: 1px solid var(--rule);
+  }
+  .row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 12px 20px;
+    padding: 18px 0;
+    border-top: 1px solid var(--rule);
+  }
+  .row-text {
+    flex: 1 1 260px;
+  }
+  .row h2 {
+    margin: 0;
+    font-size: 17px;
+    font-weight: 800;
+  }
+  .row p {
+    margin: 4px 0 0;
+    font-size: 15px;
+    color: var(--muted);
+  }
+  .row p a {
+    color: var(--muted);
+  }
+  .row-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .row[data-state="overdue"] h2::before {
+    content: "";
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    margin-right: 8px;
+    background: var(--recheck);
+  }
+  .prompt {
+    padding: 12px 14px;
+    background: var(--ink);
+    color: var(--label);
+    font: 600 14px var(--font);
+  }
+
+  /* ---------- Imported: no label yet ---------- */
+  .imported {
+    max-width: 720px;
+    padding: 28px 28px 32px;
+    display: grid;
+    gap: 12px;
+    justify-items: start;
+  }
+  .imp-num {
+    margin: 0;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 4px 12px;
+    font-size: 15px;
+  }
+  .q {
+    font-weight: 900;
+    font-stretch: 62%;
+    font-size: 56px;
+    line-height: 1;
+    color: var(--muted);
+  }
+  .imp-copy {
+    margin: 0;
+    font-size: 16px;
+    line-height: 1.5;
+  }
+  .actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  /* ---------- Phone (PhoneTool.dc.html) ---------- */
+  @media (max-width: 640px) {
+    .page {
+      padding-block: 4px 0;
+    }
+    .desk-only {
+      display: none;
+    }
+    .phone-only {
+      display: revert;
+    }
+    .phone-back {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      min-height: var(--target);
+      font-size: 14px;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .layout {
+      gap: 24px;
+    }
+    .side,
+    .main-col {
+      order: 0;
+      flex-basis: 100%;
+      max-width: none;
+    }
+    .phone-head {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 12px;
+    }
+    .phone-head .title-xl {
+      font-size: 72px;
+      min-width: 0;
+      overflow-wrap: anywhere;
+    }
+    .phone-scale {
+      display: block;
+      flex: 0 0 96px;
+    }
+    /* On the shelf background, empty steps are white (PhoneTool.dc.html). */
+    .phone-scale :global(.step:not(.on)) {
+      background: var(--label);
+    }
+    .tagline {
+      margin-top: 4px;
+      font-size: 16px;
+      font-weight: 400;
+    }
+    .decide {
+      margin-top: 14px;
+    }
+    .cell {
+      padding: 14px 16px;
+    }
+    .sub {
+      font-size: 28px;
+      margin-bottom: 8px;
+    }
+    .ticks {
+      gap: 6px;
+    }
+    .ticks li {
+      font-size: 15px;
+      line-height: 1.4;
+    }
+    .compare-with {
+      margin-left: 0;
+    }
+    .rows {
+      margin-top: 12px;
+    }
+    .row-actions .btn,
+    .prompt {
+      flex: 1 1 auto;
+    }
+    .label-wrap :global(.label .headline .big),
+    .label-wrap :global(.label .headline .big.long) {
+      font-size: 80px;
+    }
+    .phone-bar {
+      position: sticky;
+      bottom: 0;
+      z-index: 2;
+      display: flex;
+      gap: 8px;
+      flex: 0 0 calc(100% + 2 * var(--gutter));
+      margin-inline: calc(-1 * var(--gutter));
+      padding: 12px var(--gutter) calc(16px + env(safe-area-inset-bottom, 0px));
+      background: var(--shelf);
+      border-top: 1px solid var(--rule);
+    }
+    .phone-bar .btn {
+      flex: 1;
+      padding-inline: 10px;
+    }
+    .imported {
+      padding: 20px 18px 24px;
+    }
+  }
+</style>
