@@ -23,6 +23,29 @@ Before the first deploy: set `SITE_URL`, run `pnpm plugin:build` so the Claude C
 
 ---
 
+## Development
+
+Node 22.18 or newer (`.nvmrc`): the scripts import `.ts` files directly.
+
+```bash
+pnpm typecheck        # astro check (.astro and .ts)
+pnpm format           # prettier --write (format:check in CI)
+pnpm lint:workflows   # actionlint, when installed
+pnpm test:e2e         # Playwright (PORT=4441 to run beside another worktree)
+```
+
+`pnpm install` installs git hooks with [lefthook](https://lefthook.dev) (`lefthook.yml`):
+
+- **pre-commit**, on staged files only: Prettier (fixes are restaged); `catalog:generate` when `data/`, `schema/`, `label.ts` or `generate.mjs` change (fails if the snapshot changed but isn't staged); the schema test when `data/tools/` or `schema/` change; actionlint on workflows; no `.env` files or tokens.
+- **commit-msg**: conventional commit subject (`fix(scope): ...`).
+- **pre-push**: `pnpm typecheck` and `pnpm test`.
+
+In an emergency, skip them once with `LEFTHOOK=0 git commit ...` (or `git push`). CI runs the same checks.
+
+The one-time Prettier commit is listed in `.git-blame-ignore-revs`; run `git config blame.ignoreRevsFile .git-blame-ignore-revs` once to skip it in `git blame`.
+
+---
+
 ## Catalogs & Content
 
 Data lives in [`data/`](data/): one YAML file per tool in [`data/tools/`](data/tools/) (validated by [`schema/tool.schema.json`](schema/tool.schema.json)), aisles and their headline metric in [`data/aisles.yaml`](data/aisles.yaml), stack rules in [`data/rules.yaml`](data/rules.yaml), unlabeled entries from awesome lists in [`data/imported/`](data/imported/), and trust-loop state in [`data/state/`](data/state/). The old Markdown catalogs were migrated once; see [`docs/migration-report.md`](docs/migration-report.md).
