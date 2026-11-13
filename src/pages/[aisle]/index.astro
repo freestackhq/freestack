@@ -993,9 +993,16 @@ const binNoun = bin.length === 1 ? one(noun) : noun;
     .title-row h1 {
       font-size: 56px;
     }
+    /* Phone.dc.html: the label count sits beside the title instead. */
     .count-line {
-      flex-basis: 100%;
-      font-size: 15px;
+      display: none;
+    }
+    .note {
+      padding: 2px 4px 2px 12px;
+      font-size: 14px;
+    }
+    .pips {
+      display: none;
     }
     .head {
       gap: 8px;
@@ -1003,9 +1010,6 @@ const binNoun = bin.length === 1 ? one(noun) : noun;
     .bar {
       margin-top: 16px;
       padding: 12px 0;
-    }
-    .note {
-      padding-left: 12px;
     }
     .cross {
       padding: 16px;
@@ -1024,8 +1028,16 @@ const binNoun = bin.length === 1 ? one(noun) : noun;
       display: none;
     }
     .tray-row {
-      gap: 8px 12px;
+      gap: 4px 8px;
       padding-right: 8px;
+    }
+    .tray-hint {
+      order: 5;
+      flex-basis: 100%;
+    }
+    .tray .btn {
+      font-size: 15px;
+      padding: 0 14px;
     }
   }
 </style>
