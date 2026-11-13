@@ -120,6 +120,7 @@ for (const id of Object.keys(pricing)) if (!curatedIds.has(id)) fail(`state/pric
 const lists = [];
 const importedIds = new Set();
 for (const { file, data } of yamlFiles("imported")) {
+  if (file === "imported/denylist.yaml") continue; // read by the importer, not a list
   const list = data?.list;
   if (!list?.id || !list?.name) {
     fail(`${file}: needs list.id and list.name`);

@@ -12,6 +12,7 @@ import {
   cleanName,
   cleanUrl,
   hostKey,
+  isDenied,
   licenseComment,
   nameKey,
   parseCatalogMarkdown,
@@ -19,7 +20,9 @@ import {
   parseHtmlLinkTables,
   parsePages,
   parseTables,
+  productUrl,
   readAisleIds,
+  readDenylist,
   readCatalogTools,
   selectEntries,
   slugify,
@@ -299,6 +302,13 @@ describe("classify and select", () => {
     expect(selectEntries(parseTables(PUBLIC_APIS), rules, aisles, seen)).toEqual([]);
   });
 
+  it("skips denied entries but keeps their name taken, so later lists skip them too", () => {
+    const seen = new Seen();
+    const deny = [{ id: "stytch", reason: "test" }, { id: "x", url: "https://smtpfa.st/docs", reason: "test" }];
+    expect(selectEntries(parseTables(PUBLIC_APIS), rules, aisles, seen, deny).map((e) => e.id)).toEqual(["auth0", "groq"]);
+    expect(selectEntries(parseTables(PUBLIC_APIS), rules, aisles, seen)).toEqual([]);
+  });
+
   it("maps to aisle ids that exist in data/aisles.yaml (catches typos)", () => {
     const ids = readAisleIds();
     for (const l of LISTS) for (const r of l.rules) expect(ids, `${l.id} -> ${r.aisle}`).toContain(r.aisle);
@@ -350,5 +360,44 @@ describe("output", () => {
     expect(out).toContain("Creative Commons Legal Code");
     expect(out).toContain("https://github.com/public-apis/public-apis/blob/abc123/license");
     expect(out.split("\n").length).toBeLessThan(6);
+  });
+});
+
+describe("product URLs and the deny list", () => {
+  it("points console and API-key pages at the vendor's root", () => {
+    expect(productUrl("https://platform.agnes-ai.com/settings/apiKeys")).toBe("https://agnes-ai.com/");
+    expect(productUrl("https://bailian.console.alibabacloud.com/?apiKey=1")).toBe("https://alibabacloud.com/");
+    expect(productUrl("https://modelscope.cn/my/myaccesstoken")).toBe("https://modelscope.cn/");
+    expect(productUrl("https://console.x.ai/")).toBe("https://x.ai/");
+  });
+
+  it("points pricing pages at the site, or the product page for shared vendors", () => {
+    expect(productUrl("https://www.descope.com/pricing")).toBe("https://www.descope.com/");
+    expect(productUrl("https://www.cloudamqp.com/plans.html")).toBe("https://www.cloudamqp.com/");
+    expect(productUrl("https://aws.amazon.com/cognito/pricing/")).toBe("https://aws.amazon.com/cognito/");
+    expect(productUrl("https://cloud.google.com/pubsub/pricing")).toBe("https://cloud.google.com/pubsub/");
+  });
+
+  it("leaves product pages, docs and shared-vendor consoles alone", () => {
+    for (const u of ["https://smtpfa.st/docs", "https://studio.example.com/", "https://console.cloud.google.com/apis", "https://aiven.io/free-mysql-database"]) {
+      expect(productUrl(u)).toBe(u);
+    }
+  });
+
+  it("matches the deny list on id slug or exact URL", () => {
+    const deny = [{ id: "elephantsql", url: "https://www.elephantsql.com/" }];
+    expect(isDenied("ElephantSQL", "https://elephantsql.com/x", deny)).toBe(true);
+    expect(isDenied("Elephant", "https://www.elephantsql.com/", deny)).toBe(true);
+    expect(isDenied("Neon", "https://neon.tech/", deny)).toBe(false);
+  });
+
+  it("reads data/imported/denylist.yaml with a reason and date per entry", () => {
+    const deny = readDenylist();
+    expect(deny.length).toBeGreaterThan(0);
+    for (const d of deny) {
+      expect(d.id).toMatch(/^[a-z0-9-]+$/);
+      expect(d.reason).toBeTruthy();
+      expect(String(d.date)).toMatch(/^\d{4}-\d{2}-\d{2}$/);
+    }
   });
 });

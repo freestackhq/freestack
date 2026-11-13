@@ -11,11 +11,14 @@
  *        pnpm import:lists --latest   (resolve each repo's HEAD; update LISTS after)
  *
  * License review for every candidate list lives in docs/IMPORTS.md.
+ * Dead vendors are kept out by data/imported/denylist.yaml (see the link check,
+ * scripts/ops/link-check.mjs).
  */
 import { execFileSync } from "node:child_process";
 import { mkdirSync, readFileSync, readdirSync, existsSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
+import { parse } from "yaml";
 
 const root = join(dirname(fileURLToPath(import.meta.url)), "..");
 
@@ -365,11 +368,13 @@ const SHARED_ROOTS = new Set([
   "herokuapp.com", "onrender.com", "readthedocs.io", "rtfd.io", "prisma.io", "medium.com",
 ]);
 
+const SECOND_LEVEL = new Set(["co", "com", "net", "org", "gov", "edu", "ac", "or", "ne", "go"]);
+
 export function rootDomain(host) {
   const parts = host.split(".");
   if (parts.length <= 2) return host;
   const [sld, tld] = parts.slice(-2);
-  const n = tld.length === 2 && sld.length <= 3 ? 3 : 2; // co.uk, com.cn
+  const n = tld.length === 2 && SECOND_LEVEL.has(sld) ? 3 : 2; // co.uk, com.cn, but x.ai stays x.ai
   return parts.slice(-n).join(".");
 }
 
@@ -397,6 +402,49 @@ export function hostKey(url) {
   if (sub && !GENERIC_SUBDOMAINS.has(sub)) return host;
   const seg = u.pathname.split("/").filter(Boolean)[0] ?? "";
   return `${host}/${seg.toLowerCase()}`;
+}
+
+// ---------------------------------------------------------------------------
+// Product URLs: lists often link a pricing page or an API-key console. Point
+// those at the product instead. Console pages of single-product vendors go to
+// the registrable domain root; pricing pages go to the site root (or, for
+// shared vendors like aws.amazon.com/cognito/pricing, to the page above).
+// ---------------------------------------------------------------------------
+
+const PRICING_PAGE = /^(pricing|plans|prices?)(\.html?)?$/i;
+const CONSOLE_PATH = /^(api-?keys?|apikeys|keys|tokens?|myaccesstoken|account|settings|usercenter|profile|signup|sign-up|signin|login|ak)$/i;
+const CONSOLE_HOST = new Set(["console", "dashboard", "dash", "app", "platform", "portal", "account", "accounts", "token", "login"]);
+
+export function productUrl(raw) {
+  const u = new URL(raw);
+  const host = u.hostname.toLowerCase();
+  const root = rootDomain(host.replace(/^www\./, ""));
+  const labels = host.slice(0, -root.length).split(".").filter(Boolean);
+  const segs = u.pathname.split("/").filter(Boolean);
+  const shared = SHARED_ROOTS.has(root);
+  if (!shared && (labels.some((l) => CONSOLE_HOST.has(l)) || segs.some((s) => CONSOLE_PATH.test(s)))) return `https://${root}/`;
+  if (segs.length && PRICING_PAGE.test(segs.at(-1))) {
+    if (!shared) return `${u.origin}/`;
+    segs.pop();
+    return `${u.origin}/${segs.map((s) => `${s}/`).join("")}`;
+  }
+  return u.href;
+}
+
+// ---------------------------------------------------------------------------
+// Deny list: imported entries that are known dead. Matched on the entry's id
+// slug or its exact URL, so the same vendor is skipped in every list.
+// ---------------------------------------------------------------------------
+
+export function readDenylist(dir = root) {
+  const p = join(dir, "data/imported/denylist.yaml");
+  if (!existsSync(p)) return [];
+  return parse(readFileSync(p, "utf8")) ?? [];
+}
+
+export function isDenied(name, url, deny = []) {
+  const id = slugify(name);
+  return deny.some((d) => d.id === id || (d.url && d.url === url));
 }
 
 /** Tracks names, host keys and ids already taken (catalog first, then each accepted import). */
@@ -448,19 +496,24 @@ export function classify(entry, rules, aisleIds) {
   return null;
 }
 
-/** Parse, classify, clean and dedupe one list's raw entries. Mutates `seen`. */
-export function selectEntries(raw, rules, aisleIds, seen) {
+/**
+ * Parse, classify, clean and dedupe one list's raw entries. Mutates `seen`.
+ * Denied entries still claim their name and host, so later lists skip the
+ * same vendor and other ids don't shift.
+ */
+export function selectEntries(raw, rules, aisleIds, seen, deny = []) {
   const out = [];
   for (const e of raw) {
     const aisle = classify(e, rules, aisleIds);
     if (!aisle) continue;
     const name = cleanName(e.name);
-    const url = cleanUrl(e.url);
-    if (!name || !url) continue;
-    if (seen.isDuplicate(name, url)) continue;
+    const listed = cleanUrl(e.url);
+    if (!name || !listed) continue;
+    if (seen.isDuplicate(name, listed)) continue;
     const id = seen.uniqueId(name);
-    seen.addTool({ id, name, urls: [url] });
-    out.push({ id, name, url, aisle });
+    seen.addTool({ id, name, urls: [listed] });
+    if (isDenied(name, listed, deny)) continue;
+    out.push({ id, name, url: productUrl(listed), aisle });
   }
   return out.sort((a, b) => a.aisle.localeCompare(b.aisle) || a.id.localeCompare(b.id));
 }
@@ -571,6 +624,7 @@ async function main() {
   const latest = process.argv.includes("--latest");
   const aisleIds = readAisleIds();
   const seen = new Seen();
+  const deny = readDenylist();
   for (const t of readCatalogTools()) seen.addTool(t);
   const outDir = join(root, "data/imported");
   mkdirSync(outDir, { recursive: true });
@@ -582,7 +636,7 @@ async function main() {
     const raw = [];
     for (const src of list.sources) raw.push(...PARSERS[list.format](await fetchText(list.repo, list.commit, src)));
     const license = await fetchText(list.repo, list.commit, list.licenseFile);
-    const entries = selectEntries(raw, list.rules, aisleIds, seen);
+    const entries = selectEntries(raw, list.rules, aisleIds, seen, deny);
     writeFileSync(join(outDir, `${list.id}.yaml`), toYaml(list, entries, licenseComment(list, license)));
     const perAisle = Object.entries(Object.groupBy(entries, (e) => e.aisle)).map(([a, es]) => `${a} ${es.length}`);
     console.log(`${list.id}: ${entries.length} of ${raw.length} parsed (${perAisle.join(", ") || "none"})`);
