@@ -1,0 +1,30 @@
+id: openai-api
+name: OpenAI API
+kind: Inference API
+url: https://platform.openai.com
+aisle: inference
+metric: null
+metric_note: Not listed
+limits:
+  - No forever free
+  - Usage billing
+  - Project spend limits
+who:
+  - anyone
+region: null
+sell: yes
+card: unknown
+cost: credits
+catches:
+  - Credits, not a free tier
+use_if:
+  - "You need frontier-quality reasoning (GPT-4o, o1) as a fallback when open models or Gemini can't cut it — use project-level spend caps to prevent bill shock and route here only for the hard 10 % of prompts. vs Anthropic API: OpenAI has wider model range (vision, TTS, DALL·E, embeddings in one account); Anthropic is stronger for agentic multi-step tool use and long-form reasoning. vs Google AI Studio: OpenAI has no free tier but often higher benchmark scores on coding and structured output; Gemini wins on cost and context length."
+skip_if: []
+pricing_url: https://platform.openai.com
+verified_at: null
+verified_by: null
+source: catalog
+tagline: Pay only when cheaper models fail — wire hard budget alerts day one.
+about: Pay only when cheaper models fail — wire hard budget alerts day one.
+tags:
+  - llm

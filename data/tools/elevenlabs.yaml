@@ -1,0 +1,30 @@
+id: elevenlabs
+name: ElevenLabs
+kind: Text to speech API
+url: https://elevenlabs.io
+aisle: inference
+metric: null
+metric_note: 10,000 chars a month free
+limits:
+  - 10,000 chars a month free
+  - 3 custom voices
+  - Commercial on paid only
+who:
+  - anyone
+region: null
+sell: unknown
+card: unknown
+cost: free
+catches: []
+use_if:
+  - "You need the most natural-sounding text-to-speech or voice cloning for your app — 10,000 characters/month free lets you prototype audio features before committing to a paid plan. vs OpenAI TTS: ElevenLabs has more natural prosody, voice cloning, and 30+ languages; OpenAI TTS is simpler (one API call) but fewer voices and no cloning on the free tier. vs self-hosted Coqui/Bark: ElevenLabs is dramatically higher quality with zero infra; open-source TTS requires GPU hosting and sounds noticeably worse."
+skip_if: []
+pricing_url: https://elevenlabs.io
+verified_at: 2026-08-01
+verified_by: null
+source: catalog
+tagline: Best-in-class TTS and voice cloning — free tier for prototyping audio.
+about: Best-in-class TTS and voice cloning — free tier for prototyping audio.
+tags:
+  - voice
+  - tts

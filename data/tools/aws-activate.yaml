@@ -1,0 +1,40 @@
+id: aws-activate
+name: AWS Activate
+kind: Startup credit
+url: https://aws.amazon.com/activate/
+aisle: startup-programs
+metric: null
+metric_note: $1k–$100k+ depending on path
+limits:
+  - $1k–$100k+ depending on path
+  - Expires
+who:
+  - startup_proof
+region: null
+sell: yes
+card: unknown
+cost: credits
+catches:
+  - Expires
+use_if:
+  - "Your production infra is already on AWS (or will be) and you need runway to defer cloud bills for 12–24 months. The credits burn on anything — EC2, RDS, Bedrock — so they're most valuable when you'd otherwise be paying cash for compute-heavy workloads. vs Google for Startups: AWS credits cover more SKUs but require an accelerator/partner voucher for the big packages; GCP gives similar amounts with a simpler solo-founder application. vs Azure: AWS ecosystem is deeper for startups shipping containers + managed Postgres; Azure wins if your stack is .NET or you want bundled OpenAI credits."
+skip_if: []
+pricing_url: https://aws.amazon.com/activate/
+verified_at: null
+verified_by: null
+source: catalog
+tagline: Startup cloud credits — apply via accelerator/partner or Activate Founders.
+about: Startup cloud credits — apply via accelerator/partner or Activate Founders.
+tags:
+  - credits
+  - must-claim
+program:
+  order: 1
+  lasts_big: "?"
+  lasts_sub: Not listed
+  perks:
+    - $1k–$100k+ depending on path
+    - Expires
+  needs: An application as a startup
+  lasts: Not listed
+  claim_url: https://aws.amazon.com/activate/

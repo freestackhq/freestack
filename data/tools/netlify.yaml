@@ -1,0 +1,28 @@
+id: netlify
+name: Netlify
+kind: Hosting
+url: https://www.netlify.com
+aisle: hosting
+metric: null
+metric_note: 100 GB bandwidth
+limits:
+  - 100 GB bandwidth
+  - 300 build min a month
+who:
+  - anyone
+region: null
+sell: unknown
+card: unknown
+cost: free
+catches: []
+use_if:
+  - You're shipping a static site or SPA that needs a few serverless functions for forms, auth, or API proxying — and you want 100 GB bandwidth free without worrying about cold containers or edge-runtime constraints. Netlify's build plugins and form handling are unmatched for content sites.
+skip_if:
+  - reason: "Cloudflare has no bandwidth cap and faster edge functions, but Netlify's build plugin ecosystem (CMS previews, form handling, split testing) is richer for content-heavy JAMstack. vs Vercel Hobby: Netlify allows commercial use on the free tier; Vercel Hobby restricts you to non-commercial projects."
+    use: cf-workers
+pricing_url: https://www.netlify.com
+verified_at: null
+verified_by: null
+source: catalog
+tagline: JAMstack hosting + serverless functions.
+about: JAMstack hosting + serverless functions.

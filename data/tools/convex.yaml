@@ -1,0 +1,27 @@
+id: convex
+name: Convex
+kind: Reactive backend
+url: https://convex.dev
+aisle: databases
+metric: 0.5
+limits:
+  - 1M function calls a month
+who:
+  - anyone
+region: null
+sell: yes
+card: unknown
+cost: free
+catches: []
+use_if:
+  - You're building a collaborative or realtime-first app (multiplayer editors, live dashboards, chat) in TypeScript and you want the database, server functions, and realtime subscriptions as one coherent system — no SQL, no ORM, no WebSocket plumbing.
+skip_if:
+  - reason: "Supabase Realtime: Supabase bolts realtime onto Postgres via change-data-capture; Convex is reactive from the ground up. Pick Convex when every query must live-update. Pick Supabase when you also need traditional REST endpoints and raw SQL escape hatches."
+  - reason: "Firebase: Convex gives you TypeScript-native server functions with full ACID transactions; Firebase gives you a proprietary SDK with weaker consistency. Pick Convex for type-safe, transactional realtime; Firebase if you need its massive mobile ecosystem."
+pricing_url: https://convex.dev
+verified_at: null
+verified_by: null
+source: catalog
+tagline: Reactive backend with realtime sync for collaborative UIs.
+about: Reactive backend with realtime sync for collaborative UIs.
+type: documents

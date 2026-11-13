@@ -1,0 +1,44 @@
+id: mistral
+name: Mistral AI API
+kind: Inference API
+url: https://console.mistral.ai
+aisle: inference
+metric: null
+metric_note: Experiment tier ~1B tokens a month free
+limits:
+  - Experiment tier ~1B tokens a month free
+  - Then PAYG from $0.10/MTok
+  - Free tier for open models
+who:
+  - anyone
+region: null
+sell: unknown
+card: unknown
+cost: free
+catches: []
+use_if:
+  - "You want a European AI provider with a massive free Experiment tier (~1 B tokens/month), strong coding models (Codestral), and both open-weight and proprietary options — good for EU data residency requirements. vs Groq: Mistral's free tier has far higher token limits; Groq is faster but with stricter rate limits. Mistral also offers its own proprietary models (Large, Medium) not available elsewhere. vs OpenAI API: Mistral is significantly cheaper (PAYG from $0.10/MTok vs $2.50+) with competitive quality on many tasks; OpenAI wins on frontier reasoning benchmarks."
+  - You want a strong small model (Nemo 12B) with good instruction following and structured output.
+skip_if:
+  - reason: Smaller models, more predictable outputs for structured tasks; Gemini is more capable but heavier.
+    use: google-ai-studio
+pricing_url: https://console.mistral.ai
+verified_at: 2026-08-01
+verified_by: null
+source: catalog
+tagline: Strong open-weight and proprietary models — generous free Experiment tier.
+about: |-
+  Strong open-weight and proprietary models — generous free Experiment tier.
+
+  European AI lab's API. Mistral Nemo (12B) is free-tier eligible and good for structured output and function calling. Mistral models tend to be efficient for their size class.
+tags:
+  - llm
+api:
+  base_url: https://api.mistral.ai/v1
+  docs: https://docs.mistral.ai
+  auth: api-key
+  models: open-mistral-nemo
+  openai_compatible: yes
+  streaming: yes
+  self_host: no (weights downloadable for local)
+  status: active

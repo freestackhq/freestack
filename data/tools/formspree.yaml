@@ -1,0 +1,29 @@
+id: formspree
+name: Formspree
+kind: Form backend
+url: https://formspree.io
+aisle: forms
+metric: 50
+metric_note: About
+limits:
+  - 1 form on free
+who:
+  - anyone
+region: null
+sell: yes
+card: unknown
+cost: free
+catches: []
+use_if:
+  - You want a zero-JS form endpoint you can drop into any HTML page with a simple `action=` URL — no build step, no SDK, no client-side code required. The 50 submissions/mo free cap is tight, so this fits low-traffic pages like a portfolio contact form or an internal feedback widget.
+skip_if:
+  - reason: Formspree is a raw HTTP endpoint (you own the HTML); Tally is a hosted form builder (you embed their UI). Pick Formspree when you want pixel-perfect form styling. vs Formspark — nearly identical concept; Formspree has a slightly richer plugin/integration layer, Formspark is simpler and cheaper at paid tiers.
+    use: tally-formspark
+pricing_url: https://formspree.io
+verified_at: 2026-07-24
+verified_by: null
+source: catalog
+tagline: Form backend for static sites — email on submit without a server.
+about: Form backend for static sites — email on submit without a server.
+tags:
+  - forms

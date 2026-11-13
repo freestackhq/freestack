@@ -1,0 +1,35 @@
+id: openweathermap
+name: OpenWeatherMap
+kind: Weather API
+url: https://openweathermap.org/api
+aisle: weather
+metric: 1000
+limits:
+  - 1000 API calls a day, current + 5-day forecast
+  - "Rate limit: 60 requests/min"
+who:
+  - anyone
+region: null
+sell: unknown
+card: unknown
+cost: free
+catches: []
+use_if:
+  - You want the most ecosystem support (SDKs, tutorials, integrations everywhere) and don't mind managing an API key.
+skip_if:
+  - reason: More integrations and wider data history, but requires signup and has stricter free limits.
+    use: open-meteo
+pricing_url: https://openweathermap.org/api
+verified_at: null
+verified_by: null
+source: catalog
+tagline: The most widely-used weather API.
+about: The most widely-used weather API. Current conditions, 5-day/3-hour forecast, geocoding, and air pollution data on the free tier. One Call API 3.0 requires subscription but has a free tier of 1000 calls/day.
+api:
+  base_url: https://api.openweathermap.org/data/2.5
+  docs: https://openweathermap.org/api
+  auth: api-key
+  cors: yes
+  response: JSON, XML
+  openapi: no
+  status: active

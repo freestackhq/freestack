@@ -1,0 +1,33 @@
+id: duckdb
+name: DuckDB
+kind: In-process analytics database
+url: https://duckdb.org
+aisle: databases
+metric: null
+metric_note: Not listed
+limits:
+  - OSS
+  - Runs in-process
+  - MotherDuck for cloud
+who:
+  - anyone
+region: null
+sell: yes
+card: unknown
+cost: free
+catches: []
+use_if:
+  - You want to run analytical SQL on local Parquet/CSV files without any server, any cost, or any setup — just `pip install duckdb` or grab the CLI and query terabytes on your laptop.
+skip_if:
+  - reason: 'DuckDB is embedded and ephemeral (think SQLite for analytics); ClickHouse is a running server for concurrent users and live dashboards. Use DuckDB in scripts and notebooks, ClickHouse in production. vs Pandas: DuckDB handles datasets that blow out Pandas memory, runs standard SQL, and reads Parquet natively — it replaces most "load into DataFrame → groupby" workflows.'
+    use: clickhouse-cloud
+pricing_url: https://duckdb.org
+verified_at: 2026-07-24
+verified_by: null
+source: catalog
+tagline: $0 local warehouse — Parquet/CSV analytics on a laptop before MotherDuck.
+about: $0 local warehouse — Parquet/CSV analytics on a laptop before MotherDuck.
+type: analytics
+tags:
+  - analytics
+  - oss

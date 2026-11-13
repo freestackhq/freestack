@@ -1,0 +1,30 @@
+id: awesome-ph-student-life
+name: Awesome PH Student Life
+kind: Campus tool
+url: https://github.com/smmariquit/awesomeph-studentlife
+aisle: campus
+metric: null
+metric_note: CC0
+limits:
+  - Markdown list
+  - CC0
+who:
+  - anyone
+region: null
+sell: yes
+card: unknown
+cost: free
+catches: []
+use_if:
+  - You're a freshman or transferee who needs the "how does campus life actually work" cheat sheet — dorms, enrollment tricks, org tips, commute hacks — that upperclassmen share verbally but never document.
+skip_if:
+  - reason: EdTech focuses on learning platforms and tools; Student Life focuses on survival logistics — housing, food, transport, admin processes. Use both.
+    use: awesome-ph-edtech
+pricing_url: https://github.com/smmariquit/awesomeph-studentlife
+verified_at: 2026-07-24
+verified_by: null
+source: catalog
+tagline: Campus navigation, housing, grades, getting started — PH student ops.
+about: Campus navigation, housing, grades, getting started — PH student ops.
+tags:
+  - list

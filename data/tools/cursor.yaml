@@ -1,0 +1,27 @@
+id: cursor
+name: Cursor
+kind: AI code editor
+url: https://www.cursor.com
+aisle: coding
+metric: 2000
+limits:
+  - Pro $20 a month usage-based
+who:
+  - anyone
+region: null
+sell: yes
+card: unknown
+cost: free
+catches:
+  - "Hobby free: 2,000 completions a month"
+use_if:
+  - "You want the most polished AI-native editor experience — Tab completions that predict multi-line edits, Cmd-K inline generation, and an agent mode that can refactor across files autonomously. Free Hobby tier gives 2,000 completions/month. vs Windsurf: Cursor's Tab and Cmd-K feel faster for surgical edits; Windsurf's Cascade is better for longer autonomous sessions. Try both — switching cost is low. vs GitHub Copilot: Cursor offers deeper agentic features (multi-file agent, codebase-aware context); Copilot is cheaper ($10/mo) and stays inside VS Code without a separate app."
+skip_if: []
+pricing_url: https://www.cursor.com
+verified_at: 2026-08-01
+verified_by: null
+source: catalog
+tagline: AI-native code editor — Tab, Cmd-K, and agent mode for multi-file edits.
+about: AI-native code editor — Tab, Cmd-K, and agent mode for multi-file edits.
+tags:
+  - ide

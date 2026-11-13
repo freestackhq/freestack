@@ -1,0 +1,36 @@
+id: coincap
+name: CoinCap
+kind: Crypto API
+url: https://docs.coincap.io
+aisle: crypto
+metric: null
+metric_note: 200 requests/min with key, lower without
+limits:
+  - All endpoints free
+  - "Rate limit: 200 requests/min with key, lower without"
+who:
+  - anyone
+region: null
+sell: unknown
+card: unknown
+cost: free
+catches: []
+use_if:
+  - You need fast real-time price data with WebSocket support and don't need NFT/exchange metadata.
+skip_if:
+  - reason: Simpler API surface, higher rate limits, but less breadth (no NFTs, fewer historical endpoints).
+    use: coingecko
+pricing_url: https://docs.coincap.io
+verified_at: null
+verified_by: null
+source: catalog
+tagline: Real-time crypto prices, market data, and exchange rates.
+about: Real-time crypto prices, market data, and exchange rates. Also provides WebSocket streams for live price updates. Simple, fast, and focused on price/market data rather than trying to cover everything.
+api:
+  base_url: https://rest.coincap.io/v3
+  docs: https://docs.coincap.io
+  auth: none (API key optional for higher limits)
+  cors: yes
+  response: JSON
+  openapi: no
+  status: active

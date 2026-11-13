@@ -1,0 +1,28 @@
+id: railway
+name: Railway
+kind: Containers
+url: https://railway.app
+aisle: servers
+metric: null
+metric_note: ~$5 credit a month then $5 base + usage
+limits:
+  - ~$5 credit a month then $5 base + usage
+who:
+  - anyone
+region: null
+sell: yes
+card: unknown
+cost: credits
+catches:
+  - Credits, not a free tier
+use_if:
+  - "You want the simplest git-push-to-deploy container experience with databases, cron, and private networking included — and you're okay spending $5/mo once the free credit runs out. Railway treats containers as first-class: Postgres, Redis, and workers all live in one project."
+skip_if:
+  - reason: "Render's free tier sleeps and the free Postgres expires after 30 days; Railway's $5 credit covers always-on compute + persistent DB. vs Koyeb: Koyeb gives you one always-free micro, but Railway gives a full project graph (app + DB + worker) under one credit pool."
+    use: render
+pricing_url: https://railway.app
+verified_at: null
+verified_by: null
+source: catalog
+tagline: Git-push containers with a small monthly credit.
+about: Git-push containers with a small monthly credit.

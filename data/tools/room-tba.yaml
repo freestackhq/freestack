@@ -1,0 +1,30 @@
+id: room-tba
+name: Room TBA
+kind: Campus tool
+url: https://room-tba.uplbtools.me/
+aisle: campus
+metric: null
+metric_note: Not listed
+limits:
+  - Free
+  - Open source
+who:
+  - anyone
+region: null
+sell: yes
+card: unknown
+cost: free
+catches: []
+use_if:
+  - You regularly need to find which building a class is in, check jeepney schedules, or plan routes — especially when campus Wi-Fi is spotty. The PWA works offline, which is the killer feature.
+skip_if:
+  - reason: "Google Maps: Room TBA knows UPLB building codes and room numbers; Google Maps doesn't. It also integrates class schedules, so you get \"where do I go next\" not just \"navigate to CAS.\""
+pricing_url: https://room-tba.uplbtools.me/
+verified_at: 2026-07-24
+verified_by: null
+source: catalog
+tagline: Find UPLB rooms, schedules, jeepney routes — offline-capable PWA.
+about: Find UPLB rooms, schedules, jeepney routes — offline-capable PWA.
+tags:
+  - campus
+  - oss

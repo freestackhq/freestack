@@ -1,0 +1,43 @@
+id: mem0
+name: Mem0
+kind: Agent memory
+url: https://mem0.ai
+aisle: ai-tooling
+metric: null
+metric_note: Not listed
+limits:
+  - Free tier for early agents
+  - Free tier for early-stage agents
+who:
+  - anyone
+region: null
+sell: yes
+card: unknown
+cost: free
+catches: []
+use_if:
+  - "Your agent needs persistent per-user memory (preferences, past interactions, facts) without building your own embedding + retrieval pipeline from scratch. vs pgvector + custom code: Mem0 handles memory extraction, deduplication, and decay out of the box; rolling your own means writing and maintaining that logic yourself. vs LangChain memory modules: Mem0 is a dedicated managed service with a real API and dashboard; LangChain memory is an in-process abstraction you still need to persist somewhere."
+  - You're building agents that need to remember user context across sessions without reinventing memory storage.
+skip_if:
+  - reason: Different layer. Mem0 is memory (what to remember); Langfuse is observability (what happened).
+    use: langfuse
+pricing_url: https://mem0.ai
+verified_at: null
+verified_by: null
+source: catalog
+tagline: Managed memory layer for agents so you don't reinvent user context stores.
+about: |-
+  Managed memory layer for agents so you don't reinvent user context stores.
+
+  Managed memory layer for AI agents. Stores user context, preferences, and conversation history so agents remember across sessions. Self-hostable or use their cloud.
+tags:
+  - agents
+api:
+  base_url: https://api.mem0.ai/v1
+  docs: https://docs.mem0.ai
+  auth: api-key
+  models: N/A (memory layer for agents)
+  openai_compatible: yes
+  streaming: no
+  self_host: yes (open source)
+  status: active

@@ -1,0 +1,27 @@
+id: dub-co
+name: Dub.co
+kind: Link shortener
+url: https://dub.co
+aisle: team
+metric: null
+metric_note: Not listed
+limits:
+  - Free plan
+who:
+  - anyone
+region: null
+sell: yes
+card: unknown
+cost: free
+catches: []
+use_if:
+  - You share links publicly (newsletters, social, docs) and want click analytics + custom domains without Bitly's $35/mo paywall. The free tier is generous enough for indie projects and personal branding.
+skip_if:
+  - reason: "Bitly: Dub.co is open-source, cheaper at scale, and developer-friendly (API-first). Bitly charges for custom domains and advanced analytics that Dub includes free."
+  - reason: "just using your own redirect: Dub gives you analytics, QR codes, link previews, and expiration without writing any code. A bare Nginx redirect gives you nothing."
+pricing_url: https://dub.co
+verified_at: null
+verified_by: null
+source: catalog
+tagline: Link shortener with analytics — no Bitly tax.
+about: Link shortener with analytics — no Bitly tax.

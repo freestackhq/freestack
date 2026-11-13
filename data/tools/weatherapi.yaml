@@ -1,0 +1,36 @@
+id: weatherapi
+name: WeatherAPI
+kind: Weather API
+url: https://www.weatherapi.com/docs/
+aisle: weather
+metric: null
+metric_note: 1M calls/month, current + 3-day forecast + astronomy
+limits:
+  - 1M calls/month, current + 3-day forecast + astronomy
+  - "Rate limit: varies by plan"
+who:
+  - anyone
+region: null
+sell: unknown
+card: unknown
+cost: free
+catches: []
+use_if:
+  - You need high volume on free tier and 3-day forecast is enough, or you want astronomy data included.
+skip_if:
+  - reason: Higher free volume ceiling but requires a key; Open-Meteo is simpler for quick prototypes.
+    use: open-meteo
+pricing_url: https://www.weatherapi.com/docs/
+verified_at: null
+verified_by: null
+source: catalog
+tagline: Weather data with current conditions, forecasts, historical data, and astronomy (sunrise/sunset).
+about: Weather data with current conditions, forecasts, historical data, and astronomy (sunrise/sunset). The free tier is generous at 1M calls/month but limited to 3-day forecasts.
+api:
+  base_url: https://api.weatherapi.com/v1
+  docs: https://www.weatherapi.com/docs/
+  auth: api-key
+  cors: yes
+  response: JSON, XML
+  openapi: yes
+  status: active

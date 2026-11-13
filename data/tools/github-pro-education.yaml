@@ -1,0 +1,41 @@
+id: github-pro-education
+name: GitHub Pro (Education)
+kind: Student offer
+url: https://education.github.com
+aisle: student-programs
+metric: null
+metric_note: While education status active
+limits:
+  - While education status active
+  - Re-verify
+who:
+  - student_school_email
+region: null
+sell: unknown
+card: unknown
+cost: student
+catches: []
+use_if:
+  - You use GitHub heavily and want branch protection rules on private repos, advanced code review (required reviewers, CODEOWNERS), Actions minutes bump, and Packages storage — the stuff that matters once your projects have collaborators or CI pipelines.
+skip_if: []
+pricing_url: https://education.github.com
+verified_at: 2026-07-24
+verified_by: null
+source: catalog
+tagline: Pro features while student-verified — private extras beyond free plan.
+about: |-
+  Pro features while student-verified — private extras beyond free plan.
+
+  vs GitHub Free: Free gives you unlimited private repos and 2,000 Actions minutes, which is enough for solo work. Pro adds required reviewers, Pages from private repos, and 3,000 Actions minutes. Claim Pro if you collaborate on private repos or run CI-heavy workflows; skip if you're solo on public repos.
+tags:
+  - github
+program:
+  order: 21
+  lasts_big: Enrolled
+  lasts_sub: lasts while you study
+  perks:
+    - While education status active
+    - Re-verify
+  needs: A school email
+  lasts: While education status active
+  claim_url: https://education.github.com

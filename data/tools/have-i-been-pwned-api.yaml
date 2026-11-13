@@ -1,0 +1,29 @@
+id: have-i-been-pwned-api
+name: Have I Been Pwned API
+kind: Security tool
+url: https://haveibeenpwned.com/API/Key
+aisle: security
+metric: null
+metric_note: Not listed
+limits:
+  - Free Pwned Passwords API
+  - Paid for some enterprise feeds
+who:
+  - anyone
+region: null
+sell: unknown
+card: unknown
+cost: free
+catches: []
+use_if:
+  - You have a signup or password-change flow and want to reject passwords that already appear in public breach dumps — without sending the actual password to any third party (the k-anonymity API only sends a hash prefix).
+skip_if:
+  - reason: "NIST 800-63B word lists: HIBP's Pwned Passwords corpus is 900M+ real-world breached passwords, far larger than any static dictionary. It catches \"P@ssw0rd123!\" that a complexity rule would accept. vs rolling your own bloom filter: The HIBP range API is 1 HTTP call, no local storage, no update pipeline. You get breach coverage without shipping a multi-GB dataset."
+pricing_url: https://haveibeenpwned.com/API/Key
+verified_at: 2026-07-24
+verified_by: null
+source: catalog
+tagline: Check passwords / emails against breach corpora (k-anonymity range API).
+about: Check passwords / emails against breach corpora (k-anonymity range API).
+tags:
+  - passwords

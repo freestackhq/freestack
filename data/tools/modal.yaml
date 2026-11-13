@@ -1,0 +1,29 @@
+id: modal
+name: Modal
+kind: Serverless GPUs
+url: https://modal.com
+aisle: inference
+metric: null
+metric_note: Not listed
+limits:
+  - Free credits on signup
+  - Then usage
+who:
+  - anyone
+region: null
+sell: yes
+card: unknown
+cost: credits
+catches:
+  - Credits, not a free tier
+use_if:
+  - "You need serverless GPU compute for batch jobs — embedding millions of documents, running fine-tunes, or executing custom model code that doesn't fit a managed inference API. vs Replicate: Modal gives you full code control (bring your own Dockerfile, Python, model weights); Replicate is \"pick a model from the menu and call it.\" vs Unsloth on Colab: Modal scales to real batch sizes with persistent storage and cron scheduling; Colab is a free notebook that disconnects after idle."
+skip_if: []
+pricing_url: https://modal.com
+verified_at: null
+verified_by: null
+source: catalog
+tagline: Serverless GPU/CPU jobs — batch embeddings and fine-tunes without a cluster.
+about: Serverless GPU/CPU jobs — batch embeddings and fine-tunes without a cluster.
+tags:
+  - gpu

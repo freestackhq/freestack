@@ -1,0 +1,31 @@
+id: nvidia-nim
+name: NVIDIA NIM
+kind: Inference API
+url: https://build.nvidia.com
+aisle: inference
+metric: null
+metric_note: 5,000 API credits on signup
+limits:
+  - 5,000 API credits on signup
+  - 40 RPM cap
+  - Prototyping only on free
+who:
+  - anyone
+region: null
+sell: unknown
+card: no
+cost: free
+catches:
+  - Prototyping only on free
+use_if:
+  - "You want to prototype with 100+ models (Llama, Mistral, Gemma, Nemotron) for free via an OpenAI-compatible API — 5,000 credits on signup, no credit card, useful for quick benchmarking across models. vs OpenRouter: NIM is free for prototyping with generous credits; OpenRouter is pay-per-token but production-grade with better routing and fallback. vs Together AI: NIM is for free experimentation (40 RPM cap, not production); Together is PAYG with production SLAs and fine-tuning support."
+skip_if: []
+pricing_url: https://build.nvidia.com
+verified_at: 2026-08-01
+verified_by: null
+source: catalog
+tagline: 100+ frontier models free via NVIDIA Developer — OpenAI-compatible, no card.
+about: 100+ frontier models free via NVIDIA Developer — OpenAI-compatible, no card.
+tags:
+  - llm
+  - gpu

@@ -1,0 +1,30 @@
+id: forward-email
+name: Forward Email
+kind: Email service
+url: https://forwardemail.net
+aisle: email
+metric: null
+metric_note: Not listed
+limits:
+  - Unlimited aliases free class
+  - Paid for outbound SMTP
+who:
+  - anyone
+region: null
+sell: yes
+card: unknown
+cost: free
+catches: []
+use_if:
+  - You want `hello@yourdomain.com` to land in your personal Gmail/Proton without paying for Google Workspace or a hosted mailbox. Forward Email gives unlimited aliases on the free tier — perfect for receiving support@ or billing@ at your custom domain while keeping a single inbox.
+skip_if:
+  - reason: "Cloudflare Email Routing: both are free inbound forwarding; Forward Email is open-source and works with any DNS provider, while Cloudflare Email Routing requires your domain's nameservers on Cloudflare. vs ImprovMX — Forward Email's free tier is more generous (unlimited aliases vs 25) and the project is fully open-source with no tracking."
+pricing_url: https://forwardemail.net
+verified_at: 2026-07-24
+verified_by: null
+source: catalog
+tagline: Privacy-first custom-domain email forwarding — free MX without a mailbox bill.
+about: Privacy-first custom-domain email forwarding — free MX without a mailbox bill.
+tags:
+  - oss
+  - email

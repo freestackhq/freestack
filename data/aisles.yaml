@@ -1,57 +1,251 @@
 # One headline metric per aisle. Every tool in the aisle shows this number.
 # Each aisle measures what its tools actually list, so aisles that measure
-# different things never share a metric.
+# different things never share a metric (tests/unit/aisles.test.ts).
+# A tool that lists its limit in another unit sets metric: null and puts the
+# figure in metric_note.
+#
+# UI-only fields: noun (counts, "8 free databases"), types (filter chips,
+# matched against tool.type), seeAlso (where related tools live), intro
+# (Claim Once page lede).
+#
+# Order in this file is the order in menus and on Home.
+
+# ---------- Build ----------
 - id: databases
   group: Build
   name: Databases
   metric: storage_gb
   unit: GB
   label: free storage
+  noun: databases
+  types:
+    - { id: postgres, label: Postgres }
+    - { id: sqlite, label: SQLite }
+    - { id: documents, label: Documents }
+    - { id: analytics, label: Analytics }
+  seeAlso: { text: "Redis and queues are in", aisle: cache, name: Cache and queues }
 - id: cache
   group: Build
   name: Cache and queues
   metric: commands_per_day
   unit: a day
   label: commands
+  noun: caches and queues
 - id: hosting
   group: Build
   name: Sites and functions
   metric: bandwidth_gb_month   # static sites, serverless and edge functions list transfer
   unit: GB a month
   label: transfer
+  noun: hosts
+  seeAlso: { text: "Servers that stay up are in", aisle: servers, name: Always-on servers }
 - id: servers
   group: Build
   name: Always-on servers
   metric: ram_gb               # VMs and containers that stay up (Koyeb, Render, Oracle) list memory
   unit: GB
   label: memory
+  noun: servers
+  seeAlso: { text: "Static sites and functions are in", aisle: hosting, name: Sites and functions }
 - id: auth
   group: Build
   name: Auth and secrets
   metric: monthly_users
   unit: users a month
   label: monthly users
+  noun: auth and secrets tools
 - id: email
   group: Build
   name: Email
   metric: emails_per_day     # the email catalog lists daily send caps (Resend 100, Brevo 300)
   unit: a day
   label: emails
+  noun: email services
+  seeAlso: { text: "Form backends are in", aisle: forms, name: Forms }
+- id: forms
+  group: Build
+  name: Forms
+  metric: submissions_per_month   # Formspree lists submissions a month
+  unit: a month
+  label: submissions
+  noun: form backends
 - id: storage
   group: Build
   name: Storage
   metric: storage_gb
   unit: GB
   label: free storage
+  noun: storage services
+- id: jobs
+  group: Build
+  name: Jobs and automation
+  metric: messages_per_month      # Svix lists messages a month; steps, events and daily caps go in metric_note
+  unit: a month
+  label: messages
+  noun: job and automation tools
+- id: observability
+  group: Build
+  name: Logs and monitoring
+  metric: ingest_gb_month         # Axiom, New Relic and Better Stack list GB of data sent in a month
+  unit: GB a month
+  label: data in
+  noun: monitoring tools
+- id: search
+  group: Build
+  name: Search
+  metric: records                 # none of these list a number yet
+  unit: ""
+  label: records
+  noun: search services
+- id: security
+  group: Build
+  name: Security
+  metric: seats                   # Tailscale lists users; most list nothing
+  unit: ""
+  label: free seats
+  noun: security tools
+- id: design
+  group: Build
+  name: Design
+  metric: seats
+  unit: ""
+  label: free seats
+  noun: design tools
+- id: team
+  group: Build
+  name: Team and ops
+  metric: seats
+  unit: ""
+  label: free seats
+  noun: team tools
+
+# ---------- AI ----------
 - id: inference
   group: AI
   name: Inference APIs
   metric: requests_per_day   # providers that list only tokens get null and a metric_note
   unit: a day
   label: requests
-- id: student
+  noun: inference APIs
+  seeAlso: { text: "Models on your own machine are in", aisle: local-models, name: Local models }
+- id: embeddings
+  group: AI
+  name: Embeddings
+  metric: tokens_per_month        # none list a monthly token figure yet
+  unit: a month
+  label: tokens
+  noun: embedding APIs
+- id: vectors
+  group: AI
+  name: Vector databases
+  metric: storage_gb              # Zilliz and Qdrant list GB of storage
+  unit: GB
+  label: free storage
+  noun: vector databases
+- id: local-models
+  group: AI
+  name: Local models
+  metric: usage                   # runs on your hardware; nothing to meter
+  unit: ""
+  label: free usage
+  noun: local model runners
+- id: coding
+  group: AI
+  name: AI coding tools
+  metric: completions_per_month   # Cursor and Copilot list completions a month
+  unit: a month
+  label: completions
+  noun: coding tools
+- id: ai-tooling
+  group: AI
+  name: AI tooling
+  metric: requests_per_month      # tracing, memory, agent search; none list a monthly request figure yet
+  unit: a month
+  label: requests
+  noun: AI tools
+
+# ---------- Free and Open Data ----------
+- id: weather
+  group: Free and Open Data
+  name: Weather
+  metric: calls_per_day
+  unit: a day
+  label: calls
+  noun: weather APIs
+- id: geo
+  group: Free and Open Data
+  name: Maps and IP location
+  metric: calls_per_day
+  unit: a day
+  label: calls
+  noun: location APIs
+- id: finance
+  group: Free and Open Data
+  name: Money and markets
+  metric: calls_per_day
+  unit: a day
+  label: calls
+  noun: finance APIs
+- id: crypto
+  group: Free and Open Data
+  name: Crypto prices
+  metric: calls_per_day
+  unit: a day
+  label: calls
+  noun: crypto APIs
+- id: news
+  group: Free and Open Data
+  name: News
+  metric: calls_per_day
+  unit: a day
+  label: calls
+  noun: news APIs
+- id: reference
+  group: Free and Open Data
+  name: Reference data
+  metric: calls_per_day
+  unit: a day
+  label: calls
+  noun: reference APIs
+- id: campus
+  group: Free and Open Data
+  name: PH and campus
+  metric: usage
+  unit: ""
+  label: free usage
+  noun: campus tools
+
+# ---------- Claim Once ----------
+# duration is in months. Program labels show it as "2 yrs" (program.lasts_big).
+- id: student-programs
   group: Claim Once
   name: Student programs
   metric: duration
   unit: ""
   label: how long it lasts
+  noun: programs
+  intro: "Bundles you claim once with a school email. They are numbered in the order worth claiming. The big number is how long it lasts."
+- id: cloud-credits
+  group: Claim Once
+  name: Cloud credits
+  metric: duration
+  unit: ""
+  label: how long it lasts
+  noun: credit programs
+  intro: "Cloud credit you claim once as a student. Spend it before it runs out. The big number is how long it lasts."
+- id: learning
+  group: Claim Once
+  name: Learning
+  metric: duration
+  unit: ""
+  label: how long it lasts
+  noun: course programs
+  intro: "Course platforms you can use free for a while as a student. The big number is how long it lasts."
+- id: startup-programs
+  group: Claim Once
+  name: Startup programs
+  metric: duration
+  unit: ""
+  label: how long it lasts
+  noun: startup programs
+  intro: "Credit programs you apply for once you have a company or an accelerator. The big number is how long it lasts."

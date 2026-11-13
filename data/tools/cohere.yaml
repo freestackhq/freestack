@@ -1,0 +1,31 @@
+id: cohere
+name: Cohere
+kind: Embeddings and rerank
+url: https://cohere.com
+aisle: embeddings
+metric: null
+metric_note: Not listed
+limits:
+  - Free trial keys
+  - Rate limits
+  - Then PAYG
+who:
+  - anyone
+region: null
+sell: unknown
+card: unknown
+cost: free
+catches:
+  - Free trial keys
+use_if:
+  - "Your RAG pipeline's retrieval quality is the bottleneck and you want best-in-class embeddings plus a reranker endpoint that dramatically improves top-K precision without changing your vector DB. vs Voyage AI: Cohere bundles embeddings *and* rerank in one platform; Voyage has stronger embedding benchmarks but no reranker. vs OpenAI embeddings: Cohere's embed-v3 models are multilingual and retrieval-optimized by design; OpenAI's ada-002 is general-purpose and often weaker for search tasks."
+skip_if: []
+pricing_url: https://cohere.com
+verified_at: 2026-07-24
+verified_by: null
+source: catalog
+tagline: Embeddings + rerank that often beat generic LLM embeds for retrieval.
+about: Embeddings + rerank that often beat generic LLM embeds for retrieval.
+tags:
+  - embeddings
+  - rerank

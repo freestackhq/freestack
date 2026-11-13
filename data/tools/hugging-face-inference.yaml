@@ -1,0 +1,31 @@
+id: hugging-face-inference
+name: Hugging Face Inference
+kind: Inference API
+url: https://huggingface.co/inference-api
+aisle: inference
+metric: null
+metric_note: Not listed
+limits:
+  - Free CPU quota
+  - Paid for speed/GPU
+  - Model licenses vary
+who:
+  - anyone
+region: null
+sell: unknown
+card: unknown
+cost: credits
+catches:
+  - Credits, not a free tier
+use_if:
+  - "You want access to the largest catalog of open models (100 K+) with a unified Inference API and free CPU-tier access for experimentation — deploy any model from the Hub without managing infrastructure. vs Together AI / Fireworks: HF Inference has the broadest model selection (including niche fine-tunes); Together/Fireworks are faster and cheaper for the popular models they curate. vs Replicate: HF is better for text/embedding models from the Hub; Replicate's strength is media models (image, video, audio) with per-second billing."
+skip_if: []
+pricing_url: https://huggingface.co/inference-api
+verified_at: 2026-07-24
+verified_by: null
+source: catalog
+tagline: Hosted open models + embeddings without owning a GPU box.
+about: Hosted open models + embeddings without owning a GPU box.
+tags:
+  - llm
+  - embeddings

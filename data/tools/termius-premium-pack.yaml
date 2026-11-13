@@ -1,0 +1,37 @@
+id: termius-premium-pack
+name: Termius Premium (Pack)
+kind: Student offer
+url: https://termius.com
+aisle: student-programs
+metric: null
+metric_note: While in GitHub Pack
+limits:
+  - While in GitHub Pack
+who:
+  - student_school_email
+region: null
+sell: yes
+card: unknown
+cost: student
+catches: []
+use_if:
+  - You SSH into servers from multiple devices (laptop, phone, tablet) and want your hosts, keys, and snippets synced everywhere with a polished UI — especially useful when managing cloud VMs, lab machines, or homelab boxes from anywhere.
+skip_if: []
+pricing_url: https://termius.com
+verified_at: null
+verified_by: null
+source: catalog
+tagline: SSH synced across laptop and phone.
+about: |-
+  SSH synced across laptop and phone.
+
+  vs native SSH + config file / Blink (iOS): A plain `~/.ssh/config` is free and works great on one machine, but doesn't sync to mobile or handle SFTP visually. Blink is iOS-only and pricey post-student. Termius wins on cross-platform sync and team snippet sharing while the Pack license lasts.
+program:
+  order: 16
+  lasts_big: Enrolled
+  lasts_sub: lasts while you study
+  perks:
+    - While in GitHub Pack
+  needs: A school email
+  lasts: While in GitHub Pack
+  claim_url: https://termius.com

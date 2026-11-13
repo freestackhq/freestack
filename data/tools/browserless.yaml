@@ -1,0 +1,30 @@
+id: browserless
+name: Browserless
+kind: Headless Chrome API
+url: https://www.browserless.io
+aisle: ai-tooling
+metric: null
+metric_note: Not listed
+limits:
+  - Free/starter unit caps
+  - Then usage
+who:
+  - anyone
+region: null
+sell: yes
+card: unknown
+cost: credits
+catches:
+  - Credits, not a free tier
+use_if:
+  - "You need headless Chrome as a service for generating PDFs, taking screenshots, or scraping pages — simpler API than full Playwright, with managed scaling and a free starter tier. vs Browserbase: Browserless is better for straightforward Chrome tasks (PDF gen, screenshots, simple scrapes); Browserbase is built for complex AI agent browsing with stealth, sessions, and anti-bot evasion. vs self-hosted Playwright: Browserless handles Chrome lifecycle, memory leaks, and concurrency scaling; self-hosting means you manage zombie processes and OOM kills yourself."
+skip_if: []
+pricing_url: https://www.browserless.io
+verified_at: 2026-07-24
+verified_by: null
+source: catalog
+tagline: Headless Chrome API for PDFs, scrapes, screenshots — less Playwright ops.
+about: Headless Chrome API for PDFs, scrapes, screenshots — less Playwright ops.
+tags:
+  - browser
+  - agents

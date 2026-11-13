@@ -1,0 +1,27 @@
+id: svix
+name: Svix
+kind: Outgoing webhooks
+url: https://www.svix.com
+aisle: jobs
+metric: 50000
+metric_note: About
+limits: []
+who:
+  - anyone
+region: null
+sell: yes
+card: unknown
+cost: free
+catches: []
+use_if:
+  - Your SaaS needs to send webhooks to customers and you don't want to build retry logic, signature verification, delivery dashboards, and failure alerting from scratch. 50k msgs/mo free handles most early-stage products.
+skip_if:
+  - reason: "rolling your own queue + retry: Svix handles exponential backoff, signing, delivery logs, and customer-facing retry UI. Building that yourself is 2–4 weeks of work you'll regret maintaining."
+  - reason: Hookdeck is for *receiving* webhooks (inbound); Svix is for *sending* them (outbound). They're complements, not competitors.
+    use: hookdeck
+pricing_url: https://www.svix.com
+verified_at: null
+verified_by: null
+source: catalog
+tagline: Outbound webhook delivery (Hookdeck's dual for sending).
+about: Outbound webhook delivery (Hookdeck's dual for sending).

@@ -1,0 +1,29 @@
+id: pinecone
+name: Pinecone
+kind: Vector database
+url: https://www.pinecone.io
+aisle: vectors
+metric: null
+metric_note: Not listed
+limits:
+  - Starter free serverless quota
+  - Then usage
+who:
+  - anyone
+region: null
+sell: yes
+card: unknown
+cost: free
+catches: []
+use_if:
+  - "You want the lowest-ops vector database experience — create an index, upsert, query, done — and your dataset fits comfortably in the free serverless tier without needing self-host escape hatches. vs Qdrant: Pinecone has a slicker onboarding and zero config, but Qdrant gives you open-source portability and richer filtering. vs pgvector: Pinecone is faster at scale and purpose-built for similarity search; pgvector avoids an extra service when your vectors are small and already live next to your relational data."
+skip_if: []
+pricing_url: https://www.pinecone.io
+verified_at: 2026-07-24
+verified_by: null
+source: catalog
+tagline: Managed vectors with the least ops — fine until egress and namespaces bite.
+about: Managed vectors with the least ops — fine until egress and namespaces bite.
+tags:
+  - vector
+  - rag

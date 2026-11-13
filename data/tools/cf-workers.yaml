@@ -1,0 +1,33 @@
+id: cf-workers
+name: Cloudflare Workers & Pages
+kind: Edge hosting
+url: https://workers.cloudflare.com
+aisle: hosting
+metric: null
+metric_note: 100k requests a day
+limits:
+  - 100k requests a day
+  - Static unlimited
+who:
+  - anyone
+region: null
+sell: yes
+card: unknown
+cost: free
+catches: []
+use_if:
+  - Your app is a static frontend + API routes and you want zero cold starts at the edge with the most generous free static tier available — no bandwidth caps, no sleep, no containers to manage.
+skip_if:
+  - reason: "Both deploy static + functions, but Workers runs on 300+ edge locations with no commercial-use restriction; Vercel locks you to hobby/non-commercial on the free plan. vs Render: Render gives you a container that sleeps after 15 min; Workers never sleeps and responds in <50 ms globally."
+    use: vercel-hobby
+pricing_url: https://workers.cloudflare.com
+verified_at: null
+verified_by: null
+source: catalog
+tagline: Static sites plus API routes. No cold starts.
+about: Edge functions + unlimited static hosting.
+fits:
+  - school
+  - student
+  - indie
+  - startup

@@ -1,0 +1,43 @@
+id: azure-for-students-starter
+name: Azure for Students Starter
+kind: Student offer
+url: https://azure.microsoft.com/en-us/free/students/starter/
+aisle: student-programs
+metric: null
+metric_note: Separate from $100 Azure Students
+limits:
+  - No credit card
+  - Service caps
+  - Separate from $100 Azure Students
+who:
+  - student_school_email
+region: null
+sell: unknown
+card: no
+cost: student
+catches: []
+use_if:
+  - You're under 18 or can't get the full Azure for Students $100 credit — this no-credit-card tier gives you App Service, Functions, and Cognitive Services with caps, enough to deploy a web app or API for a class project without any billing risk.
+skip_if: []
+pricing_url: https://azure.microsoft.com/en-us/free/students/starter/
+verified_at: 2026-07-24
+verified_by: null
+source: catalog
+tagline: No-card starter cloud for younger students — App Service / Functions caps.
+about: |-
+  No-card starter cloud for younger students — App Service / Functions caps.
+
+  vs Azure for Students ($100 credit): The full Azure for Students is strictly better if you qualify — more services, VMs, and flexibility. Use Starter only if age or verification blocks the main offer. Don't use both simultaneously; they're separate programs with separate limits.
+tags:
+  - azure
+program:
+  order: 22
+  lasts_big: "?"
+  lasts_sub: Not listed
+  perks:
+    - No credit card
+    - Service caps
+    - Separate from $100 Azure Students
+  needs: A school email
+  lasts: Not listed
+  claim_url: https://azure.microsoft.com/en-us/free/students/starter/

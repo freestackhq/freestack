@@ -1,0 +1,44 @@
+id: cerebras
+name: Cerebras Inference
+kind: Inference API
+url: https://inference.cerebras.ai
+aisle: inference
+metric: null
+metric_note: Not listed
+limits:
+  - Free tier with rate limits
+  - Then paid
+  - Free tier with token limits
+who:
+  - anyone
+region: null
+sell: unknown
+card: unknown
+cost: free
+catches: []
+use_if:
+  - "You need Groq-class speed on open models and want a second fast-inference provider to failover to when Groq's rate limits hit — Cerebras's wafer-scale chips deliver similar TTFT. vs Groq: both are ultra-fast; Groq has a more mature free tier and wider model support today, so use Cerebras as your secondary or when Groq is at capacity. vs Fireworks/Together: Cerebras is optimized purely for speed (like Groq); Fireworks/Together offer broader model catalogs and fine-tuning at moderate speed."
+  - You want an alternative fast provider to Groq for failover, or Groq's daily limits are exhausted.
+skip_if:
+  - reason: Similar speed; Groq has more model options. Good as a failover provider in a multi-provider router.
+    use: groq
+pricing_url: https://inference.cerebras.ai
+verified_at: 2026-07-24
+verified_by: null
+source: catalog
+tagline: Very fast open-weight inference — useful when Groq quotas run dry.
+about: |-
+  Very fast open-weight inference — useful when Groq quotas run dry.
+
+  Wafer-scale inference hardware. Similar speed story to Groq with extremely fast generation. Currently offers fewer models but competitive on Llama variants.
+tags:
+  - llm
+api:
+  base_url: https://api.cerebras.net/v1
+  docs: https://docs.cerebras.ai
+  auth: api-key
+  models: llama-3.3-70b
+  openai_compatible: yes
+  streaming: yes
+  self_host: no
+  status: active

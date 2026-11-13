@@ -1,0 +1,36 @@
+id: nominatim
+name: Nominatim
+kind: Location API
+url: https://nominatim.org/release-docs/latest/
+aisle: geo
+metric: null
+metric_note: 1 requests/sec (absolute max)
+limits:
+  - Unlimited (respect usage policy)
+  - "Rate limit: 1 requests/sec (absolute max)"
+who:
+  - anyone
+region: null
+sell: unknown
+card: unknown
+cost: free
+catches: []
+use_if:
+  - You need geocoding/reverse geocoding backed by OSM data and can self-host for higher throughput.
+skip_if:
+  - reason: Different purpose. Nominatim does address/coordinate lookup; ipinfo does IP-based geolocation.
+    use: ipinfo-io
+pricing_url: https://nominatim.org/release-docs/latest/
+verified_at: null
+verified_by: null
+source: catalog
+tagline: Geocoding (address → coordinates) and reverse geocoding (coordinates → address) powered by OpenStreetMap data.
+about: Geocoding (address → coordinates) and reverse geocoding (coordinates → address) powered by OpenStreetMap data. Self-hostable. The public instance has strict rate limits but is completely free.
+api:
+  base_url: https://nominatim.openstreetmap.org
+  docs: https://nominatim.org/release-docs/latest/
+  auth: none
+  cors: yes
+  response: JSON, XML
+  openapi: no
+  status: active

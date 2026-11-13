@@ -1,0 +1,37 @@
+id: posthog
+name: PostHog
+kind: Monitoring
+url: https://posthog.com
+aisle: observability
+metric: null
+metric_note: ~1M events a month
+limits:
+  - ~1M events a month
+  - No CC for free caps
+  - ~1M events a month free across products
+who:
+  - anyone
+region: null
+sell: yes
+card: no
+cost: free
+catches: []
+use_if:
+  - You need product analytics (funnels, retention, paths) *and* session replay *and* feature flags in one SDK instead of stitching three vendors together. The ~1M events/mo free tier is real — no credit card, no trial expiry.
+  - "You need session replays, feature flags, A/B tests, AND funnels in one tool and refuse to duct-tape Mixpanel + LaunchDarkly + Hotjar together. PostHog's all-in-one surface means one SDK, one billing meter, one data model to reason about. vs Mixpanel/Amplitude: PostHog is warehouse-native and self-hostable; Mixpanel has slightly better collaboration UX for non-technical PMs but costs more per event and locks data in their cloud. vs Plausible/Umami: PostHog is for *product* analytics (who clicked what, where they churned); Plausible is for *traffic* analytics (pageviews, referrers) — use Plausible for your marketing site, PostHog for your app."
+skip_if:
+  - reason: "Sentry catches crashes; PostHog tells you *why users churned before they crashed*. Use both: Sentry for errors, PostHog for behavior."
+    use: sentry
+  - reason: Axiom is for structured backend logs; PostHog is for frontend product analytics. Different layers, not competitors.
+    use: axiom
+pricing_url: https://posthog.com
+verified_at: null
+verified_by: null
+source: catalog
+tagline: Product analytics, session replay, feature flags.
+about: |-
+  Product analytics, session replay, feature flags.
+
+  Product analytics without a $enterprise contract — free until you scale events.
+tags:
+  - analytics

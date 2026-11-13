@@ -1,0 +1,35 @@
+id: heroku-pack
+name: Heroku (Pack)
+kind: Cloud credit
+url: https://www.heroku.com
+aisle: cloud-credits
+metric: 24
+limits:
+  - $13 a month × 24 months
+who:
+  - student_school_email
+region: null
+sell: yes
+card: unknown
+cost: credits
+catches: []
+use_if:
+  - You want the fastest path from `git push` to a live URL — no Dockerfiles, no infrastructure YAML, no SSH. The 24-month runway means your capstone demo stays online through graduation without babysitting.
+skip_if:
+  - reason: "DO gives you a whole VM to configure yourself. Heroku abstracts all of that away: add a Postgres add-on with one click, scale dynos with a slider. You trade control for speed — ideal when shipping matters more than learning ops."
+    use: digitalocean-pack
+pricing_url: https://www.heroku.com
+verified_at: null
+verified_by: null
+source: catalog
+tagline: Simple PaaS credit for 24 months.
+about: Simple PaaS credit for 24 months.
+program:
+  order: 2
+  lasts_big: 2 yrs
+  lasts_sub: ""
+  perks:
+    - $13 a month × 24 months
+  needs: A school email
+  lasts: ""
+  claim_url: https://www.heroku.com

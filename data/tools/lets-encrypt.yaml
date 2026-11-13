@@ -1,0 +1,29 @@
+id: lets-encrypt
+name: Let's Encrypt
+kind: Security tool
+url: https://letsencrypt.org
+aisle: security
+metric: null
+metric_note: 90-day certs
+limits:
+  - Rate limits per domain
+  - 90-day certs
+who:
+  - anyone
+region: null
+sell: yes
+card: unknown
+cost: free
+catches: []
+use_if:
+  - You run any web service and need TLS without paying for it. Pair with certbot or Caddy's auto-HTTPS and forget about it. There is no reason to serve HTTP in 2026.
+skip_if:
+  - reason: "Cloudflare Universal SSL: Let's Encrypt works on any origin you control (not just Cloudflare-proxied domains). Use it when you need certs for non-HTTP services (mail, MQTT) or when you're not fronted by Cloudflare. vs paid CAs (DigiCert, Sectigo): Unless you need EV/OV certificates for regulatory compliance, Let's Encrypt DV certs are functionally identical in the browser. Save the $200/yr."
+pricing_url: https://letsencrypt.org
+verified_at: 2026-07-24
+verified_by: null
+source: catalog
+tagline: Free TLS certificates — boring, required, still the default.
+about: Free TLS certificates — boring, required, still the default.
+tags:
+  - tls

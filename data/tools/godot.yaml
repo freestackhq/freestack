@@ -1,0 +1,26 @@
+id: godot
+name: Godot
+kind: Design tool
+url: https://godotengine.org
+aisle: design
+metric: null
+metric_note: Not listed
+limits:
+  - Fully free / open source
+who:
+  - anyone
+region: null
+sell: yes
+card: unknown
+cost: free
+catches: []
+use_if:
+  - You want to build a 2D or 3D game and own every line of your engine. GDScript is beginner-friendly, the editor runs on potato hardware, and you can ship commercially on Steam/itch.io with zero royalties or fees.
+skip_if:
+  - reason: "Unity/Unreal: Unity charges a runtime fee past $200K revenue; Unreal takes 5% after $1M. Godot takes nothing, ever. Trade-off: fewer AAA-ready rendering features and a smaller asset marketplace — fine for indie and jam-scale games."
+pricing_url: https://godotengine.org
+verified_at: null
+verified_by: null
+source: catalog
+tagline: Open-source game engine.
+about: Open-source game engine. No student ID needed.

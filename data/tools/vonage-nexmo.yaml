@@ -1,0 +1,31 @@
+id: vonage-nexmo
+name: Vonage (Nexmo)
+kind: SMS and voice
+url: https://www.vonage.com/communications-apis/
+aisle: email
+metric: null
+metric_note: Not listed
+limits:
+  - Signup credit crumbs
+  - PAYG
+who:
+  - anyone
+region: null
+sell: yes
+card: unknown
+cost: credits
+catches:
+  - Credits, not a free tier
+use_if:
+  - Twilio can't provision a local number in your target country, charges an unreasonable premium on a specific route, or you want a second vendor for failover. Vonage's API surface is comparable but the signup credit is stingy — treat it as a backup, not a default.
+skip_if:
+  - reason: "Vonage occasionally wins on per-SMS pricing in APAC/EMEA corridors and has better WhatsApp Business API coverage in some regions; Twilio wins everywhere else on DX, docs, and ecosystem. vs email-based OTP — same trade-off as Twilio: only reach for SMS when a phone number is the trust anchor your product needs."
+    use: twilio-trial
+pricing_url: https://www.vonage.com/communications-apis/
+verified_at: 2026-07-24
+verified_by: null
+source: catalog
+tagline: SMS/voice alternative when Twilio pricing or coverage is awkward.
+about: SMS/voice alternative when Twilio pricing or coverage is awkward.
+tags:
+  - sms

@@ -1,0 +1,38 @@
+id: zyte-scrapy-cloud-pack
+name: Zyte Scrapy Cloud (Pack)
+kind: Scraping cloud
+url: https://www.zyte.com
+aisle: student-programs
+metric: null
+metric_note: 1 unit forever
+limits:
+  - 1 unit forever
+  - 120d retention
+who:
+  - student_school_email
+region: null
+sell: yes
+card: unknown
+cost: student
+catches: []
+use_if:
+  - You have Scrapy spiders and want them running on a schedule in the cloud without maintaining a server or Docker cron. The Pack gives you one persistent unit — enough for a personal data pipeline that scrapes daily.
+skip_if:
+  - reason: "self-hosted Scrapy + cron: Zyte handles scheduling, log storage (120 days), and scaling without you babysitting a VPS. The tradeoff is vendor lock-in to their platform."
+  - reason: "Apify free tier: Apify is broader (Puppeteer, Playwright, any scraper); Zyte is Scrapy-native. If your spiders are already Scrapy, Zyte deploys them as-is with zero rewrite."
+pricing_url: https://www.zyte.com
+verified_at: null
+verified_by: null
+source: catalog
+tagline: One Scrapy Cloud unit forever via Pack.
+about: One Scrapy Cloud unit forever via Pack.
+program:
+  order: 11
+  lasts_big: "?"
+  lasts_sub: Not listed
+  perks:
+    - 1 unit forever
+    - 120d retention
+  needs: A school email
+  lasts: Not listed
+  claim_url: https://www.zyte.com

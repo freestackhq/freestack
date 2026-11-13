@@ -1,0 +1,45 @@
+id: voyage-ai
+name: Voyage AI
+kind: Embeddings API
+url: https://www.voyageai.com
+aisle: embeddings
+metric: null
+metric_note: Not listed
+limits:
+  - Free tokens on signup
+  - Then PAYG
+  - Free tokens on signup (then PAYG)
+who:
+  - anyone
+region: null
+sell: yes
+card: unknown
+cost: credits
+catches:
+  - Credits, not a free tier
+use_if:
+  - "Retrieval precision is your primary bottleneck and you want embeddings that consistently top MTEB benchmarks for search — Voyage models are purpose-built for retrieval, not general-purpose. vs Cohere: Voyage often leads on raw embedding quality benchmarks; Cohere bundles a reranker you'd need to add separately with Voyage. vs Together Embeddings: Voyage is a specialized embeddings company with top-tier quality; Together offers open-weight embeddings that are cheaper and let you self-host the same model later."
+  - You need the highest-quality embeddings for retrieval/RAG and can afford PAYG after free credits.
+skip_if:
+  - reason: Better quality for code and retrieval; Together is cheaper at scale with open-weight models.
+    use: together-embeddings
+pricing_url: https://www.voyageai.com
+verified_at: 2026-07-24
+verified_by: null
+source: catalog
+tagline: Strong embeddings API when retrieval quality matters more than chat.
+about: |-
+  Strong embeddings API when retrieval quality matters more than chat.
+
+  Top-tier embedding quality, especially for code (voyage-code-3) and retrieval tasks. Benchmarks consistently near the top on MTEB. Free credits on signup let you prototype RAG pipelines.
+tags:
+  - embeddings
+api:
+  base_url: https://api.voyageai.com/v1
+  docs: https://docs.voyageai.com
+  auth: api-key
+  models: voyage-3, voyage-3-lite, voyage-code-3
+  openai_compatible: no
+  streaming: no
+  self_host: no
+  status: active

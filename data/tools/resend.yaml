@@ -1,0 +1,28 @@
+id: resend
+name: Resend
+kind: Email API
+url: https://resend.com
+aisle: email
+metric: 100
+limits:
+  - 3k emails a month
+  - 1 domain
+who:
+  - anyone
+region: null
+sell: yes
+card: unknown
+cost: free
+catches:
+  - 100 a day cap
+use_if:
+  - Your app sends password resets, receipts, or magic links and you want to compose them in JSX/TSX like a React component — not raw HTML tables from 2004. The 3k/mo free tier covers early-stage SaaS without thinking about cost, and the single-domain cap only hurts if you run multiple brands.
+skip_if:
+  - reason: Resend is pure transactional with a modern SDK; Brevo bundles marketing lists and campaigns you won't use yet. vs SendGrid — Resend's deliverability is comparable but the DX (React Email templates, instant logs) is a generation ahead of SendGrid's legacy dashboard.
+    use: brevo
+pricing_url: https://resend.com
+verified_at: null
+verified_by: null
+source: catalog
+tagline: Transactional email with React Email DX.
+about: Transactional email with React Email DX.

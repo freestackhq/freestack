@@ -1,0 +1,33 @@
+id: turso
+name: Turso
+kind: Edge SQLite
+url: https://turso.tech
+aisle: databases
+metric: 5
+limits:
+  - 500M reads a month
+  - 100 DBs
+who:
+  - anyone
+region: null
+sell: yes
+card: unknown
+cost: free
+catches: []
+use_if:
+  - Your app is read-heavy (dashboards, content sites, analytics) and you want embedded replicas that sit next to your compute for sub-millisecond reads without a connection round-trip.
+skip_if:
+  - reason: Both are SQLite-at-edge. Pick D1 if you're already on Cloudflare Workers and want zero-config binding. Pick Turso if you deploy on Vercel/Fly/Deno and need a portable edge DB with embedded replicas you control.
+    use: d1
+  - reason: Pick Turso when reads dominate and you want edge locality. Pick Neon when you need Postgres features (CTEs, full-text search, extensions) or write-heavy transactional workloads.
+    use: neon
+pricing_url: https://turso.tech
+verified_at: null
+verified_by: null
+source: catalog
+tagline: SQLite copies close to your users.
+about: LibSQL at the edge — strong for read-heavy apps.
+type: sqlite
+tags:
+  - sqlite
+  - edge

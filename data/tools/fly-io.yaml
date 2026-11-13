@@ -1,0 +1,29 @@
+id: fly-io
+name: Fly.io
+kind: Virtual machines
+url: https://fly.io
+aisle: servers
+metric: null
+metric_note: Not listed
+limits:
+  - No classic free tier for new accounts
+  - Small bills if sized right
+who:
+  - anyone
+region: null
+sell: yes
+card: unknown
+cost: credits
+catches:
+  - Credits, not a free tier
+use_if:
+  - "You need your backend within 50ms of users in multiple regions and don't want to learn Terraform + VPCs to get there. Fly gives you Firecracker VMs with a `fly deploy` and handles Anycast, TLS, and private networking. Best for latency-sensitive APIs, real-time apps, or SQLite-on-the-edge patterns. vs Railway/Render: Railway and Render are simpler (git-push deploy) but single-region by default; Fly wins when multi-region latency matters. vs AWS/GCP: hyperscalers give you infinite knobs but cost $0 in brainpower only if you already know them; Fly trades some flexibility for \"deploy globally in 5 minutes\" simplicity at <$10/mo for small apps."
+skip_if: []
+pricing_url: https://fly.io
+verified_at: null
+verified_by: null
+source: catalog
+tagline: Global VMs near users — PAYG after free allowances changed; still lean vs hyperscale.
+about: Global VMs near users — PAYG after free allowances changed; still lean vs hyperscale.
+tags:
+  - hosting

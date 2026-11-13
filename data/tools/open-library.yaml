@@ -1,0 +1,36 @@
+id: open-library
+name: Open Library
+kind: Reference data API
+url: https://openlibrary.org/developers/api
+aisle: reference
+metric: null
+metric_note: 100 requests per 5 minutes (search); generous for direct lookups
+limits:
+  - Unlimited
+  - "Rate limit: 100 requests per 5 minutes (search); generous for direct lookups"
+who:
+  - anyone
+region: null
+sell: unknown
+card: unknown
+cost: free
+catches: []
+use_if:
+  - You need book metadata, covers, or ISBN lookups without paying for a proprietary book API.
+skip_if:
+  - reason: Different domain entirely. Open Library is books; REST Countries is geographic data.
+    use: rest-countries
+pricing_url: https://openlibrary.org/developers/api
+verified_at: null
+verified_by: null
+source: catalog
+tagline: "Book data from the Internet Archive: search by title/author/ISBN, get cover images, edition info, author bios."
+about: "Book data from the Internet Archive: search by title/author/ISBN, get cover images, edition info, author bios. Over 20M edition records. Self-hostable (open source)."
+api:
+  base_url: https://openlibrary.org
+  docs: https://openlibrary.org/developers/api
+  auth: none
+  cors: yes
+  response: JSON
+  openapi: no
+  status: active

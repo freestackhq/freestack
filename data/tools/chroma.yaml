@@ -1,0 +1,30 @@
+id: chroma
+name: Chroma
+kind: Vector database
+url: https://www.trychroma.com
+aisle: vectors
+metric: null
+metric_note: Not listed
+limits:
+  - OSS local free
+  - Chroma Cloud has a free tier (check caps)
+who:
+  - anyone
+region: null
+sell: yes
+card: unknown
+cost: free
+catches: []
+use_if:
+  - "You want to add vector search to a prototype with `pip install chromadb` and zero infrastructure — embeddings persist locally, and you can move to Chroma Cloud later without changing your code. vs pgvector: Chroma is purpose-built for embeddings with better DX (auto-embedding, metadata filtering); pgvector requires you to manage embedding generation yourself and lives inside Postgres. vs Qdrant/Pinecone: Chroma is the fastest path from zero to working RAG on localhost; switch to Qdrant or Pinecone when you need distributed scale or SLA guarantees."
+skip_if: []
+pricing_url: https://www.trychroma.com
+verified_at: 2026-07-24
+verified_by: null
+source: catalog
+tagline: Embedded-first vector store — local RAG before you pay for a cluster.
+about: Embedded-first vector store — local RAG before you pay for a cluster.
+tags:
+  - vector
+  - rag
+  - oss

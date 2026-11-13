@@ -1,0 +1,43 @@
+id: jetbrains-edu
+name: JetBrains All Products
+kind: Student license
+url: https://www.jetbrains.com/community/education/
+aisle: student-programs
+metric: null
+metric_note: While student
+limits:
+  - Free while student
+  - Renew yearly
+  - Edu/non-commercial
+who:
+  - student_school_email
+region: null
+sell: no
+card: unknown
+cost: student
+catches:
+  - Not for paid work
+use_if:
+  - You write Java, Kotlin, C#, or Python professionally-sized projects and need refactoring, debugging, and database tooling that actually understands your framework — not just syntax highlighting. The student license gives you _every_ IDE simultaneously, so you never hit a "wrong language" wall.
+skip_if: []
+pricing_url: https://www.jetbrains.com/community/education/
+verified_at: null
+verified_by: null
+source: catalog
+tagline: IntelliJ, PyCharm, WebStorm, Rider, CLion — full pack.
+about: |-
+  IntelliJ, PyCharm, WebStorm, Rider, CLion — full pack.
+
+  vs VS Code + extensions: VS Code is lighter and free forever, but JetBrains wins on deep refactors, integrated profilers, and framework-aware inspections (Spring, Django, .NET). Pick JetBrains when the project is large enough that "go to definition" isn't enough.
+tags:
+  - must-claim
+program:
+  order: 2
+  lasts_big: Enrolled
+  lasts_sub: then renew
+  perks:
+    - IntelliJ, PyCharm, WebStorm
+    - Rider, CLion and the rest
+  needs: School email
+  lasts: While you are a student
+  claim_url: https://www.jetbrains.com/community/education/

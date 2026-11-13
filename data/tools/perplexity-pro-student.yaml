@@ -1,0 +1,35 @@
+id: perplexity-pro-student
+name: Perplexity Pro Student
+kind: Student offer
+url: https://www.perplexity.ai/hub/student-discount
+aisle: student-programs
+metric: 12
+limits: []
+who:
+  - student_school_email
+region: null
+sell: yes
+card: unknown
+cost: student
+catches: []
+use_if:
+  - You write research papers or need to quickly synthesize sources with proper citations — Perplexity Pro gives you unlimited Pro searches with source links, making it a turbo-charged literature review tool that actually shows where claims come from.
+skip_if: []
+pricing_url: https://www.perplexity.ai/hub/student-discount
+verified_at: null
+verified_by: null
+source: catalog
+tagline: Research AI with citations — often 1 year free.
+about: |-
+  Research AI with citations — often 1 year free.
+
+  vs ChatGPT Plus / Google Scholar: ChatGPT hallucinates citations; Perplexity's inline sources let you verify instantly. Google Scholar is authoritative but requires you to read and synthesize manually. Perplexity sits between them — AI speed with citation accountability.
+program:
+  order: 15
+  lasts_big: 1 yr
+  lasts_sub: Promo term (typically 1 yr)
+  perks:
+    - Research AI with citations — often 1 year free.
+  needs: A school email
+  lasts: Promo term (typically 1 yr)
+  claim_url: https://www.perplexity.ai/hub/student-discount

@@ -1,0 +1,30 @@
+id: socket-dev
+name: Socket.dev
+kind: Security tool
+url: https://socket.dev
+aisle: security
+metric: null
+metric_note: Not listed
+limits:
+  - Free tier for public / small private
+  - Paid for orgs
+who:
+  - anyone
+region: null
+sell: yes
+card: unknown
+cost: free
+catches: []
+use_if:
+  - You install packages from npm/pypi and want to know *before* merge when a dependency starts exfiltrating env vars, spawns install scripts, or was published by a hijacked maintainer account.
+skip_if:
+  - reason: "Snyk alerts on known CVEs (reactive); Socket alerts on suspicious package *behavior* like network calls in postinstall or obfuscated code (proactive). They're complementary. vs `npm audit`: npm audit only checks the advisory database. Socket does static analysis of package contents to catch zero-day supply-chain attacks that have no CVE yet."
+    use: snyk
+pricing_url: https://socket.dev
+verified_at: 2026-07-24
+verified_by: null
+source: catalog
+tagline: Supply-chain alerts for npm/pypi — catch malicious packages early.
+about: Supply-chain alerts for npm/pypi — catch malicious packages early.
+tags:
+  - sca

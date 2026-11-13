@@ -1,0 +1,30 @@
+id: tailscale
+name: Tailscale
+kind: Security tool
+url: https://tailscale.com
+aisle: security
+metric: 3
+metric_note: About
+limits:
+  - Personal free
+  - 3 users / 100 devices class Free plan
+who:
+  - anyone
+region: null
+sell: yes
+card: unknown
+cost: free
+catches: []
+use_if:
+  - You have admin panels, databases, or staging environments that should never touch the public internet. Install on each machine, they see each other — no port forwarding, no firewall rules, no VPN server to maintain.
+skip_if:
+  - reason: "Netbird: Both are WireGuard mesh overlays. Tailscale has a slicker UX, better docs, and MagicDNS. Netbird is fully self-hostable (no vendor control plane). Pick Tailscale for fastest setup; pick Netbird if you refuse to trust any third-party coordination server. vs traditional VPN (OpenVPN/WireGuard manual): No central gateway bottleneck, no config file distribution, no NAT traversal headaches. Tailscale is peer-to-peer and auto-punches through NAT."
+pricing_url: https://tailscale.com
+verified_at: 2026-07-24
+verified_by: null
+source: catalog
+tagline: Zero-config mesh VPN for homelab, staging, and private admin panels.
+about: Zero-config mesh VPN for homelab, staging, and private admin panels.
+tags:
+  - vpn
+  - homelab

@@ -1,0 +1,29 @@
+id: anthropic-api
+name: Anthropic API
+kind: Inference API
+url: https://console.anthropic.com
+aisle: inference
+metric: null
+metric_note: Not listed
+limits:
+  - Usage billing
+  - Set org spend caps
+who:
+  - anyone
+region: null
+sell: yes
+card: unknown
+cost: credits
+catches:
+  - Credits, not a free tier
+use_if:
+  - "You're building multi-step agents with complex tool-calling chains and need the model that most reliably follows system prompts, uses tools correctly, and reasons through ambiguous steps. vs OpenAI API: Claude excels at long agentic workflows and instruction-following; GPT-4o is better for breadth (image gen, TTS, embeddings all in one platform). vs Groq/Fireworks: Anthropic is the quality ceiling for hard reasoning; Groq/Fireworks are for high-volume, latency-sensitive calls where \"good enough\" open models suffice."
+skip_if: []
+pricing_url: https://console.anthropic.com
+verified_at: null
+verified_by: null
+source: catalog
+tagline: Claude for agent/tool use — keep it off the hot path until revenue.
+about: Claude for agent/tool use — keep it off the hot path until revenue.
+tags:
+  - llm

@@ -1,0 +1,35 @@
+id: educative-pack
+name: Educative (Pack)
+kind: Course platform
+url: https://www.educative.io
+aisle: learning
+metric: 6
+limits:
+  - 30% off later
+who:
+  - student_school_email
+region: null
+sell: yes
+card: unknown
+cost: student
+catches: []
+use_if:
+  - You're grinding system design or coding interviews and prefer reading + in-browser coding over watching videos. The "Grokking" series lives here and it's genuinely the fastest path to FAANG-style system design fluency.
+skip_if:
+  - reason: "LeetCode Premium: Educative teaches patterns and mental models; LeetCode is pure drill. Use both — Educative first to learn the framework, then LeetCode to build speed."
+  - reason: "AlgoExpert: Educative has broader coverage (system design, ML, cloud) and text-first format vs AlgoExpert's video-heavy approach."
+pricing_url: https://www.educative.io
+verified_at: null
+verified_by: null
+source: catalog
+tagline: Interactive courses — system design, interviews.
+about: Interactive courses — system design, interviews.
+program:
+  order: 2
+  lasts_big: 6 mo
+  lasts_sub: 6 months
+  perks:
+    - 30% off later
+  needs: A school email
+  lasts: 6 months
+  claim_url: https://www.educative.io

@@ -1,0 +1,47 @@
+id: openrouter
+name: OpenRouter
+kind: Inference API
+url: https://openrouter.ai
+aisle: inference
+metric: null
+metric_note: Models tagged `:free` cost $0 (rate-limited)
+limits:
+  - Pay-per-token
+  - Free-tier models available
+  - Set spend caps
+  - Models tagged `:free` cost $0 (rate-limited)
+who:
+  - anyone
+region: null
+sell: yes
+card: unknown
+cost: credits
+catches:
+  - Credits, not a free tier
+use_if:
+  - "You need one API key to access OpenAI, Anthropic, Mistral, and dozens of open models — swap providers without changing code and use free-tier models for dev. vs Together AI: OpenRouter aggregates *all* providers (closed + open) behind one endpoint; Together only hosts open-weight models. vs direct OpenAI/Anthropic: you trade ~5 % markup for instant fallback routing and cost-ranked model selection."
+  - You want one API key to access many providers and use `:free` models for development/side projects.
+skip_if:
+  - reason: OpenRouter is a router (many providers); Groq is a single ultra-fast inference provider. OpenRouter's free models rotate; Groq's free tier is more predictable.
+    use: groq
+pricing_url: https://openrouter.ai
+verified_at: null
+verified_by: null
+source: catalog
+tagline: One API for many models — route cheap for drafts, frontier for hard steps.
+about: |-
+  One API for many models — route cheap for drafts, frontier for hard steps.
+
+  Meta-router across 200+ models from dozens of providers. Free-tagged models run at $0 with rate limits. Pay-per-token for everything else. One API key works across all providers, making it ideal as a failover entry point.
+tags:
+  - llm
+  - startup
+api:
+  base_url: https://openrouter.ai/api/v1
+  docs: https://openrouter.ai/docs
+  auth: api-key
+  models: meta-llama/llama-3.3-70b-instruct:free, google/gemma-4-31b:free, nvidia/ling-3.0-flash:free
+  openai_compatible: yes
+  streaming: yes
+  self_host: no
+  status: active

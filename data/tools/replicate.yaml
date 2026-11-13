@@ -1,0 +1,30 @@
+id: replicate
+name: Replicate
+kind: Hosted model API
+url: https://replicate.com
+aisle: inference
+metric: null
+metric_note: Not listed
+limits:
+  - PAYG per second
+  - Free trial credit windows
+who:
+  - anyone
+region: null
+sell: yes
+card: unknown
+cost: credits
+catches:
+  - Free trial credit windows
+  - Credits, not a free tier
+use_if:
+  - "You need non-text models (image generation, voice cloning, video, upscaling) from a marketplace of community-published models with per-second billing and zero infra management. vs Modal: Replicate is a curated model marketplace you call via API; Modal gives you raw GPU compute to run *your own* code and custom models. vs Stability AI: Replicate hosts Stable Diffusion *plus* thousands of other models (ControlNet, Whisper, RIFE); Stability's API is first-party SD only."
+skip_if: []
+pricing_url: https://replicate.com
+verified_at: null
+verified_by: null
+source: catalog
+tagline: Run public models (vision, voice, image) without owning GPUs.
+about: Run public models (vision, voice, image) without owning GPUs.
+tags:
+  - ml

@@ -1,0 +1,31 @@
+id: better-auth
+name: Better Auth
+kind: Sign-in
+url: https://www.better-auth.com
+aisle: auth
+metric: null
+metric_note: Not listed
+limits:
+  - OSS
+  - Self-host
+  - Your infra cost only
+who:
+  - anyone
+region: null
+sell: yes
+card: unknown
+cost: free
+catches: []
+use_if:
+  - You want full auth (email/password, OAuth, MFA) as a library you import — not a service you pay monthly. You control the database, the session store, and the upgrade path.
+skip_if:
+  - reason: "Clerk / Auth0: No per-MAU billing, no vendor dashboard you lose access to when the invoice bounces. You own the user table. vs NextAuth/Auth.js: Better Auth ships with built-in email+password, organization support, and a plugin system instead of forcing you to wire every provider callback manually."
+pricing_url: https://www.better-auth.com
+verified_at: 2026-07-24
+verified_by: null
+source: catalog
+tagline: Open-source auth library — own the sessions, skip Clerk bill until you need hosted UI.
+about: Open-source auth library — own the sessions, skip Clerk bill until you need hosted UI.
+tags:
+  - auth
+  - oss

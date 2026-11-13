@@ -1,0 +1,37 @@
+id: localstack-pack
+name: LocalStack (Pack)
+kind: Student offer
+url: https://localstack.cloud
+aisle: student-programs
+metric: null
+metric_note: Not listed
+limits:
+  - Full license via Pack
+who:
+  - student_school_email
+region: null
+sell: unknown
+card: unknown
+cost: student
+catches: []
+use_if:
+  - You're learning AWS (Lambda, S3, DynamoDB, SQS, API Gateway) and want to iterate locally without worrying about credits or accidentally leaving resources running. The Pro license adds persistence, IAM enforcement, and advanced services that the free Community edition lacks.
+skip_if: []
+pricing_url: https://localstack.cloud
+verified_at: null
+verified_by: null
+source: catalog
+tagline: Full AWS emulator — practice without burning credits.
+about: |-
+  Full AWS emulator — practice without burning credits.
+
+  vs AWS Free Tier / real AWS sandbox: Real AWS teaches you billing and IAM reality but punishes mistakes with charges. LocalStack lets you `terraform apply` fearlessly and run integration tests offline. Use LocalStack for fast dev loops; validate on real AWS only before deploy.
+program:
+  order: 17
+  lasts_big: "?"
+  lasts_sub: Not listed
+  perks:
+    - Full license via Pack
+  needs: A school email
+  lasts: Not listed
+  claim_url: https://localstack.cloud

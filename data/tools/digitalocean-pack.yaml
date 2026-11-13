@@ -1,0 +1,39 @@
+id: digitalocean-pack
+name: DigitalOcean (Pack)
+kind: Cloud credit
+url: https://www.digitalocean.com
+aisle: cloud-credits
+metric: null
+metric_note: ~$200 windows
+limits:
+  - ~$200 windows
+  - Check GPU exclusions / expiry
+who:
+  - student_school_email
+region: null
+sell: yes
+card: unknown
+cost: credits
+catches:
+  - Check GPU exclusions / expiry
+use_if:
+  - You want real Linux VMs (droplets) you fully control — SSH in, install anything, run Docker — or a simple App Platform deploy with zero Kubernetes overhead. Best bang-per-credit for hosting side projects that need a static IP and root access.
+skip_if:
+  - reason: Heroku gives you push-to-deploy simplicity but zero SSH and no raw VM. DigitalOcean gives you the whole machine. Pick DO when you need custom Nginx configs, background workers, or GPU experimentation; pick Heroku when you just want `git push` and done.
+    use: heroku-pack
+pricing_url: https://www.digitalocean.com
+verified_at: null
+verified_by: null
+source: catalog
+tagline: Platform credit for droplets and App Platform.
+about: Platform credit for droplets and App Platform.
+program:
+  order: 1
+  lasts_big: "?"
+  lasts_sub: Not listed
+  perks:
+    - ~$200 windows
+    - Check GPU exclusions / expiry
+  needs: A school email
+  lasts: Not listed
+  claim_url: https://www.digitalocean.com

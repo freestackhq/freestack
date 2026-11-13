@@ -1,0 +1,28 @@
+id: doppler
+name: Doppler
+kind: Secrets
+url: https://www.doppler.com
+aisle: auth
+metric: null
+metric_note: 5 users free
+limits:
+  - 5 users free
+  - Team free via GitHub Pack while student
+who:
+  - anyone
+region: null
+sell: yes
+card: unknown
+cost: free
+catches: []
+use_if:
+  - Your stack spans multiple deploy targets (Vercel preview + Railway prod + local dev) and you're tired of copy-pasting `.env` values between dashboards. Doppler becomes the single source of truth for secrets and syncs them to each target automatically — one `doppler run` replaces a pile of `.env` files.
+skip_if:
+  - reason: Doppler is polished SaaS with first-class integrations for Vercel/Railway/Fly; Infisical is open-source and self-hostable. Pick Doppler for zero-ops secret sync across commercial PaaS; pick Infisical if you want an auditable OSS layer you control or need to avoid vendor lock-in on secrets.
+    use: infisical
+pricing_url: https://www.doppler.com
+verified_at: null
+verified_by: null
+source: catalog
+tagline: Secrets sync to Vercel, Koyeb, Railway.
+about: Secrets sync to Vercel, Koyeb, Railway.

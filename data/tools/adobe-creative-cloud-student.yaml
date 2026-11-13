@@ -1,0 +1,36 @@
+id: adobe-creative-cloud-student
+name: Adobe Creative Cloud Student
+kind: Student discount
+url: https://www.adobe.com/creativecloud/plans.html
+aisle: student-programs
+metric: null
+metric_note: ~60% off retail
+limits:
+  - ~60% off retail
+who:
+  - student_school_email
+region: null
+sell: unknown
+card: unknown
+cost: discount
+catches:
+  - A discount, not a free tier
+use_if:
+  - Your workflow demands Photoshop, Premiere, or After Effects specifically — because your team shares .psd/.aep files, or an internship requires Adobe deliverables. The discount makes the ~$23/mo sting less, but it still stings.
+skip_if:
+  - reason: "Figma + DaVinci Resolve: For UI design + video editing alone, Figma (free) plus DaVinci Resolve (free) covers 80% of use cases at $0. Adobe only wins when you need the exact Adobe file format or a tool like Illustrator's print-press output."
+pricing_url: https://www.adobe.com/creativecloud/plans.html
+verified_at: null
+verified_by: null
+source: catalog
+tagline: All Apps cheaper — still a subscription.
+about: All Apps cheaper — still a subscription.
+program:
+  order: 9
+  lasts_big: "?"
+  lasts_sub: Not listed
+  perks:
+    - ~60% off retail
+  needs: A school email
+  lasts: Not listed
+  claim_url: https://www.adobe.com/creativecloud/plans.html

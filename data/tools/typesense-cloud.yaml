@@ -1,0 +1,31 @@
+id: typesense-cloud
+name: Typesense Cloud
+kind: Search service
+url: https://typesense.org
+aisle: search
+metric: null
+metric_note: Not listed
+limits:
+  - Free/hobby cluster sizes
+  - Or self-host OSS free
+who:
+  - anyone
+region: null
+sell: yes
+card: unknown
+cost: free
+catches:
+  - Free/hobby cluster sizes
+use_if:
+  - You need typo-tolerant, sub-50ms instant search and you want one binary you can self-host today or move to their managed cloud later — no JVM, no cluster ops, no Elasticsearch YAML nightmares.
+skip_if:
+  - reason: 'Typesense edges out on geo-search, multi-tenant API-key scoping, and HA clustering out of the box; Meilisearch wins on simplicity and first-10-minutes DX. vs Algolia: Typesense gives you the same "search-as-you-type" UX without per-query pricing that explodes at scale.'
+    use: meilisearch-cloud
+pricing_url: https://typesense.org
+verified_at: 2026-07-24
+verified_by: null
+source: catalog
+tagline: Typo-tolerant search without standing up Elasticsearch.
+about: Typo-tolerant search without standing up Elasticsearch.
+tags:
+  - search

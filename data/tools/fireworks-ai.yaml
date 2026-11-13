@@ -1,0 +1,30 @@
+id: fireworks-ai
+name: Fireworks AI
+kind: Inference API
+url: https://fireworks.ai
+aisle: inference
+metric: null
+metric_note: Not listed
+limits:
+  - PAYG
+  - Free trial credits often
+who:
+  - anyone
+region: null
+sell: yes
+card: unknown
+cost: credits
+catches:
+  - Free trial credits often
+  - Credits, not a free tier
+use_if:
+  - "You're building a latency-sensitive product feature (autocomplete, inline suggestions, real-time classification) on open models and need consistently fast p95 response times at PAYG rates. vs Together AI: Fireworks optimizes inference speed with custom serving infra; Together offers broader model selection and fine-tuning. vs Groq: Fireworks is production-grade PAYG with no rate-limit cliffs; Groq is faster but has strict free-tier quotas that break under real traffic."
+skip_if: []
+pricing_url: https://fireworks.ai
+verified_at: null
+verified_by: null
+source: catalog
+tagline: Fast open-model inference for product features that don't need Opus.
+about: Fast open-model inference for product features that don't need Opus.
+tags:
+  - llm

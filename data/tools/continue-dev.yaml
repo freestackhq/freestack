@@ -1,0 +1,45 @@
+id: continue-dev
+name: Continue.dev
+kind: Open-source code assistant
+url: https://continue.dev
+aisle: coding
+metric: null
+metric_note: Not listed
+limits:
+  - OSS
+  - Your model backend
+  - Completely free, open source
+who:
+  - anyone
+region: null
+sell: yes
+card: unknown
+cost: free
+catches: []
+use_if:
+  - "You want a free, open-source Copilot alternative that works with *any* backend — point it at Ollama for $0 local completions, or at Groq/Together for cheap cloud inference, all without paying $10–20/mo for a proprietary IDE tool. vs GitHub Copilot: Continue is free, open-source, and backend-agnostic; Copilot is polished but proprietary, $10/mo, and locked to OpenAI models. vs Cursor/Windsurf: Continue is an extension for your existing VS Code/JetBrains setup; Cursor and Windsurf are separate editors you'd have to switch to."
+  - You want a free GitHub Copilot alternative that works with local models or cheap API providers.
+skip_if:
+  - reason: Continue.dev is an IDE tool for your workflow; AI SDK is a library for building AI features into apps.
+    use: vercel-ai-sdk
+pricing_url: https://continue.dev
+verified_at: 2026-07-24
+verified_by: null
+source: catalog
+tagline: Open-source coding assistant in the IDE — point at Ollama or cheap APIs.
+about: |-
+  Open-source coding assistant in the IDE — point at Ollama or cheap APIs.
+
+  Open-source AI code assistant for VS Code and JetBrains. Point it at Ollama for $0 code completion and chat, or use any API provider. Tab autocomplete, inline editing, chat with codebase context.
+tags:
+  - ide
+  - oss
+api:
+  base_url: N/A (IDE extension)
+  docs: https://docs.continue.dev
+  auth: none (OSS)
+  models: Ollama, OpenAI, Anthropic, Groq, any OpenAI-compatible endpoint
+  openai_compatible: yes
+  streaming: yes
+  self_host: yes (point at local Ollama)
+  status: active

@@ -1,0 +1,36 @@
+id: hacker-news
+name: Hacker News
+kind: News API
+url: https://github.com/HackerNews/API
+aisle: news
+metric: null
+metric_note: Not listed
+limits:
+  - Unlimited, fully open
+  - "Rate limit: fair use (Firebase-backed)"
+who:
+  - anyone
+region: null
+sell: unknown
+card: unknown
+cost: free
+catches: []
+use_if:
+  - You want tech/startup news with zero auth and real-time capabilities.
+skip_if:
+  - reason: HN is free and unlimited but only tech/startup content; NewsAPI covers global news across all topics.
+    use: newsapi
+pricing_url: https://github.com/HackerNews/API
+verified_at: null
+verified_by: null
+source: catalog
+tagline: Official Hacker News API on Firebase.
+about: Official Hacker News API on Firebase. Get top/new/best stories, item details, user profiles, and live updates. No key needed, no rate limit published. Perfect for tech news aggregators.
+api:
+  base_url: https://hacker-news.firebaseio.com/v0
+  docs: https://github.com/HackerNews/API
+  auth: none
+  cors: yes
+  response: JSON
+  openapi: no
+  status: active

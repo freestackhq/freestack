@@ -1,0 +1,29 @@
+id: tinybird
+name: Tinybird
+kind: Analytics APIs
+url: https://www.tinybird.co
+aisle: databases
+metric: null
+metric_note: Not listed
+limits:
+  - Free starter tier
+who:
+  - anyone
+region: null
+sell: yes
+card: unknown
+cost: free
+catches: []
+use_if:
+  - You need sub-second analytics APIs over streaming event data (page views, IoT, logs) and want ClickHouse power without managing ClickHouse. Ingest → SQL pipe → published REST endpoint in minutes.
+skip_if:
+  - reason: Tinybird is for real-time streaming ingestion + API publishing; MotherDuck is for batch analytics on files you already have. Tinybird for live dashboards, MotherDuck for ad-hoc exploration.
+    use: motherduck
+  - reason: "Supabase + pg_cron: Tinybird handles millions of events/day with columnar compression; Postgres will choke on that volume. Use Supabase for your app DB, Tinybird for your analytics API."
+pricing_url: https://www.tinybird.co
+verified_at: null
+verified_by: null
+source: catalog
+tagline: ClickHouse-backed APIs from event streams.
+about: ClickHouse-backed APIs from event streams.
+type: analytics

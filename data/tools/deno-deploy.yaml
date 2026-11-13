@@ -1,0 +1,27 @@
+id: deno-deploy
+name: Deno Deploy
+kind: Hosting
+url: https://deno.com/deploy
+aisle: hosting
+metric: null
+metric_note: 1M requests a month
+limits:
+  - 1M requests a month
+who:
+  - anyone
+region: null
+sell: yes
+card: unknown
+cost: free
+catches: []
+use_if:
+  - You're writing TypeScript/Deno-native code and want an edge runtime with built-in KV storage — no external database required for small apps. 1M requests/month free makes it viable for real production traffic, not just demos.
+skip_if:
+  - reason: "Both are edge runtimes, but Deno Deploy uses standard Web APIs + Deno KV with zero config; Workers requires learning KV/D1 bindings and the Cloudflare-specific module system. vs Vercel Edge Functions: Vercel's edge runtime is a thin layer on top of their Node platform; Deno Deploy is the runtime itself with first-party KV, giving you a complete backend in one place."
+    use: cf-workers
+pricing_url: https://deno.com/deploy
+verified_at: null
+verified_by: null
+source: catalog
+tagline: TypeScript at the edge; pairs with Deno KV.
+about: TypeScript at the edge; pairs with Deno KV.

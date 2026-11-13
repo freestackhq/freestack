@@ -1,0 +1,27 @@
+id: vercel-hobby
+name: Vercel Hobby
+kind: Frontend hosting
+url: https://vercel.com
+aisle: hosting
+metric: 100
+limits:
+  - Non-commercial
+who:
+  - anyone
+region: null
+sell: no
+card: unknown
+cost: free
+catches:
+  - Personal projects only
+use_if:
+  - You're building a Next.js side project and want the tightest integration possible — ISR, middleware, image optimization, and preview deployments all work out of the box with zero config. Accept the non-commercial restriction and enjoy the DX.
+skip_if:
+  - reason: "Cloudflare allows commercial use and has no bandwidth cap, but Next.js support is partial (no streaming RSC, limited middleware); Vercel is the canonical Next.js host. vs Netlify: Netlify also deploys Next.js but lags behind on latest features and has tighter build-minute limits."
+    use: cf-workers
+pricing_url: https://vercel.com
+verified_at: null
+verified_by: null
+source: catalog
+tagline: Next.js-native deploys.
+about: Next.js-native deploys. Personal projects only.

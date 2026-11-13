@@ -1,0 +1,31 @@
+id: trufflehog
+name: TruffleHog
+kind: Security tool
+url: https://trufflesecurity.com/trufflehog
+aisle: security
+metric: null
+metric_note: Not listed
+limits:
+  - OSS free
+  - Enterprise cloud paid
+who:
+  - anyone
+region: null
+sell: yes
+card: unknown
+cost: free
+catches: []
+use_if:
+  - You're auditing an existing codebase (or an acquired one) and need to know exactly which leaked secrets are *still valid* — TruffleHog verifies findings against live APIs so you only rotate what's actually exploitable.
+skip_if:
+  - reason: "TruffleHog's killer feature is live secret verification (it checks if a found AWS key is active). Gitleaks is faster for pre-commit gating but doesn't verify. Use TruffleHog for periodic deep scans, Gitleaks for real-time prevention. vs GitHub Secret Scanning: TruffleHog scans any git remote, S3 buckets, Slack, Confluence — not just GitHub repos."
+    use: gitleaks
+pricing_url: https://trufflesecurity.com/trufflehog
+verified_at: 2026-07-24
+verified_by: null
+source: catalog
+tagline: Deep secret hunting across repos and history — verify before you rotate everything.
+about: Deep secret hunting across repos and history — verify before you rotate everything.
+tags:
+  - secrets
+  - oss

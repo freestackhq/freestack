@@ -1,0 +1,35 @@
+id: ipinfo-io
+name: ipinfo.io
+kind: Location API
+url: https://ipinfo.io/developers
+aisle: geo
+metric: 1000
+metric_note: Without token
+limits:
+  - 50,000 requests/month
+who:
+  - anyone
+region: null
+sell: unknown
+card: unknown
+cost: free
+catches: []
+use_if:
+  - You want HTTPS IP geolocation with ASN/company info and don't mind getting a free token for higher limits.
+skip_if:
+  - reason: Ipinfo has HTTPS, ASN data, and privacy detection; ip-api is simpler but HTTP-only on free.
+    use: ip-api
+pricing_url: https://ipinfo.io/developers
+verified_at: null
+verified_by: null
+source: catalog
+tagline: IP geolocation plus ASN, company, privacy detection (VPN/proxy/tor), and carrier data.
+about: IP geolocation plus ASN, company, privacy detection (VPN/proxy/tor), and carrier data. Free tier is generous and works over HTTPS. Token unlocks 50k/mo.
+api:
+  base_url: https://ipinfo.io
+  docs: https://ipinfo.io/developers
+  auth: none (token for higher limits)
+  cors: yes
+  response: JSON
+  openapi: no
+  status: active

@@ -1,0 +1,31 @@
+id: flowise
+name: Flowise
+kind: Visual agent builder
+url: https://flowiseai.com
+aisle: ai-tooling
+metric: null
+metric_note: Not listed
+limits:
+  - OSS self-host
+  - Or npx
+  - You pay models
+who:
+  - anyone
+region: null
+sell: yes
+card: unknown
+cost: free
+catches: []
+use_if:
+  - "You want to visually prototype LLM chains, RAG pipelines, and agent graphs with drag-and-drop — self-host with `npx flowise start` and iterate without writing orchestration code. vs LangChain code: Flowise gives non-coders and rapid prototypers a visual canvas backed by LangChain under the hood; switch to code when you need version control and tests. vs LlamaIndex: Flowise is a visual builder for wiring components; LlamaIndex is a code framework for data ingestion and retrieval — use Flowise *with* LlamaIndex nodes for the best of both."
+skip_if: []
+pricing_url: https://flowiseai.com
+verified_at: 2026-07-24
+verified_by: null
+source: catalog
+tagline: Drag-drop LLM/RAG builders — self-host visual agent graphs.
+about: Drag-drop LLM/RAG builders — self-host visual agent graphs.
+tags:
+  - oss
+  - agents
+  - rag

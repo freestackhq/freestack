@@ -1,0 +1,28 @@
+id: windsurf
+name: Windsurf
+kind: AI code editor
+url: https://windsurf.com
+aisle: coding
+metric: null
+metric_note: "Free: ~25 Flow Actions a month + unlimited autocomplete"
+limits:
+  - "Free: ~25 Flow Actions a month + unlimited autocomplete"
+  - Pro $20 a month
+who:
+  - anyone
+region: null
+sell: yes
+card: unknown
+cost: free
+catches: []
+use_if:
+  - "You want an AI IDE that excels at longer autonomous tasks — Cascade mode plans and executes multi-step, multi-file changes with less hand-holding than competitors, plus unlimited free autocomplete. vs Cursor: Windsurf's Cascade is more autonomous for big refactors; Cursor's Tab/Cmd-K is snappier for quick inline edits. Windsurf's free tier includes unlimited autocomplete (Cursor caps at 2 K). vs Kiro: Windsurf is flow-state and conversational; Kiro is spec-driven with formal requirements. Windsurf suits exploratory coding, Kiro suits structured projects."
+skip_if: []
+pricing_url: https://windsurf.com
+verified_at: 2026-08-01
+verified_by: null
+source: catalog
+tagline: Flow-state AI IDE (ex-Codeium) — Cascade agent for autonomous multi-file tasks.
+about: Flow-state AI IDE (ex-Codeium) — Cascade agent for autonomous multi-file tasks.
+tags:
+  - ide

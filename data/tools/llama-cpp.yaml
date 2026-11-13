@@ -1,0 +1,36 @@
+id: llama-cpp
+name: llama.cpp
+kind: Local inference engine
+url: https://github.com/ggerganov/llama.cpp
+aisle: local-models
+metric: null
+metric_note: Not listed
+limits:
+  - Completely free, open source
+who:
+  - anyone
+region: null
+sell: unknown
+card: unknown
+cost: free
+catches: []
+use_if:
+  - You need maximum control over inference parameters, custom builds, or are embedding inference into a larger system.
+skip_if:
+  - reason: Llama.cpp is the engine; Ollama wraps it with model management and ease-of-use. Use llama.cpp directly for custom builds or performance tuning.
+    use: ollama
+pricing_url: https://github.com/ggerganov/llama.cpp
+verified_at: null
+verified_by: null
+source: catalog
+tagline: The foundational C++ inference engine that Ollama and LM Studio are built on.
+about: The foundational C++ inference engine that Ollama and LM Studio are built on. Direct control over quantization, context length, batch size, GPU layers. Maximum performance tuning at the cost of more manual setup.
+api:
+  base_url: http://localhost:8080/v1 (server mode)
+  docs: https://github.com/ggerganov/llama.cpp
+  auth: none
+  models: any GGUF-format model
+  openai_compatible: yes
+  streaming: yes
+  self_host: yes
+  status: active

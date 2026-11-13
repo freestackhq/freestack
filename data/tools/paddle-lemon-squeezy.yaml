@@ -1,0 +1,29 @@
+id: paddle-lemon-squeezy
+name: Paddle / Lemon Squeezy
+kind: Team tool
+url: https://www.lemonsqueezy.com
+aisle: team
+metric: null
+metric_note: Not listed
+limits:
+  - Fee % of revenue
+  - No monthly until you sell
+who:
+  - anyone
+region: null
+sell: yes
+card: unknown
+cost: discount
+catches:
+  - A discount, not a free tier
+use_if:
+  - "You sell to consumers or small businesses worldwide and refuse to register for VAT in 30 countries. A merchant of record (MoR) is the legal seller — they handle sales tax, VAT, invoicing, and refunds. You get a net payout. Worth the 5% fee to avoid tax compliance nightmares on day one. vs Stripe direct: Stripe is a payment processor, not a MoR — *you* are still liable for tax collection and remittance. Use Stripe when you only sell B2B in one country or have a tax tool (Avalara) already. vs Paddle vs Lemon Squeezy: Paddle is more mature (subscription dunning, retention tools); Lemon Squeezy is simpler and better for digital products / info products. Pick Lemon Squeezy for solo-founder simplicity, Paddle for SaaS with seat-based billing."
+skip_if: []
+pricing_url: https://www.lemonsqueezy.com
+verified_at: null
+verified_by: null
+source: catalog
+tagline: Merchant of record — taxes/VAT handled so you can sell globally early.
+about: Merchant of record — taxes/VAT handled so you can sell globally early.
+tags:
+  - payments

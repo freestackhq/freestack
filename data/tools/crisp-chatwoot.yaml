@@ -1,0 +1,28 @@
+id: crisp-chatwoot
+name: Crisp / Chatwoot
+kind: Team tool
+url: https://www.chatwoot.com
+aisle: team
+metric: null
+metric_note: Not listed
+limits:
+  - Crisp free tier
+  - Chatwoot OSS
+who:
+  - anyone
+region: null
+sell: yes
+card: unknown
+cost: free
+catches: []
+use_if:
+  - "Users expect a chat widget in your app and you want to respond from one inbox (not scattered Slack DMs). Chatwoot self-hosted is truly $0 with unlimited agents; Crisp's free tier works if you have ≤2 agents and don't want to run infra. vs Intercom: Intercom is 10x the price and 10x the feature bloat — you don't need AI bots, product tours, and a CDP when you have 50 users; Chatwoot/Crisp cover live chat + email inbox which is all that matters pre-scale. vs Freshdesk: Freshdesk is ticket-first (email/forms); Crisp/Chatwoot are chat-first (widget). Pick based on whether your users expect real-time replies or async tickets."
+skip_if: []
+pricing_url: https://www.chatwoot.com
+verified_at: null
+verified_by: null
+source: catalog
+tagline: Customer chat on a budget — Chatwoot self-host if you want $0.
+about: Customer chat on a budget — Chatwoot self-host if you want $0.
+tags:
+  - support

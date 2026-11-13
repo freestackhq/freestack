@@ -1,0 +1,30 @@
+id: elbi-gradesim
+name: Elbi GradeSim
+kind: Campus tool
+url: https://gradesim.uplbtools.me/
+aisle: campus
+metric: null
+metric_note: Not listed
+limits:
+  - Browser extension
+  - Free
+who:
+  - anyone
+region: null
+sell: yes
+card: unknown
+cost: free
+catches: []
+use_if:
+  - You're obsessing over whether dropping that 2.5 will cost you Cum Laude, or planning which electives to retake. It simulates GWA scenarios instantly without manual spreadsheet math.
+skip_if:
+  - reason: "manual Excel GWA calculator: GradeSim pulls your actual AMIS grades automatically — no transcription errors, no forgetting that one PE class. Excel is flexible but tedious; GradeSim is instant."
+pricing_url: https://gradesim.uplbtools.me/
+verified_at: 2026-07-24
+verified_by: null
+source: catalog
+tagline: AMIS grade overlay for GWA / Latin honors simulation — data stays local.
+about: AMIS grade overlay for GWA / Latin honors simulation — data stays local.
+tags:
+  - campus
+  - oss

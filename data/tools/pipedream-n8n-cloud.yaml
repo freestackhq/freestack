@@ -1,0 +1,26 @@
+id: pipedream-n8n-cloud
+name: Pipedream / n8n Cloud
+kind: Background jobs
+url: https://pipedream.com
+aisle: jobs
+metric: null
+metric_note: Not listed
+limits:
+  - Free workflow caps
+who:
+  - anyone
+region: null
+sell: unknown
+card: unknown
+cost: free
+catches: []
+use_if:
+  - You want to glue third-party APIs together (Stripe → Slack, GitHub → Notion) without writing integration code. Pipedream's low-code builder lets you wire triggers and actions visually, with a generous free tier that covers hobby/startup volumes.
+skip_if:
+  - reason: Pipedream is fully managed and has deeper pre-built API integrations; n8n Cloud gives you a self-hostable escape hatch and more complex branching logic. Pick Pipedream for quick, managed API glue; pick n8n when you want open-source ownership or heavier workflow logic.
+pricing_url: https://pipedream.com
+verified_at: null
+verified_by: null
+source: catalog
+tagline: Glue APIs together without writing glue code.
+about: Glue APIs together without writing glue code.

@@ -1,0 +1,32 @@
+id: better-stack
+name: Better Stack
+kind: Monitoring
+url: https://betterstack.com
+aisle: observability
+metric: 1
+metric_note: About
+limits:
+  - 10 uptime monitors
+  - Status page
+who:
+  - anyone
+region: null
+sell: yes
+card: unknown
+cost: free
+catches: []
+use_if:
+  - You want uptime monitoring + log ingestion + a public status page from a single vendor with a polished UI. The free tier (10 monitors, ~1 GB logs, status page) is the sweet spot when you outgrow UptimeRobot's ping-only model and want one dashboard for "what's down" and "why."
+skip_if:
+  - reason: UptimeRobot has more free monitors (50 vs 10) but zero log support and no built-in status page. Better Stack is the upgrade path when you need *context* alongside alerts.
+    use: uptimerobot
+  - reason: Axiom wins on raw log volume (~500 GB vs ~1 GB free); Better Stack wins on the integrated incident workflow + status page. Pick by whether you need deep log queries or incident management.
+    use: axiom
+pricing_url: https://betterstack.com
+verified_at: 2026-07-24
+verified_by: null
+source: catalog
+tagline: Uptime, incidents, and logs — cleaner next step after UptimeRobot.
+about: Uptime, incidents, and logs — cleaner next step after UptimeRobot.
+tags:
+  - uptime

@@ -1,0 +1,42 @@
+id: figma-education
+name: Figma Education
+kind: Student plan
+url: https://www.figma.com/education/apply
+aisle: student-programs
+metric: null
+metric_note: K-12 gets Enterprise
+limits:
+  - Yearly reapply
+  - Edu-only
+  - K-12 gets Enterprise
+who:
+  - student_school_email
+region: null
+sell: no
+card: unknown
+cost: student
+catches:
+  - Not for client work
+use_if:
+  - You need unlimited projects, shared team libraries, and branching — the full Professional feature set — without paying $15/seat/mo. You're enrolled in higher-ed and can re-verify yearly.
+skip_if:
+  - reason: Starter caps you at 3 Figma files and 3 FigJam files per team; Education unlocks unlimited files, shared libraries, and dev-mode — the tools you actually need for group capstone work.
+    use: figma-starter
+pricing_url: https://www.figma.com/education/apply
+verified_at: null
+verified_by: null
+source: catalog
+tagline: Professional plan free for higher-ed students.
+about: Professional plan free for higher-ed students.
+tags:
+  - must-claim
+program:
+  order: 4
+  lasts_big: "?"
+  lasts_sub: lasts while you study
+  perks:
+    - Figma Professional plan
+    - Team files
+  needs: Higher-ed verification
+  lasts: While enrolled
+  claim_url: https://www.figma.com/education/apply

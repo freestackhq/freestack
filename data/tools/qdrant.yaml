@@ -1,0 +1,30 @@
+id: qdrant
+name: Qdrant
+kind: Vector database
+url: https://qdrant.tech
+aisle: vectors
+metric: 4
+limits:
+  - Free cluster
+  - 1 GB RAM
+  - Suspends after 1w idle
+who:
+  - anyone
+region: null
+sell: yes
+card: unknown
+cost: free
+catches:
+  - Suspends after 1w idle
+use_if:
+  - "You need vector search with rich payload filtering (numeric ranges, geo, nested JSON) and want a free managed cluster to prototype before committing — Qdrant's Rust core is fast and memory-efficient. vs Pinecone: Qdrant is open-source with self-host option and more expressive filtering; Pinecone is marginally simpler but proprietary. vs Chroma: Qdrant is production-grade with replication and cloud hosting; Chroma is embedded-first and better for local dev or single-node prototypes."
+skip_if: []
+pricing_url: https://qdrant.tech
+verified_at: 2026-07-24
+verified_by: null
+source: catalog
+tagline: Vector search with strong filters — solid free cloud node for prototypes.
+about: Vector search with strong filters — solid free cloud node for prototypes.
+tags:
+  - vector
+  - rag

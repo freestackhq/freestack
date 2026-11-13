@@ -1,0 +1,39 @@
+id: name-com-pack
+name: Name.com (Pack)
+kind: Student offer
+url: https://www.name.com/github-students
+aisle: student-programs
+metric: 12
+limits:
+  - SSL add-ons vary
+who:
+  - student_school_email
+region: null
+sell: yes
+card: unknown
+cost: student
+catches: []
+use_if:
+  - You want a `.live` TLD for a hackathon demo, project showcase, or streaming brand — it's instant via Pack and gives you a real custom domain to point at Vercel/Cloudflare Pages/your VPS for a year.
+skip_if: []
+pricing_url: https://www.name.com/github-students
+verified_at: 2026-07-24
+verified_by: null
+source: catalog
+tagline: Free domain year via GitHub Pack — alternate to Namecheap .me.
+about: |-
+  Free domain year via GitHub Pack — alternate to Namecheap .me.
+
+  vs Namecheap .me (also Pack) / buying a .dev or .com: Namecheap gives `.me` which is better for personal portfolio branding ("yourname.me"). Name.com `.live` is quirkier — good for event sites or streaming. If you want a serious long-term domain (.com/.dev), buy one for $10-12/yr and use these freebies for experiments.
+tags:
+  - pack
+  - domain
+program:
+  order: 20
+  lasts_big: 1 yr
+  lasts_sub: 1 yr free on eligible TLDs
+  perks:
+    - SSL add-ons vary
+  needs: A school email
+  lasts: 1 yr free on eligible TLDs
+  claim_url: https://www.name.com/github-students

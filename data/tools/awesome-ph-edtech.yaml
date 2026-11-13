@@ -1,0 +1,29 @@
+id: awesome-ph-edtech
+name: Awesome PH EdTech
+kind: Campus tool
+url: https://github.com/smmariquit/awesome-ph-edtech
+aisle: campus
+metric: null
+metric_note: CC0
+limits:
+  - Markdown list
+  - CC0
+who:
+  - anyone
+region: null
+sell: yes
+card: unknown
+cost: free
+catches: []
+use_if:
+  - You're building or researching PH education tools and want to see what already exists before reinventing. It's the landscape map — use it to find gaps or potential integrations.
+skip_if:
+  - reason: 'random Google search: The list is curated and categorized; a Google search surfaces SEO-gamed EdTech marketing pages. This is the "awesome-list" pattern applied to a gap no one else filled.'
+pricing_url: https://github.com/smmariquit/awesome-ph-edtech
+verified_at: 2026-07-24
+verified_by: null
+source: catalog
+tagline: Curated PH education tech list — K-12, college, offline-first.
+about: Curated PH education tech list — K-12, college, offline-first.
+tags:
+  - list

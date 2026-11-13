@@ -1,0 +1,34 @@
+id: alpha-vantage
+name: Alpha Vantage
+kind: Finance API
+url: https://www.alphavantage.co/documentation/
+aisle: finance
+metric: 25
+limits:
+  - "Rate limit: 25 requests a day (5 requests/min)"
+who:
+  - anyone
+region: null
+sell: unknown
+card: unknown
+cost: free
+catches: []
+use_if:
+  - You need stock market or technical indicator data and can live with 25 calls/day for prototyping.
+skip_if:
+  - reason: Different scope; Alpha Vantage does stocks + indicators + fundamentals; Frankfurter is FX-only but unlimited.
+    use: frankfurter
+pricing_url: https://www.alphavantage.co/documentation/
+verified_at: null
+verified_by: null
+source: catalog
+tagline: Stock prices, forex, crypto, technical indicators, and fundamental data (earnings, balance sheets).
+about: Stock prices, forex, crypto, technical indicators, and fundamental data (earnings, balance sheets). The free tier is very limited (25/day) but covers a wide surface area of financial data.
+api:
+  base_url: https://www.alphavantage.co/query
+  docs: https://www.alphavantage.co/documentation/
+  auth: api-key
+  cors: yes
+  response: JSON, CSV
+  openapi: no
+  status: active

@@ -1,0 +1,35 @@
+id: clerk
+name: Clerk
+kind: Sign-in
+url: https://clerk.com
+aisle: auth
+metric: 50000
+limits:
+  - 50k MRU free
+  - Then paid
+who:
+  - anyone
+region: null
+sell: yes
+card: unknown
+cost: free
+catches: []
+use_if:
+  - You want auth working in an afternoon, not a weekend — drop-in `<SignIn/>` components, hosted account portal, and you never write a password-reset flow again. 50 k monthly active users before you pay a cent means most indie projects never outgrow free.
+  - "You want polished auth UI (sign-in, user profile, org switcher) shipped in hours instead of days, and you're building with Next.js/React. Clerk's component library and webhook system let you skip writing auth plumbing entirely until 50k monthly active users. vs Auth0/Okta: Clerk's DX is years ahead for small teams — embeddable components, simpler pricing, no \"contact sales\" cliff until you're well-funded; Auth0 wins when you need enterprise SAML/SCIM on day one. vs Supabase Auth / Firebase Auth: those are cheaper (free) but give you a bare JWT — you still build every UI and session flow yourself; Clerk trades some lock-in for shipping velocity."
+skip_if:
+  - reason: Clerk's UI components are richer out-of-the-box (pre-styled modals, user profile pages); Kinde bundles feature flags and SSO at the same tier so you install fewer vendors. Pick Clerk for speed-to-ship; pick Kinde if you also need flags/SSO without another tool.
+    use: kinde
+  - reason: Clerk is a managed-only service — zero ops, but you can't self-host. Zitadel gives you an OSS escape hatch and 25 k MAU free, but you build your own login UI.
+    use: zitadel
+pricing_url: https://clerk.com
+verified_at: null
+verified_by: null
+source: catalog
+tagline: Pre-built auth UI for B2B/B2C.
+about: |-
+  Pre-built auth UI for B2B/B2C.
+
+  Auth that ships — stay on free MAU until you have users worth billing.
+tags:
+  - auth

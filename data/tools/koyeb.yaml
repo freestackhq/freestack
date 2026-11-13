@@ -1,0 +1,28 @@
+id: koyeb
+name: Koyeb
+kind: Containers
+url: https://www.koyeb.com
+aisle: servers
+metric: 0.5
+metric_note: 512 MB
+limits:
+  - 1 web service
+  - 0.1 vCPU
+who:
+  - anyone
+region: null
+sell: yes
+card: unknown
+cost: free
+catches: []
+use_if:
+  - You need a container that never sleeps — Discord bots, background workers, or long-running processes that must stay warm without paying. Koyeb's free micro runs 24/7 with zero cold-start penalty.
+skip_if:
+  - reason: "Render's free web services sleep after 15 min of inactivity (30–60 s cold starts); Koyeb stays awake permanently. vs Railway: Railway gives ~$5/mo in credits that run out; Koyeb's free instance is truly unlimited hours."
+    use: render
+pricing_url: https://www.koyeb.com
+verified_at: null
+verified_by: null
+source: catalog
+tagline: For bots and workers that must never sleep.
+about: Managed containers that stay up 24/7 on free micro.

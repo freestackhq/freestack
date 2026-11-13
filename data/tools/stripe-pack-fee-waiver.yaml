@@ -1,0 +1,42 @@
+id: stripe-pack-fee-waiver
+name: Stripe (Pack fee waiver)
+kind: Student offer
+url: https://stripe.com
+aisle: student-programs
+metric: null
+metric_note: First ~$1k volume fee-free class
+limits:
+  - First ~$1k volume fee-free class
+  - Confirm Pack offer
+who:
+  - student_school_email
+region: null
+sell: yes
+card: unknown
+cost: student
+catches: []
+use_if:
+  - You're building a real SaaS, marketplace, or side business that will process payments — the fee waiver on your first ~$1k in transactions means your early revenue isn't eaten by 2.9% + 30¢ per charge while you're validating product-market fit.
+skip_if: []
+pricing_url: https://stripe.com
+verified_at: 2026-07-24
+verified_by: null
+source: catalog
+tagline: Processing fee waiver on early volume via GitHub Student Pack.
+about: |-
+  Processing fee waiver on early volume via GitHub Student Pack.
+
+  vs starting without the waiver / Lemon Squeezy / Paddle: Without the waiver you lose ~$30 per $1k processed — small but meaningful at student scale. Lemon Squeezy and Paddle are merchant-of-record (simpler tax handling) but take 5-8% cuts with no student discount. Stripe + this waiver is the cheapest path for early direct payment processing.
+tags:
+  - pack
+  - payments
+program:
+  order: 24
+  lasts_big: "?"
+  lasts_sub: Not listed
+  perks:
+    - First ~$1k volume fee-free class
+    - Confirm Pack offer
+  needs: A school email
+  lasts: Not listed
+  claim_url: https://stripe.com

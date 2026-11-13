@@ -1,0 +1,32 @@
+id: n8n-self-host
+name: n8n (self-host)
+kind: Background jobs
+url: https://n8n.io
+aisle: jobs
+metric: null
+metric_note: Not listed
+limits:
+  - Fair-code OSS self-host
+  - Cloud has free trial then paid
+who:
+  - anyone
+region: null
+sell: unknown
+card: unknown
+cost: free
+catches:
+  - Cloud has free trial then paid
+use_if:
+  - You want Zapier-level workflow automation you fully own — run it in Docker on your homelab or VPS with zero per-execution fees. Best for complex multi-branch automations, agent-style graphs, or when Pipedream's free tier caps become a bottleneck.
+skip_if:
+  - reason: N8n is open-source and self-hostable so you pay only for compute; Pipedream is managed but locks you into their execution limits. Pick n8n when you need unlimited executions, data sovereignty, or want to extend nodes with custom code without vendor limits.
+    use: pipedream-n8n-cloud
+pricing_url: https://n8n.io
+verified_at: 2026-07-24
+verified_by: null
+source: catalog
+tagline: Workflow automation + agent graphs without Pipedream caps.
+about: Workflow automation + agent graphs without Pipedream caps.
+tags:
+  - oss
+  - automation

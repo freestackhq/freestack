@@ -1,0 +1,36 @@
+id: supabase
+name: Supabase
+kind: Postgres plus auth
+url: https://supabase.com
+aisle: databases
+metric: 0.5
+limits:
+  - 50k MAU
+  - Pauses after 7d idle
+who:
+  - anyone
+region: null
+sell: yes
+card: unknown
+cost: free
+catches:
+  - Pauses after 7d idle
+use_if:
+  - You need a database, logins and file uploads in one place.
+skip_if:
+  - reason: You only need a database.
+    use: neon
+pricing_url: https://supabase.com
+verified_at: null
+verified_by: null
+source: catalog
+tagline: Postgres with sign-in and file uploads built in.
+about: Postgres BaaS with auth, storage, and REST out of the box.
+type: postgres
+fits:
+  - school
+  - student
+  - indie
+tags:
+  - postgres
+  - baas

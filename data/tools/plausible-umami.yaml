@@ -1,0 +1,28 @@
+id: plausible-umami
+name: Plausible / Umami
+kind: Web analytics
+url: https://umami.is
+aisle: observability
+metric: null
+metric_note: Not listed
+limits:
+  - Umami Cloud free tier
+  - Plausible paid (or self-host)
+who:
+  - anyone
+region: null
+sell: yes
+card: unknown
+cost: free
+catches: []
+use_if:
+  - "You only need pageviews, referrers, and country breakdowns for a marketing site or docs — and you want a <1 KB script that doesn't trigger cookie banners. Perfect when GDPR compliance matters more than funnel analysis. vs PostHog: Plausible/Umami show you *traffic*; PostHog shows you *product behavior*. Don't shoehorn PostHog onto a landing page, and don't expect Umami to tell you where users drop off in onboarding. vs Google Analytics: GA4 is free but bloated, cookie-dependent, and feeds Google's ad network — Plausible/Umami give you clean numbers without the privacy trade-off or the learning curve of GA4's data model."
+skip_if: []
+pricing_url: https://umami.is
+verified_at: null
+verified_by: null
+source: catalog
+tagline: Privacy-first analytics when PostHog is overkill for a brochure site.
+about: Privacy-first analytics when PostHog is overkill for a brochure site.
+tags:
+  - analytics

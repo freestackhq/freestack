@@ -1,0 +1,28 @@
+id: axiom
+name: Axiom
+kind: Monitoring
+url: https://axiom.co
+aisle: observability
+metric: 500
+metric_note: About
+limits: []
+who:
+  - anyone
+region: null
+sell: yes
+card: unknown
+cost: free
+catches: []
+use_if:
+  - You want to `console.log` structured JSON from your backend and actually *query* it later without running Elasticsearch or paying Datadog prices. ~500 GB/mo free ingest is absurd — you won't hit it on a solo SaaS. Axiom's query language (APL) feels like KQL and returns in seconds.
+skip_if:
+  - reason: New Relic is a full APM with traces/metrics/dashboards; Axiom is a focused log-query engine that's faster to set up and won't nickel-and-dime on seats.
+    use: new-relic
+  - reason: Better Stack bundles uptime + logs + status pages; Axiom gives you *far* more ingest headroom and a more powerful query language if logs are your primary concern.
+    use: better-stack
+pricing_url: https://axiom.co
+verified_at: null
+verified_by: null
+source: catalog
+tagline: Structured logs that don't melt your laptop.
+about: Structured logs that don't melt your laptop.

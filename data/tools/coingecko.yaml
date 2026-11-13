@@ -1,0 +1,36 @@
+id: coingecko
+name: CoinGecko
+kind: Crypto API
+url: https://www.coingecko.com/api/documentation
+aisle: crypto
+metric: null
+metric_note: 10-30 requests/min (varies by endpoint)
+limits:
+  - All endpoints, no key required
+  - "Rate limit: 10-30 requests/min (varies by endpoint)"
+who:
+  - anyone
+region: null
+sell: unknown
+card: unknown
+cost: free
+catches: []
+use_if:
+  - You want the broadest crypto data coverage with zero signup friction.
+skip_if:
+  - reason: CoinGecko has more data (NFTs, exchanges, categories) but lower free rate limits. CoinCap is simpler and faster for price tickers.
+    use: coincap
+pricing_url: https://www.coingecko.com/api/documentation
+verified_at: null
+verified_by: null
+source: catalog
+tagline: The most popular free crypto data API.
+about: The most popular free crypto data API. Prices, market cap, volume, historical data, trending coins, exchange info, and NFT data. No signup required for basic use; a free demo key raises rate limits slightly.
+api:
+  base_url: https://api.coingecko.com/api/v3
+  docs: https://www.coingecko.com/api/documentation
+  auth: none (demo key for higher limits)
+  cors: yes
+  response: JSON
+  openapi: yes
+  status: active

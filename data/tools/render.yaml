@@ -1,0 +1,30 @@
+id: render
+name: Render
+kind: Web services
+url: https://render.com
+aisle: servers
+metric: null
+metric_note: 750 hrs a month
+limits:
+  - 750 hrs a month
+  - Sleep after 15m
+  - Free Postgres expires 30d
+who:
+  - anyone
+region: null
+sell: yes
+card: no
+cost: free
+catches:
+  - Sleeps after 15 minutes idle
+use_if:
+  - You want to ship a demo or portfolio app with zero financial commitment — no credit card, no trial expiry, no surprise bills. The 15-minute sleep is fine for anything that tolerates a cold start on first hit (portfolio sites, demo APIs, interview take-homes).
+skip_if:
+  - reason: "Koyeb never sleeps but limits you to one 512 MB micro; Render gives 750 free hours across multiple services (useful for multi-service demos). vs Railway: Railway requires a credit card and charges after credits are gone; Render stays free forever if you accept the sleep trade-off."
+    use: koyeb
+pricing_url: https://render.com
+verified_at: null
+verified_by: null
+source: catalog
+tagline: Web services without a credit card.
+about: Web services without a credit card. Sleeps when idle.

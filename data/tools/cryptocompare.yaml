@@ -1,0 +1,36 @@
+id: cryptocompare
+name: CryptoCompare
+kind: Crypto API
+url: https://min-api.cryptocompare.com/documentation
+aisle: crypto
+metric: null
+metric_note: 100,000 calls/month
+limits:
+  - 100,000 calls/month
+  - "Rate limit: varies by endpoint"
+who:
+  - anyone
+region: null
+sell: unknown
+card: unknown
+cost: free
+catches: []
+use_if:
+  - You need OHLCV/candlestick data for charting, social sentiment metrics, or deep historical data.
+skip_if:
+  - reason: Better for trading/charting use cases with proper OHLCV; CoinGecko is better for general market overview.
+    use: coingecko
+pricing_url: https://min-api.cryptocompare.com/documentation
+verified_at: null
+verified_by: null
+source: catalog
+tagline: Comprehensive crypto data including OHLCV, social stats, mining data, and exchange volumes.
+about: Comprehensive crypto data including OHLCV, social stats, mining data, and exchange volumes. Strong historical data going back years. The free tier is generous for prototyping.
+api:
+  base_url: https://min-api.cryptocompare.com
+  docs: https://min-api.cryptocompare.com/documentation
+  auth: api-key
+  cors: yes
+  response: JSON
+  openapi: no
+  status: active

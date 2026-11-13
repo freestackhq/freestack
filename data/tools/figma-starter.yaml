@@ -1,0 +1,27 @@
+id: figma-starter
+name: Figma Starter
+kind: Design tool
+url: https://www.figma.com
+aisle: design
+metric: null
+metric_note: Not listed
+limits:
+  - Starter plan caps
+who:
+  - anyone
+region: null
+sell: yes
+card: unknown
+cost: free
+catches: []
+use_if:
+  - You're not a student (or can't be bothered with yearly verification) and just need a real vector/UI tool for side projects. Three files is plenty for a portfolio site, a mobile mockup, and a playground.
+skip_if:
+  - reason: Education gives you unlimited files and team libraries, but locks usage to non-commercial. Starter lets you ship commercial work — just with fewer files open at once.
+    use: figma-education
+pricing_url: https://www.figma.com
+verified_at: null
+verified_by: null
+source: catalog
+tagline: Anyone can design with free Starter limits.
+about: Anyone can design with free Starter limits.

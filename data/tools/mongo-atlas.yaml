@@ -1,0 +1,28 @@
+id: mongo-atlas
+name: MongoDB Atlas M0
+kind: Document database
+url: https://www.mongodb.com/cloud/atlas
+aisle: databases
+metric: 0.5
+metric_note: 512 MB shared
+limits: []
+who:
+  - anyone
+region: null
+sell: yes
+card: unknown
+cost: free
+catches: []
+use_if:
+  - Your data is naturally document-shaped (nested objects, variable fields per record), you want a flexible schema that evolves without migrations, and you value the massive MongoDB ecosystem (Mongoose, Atlas Search, Charts).
+skip_if:
+  - reason: "Neon/Supabase: Pick MongoDB when your data doesn't fit neatly into rows and columns (CMS entries, event logs, IoT payloads). Pick Postgres (Neon/Supabase) when you need relational integrity, joins, and strong typing."
+  - reason: Both handle schema-flexible data. Pick Convex for realtime-first TypeScript apps. Pick MongoDB when you want a mature query language (aggregation pipeline), driver support in every language, and a proven path to massive scale.
+    use: convex
+pricing_url: https://www.mongodb.com/cloud/atlas
+verified_at: null
+verified_by: null
+source: catalog
+tagline: Classic document store, free forever shared cluster.
+about: Classic document store, free forever shared cluster.
+type: documents

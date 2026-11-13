@@ -1,0 +1,29 @@
+id: plain-freshdesk-lite
+name: Plain / Freshdesk Lite
+kind: Team tool
+url: https://www.plain.com
+aisle: team
+metric: null
+metric_note: Not listed
+limits:
+  - Free tiers / trials
+  - Graduate when ticket volume hurts
+who:
+  - anyone
+region: null
+sell: yes
+card: unknown
+cost: free
+catches:
+  - Free tiers / trials
+use_if:
+  - "You've outgrown \"check Discord/email manually\" and need a shared inbox with assignment, status tracking, and SLA timers — but you're not ready to pay Intercom prices. Plain is developer-first (API-native, thread-based); Freshdesk Lite is more traditional (ticket queue, canned responses, knowledge base). vs Intercom: Plain/Freshdesk cost $0–$15/agent vs Intercom's $39+/seat — and you don't need chatbots, product tours, or a CDP at this stage. vs Crisp/Chatwoot: those are chat-widget-first; Plain/Freshdesk are inbox/ticket-first. Pick based on your support model: real-time widget conversations → Crisp; async email/form tickets → Plain or Freshdesk."
+skip_if: []
+pricing_url: https://www.plain.com
+verified_at: null
+verified_by: null
+source: catalog
+tagline: Support inbox when Discord DMs stop scaling.
+about: Support inbox when Discord DMs stop scaling.
+tags:
+  - support

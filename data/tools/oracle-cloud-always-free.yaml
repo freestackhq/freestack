@@ -1,0 +1,27 @@
+id: oracle-cloud-always-free
+name: Oracle Cloud Always Free
+kind: Virtual machines
+url: https://www.oracle.com/cloud/free/
+aisle: servers
+metric: null
+metric_note: 2× AMD VMs + 4 ARM OCPUs
+limits:
+  - 2× AMD VMs + 4 ARM OCPUs
+  - 200 GB block
+who:
+  - anyone
+region: null
+sell: yes
+card: unknown
+cost: free
+catches: []
+use_if:
+  - "You need actual Linux VMs with root access, persistent storage, and serious compute (4 ARM OCPUs + 24 GB RAM is more than most $50/mo VPS plans) — and you're patient enough to fight Oracle's signup lottery. Once provisioned, these run any stack: Docker, K3s, databases, game servers, whatever."
+skip_if:
+  - reason: "Koyeb/Render/Railway: Those are managed PaaS with opinionated runtimes; Oracle gives you bare metal control — install anything, run anything, no platform lock-in. vs Fly.io: Fly gives you global distribution but charges per GB/hour; Oracle gives you one region but 24 GB RAM free forever."
+pricing_url: https://www.oracle.com/cloud/free/
+verified_at: null
+verified_by: null
+source: catalog
+tagline: Real VMs forever — if you survive signup.
+about: Real VMs forever — if you survive signup.

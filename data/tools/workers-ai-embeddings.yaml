@@ -1,0 +1,36 @@
+id: workers-ai-embeddings
+name: Cloudflare Workers AI (Embeddings)
+kind: Embeddings on Workers
+url: https://developers.cloudflare.com/workers-ai/models/#text-embeddings
+aisle: embeddings
+metric: null
+metric_note: Shared 10k neurons a day (with inference budget)
+limits:
+  - Shared 10k neurons a day (with inference budget)
+who:
+  - anyone
+region: null
+sell: unknown
+card: unknown
+cost: free
+catches: []
+use_if:
+  - Your RAG stack is on Cloudflare (Workers + Vectorize + AI) and you want zero-hop embeddings.
+skip_if:
+  - reason: Lower quality models (BGE vs Voyage) but free and integrated into Cloudflare; Voyage is better quality but separate infra.
+    use: voyage-ai
+pricing_url: https://developers.cloudflare.com/workers-ai/models/#text-embeddings
+verified_at: null
+verified_by: null
+source: catalog
+tagline: Embedding generation at the Cloudflare edge.
+about: Embedding generation at the Cloudflare edge. Pairs naturally with Vectorize (their vector DB) and Workers for end-to-end RAG without leaving the Cloudflare ecosystem.
+api:
+  base_url: https://api.cloudflare.com/client/v4/accounts/{account_id}/ai/v1/openai
+  docs: https://developers.cloudflare.com/workers-ai/models/#text-embeddings
+  auth: api-key (CF API token)
+  models: "@cf/baai/bge-base-en-v1.5, @cf/baai/bge-large-en-v1.5"
+  openai_compatible: yes
+  streaming: no
+  self_host: no
+  status: active

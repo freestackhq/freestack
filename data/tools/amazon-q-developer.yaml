@@ -1,0 +1,29 @@
+id: amazon-q-developer
+name: Amazon Q Developer
+kind: AI code assistant
+url: https://aws.amazon.com/q/developer/
+aisle: coding
+metric: null
+metric_note: Pro $19 a month for expanded limits
+limits:
+  - Free Individual tier
+  - Pro $19 a month for expanded limits
+who:
+  - anyone
+region: null
+sell: yes
+card: unknown
+cost: free
+catches: []
+use_if:
+  - "You work primarily in the AWS ecosystem and want an AI assistant that understands IAM policies, CDK constructs, and AWS APIs natively — free Individual tier with no credit card. vs GitHub Copilot: Q Developer has deeper AWS-specific knowledge (IAM, CloudFormation, SDK patterns); Copilot is better for general-purpose code across all ecosystems. vs Kiro: Q Developer is an assistant inside VS Code/JetBrains; Kiro is a full IDE with autonomous spec-driven workflows — Q is a copilot, Kiro is an autopilot."
+skip_if: []
+pricing_url: https://aws.amazon.com/q/developer/
+verified_at: 2026-08-01
+verified_by: null
+source: catalog
+tagline: AWS AI code assistant — inline completions, chat, and agentic transforms.
+about: AWS AI code assistant — inline completions, chat, and agentic transforms.
+tags:
+  - ide
+  - aws

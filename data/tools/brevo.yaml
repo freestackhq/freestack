@@ -1,0 +1,25 @@
+id: brevo
+name: Brevo
+kind: Email service
+url: https://www.brevo.com
+aisle: email
+metric: 300
+limits: []
+who:
+  - anyone
+region: null
+sell: yes
+card: unknown
+cost: free
+catches: []
+use_if:
+  - You need both drip campaigns (welcome sequences, newsletters) and transactional sends (order confirmations) from one platform without stitching two services together. The 300 emails/day forever-free tier is generous enough for a side-project that also wants to nurture a small subscriber list.
+skip_if:
+  - reason: Brevo adds a full marketing automation UI; Resend is code-only transactional. vs Loops — Brevo is broader (CRM, SMS, chat) but less opinionated about SaaS lifecycle; Loops is purpose-built for product-led onboarding flows.
+    use: resend
+pricing_url: https://www.brevo.com
+verified_at: null
+verified_by: null
+source: catalog
+tagline: Marketing + transactional in one forever-free tier.
+about: Marketing + transactional in one forever-free tier.

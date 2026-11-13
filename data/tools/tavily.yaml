@@ -1,0 +1,28 @@
+id: tavily
+name: Tavily
+kind: Web search for agents
+url: https://tavily.com
+aisle: ai-tooling
+metric: null
+metric_note: ~1k API credits a month free class
+limits:
+  - ~1k API credits a month free class
+who:
+  - anyone
+region: null
+sell: yes
+card: unknown
+cost: free
+catches: []
+use_if:
+  - "Your agent needs real-time web search results as structured JSON (title, URL, content snippet) without parsing HTML — purpose-built for LLM tool-calling with ~1 K free searches/month. vs Exa: Tavily returns traditional search-style results optimized for factual grounding; Exa uses neural search for semantic similarity (better for \"find pages *like* this\"). vs SerpAPI / raw Google: Tavily extracts clean content and scores relevance for you; raw search APIs return link lists you'd have to scrape and parse yourself."
+skip_if: []
+pricing_url: https://tavily.com
+verified_at: 2026-07-24
+verified_by: null
+source: catalog
+tagline: Web search API shaped for agents — structured results, not HTML soup.
+about: Web search API shaped for agents — structured results, not HTML soup.
+tags:
+  - agents
+  - search
