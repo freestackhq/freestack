@@ -1,4 +1,5 @@
 import type { APIRoute } from "astro";
+import { SITE_URL } from "../../lib/site";
 import { CATALOGS } from "../../lib/catalog";
 import { json, options } from "../../lib/http";
 
@@ -16,7 +17,7 @@ const openapi = {
     license: { name: "MIT" },
   },
   servers: [
-    { url: "https://freestack.kuyacarlo.dev", description: "Production" },
+    { url: SITE_URL, description: "Production" },
     { url: "http://localhost:4321", description: "Local Astro" },
   ],
   tags: [{ name: "health" }, { name: "catalogs" }, { name: "entries" }],

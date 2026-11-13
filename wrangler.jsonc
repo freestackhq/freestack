@@ -6,8 +6,5 @@
   "assets": {
     "directory": "./dist",
     "binding": "ASSETS"
-  },
-  "routes": [
-    { "pattern": "freestack.kuyacarlo.dev", "custom_domain": true }
-  ]
+  }
 }

@@ -1,4 +1,5 @@
 import type { APIRoute } from "astro";
+import { SITE_URL } from "../lib/site";
 import { CATALOGS } from "../lib/catalog";
 
 export const prerender = true;
@@ -15,23 +16,23 @@ export const GET: APIRoute = () => {
 
   for (const c of CATALOGS) {
     const total = c.categories.reduce((n, cat) => n + cat.entries.length, 0);
-    lines.push(`- [${c.label}](https://freestack.kuyacarlo.dev/catalogs/${c.id}): ${c.description} (${total} entries across ${c.categories.length} categories)`);
+    lines.push(`- [${c.label}](${SITE_URL}/catalogs/${c.id}): ${c.description} (${total} entries across ${c.categories.length} categories)`);
   }
 
   lines.push(
     "",
     "## API Endpoints",
     "",
-    "- [OpenAPI Spec](https://freestack.kuyacarlo.dev/api/openapi.json): Machine-readable OpenAPI 3.1.0 definition.",
-    "- [All Entries API](https://freestack.kuyacarlo.dev/api/entries): Query entries across all catalogs with filters.",
-    "- [Catalogs API](https://freestack.kuyacarlo.dev/api/catalogs): List of available catalogs, categories, and entry counts.",
-    "- [Full Text Dump](https://freestack.kuyacarlo.dev/llms-full.txt): Complete Markdown dump of all entries for LLMs.",
+    `- [OpenAPI Spec](${SITE_URL}/api/openapi.json): Machine-readable OpenAPI 3.1.0 definition.`,
+    `- [All Entries API](${SITE_URL}/api/entries): Query entries across all catalogs with filters.`,
+    `- [Catalogs API](${SITE_URL}/api/catalogs): List of available catalogs, categories, and entry counts.`,
+    `- [Full Text Dump](${SITE_URL}/llms-full.txt): Complete Markdown dump of all entries for LLMs.`,
     "",
     "## Guides",
     "",
-    "- [Claim Order Guide](https://freestack.kuyacarlo.dev/guides/claim-order): Optimal claiming order for student & developer credits.",
-    "- [Startup Guide](https://freestack.kuyacarlo.dev/guides/startup): Zero-cost stack architecture guide for startups.",
-    "- [Stacks Guide](https://freestack.kuyacarlo.dev/guides/stacks): Recommended developer stacks with free tiers.",
+    `- [Claim Order Guide](${SITE_URL}/guides/claim-order): Optimal claiming order for student & developer credits.`,
+    `- [Startup Guide](${SITE_URL}/guides/startup): Zero-cost stack architecture guide for startups.`,
+    `- [Stacks Guide](${SITE_URL}/guides/stacks): Recommended developer stacks with free tiers.`,
     ""
   );
 

@@ -11,7 +11,7 @@
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
-    "deploy:cf": "astro build && wrangler deploy",
+    "deploy:cf": "node scripts/deploy.mjs",
     "preview": "astro preview",
     "astro": "astro",
     "catalog:fetch": "node scripts/fetch-catalogs.mjs",

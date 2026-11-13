@@ -1,4 +1,5 @@
 import type { APIRoute } from "astro";
+import { SITE_URL } from "../../lib/site";
 import { CATALOGS, allEntries } from "../../lib/catalog";
 import { json, options } from "../../lib/http";
 
@@ -19,5 +20,5 @@ export const GET: APIRoute = () =>
       health: "GET /api/health",
       openapi: "GET /api/openapi.json",
     },
-    site: "https://freestack.kuyacarlo.dev",
+    site: SITE_URL,
   });
