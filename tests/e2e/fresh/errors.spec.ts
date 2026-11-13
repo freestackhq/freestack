@@ -17,8 +17,13 @@ test.describe("not found (NotFound.dc.html)", () => {
     const search = page.locator("main").getByRole("button", { name: /Search \d+ tools/ });
     await expect(search).toHaveClass(/btn-promo/);
     await expect(page.locator("main .btn-promo")).toHaveCount(1);
+    // SearchDialog is a stub until the Search lane lands; check the contract event.
+    await page.evaluate(() => {
+      (window as unknown as { opened: boolean }).opened = false;
+      window.addEventListener("fs:search-open", () => ((window as unknown as { opened: boolean }).opened = true));
+    });
     await search.click();
-    await expect(page.getByRole("dialog")).toBeVisible();
+    expect(await page.evaluate(() => (window as unknown as { opened: boolean }).opened)).toBe(true);
   });
 
   test("home link and aisles with counts from the catalog", async ({ page }) => {

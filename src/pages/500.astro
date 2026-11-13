@@ -1,0 +1,76 @@
+---
+/**
+ * Site error (Edges.dc.html, "Site error"). Rendered on demand when a route
+ * throws, so "Try again" can point at the address that failed. The error
+ * itself is never shown.
+ *
+ * Tested through /dev/throw (src/pages/dev/throw.astro).
+ */
+import Shell from "../layouts/Shell.astro";
+
+export const prerender = false;
+
+interface Props {
+  error?: unknown;
+}
+
+Astro.response.status = 500;
+const again = `${Astro.url.pathname}${Astro.url.search}`;
+const retry = again === "/500" || again === "/500/" ? "/" : again;
+---
+
+<Shell title="Something broke · freestack" noindex>
+  <div class="wrap page">
+    <div class="box" role="alert">
+      <p class="code">Site error</p>
+      <h1 class="title">Something broke on our side</h1>
+      <p class="lede">The page did not load. Try again in a minute.</p>
+      <div class="actions">
+        <a class="btn" href={retry}>Try again</a>
+        <a class="btn btn-outline" href="/">Go home</a>
+      </div>
+    </div>
+  </div>
+</Shell>
+
+<style>
+  .page {
+    padding-block: 64px 120px;
+  }
+  .box {
+    max-width: 640px;
+    background: var(--label);
+    padding: 22px 24px;
+    display: grid;
+    gap: 12px;
+    justify-items: start;
+  }
+  .code {
+    margin: 0;
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--muted);
+  }
+  .title {
+    margin: 0;
+    font-weight: 900;
+    font-stretch: 62%;
+    line-height: 1;
+    font-size: clamp(36px, 4vw, 44px);
+  }
+  .lede {
+    margin: 0;
+    font-size: 16px;
+    line-height: 1.5;
+  }
+  .actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  @media (max-width: 640px) {
+    .page {
+      padding-block: 32px 72px;
+    }
+  }
+</style>

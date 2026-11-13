@@ -1,0 +1,177 @@
+---
+/**
+ * Not found (NotFound.dc.html). Old URLs redirect with a 301, so this only
+ * shows for real typos.
+ */
+import Shell from "../layouts/Shell.astro";
+import Icon from "../components/fresh/Icon.astro";
+import { aisle as getAisle, aisleCount, aisles, totalTools } from "../lib/fresh/catalog";
+
+const total = totalTools();
+
+// The aisles the board suggests, in its order; any missing one is skipped.
+// There is no visit data yet, so the heading does not claim "most visited".
+const PICKS = ["databases", "hosting", "student-programs"];
+const picked = PICKS.map((id) => getAisle(id)).filter((a) => a !== undefined);
+const links = (picked.length ? picked : aisles().slice(0, 3)).map((a) => {
+  const n = aisleCount(a.id);
+  const noun = a.group === "Claim Once" ? (n === 1 ? "program" : "programs") : n === 1 ? "label" : "labels";
+  return { href: `/${a.id}`, name: a.name, count: `${n} ${noun}` };
+});
+---
+
+<Shell title="Not found · freestack" noindex>
+  <div class="wrap page">
+    <div>
+      <p class="code">Error 404</p>
+      <h1 class="title">Not on the shelf</h1>
+      <p class="lede">This page doesn't exist. Old freestack links still work, so this one may have a typo.</p>
+      <div class="actions">
+        <button
+          type="button"
+          class="btn btn-promo search"
+          data-search-open
+          aria-haspopup="dialog"
+          aria-keyshortcuts="Control+K Meta+K /"
+        >
+          <Icon name="search" size={18} />
+          Search {total} tools
+          <span aria-hidden="true" class="keys"><kbd>Ctrl</kbd><kbd>K</kbd></span>
+        </button>
+        <a class="home" href="/">Go to the home page</a>
+      </div>
+    </div>
+    <div>
+      <h2 class="aisles-h">Aisles to start with</h2>
+      <ul class="aisles" data-aisle-links>
+        {
+          links.map((l) => (
+            <li>
+              <a href={l.href}>
+                {l.name}
+                <span class="n">{l.count}</span>
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+      <p class="report">
+        Followed a link here?{" "}
+        <a href="https://github.com/freestackhq/freestack/issues/new" target="_blank" rel="noopener">
+          Report the broken link<Icon name="external" size={14} /><span class="sr-only">, on GitHub, opens in a new tab</span>
+        </a>
+      </p>
+    </div>
+  </div>
+</Shell>
+
+<style>
+  .page {
+    padding-block: 64px 120px;
+    display: grid;
+    grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr);
+    gap: 56px;
+    align-items: start;
+  }
+  .code {
+    margin: 0 0 12px;
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--muted);
+  }
+  .title {
+    margin: 0;
+    font-weight: 900;
+    font-stretch: 62%;
+    line-height: 1;
+    font-size: clamp(72px, 10vw, 140px);
+  }
+  .lede {
+    margin: 20px 0 0;
+    max-width: 36ch;
+    font-size: 20px;
+    line-height: 1.45;
+  }
+  .actions {
+    margin-top: 32px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 12px 20px;
+  }
+  .search {
+    min-height: 52px;
+    padding: 0 24px;
+    font-size: 17px;
+    gap: 10px;
+  }
+  .keys {
+    display: inline-flex;
+    gap: 4px;
+    margin-left: 4px;
+  }
+  .keys kbd {
+    background: var(--label);
+  }
+  .home {
+    display: inline-flex;
+    align-items: center;
+    min-height: var(--target);
+    font-size: 16px;
+    font-weight: 700;
+  }
+  .aisles-h {
+    margin: 8px 0 12px;
+    font-size: 19px;
+    font-weight: 800;
+  }
+  .aisles {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 6px;
+  }
+  .aisles a {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    min-height: 52px;
+    padding: 0 18px;
+    background: var(--label);
+    text-decoration: none;
+    font-size: 17px;
+    font-weight: 700;
+  }
+  .aisles a:hover {
+    text-decoration: underline;
+  }
+  .n {
+    font-weight: 500;
+    font-size: 15px;
+    color: var(--muted);
+  }
+  .report {
+    margin: 20px 0 0;
+    font-size: 15px;
+    color: var(--muted);
+  }
+  .report a {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    min-height: var(--target);
+    font-weight: 700;
+  }
+  @media (max-width: 760px) {
+    .page {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 40px;
+      padding-block: 40px 72px;
+    }
+    .keys {
+      display: none;
+    }
+  }
+</style>
