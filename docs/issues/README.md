@@ -80,13 +80,13 @@ Every page issue is done when:
 ## Phase 4: Trust loop
 
 ### 4.1 Check a label
-- Boards: `Verify.dc.html`, `PhoneVerify.dc.html`. Worker endpoint, D1, Turnstile.
-- All "Still true" sets `verified_at`. Any "Changed" opens a review item and the label shows "A change is waiting for review".
-- Edge cases: failed send or Turnstile failure keeps the answers (`Edges.dc.html`).
+- Boards: `Verify.dc.html`, `PhoneVerify.dc.html`. GitHub issue form `label-check.yml` plus the `label-check` workflow (no Worker, D1 or Turnstile).
+- All "Still true" sets `verified_at` and `verified_by`. Any "Changed" adds a `data/state/reviews.yaml` entry and opens a PR; the label shows "A change is waiting for review".
+- Edge cases: a link too long for GitHub shows the body to copy and keeps the answers.
 
 ### 4.2 Add a tool
-- Boards: `AddTool.dc.html`, `AddToolSent.dc.html`. Worker plus a GitHub App that opens a PR with `data/tools/<id>.yaml`.
-- Edge cases: tool already listed, a number that isn't one, sent state with the PR link.
+- Boards: `AddTool.dc.html`, `AddToolSent.dc.html`. GitHub issue form `add-tool.yml` plus the `add-tool` workflow, which opens a PR with `data/tools/<id>.yaml`.
+- Edge cases: tool already listed, a number that isn't one, sent state with the issue-form link and the open add-tool PRs.
 
 ### 4.3 Weekly pricing-page scan
 - Cron Trigger hashes each `pricing_url` and sets "vendor changed".
