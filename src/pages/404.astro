@@ -7,6 +7,10 @@ import Shell from "../layouts/Shell.astro";
 import Icon from "../components/fresh/Icon.astro";
 import { aisle as getAisle, aisleCount, aisles, totalTools } from "../lib/fresh/catalog";
 
+// Rendered on demand so SSR routes (the removed-tool catch-all) can
+// Astro.rewrite("/404") to it; a prerendered 404 has no server component.
+export const prerender = false;
+
 const total = totalTools();
 
 // The aisles the board suggests, in its order; any missing one is skipped.
