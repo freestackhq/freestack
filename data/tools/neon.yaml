@@ -1,0 +1,26 @@
+id: neon
+name: Neon
+kind: Serverless Postgres
+url: https://neon.tech
+aisle: databases
+metric: 0.5          # storage_gb, the Databases aisle metric
+limits:
+  - 5 GB data sent out a month
+  - Sleeps after 5 minutes idle
+who: [anyone]
+region: null
+sell: yes
+card: unknown
+catches:
+  - Sleeps after 5 min idle
+use_if:
+  - You want a normal SQL database
+  - You want a test copy for every preview
+skip_if:
+  - { reason: You also need logins and file uploads, use: supabase }
+  - { reason: Your users are all over the world, use: turso }
+  - { reason: You are already on Cloudflare Workers, use: d1 }
+pricing_url: https://neon.tech/pricing
+verified_at: null
+verified_by: null
+source: catalog

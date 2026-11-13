@@ -1,0 +1,170 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>freestack: compare databases</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#E7E9EC}
+a{color:#1C2340;text-decoration-thickness:1px;text-underline-offset:3px}a:hover{text-decoration-thickness:2px}
+:focus-visible{outline:3px solid #2F45E0;outline-offset:2px}
+header :focus-visible,[role="region"] :focus-visible{outline-color:#FFD23F}
+</style>
+</helmet>
+<div style="min-height: 100vh; background: #E7E9EC; color: #1C2340; font-family: Archivo, sans-serif">
+  <header style="background: #1C2340; color: #FFFFFF">
+    <nav aria-label="Main" style="max-width: 1240px; margin: 0 auto; padding: 12px 32px; display: grid; grid-template-columns: minmax(max-content, 1fr) minmax(260px, 520px) minmax(max-content, 1fr); align-items: center; gap: 24px">
+      <a href="Home.dc.html" style="justify-self: start; display: inline-flex; align-items: center; gap: 10px; color: #FFFFFF; text-decoration: none; font-weight: 900; font-stretch: 125%; font-size: 22px; letter-spacing: -0.01em"><svg aria-hidden="true" width="30" height="30" viewBox="0 0 40 40"><path d="M2.5 20L11 7.5h26.5v25H11z" fill="#FFD23F"></path><circle cx="11.5" cy="20" r="2.8" fill="#1C2340"></circle><rect x="18" y="12.5" width="15" height="3.6" fill="#1C2340"></rect><rect x="18" y="18.2" width="11.5" height="3.6" fill="#1C2340"></rect><rect x="18" y="23.9" width="8" height="3.6" fill="#1C2340"></rect></svg>freestack</a>
+      <button type="button" aria-haspopup="dialog" aria-keyshortcuts="Control+K Meta+K /" aria-label="Search 222 tools" style="width: 100%; height: 44px; display: flex; align-items: center; gap: 10px; padding: 0 8px 0 14px; background: #FFFFFF; border: 0; color: #545B73; font: 500 15px Archivo, sans-serif; text-align: left; cursor: pointer">
+        <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#545B73" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-3.5-3.5"></path></svg>
+        <span style="flex: 1">Search 222 tools</span>
+        <span aria-hidden="true" style="display: inline-flex; gap: 4px"><kbd style="font: 600 12px Archivo, sans-serif; color: #1C2340; background: #E7E9EC; border-bottom: 2px solid #C9CDD4; padding: 2px 7px">Ctrl</kbd><kbd style="font: 600 12px Archivo, sans-serif; color: #1C2340; background: #E7E9EC; border-bottom: 2px solid #C9CDD4; padding: 2px 7px">K</kbd></span>
+      </button>
+      <div style="justify-self: end; display: flex; align-items: center; gap: 8px">
+        <button type="button" aria-haspopup="true" aria-expanded="false" aria-current="page" style="box-shadow: inset 0 -4px 0 #FFD23F; display: inline-flex; align-items: center; gap: 6px; min-height: 44px; padding: 0 12px; background: transparent; border: 0; color: #FFFFFF; font: 600 15px Archivo, sans-serif; cursor: pointer">Aisles<svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"></path></svg></button>
+        <a href="AddTool.dc.html" style="display: inline-flex; align-items: center; min-height: 44px; padding: 0 14px; border: 2px solid #FFFFFF; color: #FFFFFF; text-decoration: none; font-weight: 700; font-size: 15px; box-sizing: border-box">Add a tool</a>
+      </div>
+    </nav>
+  </header>
+  <main style="max-width: 1240px; margin: 0 auto; padding: 40px 32px 96px">
+    <a href="Aisle.dc.html" style="display: inline-flex; align-items: center; gap: 8px; min-height: 44px; margin: 0 0 12px -4px; padding: 0 14px 0 8px; border: 2px solid #1C2340; background: #FFFFFF; color: #1C2340; text-decoration: none; font-weight: 700; font-size: 15px"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#1C2340" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"></path></svg>Databases aisle</a>
+    <h1 style="margin: 0; font-weight: 900; font-stretch: 62%; font-size: 88px; line-height: 1; max-width: 18ch">{{headline}}</h1>
+
+    <div style="margin-top: 28px; display: flex; flex-wrap: wrap; align-items: center; gap: 12px 20px">
+      <a href="#share" style="margin-left: auto; padding: 12px 18px; border: 2px solid #1C2340; color: #1C2340; text-decoration: none; font-weight: 700; font-size: 15px">Copy link to this comparison</a>
+    </div>
+
+    <div style="margin-top: 24px; overflow-x: auto; background: #FFFFFF">
+      <table style="width: 100%; min-width: {{minW}}; border-collapse: collapse; table-layout: fixed">
+        <thead>
+          <tr style="vertical-align: top; text-align: left">
+            <td style="width: 180px; padding: 18px; font-size: 14px; line-height: 1.45; color: #545B73">Big number: free storage. All cost $0 a month. Shaded rows differ.</td>
+            <sc-for list="{{cols}}" as="col" hint-placeholder-count="3">
+              <th scope="col" style="{{col.thStyle}}">
+                <div style="display: flex; align-items: center; justify-content: space-between; margin: -6px -6px 6px 0">
+                  <span aria-hidden="true" style="font-size: 13px; font-weight: 600; color: #545B73">{{col.slotLabel}}</span>
+                  <sc-if value="{{col.canRemove}}" hint-placeholder-val="{{true}}">
+                    <button type="button" onClick="{{col.remove}}" aria-label="{{col.removeLabel}}" style="width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; background: transparent; border: 0; cursor: pointer"><svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1C2340" stroke-width="3" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"></path></svg></button>
+                  </sc-if>
+                </div>
+                <div style="position: relative">
+                  <select aria-label="{{col.slotLabel}}" value="{{col.id}}" onChange="{{col.change}}" style="width: 100%; min-height: 44px; padding: 0 36px 0 12px; appearance: none; -webkit-appearance: none; background: #FFFFFF; border: 2px solid #1C2340; border-radius: 0; color: #1C2340; font: 800 18px Archivo, sans-serif; cursor: pointer">
+                    <sc-for list="{{tools}}" as="t" hint-placeholder-count="9">
+                      <option value="{{t.id}}">{{t.name}}</option>
+                    </sc-for>
+                  </select>
+                  <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1C2340" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="position: absolute; right: 12px; top: 14px; pointer-events: none"><path d="M6 9l6 6 6-6"></path></svg>
+                </div>
+                <span style="display: block; margin-top: 12px; font-weight: 900; font-stretch: 62%; font-size: 68px; line-height: 1">{{col.big}}</span>
+                <span style="display: block; font-size: 14px; font-weight: 500; color: #545B73">{{col.unit}}</span>
+              </th>
+            </sc-for>
+            <sc-if value="{{canAdd}}" hint-placeholder-val="{{true}}">
+              <th scope="col" style="width: 220px; padding: 18px; border-left: 2px dashed #9AA0AC; border-top: 8px solid transparent; text-align: left; vertical-align: top">
+                <span aria-hidden="true" style="display: block; font-size: 13px; font-weight: 600; color: #545B73; margin-bottom: 6px">Add a tool</span>
+                <div style="position: relative">
+                  <select aria-label="Add a tool to compare" value="" onChange="{{addChange}}" style="width: 100%; min-height: 44px; padding: 0 36px 0 12px; appearance: none; -webkit-appearance: none; background: #FFFFFF; border: 2px dashed #1C2340; border-radius: 0; color: #1C2340; font: 600 16px Archivo, sans-serif; cursor: pointer">
+                    <option value="" disabled="">Choose…</option>
+                    <sc-for list="{{addOptions}}" as="t" hint-placeholder-count="6">
+                      <option value="{{t.id}}">{{t.name}}</option>
+                    </sc-for>
+                  </select>
+                  <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1C2340" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="position: absolute; right: 12px; top: 14px; pointer-events: none"><path d="M12 5v14M5 12h14"></path></svg>
+                </div>
+                <span style="display: block; margin-top: 12px; font-size: 14px; color: #545B73">Up to 4 side by side</span>
+              </th>
+            </sc-if>
+          </tr>
+        </thead>
+        <tbody>
+          <sc-for list="{{rows}}" as="r" hint-placeholder-count="7">
+            <tr style="{{r.trStyle}}">
+              <th scope="row" style="padding: 16px 18px; text-align: left; font-size: 15px; font-weight: 700">{{r.label}}<sc-if value="{{r.diff}}" hint-placeholder-val="{{false}}"><span style="display: block; margin-top: 2px; font-size: 13px; font-weight: 500; color: #545B73">Differs</span></sc-if></th>
+              <sc-for list="{{r.cells}}" as="cell" hint-placeholder-count="3">
+                <td style="padding: 16px 18px; border-left: 1px solid #E7E9EC; font-size: 16px; line-height: 1.4">
+                  <sc-if value="{{cell.isText}}" hint-placeholder-val="{{true}}"><span style="color: {{cell.color}}">{{cell.text}}</span></sc-if>
+                  <sc-if value="{{cell.yes}}" hint-placeholder-val="{{false}}"><span style="display: inline-flex; align-items: center; gap: 6px; font-weight: 600"><svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1C2340" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5l5 5L20 6.5"></path></svg>Yes</span></sc-if>
+                  <sc-if value="{{cell.no}}" hint-placeholder-val="{{false}}"><span style="display: inline-flex; align-items: center; gap: 6px; font-weight: 600"><svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1C2340" stroke-width="3.2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"></path></svg>No</span></sc-if>
+                  <sc-if value="{{cell.unk}}" hint-placeholder-val="{{false}}"><span style="display: inline-flex; align-items: center; gap: 6px; color: #545B73"><svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#545B73" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9.5" stroke-dasharray="3 3"></circle><path d="M9.6 9.4a2.5 2.5 0 0 1 4.8.9c0 1.7-2.4 2.2-2.4 3.7"></path><path d="M12 17.2h.01"></path></svg>Unknown</span></sc-if>
+                </td>
+              </sc-for>
+              <sc-if value="{{r.canAdd}}" hint-placeholder-val="{{true}}"><td style="border-left: 2px dashed #9AA0AC"></td></sc-if>
+            </tr>
+          </sc-for>
+        </tbody>
+      </table>
+    </div>
+    <p style="margin: 16px 0 0; font-size: 14px; color: #545B73">Labels marked unknown have not been checked against the vendor yet. <a href="#verify">Check one</a></p>
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1080}}'>
+class Component extends DCLogic {
+  constructor(props) { super(props); this.state = { ids: ['neon', 'turso', 'supabase'] }; }
+  data() {
+    return [
+      { id: 'neon', catch: 'Sleeps after 5 minutes idle. The next visit is slow.', name: 'Neon', big: '0.5 GB', unit: '', rel: 'Small', also: '5 GB transfer a month', idle: 'Sleeps after 5 minutes', comes: 'A test copy per preview', open: 'yes', sell: 'yes', card: 'unk', pick: 'You want a normal SQL database.' },
+      { id: 'turso', catch: '', name: 'Turso', big: '5 GB', unit: '', rel: 'Large', also: '500M reads a month, 100 databases', idle: '', comes: 'Copies close to your users', open: 'yes', sell: 'yes', card: 'unk', pick: 'Your users are all over the world.' },
+      { id: 'supabase', catch: 'Pauses after 7 days idle. You wake it by hand.', name: 'Supabase', big: '0.5 GB', unit: '', rel: 'Small', also: '50k monthly active users, 2 active projects', idle: 'Pauses after 7 days, you resume it by hand', comes: 'Logins, file uploads, live updates', open: 'yes', sell: 'yes', card: 'unk', pick: 'You also need logins and file uploads.' },
+      { id: 'd1', catch: '', name: 'Cloudflare D1', big: '5 GB', unit: 'per database', rel: 'Large', also: '5M rows read a day', idle: '', comes: 'Lives right inside your Worker', open: 'yes', sell: 'yes', card: 'no', pick: 'You are already on Cloudflare Workers.' },
+      { id: 'convex', catch: '', name: 'Convex', big: '0.5 GB', unit: '', rel: 'Small', also: '1M function calls a month', idle: '', comes: 'Database plus backend code, live by default', open: 'yes', sell: 'yes', card: 'unk', pick: 'You are building something live, like chat.' },
+      { id: 'mongo', catch: '', name: 'MongoDB Atlas M0', big: '0.5 GB', unit: '', rel: 'Small', also: '', idle: '', comes: 'Search and charts built in', open: 'yes', sell: 'yes', card: 'unk', pick: 'Your data has no fixed shape.' },
+      { id: 'appwrite', catch: '', name: 'Appwrite Cloud', big: '?', unit: 'not listed', rel: 'Not listed', also: '2 projects, 2 GB file storage', idle: '', comes: 'Logins, database, storage; open source', open: 'yes', sell: 'yes', card: 'unk', pick: 'You want a Firebase-style backend you can self-host.' },
+      { id: 'pocketbase', catch: 'You run and update the server yourself.', name: 'PocketBase', big: 'No limit', unit: 'your own disk', rel: 'As big as your server', also: 'Runs on Oracle Free or Koyeb', idle: 'Runs wherever you host it', comes: 'A whole backend in one file', open: 'yes', sell: 'yes', card: 'yes', pick: 'You want the simplest backend you host yourself.' }
+    ];
+  }
+  renderVals() {
+    var self = this, all = this.data(), ids = this.state.ids;
+    var byId = {}; all.forEach(function (t) { byId[t.id] = t; });
+    var sel = ids.map(function (id) { return byId[id]; });
+    var n = sel.length;
+    var setCol = function (i, id) {
+      var next = ids.slice(), j = next.indexOf(id);
+      if (j !== -1 && j !== i) next[j] = next[i];
+      next[i] = id; self.setState({ ids: next });
+    };
+    var canAdd = n < 4;
+    var addChange = function (e) { var id = e.target.value; if (id && ids.indexOf(id) === -1) self.setState({ ids: ids.concat([id]) }); };
+    var addOptions = all.filter(function (t) { return ids.indexOf(t.id) === -1; }).map(function (t) { return { id: t.id, name: t.name }; });
+    var cols = sel.map(function (t, i) {
+      return { id: t.id, big: t.big, unit: t.unit, slotLabel: 'Tool ' + (i + 1),
+        canRemove: n > 2, removeLabel: 'Remove ' + t.name + ' from comparison',
+        remove: function () { self.setState({ ids: ids.filter(function (x) { return x !== t.id; }) }); },
+        thStyle: 'padding: 18px; border-left: 1px solid #E7E9EC; border-top: 8px solid ' + (t.id === 'neon' ? '#FFD23F' : '#1C2340'),
+        change: function (e) { setCol(i, e.target.value); } };
+    });
+    var defs = [
+      
+      ['Also capped', function (t) { return t.also; }, 'text'],
+      ['The catch', function (t) { return t.catch; }, 'text'],
+      
+      ['Comes with', function (t) { return t.comes; }, 'text'],
+      ['Open to all', function (t) { return t.open; }, 'flag'],
+      ['Can sell', function (t) { return t.sell; }, 'flag'],
+      ['Credit card', function (t) { return t.card === 'yes' ? 'Not needed' : (t.card === 'no' ? 'Needed at signup' : 'Unknown'); }, 'text'],
+      ['Pick it if', function (t) { return t.pick; }, 'text']
+    ];
+    var rows = defs.map(function (d) {
+      var vals = sel.map(d[1]);
+      var diff = d[0] !== 'Pick it if' && vals.some(function (v) { return v !== vals[0]; });
+      return { label: d[0], diff: diff, canAdd: canAdd,
+        trStyle: 'border-top: ' + (d[0] === 'Pick it if' ? '2px solid #1C2340' : '1px solid #C9CDD4') + '; vertical-align: top' + (diff ? '; background: #FFF6D1' : ''),
+        cells: vals.map(function (v) {
+          if (d[2] === 'flag') return { isText: false, yes: v === 'yes', no: v === 'no', unk: v === 'unk' };
+          return { isText: true, text: v || 'Not listed in the catalog', color: (v && v !== 'Unknown') ? '#1C2340' : '#545B73', yes: false, no: false, unk: false };
+        }) };
+    });
+    var names = sel.map(function (t) { return t.name; });
+    var headline = names.length === 2 ? names[0] + ' or ' + names[1] + '?' : names.slice(0, -1).join(', ') + ' or ' + names[names.length - 1] + '?';
+    return { headline: headline, canAdd: canAdd, addChange: addChange, addOptions: addOptions, cols: cols, rows: rows, tools: all.map(function (t) { return { id: t.id, name: t.name }; }), minW: (200 + n * 250 + (canAdd ? 220 : 0)) + 'px' };
+  }
+}
+</script>
+</body>
+</html>

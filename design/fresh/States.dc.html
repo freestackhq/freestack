@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>freestack: states</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#E7E9EC}
+a{color:#1C2340;text-decoration-thickness:1px;text-underline-offset:3px}a:hover{text-decoration-thickness:2px}
+:focus-visible{outline:3px solid #2F45E0;outline-offset:2px}
+header :focus-visible,[role="region"] :focus-visible{outline-color:#FFD23F}
+</style>
+</helmet>
+<div style="width: 1440px; box-sizing: border-box; padding: 64px 72px; background: #E7E9EC; color: #1C2340; font-family: Archivo, sans-serif; display: grid; gap: 56px; align-content: start">
+  <section>
+    <h1 style="margin: 0; font-weight: 900; font-stretch: 62%; line-height: 1; font-size: 72px; margin-bottom: 24px">Label states</h1>
+    <div style="display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 18px"><div style="display: grid; gap: 8px; align-content: start"><p style="margin: 0; font-size: 14px; font-weight: 700; color: #545B73">Checked within 90 days</p>
+      <div style="position: relative; background: #FFFFFF; border-top: 8px solid #FFD23F"><span style="position: absolute; top: -10px; right: 12px; background: #FFD23F; color: #1C2340; font-weight: 800; font-size: 13px; padding: 6px 10px 5px; box-shadow: 0 2px 0 #C9A21E">Suggested</span><p style="margin: 0; padding: 14px 16px 2px; font-size: 18px; font-weight: 800">Neon</p><p style="margin: 0 16px 12px; font-weight: 900; font-stretch: 62%; font-size: 52px; line-height: 1; color: #1C2340">0.5 GB</p><p style="margin: 0; padding: 0 16px; min-height: 44px; display: flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 700; color: #FFFFFF; background: #1C2340"><svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#FFD23F" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" style="flex: 0 0 auto"><path d="M4 12.5l5 5L20 6.5"></path></svg>Checked 3 days ago by Karlo</p></div></div><div style="display: grid; gap: 8px; align-content: start"><p style="margin: 0; font-size: 14px; font-weight: 700; color: #545B73">Never checked</p>
+      <div style="position: relative; background: #FFFFFF; border-top: 8px solid #1C2340"><p style="margin: 0; padding: 14px 16px 2px; font-size: 18px; font-weight: 800">Neon</p><p style="margin: 0 16px 12px; font-weight: 900; font-stretch: 62%; font-size: 52px; line-height: 1; color: #1C2340">0.5 GB</p><div style="padding: 0 16px; min-height: 44px; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 0 10px; border-top: 1px solid #E7E9EC; font-size: 13px"><span style="color: #545B73">Not checked yet</span><a href="Verify.dc.html" style="display: inline-flex; align-items: center; min-height: 44px; font-weight: 700">Check it</a></div></div></div><div style="display: grid; gap: 8px; align-content: start"><p style="margin: 0; font-size: 14px; font-weight: 700; color: #545B73">Over 90 days</p>
+      <div style="position: relative; background: #FFFFFF; border-top: 8px solid #1C2340"><p style="margin: 0; padding: 14px 16px 2px; font-size: 18px; font-weight: 800">Neon</p><p style="margin: 0 16px 12px; font-weight: 900; font-stretch: 62%; font-size: 52px; line-height: 1; color: #1C2340">0.5 GB</p><div style="padding: 0 16px; min-height: 44px; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 0 10px; font-size: 13px; font-weight: 700; background: #FFB27A"><span>Checked 24 Jul. Due for a recheck</span><a href="Verify.dc.html" style="display: inline-flex; align-items: center; min-height: 44px">Recheck it</a></div></div></div><div style="display: grid; gap: 8px; align-content: start"><p style="margin: 0; font-size: 14px; font-weight: 700; color: #545B73">Change waiting for review</p>
+      <div style="position: relative; background: #FFFFFF; border-top: 8px solid #1C2340"><p style="margin: 0; padding: 14px 16px 2px; font-size: 18px; font-weight: 800">Neon</p><p style="margin: 0 16px 12px; font-weight: 900; font-stretch: 62%; font-size: 52px; line-height: 1; color: #1C2340">0.5 GB</p><p style="margin: 0; padding: 0 16px; min-height: 44px; display: flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 700; background: #F3F4F6"><svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#1C2340" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" style="flex: 0 0 auto"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path></svg>A change is waiting for review</p></div></div><div style="display: grid; gap: 8px; align-content: start"><p style="margin: 0; font-size: 14px; font-weight: 700; color: #545B73">Vendor page changed</p>
+      <div style="position: relative; background: #FFFFFF; border-top: 8px solid #1C2340"><p style="margin: 0; padding: 14px 16px 2px; font-size: 18px; font-weight: 800">Neon</p><p style="margin: 0 16px 12px; font-weight: 900; font-stretch: 62%; font-size: 52px; line-height: 1; color: #1C2340">0.5 GB</p><p style="margin: 0; padding: 10px 16px; display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 700; color: #FFFFFF; background: #1C2340"><svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#FFD23F" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" style="flex: 0 0 auto"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path></svg>Neon changed its pricing page on 12 Nov</p><a href="Verify.dc.html" style="display: flex; align-items: center; justify-content: center; min-height: 44px; font-weight: 700; font-size: 14px; background: #FFFFFF; color: #1C2340; text-decoration: underline; text-underline-offset: 3px">Recheck this label</a></div></div><div style="display: grid; gap: 8px; align-content: start"><p style="margin: 0; font-size: 14px; font-weight: 700; color: #545B73">From an awesome list</p>
+      <div style="position: relative; background: #FFFFFF; border-top: 8px solid #1C2340"><p style="margin: 0; padding: 14px 16px 2px; font-size: 18px; font-weight: 800">Neon</p><p style="margin: 0 16px 12px; font-weight: 900; font-stretch: 62%; font-size: 52px; line-height: 1; color: #545B73">?</p><p style="margin: 0; padding: 10px 16px; font-size: 13px; color: #545B73; background: #F3F4F6">From free-for-dev. No numbers yet</p><a href="AddTool.dc.html" style="display: flex; align-items: center; justify-content: center; min-height: 44px; font-weight: 700; font-size: 14px; color: #1C2340; border-top: 1px solid #E7E9EC">Write its label</a></div></div></div>
+  </section>
+  <section style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 32px">
+    <div>
+      <h2 style="margin: 0; font-weight: 900; font-stretch: 62%; line-height: 1; font-size: 44px; margin-bottom: 16px">No matches</h2>
+      <div style="background: #FFFFFF; padding: 32px; display: grid; gap: 14px; justify-items: start">
+        <p style="margin: 0; font-weight: 900; font-stretch: 62%; line-height: 1; font-size: 44px">No database fits all 3 filters</p>
+        <p style="margin: 0; font-size: 16px; line-height: 1.5">Postgres, can sell and no credit card. Nobody has confirmed a no-card Postgres yet.</p>
+        <div style="display: flex; flex-wrap: wrap; gap: 8px"><button type="button" style="display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 44px; padding: 0 18px; background: #1C2340; color: #FFFFFF; text-decoration: none; border: 0; font: 700 15px Archivo, sans-serif; cursor: pointer">Drop "No card" (2 match)</button><button type="button" style="display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 44px; padding: 0 16px; background: #FFFFFF; color: #1C2340; text-decoration: none; border: 2px solid #1C2340; font: 700 15px Archivo, sans-serif; cursor: pointer; box-sizing: border-box">Clear filters</button></div>
+      </div>
+    </div>
+    <div>
+      <h2 style="margin: 0; font-weight: 900; font-stretch: 62%; line-height: 1; font-size: 44px; margin-bottom: 16px">Could not load</h2>
+      <div role="alert" style="background: #FFFFFF; padding: 32px; display: grid; gap: 14px; justify-items: start">
+        <p style="margin: 0; font-weight: 900; font-stretch: 62%; line-height: 1; font-size: 44px">The labels did not load</p>
+        <p style="margin: 0; font-size: 16px; line-height: 1.5">Your connection dropped. The labels you saw last are still on screen.</p>
+        <button type="button" style="display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 44px; padding: 0 18px; background: #1C2340; color: #FFFFFF; text-decoration: none; border: 0; font: 700 15px Archivo, sans-serif; cursor: pointer">Try again</button>
+      </div>
+    </div>
+  </section>
+  <section style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 32px">
+    <div>
+      <h2 style="margin: 0; font-weight: 900; font-stretch: 62%; line-height: 1; font-size: 44px; margin-bottom: 16px">Loading</h2>
+      <div aria-busy="true" aria-label="Loading labels" style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px">
+        <div style="background: #FFFFFF; border-top: 8px solid #D6D9DE; padding: 16px; display: grid; gap: 10px"><span style="height: 18px; width: 50%; background: #D6D9DE"></span><span style="height: 52px; width: 70%; background: #D6D9DE"></span><span style="height: 12px; background: #D6D9DE"></span><span style="height: 12px; width: 80%; background: #D6D9DE"></span></div>
+        <div style="background: #FFFFFF; border-top: 8px solid #D6D9DE; padding: 16px; display: grid; gap: 10px"><span style="height: 18px; width: 40%; background: #D6D9DE"></span><span style="height: 52px; width: 60%; background: #D6D9DE"></span><span style="height: 12px; background: #D6D9DE"></span><span style="height: 12px; width: 70%; background: #D6D9DE"></span></div>
+      </div>
+    </div>
+    <div>
+      <h2 style="margin: 0; font-weight: 900; font-stretch: 62%; line-height: 1; font-size: 44px; margin-bottom: 16px">Compare across aisles</h2>
+      <div role="status" style="background: #1C2340; color: #FFFFFF; padding: 20px 24px; display: grid; gap: 14px">
+        <p style="margin: 0; font-size: 17px; line-height: 1.45"><strong>Compare works inside one aisle.</strong> You picked Vercel Hobby from Hosting, but your tray has 3 databases.</p>
+        <div style="display: flex; flex-wrap: wrap; gap: 8px"><button type="button" style="display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 44px; padding: 0 18px; background: #FFD23F; color: #1C2340; text-decoration: none; border: 0; font: 800 15px Archivo, sans-serif; cursor: pointer">Start a Hosting compare</button><button type="button" style="display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 44px; padding: 0 16px; background: #FFFFFF; color: #1C2340; text-decoration: none; border: 2px solid #1C2340; font: 700 15px Archivo, sans-serif; cursor: pointer; box-sizing: border-box; background: transparent; color: #FFFFFF; border-color: #FFFFFF">Keep databases</button></div>
+        <p style="margin: 0; font-size: 14px; color: #D3D7E3">Your database picks stay saved for when you come back.</p>
+      </div>
+    </div>
+  </section>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1560}}'>
+class Component extends DCLogic {
+  renderVals() { return {}; }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,50 @@
+# One headline metric per aisle. Every tool in the aisle shows this number.
+# DRAFT: Karlo approves the ones marked "decide".
+- id: databases
+  group: Build
+  name: Databases
+  metric: storage_gb
+  unit: GB
+  label: free storage
+- id: cache
+  group: Build
+  name: Cache and queues
+  metric: commands_per_day
+  unit: a day
+  label: commands
+- id: hosting
+  group: Build
+  name: Hosting
+  metric: requests_per_day   # decide: Koyeb (1 service), Render (750 hrs) and Oracle (VMs) don't fit this. Option: split into "Sites and functions" and "Always-on servers".
+  unit: a day
+  label: requests
+- id: auth
+  group: Build
+  name: Auth and secrets
+  metric: monthly_users
+  unit: users a month
+  label: monthly users
+- id: email
+  group: Build
+  name: Email
+  metric: emails_per_month   # decide: confirm against the email catalog
+  unit: a month
+  label: emails
+- id: storage
+  group: Build
+  name: Storage
+  metric: storage_gb
+  unit: GB
+  label: free storage
+- id: inference
+  group: AI
+  name: Inference APIs
+  metric: requests_per_day   # decide: some list tokens a minute instead
+  unit: a day
+  label: requests
+- id: student
+  group: Claim Once
+  name: Student programs
+  metric: duration
+  unit: ""
+  label: how long it lasts

@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>freestack: search</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#E7E9EC}
+a{color:#1C2340;text-decoration-thickness:1px;text-underline-offset:3px}a:hover{text-decoration-thickness:2px}
+:focus-visible{outline:3px solid #2F45E0;outline-offset:2px}
+header :focus-visible,[role="region"] :focus-visible{outline-color:#FFD23F}
+</style>
+</helmet>
+<div style="position: relative; width: 1440px; height: 1000px; overflow: hidden; background: #E7E9EC; color: #1C2340; font-family: Archivo, sans-serif">
+  <header style="background: #1C2340; color: #FFFFFF">
+    <nav aria-label="Main" style="max-width: 1240px; margin: 0 auto; padding: 12px 32px; display: grid; grid-template-columns: minmax(max-content, 1fr) minmax(260px, 520px) minmax(max-content, 1fr); align-items: center; gap: 24px">
+      <a href="Home.dc.html" style="justify-self: start; display: inline-flex; align-items: center; gap: 10px; color: #FFFFFF; text-decoration: none; font-weight: 900; font-stretch: 125%; font-size: 22px; letter-spacing: -0.01em"><svg aria-hidden="true" width="30" height="30" viewBox="0 0 40 40"><path d="M2.5 20L11 7.5h26.5v25H11z" fill="#FFD23F"></path><circle cx="11.5" cy="20" r="2.8" fill="#1C2340"></circle><rect x="18" y="12.5" width="15" height="3.6" fill="#1C2340"></rect><rect x="18" y="18.2" width="11.5" height="3.6" fill="#1C2340"></rect><rect x="18" y="23.9" width="8" height="3.6" fill="#1C2340"></rect></svg>freestack</a>
+      <button type="button" aria-haspopup="dialog" aria-keyshortcuts="Control+K Meta+K /" aria-label="Search 222 tools" style="width: 100%; height: 44px; display: flex; align-items: center; gap: 10px; padding: 0 8px 0 14px; background: #FFFFFF; border: 0; color: #545B73; font: 500 15px Archivo, sans-serif; text-align: left; cursor: pointer">
+        <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#545B73" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-3.5-3.5"></path></svg>
+        <span style="flex: 1">Search 222 tools</span>
+        <span aria-hidden="true" style="display: inline-flex; gap: 4px"><kbd style="font: 600 12px Archivo, sans-serif; color: #1C2340; background: #E7E9EC; border-bottom: 2px solid #C9CDD4; padding: 2px 7px">Ctrl</kbd><kbd style="font: 600 12px Archivo, sans-serif; color: #1C2340; background: #E7E9EC; border-bottom: 2px solid #C9CDD4; padding: 2px 7px">K</kbd></span>
+      </button>
+      <div style="justify-self: end; display: flex; align-items: center; gap: 8px">
+        <button type="button" aria-haspopup="true" aria-expanded="false" aria-current="page" style="box-shadow: inset 0 -4px 0 #FFD23F; display: inline-flex; align-items: center; gap: 6px; min-height: 44px; padding: 0 12px; background: transparent; border: 0; color: #FFFFFF; font: 600 15px Archivo, sans-serif; cursor: pointer">Aisles<svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"></path></svg></button>
+        <a href="AddTool.dc.html" style="display: inline-flex; align-items: center; min-height: 44px; padding: 0 14px; border: 2px solid #FFFFFF; color: #FFFFFF; text-decoration: none; font-weight: 700; font-size: 15px; box-sizing: border-box">Add a tool</a>
+      </div>
+    </nav>
+  </header>
+  <div aria-hidden="true" style="padding: 40px 32px; max-width: 1240px; margin: 0 auto"><p style="margin: 0; font-weight: 900; font-stretch: 62%; line-height: 1; font-size: 120px">Databases</p></div>
+  <div aria-hidden="true" style="position: absolute; inset: 0; background: rgba(28,35,64,0.55)"></div>
+  <div role="dialog" aria-modal="true" aria-label="Search" style="position: absolute; top: 96px; left: 50%; width: 640px; margin-left: -320px; background: #FFFFFF; box-shadow: 0 30px 60px -20px rgba(0,0,0,0.5)">
+    <label style="display: flex; align-items: center; gap: 12px; padding: 0 16px 0 20px; height: 64px; border-bottom: 2px solid #1C2340">
+      <svg aria-hidden="true" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#1C2340" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="flex: 0 0 auto"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-3.5-3.5"></path></svg>
+      <span style="position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0)">Search tools, catches and aisles</span>
+      <input type="search" value="vercel" role="combobox" aria-expanded="true" aria-controls="results" style="flex: 1; border: 0; outline: none; font: 600 22px Archivo, sans-serif; color: #1C2340; background: transparent">
+      <kbd style="font: 600 12px Archivo, sans-serif; color: #1C2340; background: #E7E9EC; border-bottom: 2px solid #C9CDD4; padding: 2px 7px">Esc</kbd>
+    </label>
+    <ul id="results" role="listbox" style="list-style: none; margin: 0; padding: 0 0 8px; max-height: 560px; overflow: auto">
+      <li role="presentation"><p style="margin: 0; padding: 14px 20px 6px; font-size: 13px; font-weight: 700; color: #545B73">Catches</p><ul role="group" aria-label="Catches" style="list-style: none; margin: 0; padding: 0"><li role="option" aria-selected="true"><a href="Trap.dc.html" style="display: flex; align-items: center; gap: 12px; padding: 12px 20px; background: #FFF6D1; color: #1C2340; text-decoration: none; box-shadow: inset 4px 0 0 #1C2340;"><span style="min-width: 0"><span style="display: block; font-size: 16px; font-weight: 700">Vercel Hobby does not allow commercial use</span><span style="display: block; margin-top: 2px; font-size: 14px; color: #545B73">Selling anything on it breaks the terms. Free options that allow it.</span></span><span style="margin-left: auto; flex: 0 0 auto; font-size: 13px; font-weight: 700">Read</span></a></li></ul></li>
+      <li role="presentation"><p style="margin: 0; padding: 14px 20px 6px; font-size: 13px; font-weight: 700; color: #545B73">Tools</p><ul role="group" aria-label="Tools" style="list-style: none; margin: 0; padding: 0"><li role="option" aria-selected="false"><a href="Tool.dc.html" style="display: flex; align-items: center; gap: 12px; padding: 12px 20px; background: #FFFFFF; color: #1C2340; text-decoration: none; "><span style="min-width: 0"><span style="display: block; font-size: 16px; font-weight: 700">Vercel Hobby</span><span style="display: block; margin-top: 2px; font-size: 14px; color: #545B73">Hosting. 100 GB bandwidth a month</span></span><span style="margin-left: auto; flex: 0 0 auto; display: inline-flex; align-items: center; gap: 5px; font-size: 13px; font-weight: 700"><svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#1C2340" stroke-width="3.2" stroke-linecap="round" style="flex: 0 0 auto"><path d="M6 6l12 12M18 6L6 18"></path></svg><span aria-hidden="true">No selling</span><span style="position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0)">Selling with it is not allowed.</span></span></a></li><li role="option" aria-selected="false"><a href="Tool.dc.html" style="display: flex; align-items: center; gap: 12px; padding: 12px 20px; background: #FFFFFF; color: #1C2340; text-decoration: none; "><span style="min-width: 0"><span style="display: block; font-size: 16px; font-weight: 700">Cloudflare Workers &amp; Pages</span><span style="display: block; margin-top: 2px; font-size: 14px; color: #545B73">Hosting. 100k requests a day, static sites unlimited</span></span><span style="margin-left: auto; flex: 0 0 auto; display: inline-flex; align-items: center; gap: 5px; font-size: 13px; font-weight: 700"><svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#1C2340" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" style="flex: 0 0 auto"><path d="M4 12.5l5 5L20 6.5"></path></svg><span aria-hidden="true">Can sell</span><span style="position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0)">You can sell with it.</span></span></a></li><li role="option" aria-selected="false"><a href="Tool.dc.html" style="display: flex; align-items: center; gap: 12px; padding: 12px 20px; background: #FFFFFF; color: #1C2340; text-decoration: none; "><span style="min-width: 0"><span style="display: block; font-size: 16px; font-weight: 700">Netlify</span><span style="display: block; margin-top: 2px; font-size: 14px; color: #545B73">Hosting. 100 GB bandwidth, 300 build minutes a month</span></span><span style="margin-left: auto; flex: 0 0 auto; display: inline-flex; align-items: center; gap: 5px; font-size: 13px; font-weight: 600; color: #545B73"><svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#545B73" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" style="flex: 0 0 auto"><circle cx="12" cy="12" r="9.5" stroke-dasharray="3 3"></circle><path d="M9.6 9.4a2.5 2.5 0 0 1 4.8.9c0 1.7-2.4 2.2-2.4 3.7"></path><path d="M12 17.2h.01"></path></svg><span aria-hidden="true">Check terms</span><span style="position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0)">Not known if you can sell with it.</span></span></a></li></ul></li>
+      <li role="presentation"><p style="margin: 0; padding: 14px 20px 6px; font-size: 13px; font-weight: 700; color: #545B73">Aisles</p><ul role="group" aria-label="Aisles" style="list-style: none; margin: 0; padding: 0"><li role="option" aria-selected="false"><a href="Aisle.dc.html" style="display: flex; align-items: center; gap: 12px; padding: 12px 20px; background: #FFFFFF; color: #1C2340; text-decoration: none; "><span style="min-width: 0"><span style="display: block; font-size: 16px; font-weight: 700">Hosting</span><span style="display: block; margin-top: 2px; font-size: 14px; color: #545B73">9 labels</span></span></a></li></ul></li>
+    </ul>
+    <div style="display: flex; flex-wrap: wrap; gap: 8px 18px; padding: 12px 20px; border-top: 1px solid #E7E9EC; font-size: 13px; color: #545B73">
+      <span style="display: inline-flex; align-items: center; gap: 6px"><kbd style="font: 600 12px Archivo, sans-serif; color: #1C2340; background: #E7E9EC; border-bottom: 2px solid #C9CDD4; padding: 2px 7px">↑</kbd><kbd style="font: 600 12px Archivo, sans-serif; color: #1C2340; background: #E7E9EC; border-bottom: 2px solid #C9CDD4; padding: 2px 7px">↓</kbd> move</span>
+      <span style="display: inline-flex; align-items: center; gap: 6px"><kbd style="font: 600 12px Archivo, sans-serif; color: #1C2340; background: #E7E9EC; border-bottom: 2px solid #C9CDD4; padding: 2px 7px">Enter</kbd> open</span>
+      <span style="display: inline-flex; align-items: center; gap: 6px"><kbd style="font: 600 12px Archivo, sans-serif; color: #1C2340; background: #E7E9EC; border-bottom: 2px solid #C9CDD4; padding: 2px 7px">Esc</kbd> close</span>
+    </div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1000}}'>
+class Component extends DCLogic {
+  renderVals() { return {}; }
+}
+</script>
+</body>
+</html>

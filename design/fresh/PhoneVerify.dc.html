@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>freestack on a phone: check a label</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&amp;display=swap" rel="stylesheet">
+<style>
+html,body{margin:0;background:#E7E9EC;overflow:hidden}
+a{color:#1C2340;text-decoration-thickness:1px;text-underline-offset:3px}a:hover{text-decoration-thickness:2px}
+:focus-visible{outline:3px solid #2F45E0;outline-offset:2px}
+header :focus-visible,[role="region"] :focus-visible{outline-color:#FFD23F}
+</style>
+</helmet>
+<div style="position: relative; width: 100%; max-width: 390px; height: 844px; overflow: hidden; box-sizing: border-box; background: #E7E9EC; color: #1C2340; font-family: Archivo, sans-serif; display: flex; flex-direction: column">
+<header style="flex: 0 0 auto; background: #1C2340; padding: 0 8px 0 16px; height: 56px; display: flex; align-items: center; gap: 4px">
+    <a href="Home.dc.html" style="display: inline-flex; align-items: center; gap: 8px; color: #FFFFFF; text-decoration: none; font-weight: 900; font-stretch: 125%; font-size: 19px; margin-right: auto"><svg aria-hidden="true" width="26" height="26" viewBox="0 0 40 40"><path d="M2.5 20L11 7.5h26.5v25H11z" fill="#FFD23F"></path><circle cx="11.5" cy="20" r="2.8" fill="#1C2340"></circle><rect x="18" y="12.5" width="15" height="3.6" fill="#1C2340"></rect><rect x="18" y="18.2" width="11.5" height="3.6" fill="#1C2340"></rect><rect x="18" y="23.9" width="8" height="3.6" fill="#1C2340"></rect></svg>freestack</a>
+    <button type="button" aria-label="Search" style="width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; background: transparent; border: 0; cursor: pointer"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2.2" stroke-linecap="round" style="flex: 0 0 auto"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-3.5-3.5"></path></svg></button>
+    <button type="button" aria-label="Menu" style="width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; background: transparent; border: 0; cursor: pointer"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2.2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"></path></svg></button>
+  </header>
+  <div style="flex: 1 1 auto; min-height: 0; overflow: hidden; padding: 4px 16px 0">
+    <a href="Tool.dc.html" style="display: inline-flex; align-items: center; gap: 6px; min-height: 44px; font-size: 14px; font-weight: 600; text-decoration: none"><svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1C2340" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" style="flex: 0 0 auto"><path d="M15 5l-7 7 7 7"></path></svg>Neon</a>
+    <h1 style="margin: 0; font-weight: 900; font-stretch: 62%; line-height: 1; font-size: 44px">Check Neon's label</h1>
+    <a href="#pricing" style="margin-top: 10px; display: flex; align-items: center; justify-content: center; gap: 6px; min-height: 44px; border: 2px solid #1C2340; text-decoration: none; font-weight: 700; font-size: 15px; box-sizing: border-box">Open neon.tech/pricing<svg aria-hidden="true" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#1C2340" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" style="flex: 0 0 auto"><path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"></path></svg></a>
+    <form style="margin-top: 12px; border: 2px solid #1C2340"><fieldset style="margin: 0; padding: 12px 14px; border: 0; border-top: 1px solid #C9CDD4; background: #FFFFFF">
+        <legend style="position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0)">Storage</legend>
+        <div style="display: flex; justify-content: space-between; align-items: baseline; gap: 12px"><span style="font-size: 14px; color: #545B73">Storage</span><span style="font-weight: 900; font-stretch: 62%; font-size: 28px; line-height: 1">0.5 GB</span></div>
+        <div role="group" style="margin-top: 8px; display: flex; gap: 6px"><button type="button" aria-pressed="false" style="flex: 1; min-height: 44px; font: 700 15px Archivo, sans-serif; border: 2px solid #1C2340; cursor: pointer; background: #FFFFFF; color: #1C2340">Still true</button><button type="button" aria-pressed="true" style="flex: 1; min-height: 44px; font: 700 15px Archivo, sans-serif; border: 2px solid #1C2340; cursor: pointer; background: #1C2340; color: #FFFFFF">Changed</button></div><label style="display: block; margin-top: 10px"><span style="display: block; margin-bottom: 6px; font-size: 14px; font-weight: 700">What does it say now?</span><input type="text" value="1 GB" style="width: 100%; box-sizing: border-box; min-height: 44px; padding: 0 12px; border: 2px solid #1C2340; border-radius: 0; font: 500 16px Archivo, sans-serif; color: #1C2340"></label>
+      </fieldset><fieldset style="margin: 0; padding: 12px 14px; border: 0; border-top: 1px solid #C9CDD4; background: #FFFFFF">
+        <legend style="position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0)">Data sent out</legend>
+        <div style="display: flex; justify-content: space-between; align-items: baseline; gap: 12px"><span style="font-size: 14px; color: #545B73">Data sent out</span><span style="font-weight: 900; font-stretch: 62%; font-size: 28px; line-height: 1">5 GB a month</span></div>
+        <div role="group" style="margin-top: 8px; display: flex; gap: 6px"><button type="button" aria-pressed="true" style="flex: 1; min-height: 44px; font: 700 15px Archivo, sans-serif; border: 2px solid #1C2340; cursor: pointer; background: #1C2340; color: #FFFFFF">Still true</button><button type="button" aria-pressed="false" style="flex: 1; min-height: 44px; font: 700 15px Archivo, sans-serif; border: 2px solid #1C2340; cursor: pointer; background: #FFFFFF; color: #1C2340">Changed</button></div>
+      </fieldset><fieldset style="margin: 0; padding: 12px 14px; border: 0; border-top: 1px solid #C9CDD4; background: #FFFFFF">
+        <legend style="position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0)">Sleeps after</legend>
+        <div style="display: flex; justify-content: space-between; align-items: baseline; gap: 12px"><span style="font-size: 14px; color: #545B73">Sleeps after</span><span style="font-weight: 900; font-stretch: 62%; font-size: 28px; line-height: 1">5 minutes idle</span></div>
+        <div role="group" style="margin-top: 8px; display: flex; gap: 6px"><button type="button" aria-pressed="false" style="flex: 1; min-height: 44px; font: 700 15px Archivo, sans-serif; border: 2px solid #1C2340; cursor: pointer; background: #FFFFFF; color: #1C2340">Still true</button><button type="button" aria-pressed="false" style="flex: 1; min-height: 44px; font: 700 15px Archivo, sans-serif; border: 2px solid #1C2340; cursor: pointer; background: #FFFFFF; color: #1C2340">Changed</button></div>
+      </fieldset></form>
+  </div>
+  <div style="flex: 0 0 auto; padding: 10px 16px 16px; border-top: 1px solid #C9CDD4; background: #E7E9EC">
+    <p style="margin: 0 0 8px; font-size: 14px; color: #545B73">2 of 4 answered. Unanswered lines stay as they are.</p>
+    <button type="button" style="width: 100%; min-height: 48px; background: #FFD23F; color: #1C2340; border: 0; font: 800 16px Archivo, sans-serif; cursor: pointer">Send check</button>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  renderVals() { return {}; }
+}
+</script>
+</body>
+</html>

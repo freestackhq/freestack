@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>freestack on a phone: filters</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&amp;display=swap" rel="stylesheet">
+<style>
+html,body{margin:0;background:#E7E9EC;overflow:hidden}
+a{color:#1C2340;text-decoration-thickness:1px;text-underline-offset:3px}a:hover{text-decoration-thickness:2px}
+:focus-visible{outline:3px solid #2F45E0;outline-offset:2px}
+header :focus-visible,[role="region"] :focus-visible{outline-color:#FFD23F}
+</style>
+</helmet>
+<div style="position: relative; width: 100%; max-width: 390px; height: 844px; overflow: hidden; box-sizing: border-box; background: #E7E9EC; color: #1C2340; font-family: Archivo, sans-serif; display: flex; flex-direction: column">
+  <header style="flex: 0 0 auto; background: #1C2340; padding: 0 8px 0 16px; height: 56px; display: flex; align-items: center; gap: 4px">
+    <a href="Home.dc.html" style="display: inline-flex; align-items: center; gap: 8px; color: #FFFFFF; text-decoration: none; font-weight: 900; font-stretch: 125%; font-size: 19px; margin-right: auto"><svg aria-hidden="true" width="26" height="26" viewBox="0 0 40 40"><path d="M2.5 20L11 7.5h26.5v25H11z" fill="#FFD23F"></path><circle cx="11.5" cy="20" r="2.8" fill="#1C2340"></circle><rect x="18" y="12.5" width="15" height="3.6" fill="#1C2340"></rect><rect x="18" y="18.2" width="11.5" height="3.6" fill="#1C2340"></rect><rect x="18" y="23.9" width="8" height="3.6" fill="#1C2340"></rect></svg>freestack</a>
+    <button type="button" aria-label="Search" style="width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; background: transparent; border: 0; cursor: pointer"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-3.5-3.5"></path></svg></button>
+    <button type="button" aria-label="Menu" style="width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; background: transparent; border: 0; cursor: pointer"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2.2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"></path></svg></button>
+  </header>
+  <div aria-hidden="true" style="padding: 20px 16px"><p style="margin: 0; font-weight: 900; font-stretch: 62%; line-height: 1; font-size: 56px">Databases</p></div>
+  <div aria-hidden="true" style="position: absolute; inset: 0; background: rgba(28,35,64,0.55)"></div>
+  <div role="dialog" aria-modal="true" aria-labelledby="sheet-h" style="position: absolute; left: 0; right: 0; bottom: 0; background: #FFFFFF; padding: 8px 16px 16px; box-shadow: 0 -20px 40px -20px rgba(0,0,0,0.5)">
+    <span aria-hidden="true" style="display: block; width: 44px; height: 5px; margin: 0 auto 10px; background: #C9CDD4"></span>
+    <div style="display: flex; align-items: center; justify-content: space-between"><h2 id="sheet-h" style="margin: 0; font-weight: 900; font-stretch: 62%; line-height: 1; font-size: 36px">Must allow</h2><button type="button" aria-label="Close" style="width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; background: transparent; border: 0"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#1C2340" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="flex: 0 0 auto"><path d="M6 6l12 12M18 6L6 18"></path></svg></button></div>
+    <div style="margin-top: 8px"><label style="display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 56px; border-top: 1px solid #E7E9EC; font-size: 17px; font-weight: 600; cursor: pointer">Selling with it<input type="checkbox" role="switch" checked="" style="width: 22px; height: 22px; accent-color: #1C2340"></label><label style="display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 56px; border-top: 1px solid #E7E9EC; font-size: 17px; font-weight: 600; cursor: pointer">No credit card<input type="checkbox" role="switch" style="width: 22px; height: 22px; accent-color: #1C2340"></label><label style="display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 56px; border-top: 1px solid #E7E9EC; font-size: 17px; font-weight: 600; cursor: pointer">No school email needed<input type="checkbox" role="switch" style="width: 22px; height: 22px; accent-color: #1C2340"></label><label style="display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 56px; border-top: 1px solid #E7E9EC; font-size: 17px; font-weight: 600; cursor: pointer">Never sleeps<input type="checkbox" role="switch" style="width: 22px; height: 22px; accent-color: #1C2340"></label></div>
+    <div style="margin-top: 14px; display: flex; gap: 8px"><button type="button" style="display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 44px; padding: 0 16px; background: #FFFFFF; color: #1C2340; text-decoration: none; border: 2px solid #1C2340; font: 700 15px Archivo, sans-serif; cursor: pointer; box-sizing: border-box">Clear</button><button type="button" style="display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 44px; padding: 0 18px; background: #1C2340; color: #FFFFFF; text-decoration: none; border: 0; font: 700 15px Archivo, sans-serif; cursor: pointer; flex: 1">Show 8 databases</button></div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  renderVals() { return {}; }
+}
+</script>
+</body>
+</html>

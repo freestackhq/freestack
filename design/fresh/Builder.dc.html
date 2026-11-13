@@ -1,0 +1,186 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>freestack: build a stack</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#E7E9EC}
+a{color:#1C2340;text-decoration-thickness:1px;text-underline-offset:3px}a:hover{text-decoration-thickness:2px}
+:focus-visible{outline:3px solid #2F45E0;outline-offset:2px}
+header :focus-visible,[role="region"] :focus-visible{outline-color:#FFD23F}
+</style>
+</helmet>
+<div style="min-height: 100vh; background: #E7E9EC; color: #1C2340; font-family: Archivo, sans-serif">
+<header style="background: #1C2340; color: #FFFFFF">
+    <nav aria-label="Main" style="max-width: 1240px; margin: 0 auto; padding: 12px 32px; display: grid; grid-template-columns: minmax(max-content, 1fr) minmax(260px, 520px) minmax(max-content, 1fr); align-items: center; gap: 24px">
+      <a href="Home.dc.html" style="justify-self: start; display: inline-flex; align-items: center; gap: 10px; color: #FFFFFF; text-decoration: none; font-weight: 900; font-stretch: 125%; font-size: 22px; letter-spacing: -0.01em"><svg aria-hidden="true" width="30" height="30" viewBox="0 0 40 40"><path d="M2.5 20L11 7.5h26.5v25H11z" fill="#FFD23F"></path><circle cx="11.5" cy="20" r="2.8" fill="#1C2340"></circle><rect x="18" y="12.5" width="15" height="3.6" fill="#1C2340"></rect><rect x="18" y="18.2" width="11.5" height="3.6" fill="#1C2340"></rect><rect x="18" y="23.9" width="8" height="3.6" fill="#1C2340"></rect></svg>freestack</a>
+      <button type="button" aria-haspopup="dialog" aria-keyshortcuts="Control+K Meta+K /" aria-label="Search 222 tools" style="width: 100%; height: 44px; display: flex; align-items: center; gap: 10px; padding: 0 8px 0 14px; background: #FFFFFF; border: 0; color: #545B73; font: 500 15px Archivo, sans-serif; text-align: left; cursor: pointer">
+        <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#545B73" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-3.5-3.5"></path></svg>
+        <span style="flex: 1">Search 222 tools</span>
+        <span aria-hidden="true" style="display: inline-flex; gap: 4px"><kbd style="font: 600 12px Archivo, sans-serif; color: #1C2340; background: #E7E9EC; border-bottom: 2px solid #C9CDD4; padding: 2px 7px">Ctrl</kbd><kbd style="font: 600 12px Archivo, sans-serif; color: #1C2340; background: #E7E9EC; border-bottom: 2px solid #C9CDD4; padding: 2px 7px">K</kbd></span>
+      </button>
+      <div style="justify-self: end; display: flex; align-items: center; gap: 8px">
+        <button type="button" aria-haspopup="true" aria-expanded="false" style="display: inline-flex; align-items: center; gap: 6px; min-height: 44px; padding: 0 12px; background: transparent; border: 0; color: #FFFFFF; font: 600 15px Archivo, sans-serif; cursor: pointer">Aisles<svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"></path></svg></button>
+        <a href="AddTool.dc.html" style="display: inline-flex; align-items: center; min-height: 44px; padding: 0 14px; border: 2px solid #FFFFFF; color: #FFFFFF; text-decoration: none; font-weight: 700; font-size: 15px; box-sizing: border-box">Add a tool</a>
+      </div>
+    </nav>
+  </header>
+
+  <main style="max-width: 1240px; margin: 0 auto; padding: 40px 32px 96px">
+    <div style="display: flex; flex-wrap: wrap; align-items: flex-end; gap: 16px 32px">
+      <h1 style="margin: 0; font-weight: 900; font-stretch: 62%; line-height: 1; font-size: 96px">Build a stack</h1>
+      <div role="group" aria-label="I'm building as" style="margin-left: auto; display: flex; flex-wrap: wrap; align-items: center; gap: 6px">
+        <span style="font-size: 15px; font-weight: 700; margin-right: 6px">I'm building as</span>
+        <sc-for list="{{sits}}" as="s" hint-placeholder-count="4"><button type="button" onClick="{{s.pick}}" aria-pressed="{{s.pressed}}" style="{{s.style}}">{{s.label}}</button></sc-for>
+      </div>
+    </div>
+
+    <div role="status" style="{{bannerStyle}}">
+      <span style="font-weight: 800; font-size: 17px">{{bannerTitle}}</span>
+      <ul style="list-style: none; margin: 0; padding: 0; display: grid; gap: 4px; font-size: 15px; line-height: 1.4">
+        <sc-for list="{{issues}}" as="i" hint-placeholder-count="1"><li>{{i.text}}</li></sc-for>
+      </ul>
+    </div>
+
+    <div style="margin-top: 16px; background: #FFFFFF; overflow-x: auto">
+      <table style="width: 100%; min-width: 980px; border-collapse: collapse; table-layout: fixed">
+        
+        <thead>
+          <tr style="text-align: left; font-size: 14px; color: #545B73; border-bottom: 2px solid #1C2340">
+            <th scope="col" style="padding: 14px 18px; font-weight: 700">Part</th>
+            <th scope="col" style="padding: 14px 12px; font-weight: 700">Pick</th>
+            <th scope="col" style="padding: 14px 12px; font-weight: 700">Free limit</th>
+            <th scope="col" style="padding: 14px 12px; font-weight: 700">Catch</th>
+            <th scope="col" style="padding: 14px 12px; font-weight: 700; text-align: right">Cost</th>
+            <th scope="col" style="padding: 14px 18px"><span style="position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0)">Actions</span></th>
+          </tr>
+        </thead>
+        <tbody>
+          <sc-for list="{{rows}}" as="r" hint-placeholder-count="5">
+            <tr style="border-top: 1px solid #E7E9EC; vertical-align: middle">
+              <th scope="row" style="padding: 16px 18px; text-align: left; font-size: 16px; font-weight: 800">{{r.slot}}</th>
+              <sc-if value="{{r.has}}" hint-placeholder-val="{{true}}">
+                <td style="padding: 16px 12px"><a href="Tool.dc.html" style="font-size: 17px; font-weight: 700; text-decoration: none">{{r.name}}</a><span style="display: block; margin-top: 2px; font-size: 13px; color: #545B73">{{r.flags}}</span></td>
+                <td style="padding: 16px 12px; font-size: 15px">{{r.limit}}</td>
+                <td style="padding: 16px 12px; font-size: 14px; font-weight: 700">{{r.catch}}</td>
+                <td style="padding: 16px 12px; text-align: right; font-weight: 900; font-stretch: 62%; font-size: 26px">$0</td>
+                <td style="padding: 12px 18px"><div style="display: flex; justify-content: flex-end; gap: 4px"><button type="button" onClick="{{r.choose}}" style="min-height: 40px; padding: 0 12px; background: #FFFFFF; border: 2px solid #1C2340; color: #1C2340; font: 700 14px Archivo, sans-serif; cursor: pointer">Swap</button><button type="button" onClick="{{r.remove}}" aria-label="{{r.removeLabel}}" style="width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; background: transparent; border: 0; cursor: pointer"><svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#1C2340" stroke-width="3.2" stroke-linecap="round" style="flex: 0 0 auto"><path d="M6 6l12 12M18 6L6 18"></path></svg></button></div></td>
+              </sc-if>
+              <sc-if value="{{r.empty}}" hint-placeholder-val="{{false}}">
+                <td colspan="5" style="padding: 12px 18px 12px 12px"><button type="button" onClick="{{r.choose}}" style="min-height: 44px; padding: 0 18px; background: #1C2340; color: #FFFFFF; border: 0; font: 700 15px Archivo, sans-serif; cursor: pointer">+ Choose {{r.slotLower}}</button></td>
+              </sc-if>
+            </tr>
+          </sc-for>
+          <tr style="border-top: 2px solid #1C2340">
+            <th scope="row" colspan="4" style="padding: 16px 18px; text-align: left; font-size: 16px; font-weight: 800">Total per month <span style="font-weight: 500; font-size: 14px; color: #545B73">{{cardNote}}</span></th>
+            <td style="padding: 12px; text-align: right; font-weight: 900; font-stretch: 62%; font-size: 44px; line-height: 1">$0.00</td>
+            <td></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div style="margin-top: 14px; display: flex; flex-wrap: wrap; align-items: center; gap: 10px">
+      <a href="CopyStack.dc.html" style="display: inline-flex; align-items: center; min-height: 44px; padding: 0 18px; background: #1C2340; color: #FFFFFF; text-decoration: none; font-weight: 700; font-size: 15px">Copy this stack</a>
+      <a href="#link" style="display: inline-flex; align-items: center; min-height: 44px; padding: 0 16px; border: 2px solid #1C2340; text-decoration: none; font-weight: 700; font-size: 15px; box-sizing: border-box">Share link</a>
+      <a href="CheckStack.dc.html" style="margin-left: auto; display: inline-flex; align-items: center; min-height: 44px; font-size: 15px; font-weight: 700">Already have a stack? Check it</a>
+    </div>
+
+    <sc-if value="{{picking}}" hint-placeholder-val="{{false}}">
+    <section role="dialog" aria-modal="true" aria-labelledby="pick-h" style="margin-top: 32px; background: #FFFFFF; border: 2px solid #1C2340">
+      <div style="display: flex; align-items: center; gap: 12px; padding: 16px 12px 16px 24px; border-bottom: 2px solid #1C2340">
+        <h2 id="pick-h" style="margin: 0; font-weight: 900; font-stretch: 62%; font-size: 44px; line-height: 1">Choose {{pickSlot}}</h2>
+        <span style="font-size: 15px; color: #545B73">{{pickCount}}</span>
+        <button type="button" onClick="{{closePick}}" aria-label="Close" style="margin-left: auto; width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; background: transparent; border: 0; cursor: pointer"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#1C2340" stroke-width="3.2" stroke-linecap="round" style="flex: 0 0 auto"><path d="M6 6l12 12M18 6L6 18"></path></svg></button>
+      </div>
+      <ul style="list-style: none; margin: 0; padding: 0">
+        <sc-for list="{{options}}" as="o" hint-placeholder-count="4">
+          <li style="{{o.rowStyle}}">
+            <div><span style="display: block; font-size: 17px; font-weight: 800">{{o.name}}</span><span style="display: block; margin-top: 2px; font-size: 14px; color: #545B73">{{o.flags}}</span></div>
+            <span style="font-size: 15px">{{o.limit}}</span>
+            <span style="font-size: 14px; font-weight: 700">{{o.catch}}</span>
+            <span style="font-size: 14px; font-weight: 700">{{o.fit}}</span>
+            <button type="button" onClick="{{o.add}}" style="{{o.btnStyle}}">{{o.btn}}</button>
+          </li>
+        </sc-for>
+      </ul>
+    </section>
+    </sc-if>
+  </main>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1500}}'>
+class Component extends DCLogic {
+  constructor(props) { super(props); this.state = { sit: 'indie', picks: { hosting: 'vercel', database: 'supabase', auth: 'clerk', secrets: null }, picking: null }; }
+  renderVals() {
+    var self = this, S = this.state, P = S.picks;
+    var SLOTS = [['hosting', 'Hosting'], ['database', 'Database'], ['auth', 'Sign-in'], ['secrets', 'Secrets']];
+    var D = {
+      hosting: [
+        { id: 'cf', name: 'Cloudflare Workers & Pages', limit: '100k requests a day', catch: '', sell: true, card: 'unk', who: 'any' },
+        { id: 'vercel', name: 'Vercel Hobby', limit: '100 GB bandwidth a month', catch: 'No selling', sell: false, card: 'unk', who: 'any' },
+        { id: 'koyeb', name: 'Koyeb', limit: '1 always-on web service', catch: '', sell: true, card: 'unk', who: 'any' },
+        { id: 'render', name: 'Render', limit: '750 hours a month', catch: 'Sleeps after 15 min idle', sell: true, card: 'unk', who: 'any' } ],
+      database: [
+        { id: 'neon', name: 'Neon', limit: '0.5 GB storage', catch: 'Sleeps after 5 min idle', sell: true, card: 'unk', who: 'any' },
+        { id: 'supabase', name: 'Supabase', limit: '0.5 GB, 2 active projects', catch: 'Pauses after 7 days idle', sell: true, card: 'unk', who: 'any' },
+        { id: 'turso', name: 'Turso', limit: '5 GB storage', catch: '', sell: true, card: 'unk', who: 'any' },
+        { id: 'd1', name: 'Cloudflare D1', limit: '5 GB per database', catch: 'Card needed', sell: true, card: 'no', who: 'any' } ],
+      auth: [
+        { id: 'clerk', name: 'Clerk', limit: '50k monthly retained users', catch: '', sell: true, card: 'unk', who: 'any' },
+        { id: 'kinde', name: 'Kinde', limit: 'About 10.5k monthly users', catch: '', sell: true, card: 'unk', who: 'any' } ],
+      secrets: [
+        { id: 'doppler', name: 'Doppler', limit: '5 users, team plan via Student Pack', catch: 'Team plan ends when you graduate', sell: true, card: 'unk', who: 'school' },
+        { id: 'infisical', name: 'Infisical', limit: 'Free cloud tier', catch: '', sell: true, card: 'unk', who: 'any' } ]
+    };
+    var find = function (slot, id) { var r = null; (D[slot] || []).forEach(function (t) { if (t.id === id) r = t; }); return r; };
+    var selling = S.sit === 'indie' || S.sit === 'startup';
+    var flags = function (t) { return (t.sell ? 'Can sell' : 'No selling') + ', ' + (t.card === 'no' ? 'Card needed' : (t.card === 'yes' ? 'No card' : 'Card unknown')) + (t.who === 'school' ? ', school email' : ''); };
+    var issues = [], warns = [];
+    var host = find('hosting', P.hosting), db = find('database', P.database), au = find('auth', P.auth), sec = find('secrets', P.secrets);
+    if (host && !host.sell && selling) issues.push({ text: host.name + ' does not allow selling, and you are building to sell. Swap hosting.' });
+    if (db && db.id === 'd1' && host && host.id !== 'cf') issues.push({ text: 'Cloudflare D1 only runs inside Cloudflare Workers. Pair it with Cloudflare hosting.' });
+    if (sec && sec.who === 'school' && S.sit !== 'school') issues.push({ text: sec.name + "'s free team plan needs a school email." });
+    if (db && db.id === 'supabase' && au) warns.push({ text: 'Supabase already has sign-in built in. You may not need ' + au.name + '.' });
+    if (db && db.id === 'neon') warns.push({ text: 'Neon sleeps after 5 minutes idle. The first visit after a break is slow.' });
+    var all = issues.concat(warns);
+    var bad = issues.length > 0;
+    var bannerTitle = bad ? issues.length + (issues.length === 1 ? ' problem' : ' problems') + (warns.length ? ', ' + warns.length + ' to watch' : '') : (warns.length ? 'Works. ' + warns.length + ' to watch' : 'Works. No problems found');
+    var bannerStyle = 'margin-top: 28px; padding: 16px 20px; display: grid; gap: 6px; ' + (bad ? 'background: #FFB27A; color: #1C2340' : 'background: #1C2340; color: #FFFFFF');
+    var cards = 0; SLOTS.forEach(function (s) { var t = find(s[0], P[s[0]]); if (t && t.card === 'no') cards++; });
+    var rows = SLOTS.map(function (s) {
+      var t = find(s[0], P[s[0]]);
+      var choose = function () { self.setState({ picking: s[0] }); };
+      var remove = function () { var n = Object.assign({}, P); n[s[0]] = null; self.setState({ picks: n }); };
+      return { slot: s[1], slotLower: s[1].toLowerCase(), has: !!t, empty: !t, name: t ? t.name : '', flags: t ? flags(t) : '', limit: t ? t.limit : '', catch: t ? (t.catch || '—') : '', choose: choose, remove: remove, removeLabel: 'Remove ' + s[1] };
+    });
+    var options = [], pickSlot = '', pickCount = '';
+    if (S.picking) {
+      SLOTS.forEach(function (s) { if (s[0] === S.picking) pickSlot = s[1].toLowerCase(); });
+      var list = D[S.picking]; pickCount = list.length + ' free options';
+      options = list.map(function (t) {
+        var on = P[S.picking] === t.id;
+        var clash = (!t.sell && selling) ? 'Clashes: no selling' : ((t.id === 'd1' && (!host || host.id !== 'cf')) ? 'Needs Cloudflare hosting' : ((t.who === 'school' && S.sit !== 'school') ? 'Needs a school email' : 'Fits your stack'));
+        return { name: t.name, flags: flags(t), limit: t.limit, catch: t.catch || '—', fit: clash,
+          rowStyle: 'display: grid; grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr) minmax(0, 1fr) 190px 120px; gap: 12px; align-items: center; padding: 14px 24px; border-top: 1px solid #E7E9EC' + (on ? '; background: #FFF6D1' : ''),
+          btn: on ? 'Selected' : 'Add', btnStyle: 'min-height: 44px; padding: 0 16px; font: 800 15px Archivo, sans-serif; cursor: pointer; border: 0; ' + (on ? 'background: #1C2340; color: #FFFFFF' : 'background: #FFD23F; color: #1C2340'),
+          add: function () { var n = Object.assign({}, P); n[S.picking] = t.id; self.setState({ picks: n, picking: null }); } };
+      });
+    }
+    var SIT = [['school', 'Student with school email'], ['student', 'Student'], ['indie', 'Indie builder'], ['startup', 'Startup']];
+    var b = 'min-height: 44px; padding: 0 14px; font: 600 15px Archivo, sans-serif; cursor: pointer; border: 2px solid #1C2340; ';
+    var sits = SIT.map(function (x) { var on = x[0] === S.sit; return { label: x[1], pressed: on ? 'true' : 'false', style: b + (on ? 'background: #1C2340; color: #FFFFFF' : 'background: #FFFFFF; color: #1C2340'), pick: function () { self.setState({ sit: x[0] }); } }; });
+    return { sits: sits, rows: rows, issues: all, bannerTitle: bannerTitle, bannerStyle: bannerStyle, cardNote: cards ? cards + (cards === 1 ? ' part needs' : ' parts need') + ' a credit card at signup' : '',
+      picking: !!S.picking, pickSlot: pickSlot, pickCount: pickCount, options: options, closePick: function () { self.setState({ picking: null }); } };
+  }
+}
+</script>
+</body>
+</html>

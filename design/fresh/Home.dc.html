@@ -1,0 +1,215 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>freestack: build a $0 stack</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#E7E9EC}
+a{color:#1C2340;text-decoration-thickness:1px;text-underline-offset:3px}a:hover{text-decoration-thickness:2px}
+:focus-visible{outline:3px solid #2F45E0;outline-offset:2px}
+header :focus-visible,[role="region"] :focus-visible{outline-color:#FFD23F}
+</style>
+</helmet>
+<div style="min-height: 100vh; background: #E7E9EC; color: #1C2340; font-family: Archivo, sans-serif; font-stretch: 100%">
+
+  <header style="background: #1C2340; color: #FFFFFF">
+    <nav aria-label="Main" style="max-width: 1240px; margin: 0 auto; padding: 12px 32px; display: grid; grid-template-columns: minmax(max-content, 1fr) minmax(260px, 520px) minmax(max-content, 1fr); align-items: center; gap: 24px">
+      <a href="Home.dc.html" style="justify-self: start; display: inline-flex; align-items: center; gap: 10px; color: #FFFFFF; text-decoration: none; font-weight: 900; font-stretch: 125%; font-size: 22px; letter-spacing: -0.01em"><svg aria-hidden="true" width="30" height="30" viewBox="0 0 40 40"><path d="M2.5 20L11 7.5h26.5v25H11z" fill="#FFD23F"></path><circle cx="11.5" cy="20" r="2.8" fill="#1C2340"></circle><rect x="18" y="12.5" width="15" height="3.6" fill="#1C2340"></rect><rect x="18" y="18.2" width="11.5" height="3.6" fill="#1C2340"></rect><rect x="18" y="23.9" width="8" height="3.6" fill="#1C2340"></rect></svg>freestack</a>
+      <button type="button" aria-haspopup="dialog" aria-keyshortcuts="Control+K Meta+K /" aria-label="Search 222 tools" style="width: 100%; height: 44px; display: flex; align-items: center; gap: 10px; padding: 0 8px 0 14px; background: #FFFFFF; border: 0; color: #545B73; font: 500 15px Archivo, sans-serif; text-align: left; cursor: pointer">
+        <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#545B73" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-3.5-3.5"></path></svg>
+        <span style="flex: 1">Search 222 tools</span>
+        <span aria-hidden="true" style="display: inline-flex; gap: 4px"><kbd style="font: 600 12px Archivo, sans-serif; color: #1C2340; background: #E7E9EC; border-bottom: 2px solid #C9CDD4; padding: 2px 7px">Ctrl</kbd><kbd style="font: 600 12px Archivo, sans-serif; color: #1C2340; background: #E7E9EC; border-bottom: 2px solid #C9CDD4; padding: 2px 7px">K</kbd></span>
+      </button>
+      <div style="justify-self: end; display: flex; align-items: center; gap: 8px">
+        <button type="button" aria-haspopup="true" aria-expanded="false" style="display: inline-flex; align-items: center; gap: 6px; min-height: 44px; padding: 0 12px; background: transparent; border: 0; color: #FFFFFF; font: 600 15px Archivo, sans-serif; cursor: pointer">Aisles<svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"></path></svg></button>
+        <a href="AddTool.dc.html" style="display: inline-flex; align-items: center; min-height: 44px; padding: 0 14px; border: 2px solid #FFFFFF; color: #FFFFFF; text-decoration: none; font-weight: 700; font-size: 15px; box-sizing: border-box">Add a tool</a>
+      </div>
+    </nav>
+  </header>
+
+  <main style="max-width: 1240px; margin: 0 auto; padding: 0 32px">
+
+    <section aria-labelledby="hero-h" style="padding: 56px 0 72px; display: flex; flex-wrap: wrap; gap: 48px; align-items: flex-start">
+      <div style="flex: 1 1 420px; min-width: 0; padding-top: 24px">
+        <h1 id="hero-h" style="margin: 0; font-weight: 900; font-stretch: 62%; font-size: clamp(72px, 9vw, 132px); line-height: 1; letter-spacing: -0.01em">Pick a stack and start building.</h1>
+        <p style="margin: 28px 0 0; max-width: 34ch; font-size: 20px; line-height: 1.45; font-weight: 500">222 free tools, student perks and APIs. Limits and catches up front.</p>
+      </div>
+
+      <section aria-labelledby="basket-h" style="flex: 1 1 560px; min-width: 0; background: #FFFFFF; box-shadow: 0 1px 0 #C9CDD4, 0 24px 48px -24px rgba(28,35,64,0.35)">
+        <div style="padding: 24px 28px 20px; border-bottom: 2px solid #1C2340">
+          <h2 id="basket-h" style="margin: 0 0 14px; font-size: 18px; font-weight: 700">I'm building as</h2>
+          <div role="group" aria-label="Who you are building as" style="display: flex; flex-wrap: wrap; gap: 8px">
+            <sc-for list="{{sits}}" as="s" hint-placeholder-count="4">
+              <button type="button" onClick="{{s.pick}}" aria-pressed="{{s.pressed}}" style="{{s.style}}">{{s.label}}</button>
+            </sc-for>
+          </div>
+        </div>
+        <ul style="list-style: none; margin: 0; padding: 0 28px">
+          <sc-for list="{{rows}}" as="r" hint-placeholder-count="4">
+            <li style="position: relative; display: grid; grid-template-columns: 110px minmax(0, 1fr); gap: 4px 16px; align-items: baseline; padding: 16px 0; border-bottom: 1px dashed #C9CDD4">
+              <span style="font-size: 14px; color: #545B73">{{r.job}}</span>
+              <span>
+                <a href="Tool.dc.html" style="font-size: 18px; font-weight: 700; color: #1C2340; text-decoration: none">{{r.tool}}</a>
+                <span style="display: block; margin-top: 2px; font-size: 14px; color: #545B73">{{r.limits}}</span>
+                <sc-if value="{{r.catch}}" hint-placeholder-val="{{false}}"><span style="display: flex; align-items: center; gap: 6px; margin-top: 6px; font-size: 14px; font-weight: 700; white-space: nowrap"><svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#1C2340" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" style="flex: 0 0 auto"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path></svg>{{r.catch}}</span></sc-if>
+                <span style="display: flex; flex-wrap: wrap; gap: 4px 14px; margin-top: 6px; font-size: 13px; font-weight: 600"><sc-if value="{{r.canSell}}" hint-placeholder-val="{{true}}"><span style="display: inline-flex; align-items: center; gap: 5px; color: #1C2340"><svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#1C2340" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" style="flex: 0 0 auto"><path d="M4 12.5l5 5L20 6.5"></path></svg><span aria-hidden="true">Can sell</span><span style="position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0)">You can sell with it.</span></span></sc-if><sc-if value="{{r.checkSell}}" hint-placeholder-val="{{false}}"><span style="display: inline-flex; align-items: center; gap: 5px; color: #545B73"><svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#545B73" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" style="flex: 0 0 auto"><circle cx="12" cy="12" r="9.5" stroke-dasharray="3 3"></circle><path d="M9.6 9.4a2.5 2.5 0 0 1 4.8.9c0 1.7-2.4 2.2-2.4 3.7"></path><path d="M12 17.2h.01"></path></svg><span aria-hidden="true">Selling: check terms</span><span style="position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0)">Check the terms before selling with it.</span></span></sc-if><span style="display: inline-flex; align-items: center; gap: 5px; color: #545B73"><svg aria-hidden="true" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#545B73" stroke-width="2.2" stroke-linecap="round" stroke-dasharray="3 2.4" style="flex: 0 0 auto"><rect x="2.5" y="5" width="19" height="14" rx="1.5"></rect><path d="M2.5 9.5h19"></path></svg><span aria-hidden="true">Card unknown</span><span style="position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0)">Not known if it needs a credit card.</span></span></span>
+              </span>
+            </li>
+          </sc-for>
+        </ul>
+        <div style="padding: 18px 28px 24px; display: flex; flex-wrap: wrap; align-items: flex-end; gap: 16px">
+          <div>
+            <p style="margin: 0; font-size: 15px; font-weight: 700">Total per month</p>
+            <p style="margin: 2px 0 0; font-size: 13px; color: #545B73">{{note}}</p>
+          </div>
+          <p style="margin: 0 0 0 auto; font-weight: 900; font-stretch: 62%; font-size: 76px; line-height: 1">$0.00</p>
+        </div>
+        <div style="padding: 0 28px 28px; display: flex; flex-wrap: wrap; gap: 10px">
+          <a href="CopyStack.dc.html" style="flex: 1 1 180px; text-align: center; padding: 15px 18px; background: #1C2340; color: #FFFFFF; text-decoration: none; font-weight: 700; font-size: 16px">Copy this stack</a>
+          <a href="#agents" style="flex: 1 1 180px; text-align: center; padding: 13px 18px; border: 2px solid #1C2340; color: #1C2340; text-decoration: none; font-weight: 700; font-size: 16px">Hand it to my coding agent</a>
+          <a href="Builder.dc.html" style="flex: 1 1 100%; display: inline-flex; align-items: center; justify-content: center; min-height: 44px; font-size: 15px; font-weight: 700">Swap parts in Build a stack</a>
+        </div>
+      </section>
+    </section>
+
+    <section aria-labelledby="aisles-h" style="padding: 24px 0 80px">
+      <h2 id="aisles-h" style="margin: 0 0 8px; font-weight: 900; font-stretch: 62%; font-size: 56px; line-height: 1">Or walk the aisles</h2>
+      <p style="margin: 0 0 32px; max-width: 52ch; font-size: 17px; line-height: 1.5; color: #545B73">Grouped by what you need. Numbers show how many tools have a label.</p>
+      <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 32px 24px">
+        <div>
+          <h3 style="margin: 0; padding: 10px 14px; background: #1C2340; color: #FFFFFF; font-size: 17px; font-weight: 800; font-stretch: 125%">Build</h3>
+          <ul style="list-style: none; margin: 0; padding: 0; background: #FFFFFF; font-size: 16px">
+            <li style="border-bottom: 1px solid #E7E9EC"><a href="Aisle.dc.html" style="display: flex; justify-content: space-between; padding: 13px 14px; color: #1C2340; text-decoration: none; font-weight: 600">Databases <span style="font-weight: 500; color: #545B73">8</span></a></li>
+            <li style="border-bottom: 1px solid #E7E9EC"><a href="Aisle.dc.html" style="display: flex; justify-content: space-between; padding: 13px 14px; color: #1C2340; text-decoration: none; font-weight: 600">Cache and queues <span style="font-weight: 500; color: #545B73">1</span></a></li>
+            <li style="border-bottom: 1px solid #E7E9EC"><a href="Aisle.dc.html" style="display: flex; justify-content: space-between; padding: 13px 14px; color: #1C2340; text-decoration: none; font-weight: 600">Hosting <span style="font-weight: 500; color: #545B73">9</span></a></li>
+            <li style="border-bottom: 1px solid #E7E9EC"><a href="Aisle.dc.html" style="display: flex; justify-content: space-between; padding: 13px 14px; color: #1C2340; text-decoration: none; font-weight: 600">Auth and secrets <span style="font-weight: 500; color: #545B73">6</span></a></li>
+            <li style="border-bottom: 1px solid #E7E9EC"><a href="Aisle.dc.html" style="display: flex; justify-content: space-between; padding: 13px 14px; color: #1C2340; text-decoration: none; font-weight: 600">Email <span style="font-weight: 500; color: #545B73">10</span></a></li>
+            <li><a href="Aisle.dc.html" style="display: flex; justify-content: space-between; padding: 13px 14px; color: #1C2340; text-decoration: none; font-weight: 600">Security <span style="font-weight: 500; color: #545B73">13</span></a></li>
+          </ul>
+        </div>
+        <div>
+          <h3 style="margin: 0; padding: 10px 14px; background: #1C2340; color: #FFFFFF; font-size: 17px; font-weight: 800; font-stretch: 125%">AI</h3>
+          <ul style="list-style: none; margin: 0; padding: 0; background: #FFFFFF; font-size: 16px">
+            <li style="border-bottom: 1px solid #E7E9EC"><a href="Aisle.dc.html" style="display: block; padding: 13px 14px; color: #1C2340; text-decoration: none; font-weight: 600">Inference APIs</a></li>
+            <li style="border-bottom: 1px solid #E7E9EC"><a href="Aisle.dc.html" style="display: block; padding: 13px 14px; color: #1C2340; text-decoration: none; font-weight: 600">Embeddings and vector databases</a></li>
+            <li style="border-bottom: 1px solid #E7E9EC"><a href="Aisle.dc.html" style="display: block; padding: 13px 14px; color: #1C2340; text-decoration: none; font-weight: 600">Coding assistants</a></li>
+            <li style="border-bottom: 1px solid #E7E9EC"><a href="Aisle.dc.html" style="display: block; padding: 13px 14px; color: #1C2340; text-decoration: none; font-weight: 600">Agent tooling</a></li>
+            <li><a href="Aisle.dc.html" style="display: block; padding: 13px 14px; color: #1C2340; text-decoration: none; font-weight: 600">Run models locally</a></li>
+          </ul>
+        </div>
+        <div>
+          <h3 style="margin: 0; padding: 10px 14px; background: #1C2340; color: #FFFFFF; font-size: 17px; font-weight: 800; font-stretch: 125%">Free and Open Data</h3>
+          <ul style="list-style: none; margin: 0; padding: 0; background: #FFFFFF; font-size: 16px">
+            <li style="border-bottom: 1px solid #E7E9EC"><a href="Aisle.dc.html" style="display: block; padding: 13px 14px; color: #1C2340; text-decoration: none; font-weight: 600">Weather</a></li>
+            <li style="border-bottom: 1px solid #E7E9EC"><a href="Aisle.dc.html" style="display: block; padding: 13px 14px; color: #1C2340; text-decoration: none; font-weight: 600">Maps and places</a></li>
+            <li style="border-bottom: 1px solid #E7E9EC"><a href="Aisle.dc.html" style="display: block; padding: 13px 14px; color: #1C2340; text-decoration: none; font-weight: 600">Money and crypto</a></li>
+            <li><a href="Aisle.dc.html" style="display: block; padding: 13px 14px; color: #1C2340; text-decoration: none; font-weight: 600">News</a></li>
+          </ul>
+        </div>
+        <div>
+          <h3 style="margin: 0; padding: 10px 14px; background: #FFD23F; color: #1C2340; font-size: 17px; font-weight: 800; font-stretch: 125%">Claim Once</h3>
+          <ul style="list-style: none; margin: 0; padding: 0; background: #FFFFFF; font-size: 16px">
+            <li style="border-bottom: 1px solid #E7E9EC"><a href="Aisle.dc.html" style="display: flex; justify-content: space-between; padding: 13px 14px; color: #1C2340; text-decoration: none; font-weight: 600">Student programs <span style="font-weight: 500; color: #545B73">20</span></a></li>
+            <li style="border-bottom: 1px solid #E7E9EC"><a href="Aisle.dc.html" style="display: flex; justify-content: space-between; padding: 13px 14px; color: #1C2340; text-decoration: none; font-weight: 600">Startup credits <span style="font-weight: 500; color: #545B73">17</span></a></li>
+            <li style="border-bottom: 1px solid #E7E9EC"><a href="Aisle.dc.html" style="display: flex; justify-content: space-between; padding: 13px 14px; color: #1C2340; text-decoration: none; font-weight: 600">Philippines and campus <span style="font-weight: 500; color: #545B73">9</span></a></li>
+            <li><a href="#claim" style="display: block; padding: 13px 14px; font-weight: 600">What to claim first</a></li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section aria-labelledby="label-h" style="padding: 24px 0 88px; display: flex; flex-wrap: wrap; gap: 48px; align-items: center">
+      <div style="flex: 1 1 320px">
+        <h2 id="label-h" style="margin: 0 0 16px; font-weight: 900; font-stretch: 62%; font-size: 56px; line-height: 1">Reading a label</h2>
+        <ol style="margin: 0; padding-left: 22px; display: grid; gap: 14px; font-size: 17px; line-height: 1.5; max-width: 44ch">
+          <li><strong>The big number</strong> is the one limit that aisle is about, like storage for databases. The 5-step scale beside it compares it with the biggest in the aisle.</li>
+          <li><strong>The fine print</strong> lists the exact limits.</li>
+          <li><strong>The bottom line</strong> covers who can claim it, whether you can sell with it, and whether signup needs a credit card. A check means yes, a cross means no, and a dashed icon means nobody knows yet. The card shows crossed out when you can sign up without one.</li>
+          <li><strong>The date</strong> is when someone last checked the vendor's page. No date means nobody has.</li>
+        </ol>
+      </div>
+      <figure style="flex: 0 1 380px; margin: 0">
+        <div style="background: #FFFFFF; border-top: 10px solid #FFD23F; box-shadow: 0 1px 0 #C9CDD4, 0 20px 40px -24px rgba(28,35,64,0.4)">
+          <div style="padding: 18px 20px 0; display: flex; justify-content: space-between; align-items: baseline; gap: 12px">
+            <span style="font-size: 20px; font-weight: 800">Turso</span>
+            <span style="font-size: 14px; color: #545B73">SQLite at the edge</span>
+          </div>
+          <div style="margin: 6px 20px 0; display: grid; grid-template-columns: minmax(0, 1fr) 88px; gap: 14px; align-items: end"><p style="margin: 0; font-weight: 900; font-stretch: 62%; font-size: 96px; line-height: 1">5 GB</p><div style="padding-bottom: 6px"><p aria-hidden="true" style="margin: 0 0 6px; font-size: 15px; font-weight: 800; line-height: 1.1; white-space: nowrap">Biggest</p><span role="img" aria-label="Biggest: 5 of 5 on this aisle's scale" style="display: flex; gap: 3px"><span style="flex: 1; height: 12px; background: #1C2340"></span><span style="flex: 1; height: 12px; background: #1C2340"></span><span style="flex: 1; height: 12px; background: #1C2340"></span><span style="flex: 1; height: 12px; background: #1C2340"></span><span style="flex: 1; height: 12px; background: #1C2340"></span></span></div></div>
+          <ul style="margin: 14px 20px 0; padding: 12px 0 0; border-top: 1px solid #1C2340; list-style: none; font-size: 15px; display: grid; gap: 4px">
+            <li>500M reads a month</li>
+            <li>100 databases</li>
+          </ul>
+          <p style="margin: 0; margin-top: 14px; padding: 12px 20px; position: relative; background: #F3F4F6; display: flex; flex-wrap: wrap; gap: 4px 16px; font-size: 13px; font-weight: 600; line-height: 1.3; white-space: nowrap"><span style="display: inline-flex; align-items: center; gap: 5px; color: #1C2340"><svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#1C2340" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5l5 5L20 6.5"></path></svg><span aria-hidden="true">Open to all</span><span style="position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0)">Anyone can claim it.</span></span><span style="display: inline-flex; align-items: center; gap: 5px; color: #1C2340"><svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#1C2340" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5l5 5L20 6.5"></path></svg><span aria-hidden="true">Can sell</span><span style="position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0)">You can sell with it.</span></span><span style="display: inline-flex; align-items: center; gap: 5px; color: #545B73"><svg aria-hidden="true" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#545B73" stroke-width="2.2" stroke-linecap="round" stroke-dasharray="3 2.4"><rect x="2.5" y="5" width="19" height="14" rx="1.5"></rect><path d="M2.5 9.5h19"></path></svg><span aria-hidden="true">Card unknown</span><span style="position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0)">Not known if it needs a credit card.</span></span></p>
+          <p style="margin: 0; padding: 10px 20px; font-size: 13px; color: #545B73; background: repeating-linear-gradient(-45deg, #FFFFFF 0 6px, #F3F4F6 6px 12px)">Not checked against the vendor yet</p>
+        </div>
+        <figcaption style="margin-top: 12px; font-size: 14px; color: #545B73">Limits as listed in the catalog. Always confirm on the vendor's page before you launch.</figcaption>
+      </figure>
+    </section>
+
+    <section id="agents" aria-labelledby="agents-h" style="margin-bottom: 88px; background: #1C2340; color: #FFFFFF; padding: 40px; display: flex; flex-wrap: wrap; gap: 32px; align-items: center">
+      <div style="flex: 1 1 380px">
+        <h2 id="agents-h" style="margin: 0 0 12px; font-weight: 900; font-stretch: 62%; font-size: 48px; line-height: 1">Let your coding agent shop for you</h2>
+        <p style="margin: 0; max-width: 46ch; font-size: 17px; line-height: 1.5; color: #D3D7E3">Install the freestack skill and your agent checks these labels before it reaches for anything paid. It tells you the limits it found.</p>
+      </div>
+      <div style="flex: 1 1 420px; display: grid; gap: 10px">
+        <code style="display: block; padding: 16px 18px; background: #FFFFFF; color: #1C2340; font: 600 15px Archivo, sans-serif; font-stretch: 87%; overflow-x: auto; white-space: nowrap">npx skills add https://github.com/freestackhq/freestack</code>
+        <p style="margin: 0; font-size: 14px; color: #D3D7E3">Also available as a remote MCP server at [your domain]/mcp, and a plain JSON API.</p>
+      </div>
+    </section>
+  </main>
+
+  <footer style="border-top: 2px solid #1C2340">
+    <div style="max-width: 1240px; margin: 0 auto; padding: 28px 32px; display: flex; flex-wrap: wrap; gap: 12px 32px; font-size: 14px; color: #545B73">
+      <p style="margin: 0; max-width: 60ch">Free tiers change without notice. Every label links the page it was read from. Not legal advice, and not affiliated with any vendor.</p>
+      <p style="margin: 0 0 0 auto"><a href="#agents">For coding agents</a> <span aria-hidden="true">/</span> <a href="CheckStack.dc.html">Check my stack</a> <span aria-hidden="true">/</span> <a href="#gh">Source on GitHub</a></p>
+    </div>
+  </footer>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":2080}}'>
+class Component extends DCLogic {
+  constructor(props) { super(props); this.state = { sit: 'student' }; }
+  renderVals() {
+    var S = {
+      student: { label: 'Student with school email', note: 'Unlocks the GitHub Student Pack and other edu perks.', rows: [
+        { job: 'Hosting', tool: 'Cloudflare Workers & Pages', limits: '100k requests a day, static sites unlimited' },
+        { job: 'Database', tool: 'Neon', limits: '0.5 GB storage' , catch: 'Sleeps after 5 min idle' },
+        { job: 'Sign-in', tool: 'Clerk', limits: '50k monthly retained users' },
+        { job: 'Secrets', tool: 'Doppler', limits: 'Team plan free while you are a student', catch: 'Ends when you graduate' } ] },
+      alumni: { label: 'Student', note: 'No school email needed. Everything here is open to anyone.', rows: [
+        { job: 'Hosting', tool: 'Cloudflare Workers & Pages', limits: '100k requests a day, static sites unlimited' },
+        { job: 'Always-on server', tool: 'Koyeb', limits: '1 web service, 512 MB RAM' },
+        { job: 'Database', tool: 'Neon', limits: '0.5 GB storage' , catch: 'Sleeps after 5 min idle' },
+        { job: 'Cache', tool: 'Upstash Redis', limits: '256 MB, 10k commands a day' },
+        { job: 'Big VMs', tool: 'Oracle Cloud Always Free', limits: '4 ARM cores, 200 GB disk' } ] },
+      shipping: { label: 'Indie builder', note: 'Free tiers you can keep once it earns money. Vercel Hobby left out.', rows: [
+        { job: 'Hosting', tool: 'Cloudflare Workers & Pages', limits: '100k requests a day, static sites unlimited' },
+        { job: 'Database', tool: 'Turso', limits: '5 GB storage, 500M reads a month' },
+        { job: 'Sign-in', tool: 'Kinde', limits: 'About 10.5k monthly active users' },
+        { job: 'Self-hosting', tool: 'Coolify', limits: 'Open source, unlimited apps on your own server', catch: 'You run the server' } ] },
+      startup: { label: 'Startup', note: 'Free now. Claim cloud credits once you have users.', rows: [
+        { job: 'Hosting', tool: 'Cloudflare Workers & Pages', limits: '100k requests a day, static sites unlimited' },
+        { job: 'Backend', tool: 'Supabase', limits: '0.5 GB database, 50k monthly users', catch: 'Pauses after 7 days idle' },
+        { job: 'Sign-in', tool: 'Clerk', limits: '50k monthly retained users' },
+        { job: 'Cache', tool: 'Upstash Redis', limits: '256 MB, 10k commands a day' } ] }
+    };
+    var self = this, cur = this.state.sit;
+    var base = 'font: 600 15px Archivo, sans-serif; min-height: 44px; padding: 10px 16px; cursor: pointer; border: 2px solid #1C2340; ';
+    var sits = ['student', 'alumni', 'shipping', 'startup'].map(function (k) {
+      var on = k === cur;
+      return { label: S[k].label, pressed: on ? 'true' : 'false', style: base + (on ? 'background: #1C2340; color: #FFFFFF' : 'background: #FFFFFF; color: #1C2340'), pick: function () { self.setState({ sit: k }); } };
+    });
+    var rows = S[cur].rows.map(function (r) { var chk = r.tool === 'Doppler'; return Object.assign({}, r, { canSell: !chk, checkSell: chk, catch: r.catch || '' }); });
+    return { sits: sits, rows: rows, note: S[cur].note };
+  }
+}
+</script>
+</body>
+</html>
