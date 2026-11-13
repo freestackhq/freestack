@@ -30,7 +30,7 @@ pnpm-debug.log*
 # local agent scratch
 tmp/
 
-# scraped catalog repos (regenerate with pnpm catalog:fetch)
+# old scraped catalog repos
 .catalogs/
 
 # playwright
