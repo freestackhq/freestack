@@ -287,11 +287,15 @@ import Icon from "./Icon.astro";
     .head {
       padding-left: 16px;
     }
+    /* Keep the three tabs on one line at 390px. */
     .tabs {
+      flex-wrap: nowrap;
       padding: 0 8px;
     }
     [role="tab"] {
-      padding: 0 10px;
+      padding: 0 6px;
+      font-size: 14px;
+      white-space: nowrap;
     }
     .panel {
       padding: 16px;

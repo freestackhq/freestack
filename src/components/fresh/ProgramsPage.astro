@@ -355,6 +355,10 @@ const countText = (n: number) => `${n} ${n === 1 ? "program" : "programs"} you c
     color: var(--muted);
   }
   @media (max-width: 640px) {
+    /* Long names ("GitHub Student Developer Pack") ran under the Claim first tag. */
+    .program.first .name {
+      padding-top: 30px;
+    }
     .page {
       padding-block: 28px 64px;
     }
