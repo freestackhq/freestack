@@ -55,6 +55,16 @@ const catchLine = tool.catches[0];
       {link ? <a href={href}>{tool.name}</a> : tool.name}
     </H>
     {variant === "full" && <span class="kind">{tool.kind}</span>}
+    {variant === "full" && suggested && <span class="tag-inline">Suggested</span>}
+    {
+      variant === "full" && compare && !imported && (
+        <button type="button" class="compare-inline" aria-pressed="false" data-compare-toggle={tool.id} data-name={tool.name}>
+          <span data-off>+ Compare</span>
+          <span data-on hidden>✓ Comparing</span>
+          <span class="sr-only"> {tool.name}</span>
+        </button>
+      )
+    }
   </div>
 
   {
@@ -78,11 +88,14 @@ const catchLine = tool.catches[0];
     variant === "full" && (
       <>
         {tool.limits.length > 0 ? (
-          <ul class="fine">
-            {tool.limits.map((l) => (
-              <li>{l}</li>
-            ))}
-          </ul>
+          <>
+            <ul class="fine">
+              {tool.limits.map((l) => (
+                <li>{l}</li>
+              ))}
+            </ul>
+            <p class="fine-line">{tool.limits.join(", ")}</p>
+          </>
         ) : (
           <div class="fine-spacer" />
         )}
@@ -257,9 +270,91 @@ const catchLine = tool.catches[0];
     background: var(--ink);
     color: var(--label);
   }
+  .tag-inline,
+  .compare-inline,
+  .fine-line {
+    display: none;
+  }
+
+  /* Phone label (Phone.dc.html): compare beside the name, limits on one line. */
   @media (max-width: 640px) {
-    .big {
-      font-size: 64px;
+    .label.full {
+      border-top-width: 6px;
+    }
+    .full .tag,
+    .full .kind,
+    .full .fine,
+    .full .compare {
+      display: none;
+    }
+    .full .name {
+      padding: 12px 14px 0;
+      flex-wrap: nowrap;
+      align-items: center;
+      gap: 8px;
+    }
+    .label.suggested .name {
+      padding-right: 14px;
+    }
+    .full .title {
+      font-size: 18px;
+    }
+    .tag-inline {
+      display: inline-block;
+      background: var(--promo);
+      color: var(--ink);
+      font-weight: 800;
+      font-size: 13px;
+      padding: 4px 8px;
+      white-space: nowrap;
+    }
+    .compare-inline {
+      display: inline-flex;
+      align-items: center;
+      margin-left: auto;
+      margin-right: -6px;
+      min-height: var(--target);
+      padding: 0 10px;
+      background: var(--label);
+      color: var(--ink);
+      border: 0;
+      font: 700 13px var(--font);
+      white-space: nowrap;
+      cursor: pointer;
+    }
+    .compare-inline[aria-pressed="true"] {
+      background: var(--ink);
+      color: var(--label);
+    }
+    .full .headline {
+      margin: 2px 14px 0;
+    }
+    .full .big {
+      font-size: 60px;
+    }
+    .full .big.long {
+      font-size: 46px;
+    }
+    .full .big.solo {
+      margin: 2px 14px 0;
+    }
+    .fine-line {
+      display: block;
+      margin: 8px 14px 0;
+      padding-top: 8px;
+      border-top: 1px solid var(--ink);
+      font-size: 14px;
+      line-height: 1.4;
+    }
+    .label :global(.facts-row) {
+      margin-top: 10px;
+      padding: 8px 14px;
+    }
+    .catch {
+      padding: 7px 14px;
+    }
+    .label.full :global(.strip .row) {
+      padding-inline: 14px;
     }
   }
 </style>

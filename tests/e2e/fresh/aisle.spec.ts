@@ -12,7 +12,7 @@ const visibleIds = (page: Page) =>
     .locator("article.label:visible")
     .evaluateAll((els) => els.map((e) => (e as HTMLElement).dataset.tool));
 const tray = (page: Page) => page.getByRole("region", { name: "Compare tray" });
-const toggle = (page: Page, id: string) => page.locator(`[data-grid] button[data-compare-toggle="${id}"]`);
+const toggle = (page: Page, id: string) => page.locator(`[data-grid] button[data-compare-toggle="${id}"]:visible`);
 
 test.describe("aisle page, desktop (Aisle.dc.html)", () => {
   test.use({ viewport: DESKTOP });
@@ -194,7 +194,7 @@ test.describe("aisle page, desktop (Aisle.dc.html)", () => {
     await page.goto(`/databases?compare=${a.id},vercel-hobby`);
     await msg.getByRole("button", { name: "Start a Hosting compare" }).click();
     await expect(page).toHaveURL(/\/hosting\/?\?compare=vercel-hobby$/);
-    await expect(page.locator('[data-grid] button[data-compare-toggle="vercel-hobby"]')).toHaveAttribute(
+    await expect(page.locator('[data-grid] button[data-compare-toggle="vercel-hobby"]:visible')).toHaveAttribute(
       "aria-pressed",
       "true",
     );
