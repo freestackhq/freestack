@@ -240,6 +240,10 @@ const total = totalTools();
   .menu-inner {
     padding-block: 28px 24px;
   }
+  /* The desktop menu is a white panel: blue focus, not the header's yellow. */
+  .menu :focus-visible {
+    outline-color: var(--focus);
+  }
   .groups {
     display: grid;
     grid-template-columns: repeat(4, minmax(0, 1fr));

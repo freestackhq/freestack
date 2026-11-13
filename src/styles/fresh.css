@@ -281,3 +281,54 @@ kbd {
   border-bottom: 2px solid var(--rule);
   padding: 2px 7px;
 }
+
+/* ---------- Accessibility ---------- */
+
+/* Skip link: off screen until focused, then a navy bar over the header. */
+.skip-link {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  z-index: 100;
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--target);
+  padding: 0 16px;
+  background: var(--ink);
+  color: var(--label);
+  font-weight: 700;
+  text-decoration: none;
+  transform: translateY(-200%);
+}
+
+/* Yellow ring drawn inside the navy bar, so it reads on any background. */
+.skip-link:focus-visible {
+  transform: none;
+  outline-color: var(--promo);
+  outline-offset: -6px;
+}
+
+/* A heading that is just a link (tool names on labels and lists): grow the
+   tap target to 44px without moving the line. */
+:is(h2, h3, h4) > a:only-child {
+  display: inline-block;
+  padding-block: 12px;
+  margin-block: -12px;
+}
+
+/* The skip link's target takes focus without drawing a ring round the page. */
+main[tabindex="-1"]:focus {
+  outline: none;
+}
+
+/* Nothing on the site needs motion to make sense. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

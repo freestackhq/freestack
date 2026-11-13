@@ -381,6 +381,10 @@ const sample = toolsInAisle("databases", at)[0];
   }
   .tool {
     justify-self: start;
+    min-width: var(--target);
+    /* 44px tap target without moving the row */
+    padding-block: 10px;
+    margin-block: -10px;
     font-size: 18px;
     font-weight: 700;
     text-decoration: none;
