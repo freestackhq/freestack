@@ -134,6 +134,15 @@ describe("rules engine", () => {
     expect(fitFor(d1, input, "cf-workers")?.short).toBe("Needs Cloudflare hosting");
   });
 
+  it("fitFor also reports a part the swap would break", () => {
+    const input = { situation: "indie" as const, tools: [workers, d1] };
+    const f = fitFor(koyeb, input, "cf-workers");
+    expect(f?.tool).toBe("d1");
+    expect(f?.rule).toBe("d1-needs-workers");
+    // A problem that was already there is not blamed on the candidate.
+    expect(fitFor(clerk, { situation: "indie", tools: [vercel] })).toBeNull();
+  });
+
   it("bestSwap picks the first candidate that clears the problem", () => {
     const input = { situation: "indie" as const, tools: [vercel, neon] };
     expect(bestSwap("vercel-hobby", input, [vercel, workers, koyeb])?.id).toBe("cf-workers");

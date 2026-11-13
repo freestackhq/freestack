@@ -146,8 +146,8 @@ const sample = toolsInAisle("databases", at)[0];
                 </>
               ) : (
                 <div class="empty" data-empty>
-                  <p class="empty-title">No ready-made stack for {p.s.label.toLowerCase()} yet.</p>
-                  <p class="muted">Pick each part from its aisle instead.</p>
+                  <p class="empty-title">No ready-made stack here yet.</p>
+                  <p class="empty-sub">Pick each part from its aisle instead.</p>
                   <ul class="empty-aisles">
                     {groups
                       .flatMap((g) => g.aisles)
@@ -155,7 +155,7 @@ const sample = toolsInAisle("databases", at)[0];
                       .map((a) => (
                         <li>
                           <a href={`/${a.id}`}>
-                            {a.name} <span class="muted">{aisleCount(a.id)}</span>
+                            {a.name} <span class="count">{aisleCount(a.id)}</span>
                           </a>
                         </li>
                       ))}
@@ -462,7 +462,8 @@ const sample = toolsInAisle("databases", at)[0];
     font-size: 20px;
     font-weight: 800;
   }
-  .empty .muted {
+  .empty-sub {
+    color: var(--muted);
     margin: 4px 0 16px;
   }
   .empty-aisles {

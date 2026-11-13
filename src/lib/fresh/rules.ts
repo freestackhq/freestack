@@ -186,12 +186,16 @@ export function summary(r: Result): string {
 
 /**
  * How a candidate fits the stack if it replaced `replacing` (or was added).
- * Returns the short text of the first problem it would cause, or null.
+ * Returns the first problem the swap would add: one on the candidate itself
+ * first, then one it causes on another part (f.tool tells which). Null when
+ * it fits.
  */
 export function fitFor(candidate: RuleTool, input: StackInput, replacing?: string): Finding | null {
+  const key = (f: Finding) => `${f.rule}:${f.tool}`;
+  const before = new Set(evaluate(input).problems.map(key));
   const tools = input.tools.filter((t) => t.id !== replacing && t.id !== candidate.id).concat(candidate);
-  const r = evaluate({ situation: input.situation, tools });
-  return r.problems.find((f) => f.tool === candidate.id) ?? null;
+  const added = evaluate({ situation: input.situation, tools }).problems.filter((f) => !before.has(key(f)) || f.tool === candidate.id);
+  return added.find((f) => f.tool === candidate.id) ?? added[0] ?? null;
 }
 
 /**
