@@ -192,7 +192,7 @@ import Icon from "./Icon.astro";
       }
       if (format === "link") showToast();
     } else {
-      setStatus("Could not copy. The text is selected: press Ctrl C (or ⌘ C) to copy it.", true);
+      setStatus("Could not copy. The text is selected: copy it with Ctrl C, ⌘ C or your phone\u2019s Copy.", true);
       selectText();
     }
   }
@@ -225,7 +225,7 @@ import Icon from "./Icon.astro";
       data = d.data;
       show("link");
       if (!dialog.open) dialog.showModal();
-      setStatus("Could not copy. The link is selected: press Ctrl C (or ⌘ C) to copy it.", true);
+      setStatus("Could not copy. The link is selected: copy it with Ctrl C, ⌘ C or your phone\u2019s Copy.", true);
       selectText();
     }
   });
