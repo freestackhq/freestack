@@ -104,7 +104,7 @@ const addToCompare = compareHref([t.id]);
         <div class="layout">
           <div class="main-col">
             <div class="phone-head">
-              <h1 class="title-xl">{t.name}</h1>
+              <h1 class:list={["title-xl", { long: t.name.length > 12, longer: t.name.length > 22 }]}>{t.name}</h1>
               <div class="phone-only phone-scale">
                 <Scale scale={scale} bar={10} />
               </div>
@@ -594,7 +594,14 @@ const addToCompare = compareHref([t.id]);
     .phone-head .title-xl {
       font-size: 72px;
       min-width: 0;
-      overflow-wrap: anywhere;
+      overflow-wrap: break-word;
+    }
+    /* Long real names ("Cloudflare Workers AI (Embeddings)") would break mid-word beside the scale. */
+    .phone-head .title-xl.long {
+      font-size: 52px;
+    }
+    .phone-head .title-xl.longer {
+      font-size: 42px;
     }
     .phone-scale {
       display: block;

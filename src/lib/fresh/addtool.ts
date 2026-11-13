@@ -3,7 +3,7 @@
  * already listed, and turn the form into a pending Tool. Pure and
  * client-safe (no catalog import): callers pass the aisles and tools.
  */
-import { compactNumber, slugify } from "./label";
+import { compactNumber, metricParts, slugify } from "./label";
 import type { Aisle, SkipIf, Tool, Who, YesNoUnknown } from "./types";
 
 export type Figure =
@@ -23,9 +23,8 @@ function round(n: number): number {
 
 /** How the figure shows on the label: "0.5 GB" or "100k requests a day". */
 export function figureDisplay(value: number, aisle: Aisle): string {
-  const n = compactNumber(value);
-  if (aisle.unit === "GB") return `${n} GB`;
-  return [n, aisle.label, aisle.unit].filter(Boolean).join(" ");
+  const { big, sub } = metricParts(compactNumber(value), aisle);
+  return [big, sub].filter(Boolean).join(" ");
 }
 
 /**

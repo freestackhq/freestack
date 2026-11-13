@@ -48,8 +48,13 @@ import { REPO_URL } from "../../lib/site";
     min-height: var(--target);
   }
   @media (max-width: 640px) {
+    /* No separators on a phone, so a wrapped line never ends in "/". */
     .links {
       margin: 0;
+      gap: 0 20px;
+    }
+    .links span {
+      display: none;
     }
   }
 </style>

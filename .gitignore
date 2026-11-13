@@ -42,3 +42,6 @@ blob-report/
 # fixture snapshot (FREESTACK_DATA=tests/fixtures/data pnpm catalog:generate)
 .generated/
 dist-*/
+
+# screenshot review (pnpm review:shots)
+/review/

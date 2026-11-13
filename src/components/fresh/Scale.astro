@@ -8,20 +8,22 @@ interface Props {
   bar?: number;
 }
 const { scale, bar = 12 } = Astro.props;
-const filled = scale.kind === "step" ? scale.step : scale.kind === "unlimited" ? 5 : 0;
+const filled = scale.kind === "step" ? scale.step : 0;
+// Odd cases (Aisle.dc.html): "Not listed" or "Your own disk" as a small word, no steps.
+const odd = scale.kind !== "step";
 // One sentence for screen readers (DESIGN.md: every icon has a text equivalent).
 const aria =
   scale.kind === "step"
     ? `${scale.word}: ${scale.step} of 5 on this aisle's scale.`
     : scale.kind === "unlimited"
-      ? "No limit. Your own disk."
+      ? `No limit. ${scale.word}.`
       : "Not listed.";
 ---
 
 <div class="scale" data-scale={scale.kind === "step" ? scale.step : scale.kind}>
-  <p aria-hidden="true" class:list={["word", { muted: scale.kind !== "step" }]}>{scale.word}</p>
+  <p aria-hidden="true" class:list={["word", { odd, muted: scale.kind === "unknown" }]}>{scale.word}</p>
   {
-    scale.kind === "unknown" ? (
+    odd ? (
       <span class="sr-only">{aria}</span>
     ) : (
       <span role="img" aria-label={aria} class="steps">
@@ -44,9 +46,14 @@ const aria =
     line-height: 1.1;
     white-space: nowrap;
   }
+  .word.odd {
+    margin: 0;
+    font-size: 13px;
+    font-weight: 600;
+    white-space: normal;
+  }
   .word.muted {
     color: var(--muted);
-    font-weight: 700;
   }
   .steps {
     display: flex;
