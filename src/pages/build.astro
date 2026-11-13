@@ -673,6 +673,9 @@ const lower = (s: string) => (/^[A-Z]{2}/.test(s) ? s : s.toLowerCase());
     padding-left: 10px;
   }
   .state a {
+    /* 44px tap target without moving the line */
+    padding-block: 12px;
+    margin-block: -12px;
     font-weight: 700;
   }
   .limit {
