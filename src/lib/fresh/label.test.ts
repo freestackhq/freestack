@@ -92,6 +92,14 @@ describe("headline", () => {
   it("puts long units underneath", () => {
     expect(headline(make({ metric: 100000 }), hosting)).toEqual({ big: "100k", sub: "requests a day", known: true });
   });
+  it("keeps a size unit with the number when the unit has more words", () => {
+    const transfer: Aisle = { ...hosting, metric: "bandwidth_gb_month", unit: "GB a month", label: "transfer" };
+    expect(headline(make({ metric: 100 }), transfer)).toEqual({ big: "100 GB", sub: "transfer a month", known: true });
+  });
+  it("does not repeat a word the label already says", () => {
+    const users: Aisle = { ...hosting, metric: "monthly_users", unit: "users a month", label: "monthly users" };
+    expect(headline(make({ metric: 50000 }), users)).toEqual({ big: "50k", sub: "monthly users", known: true });
+  });
   it("shows ? for unknown and imported", () => {
     expect(headline(make({ metric: null }), db)).toMatchObject({ big: "?", sub: "Not listed", known: false });
     expect(headline(make({ source: "imported", metric: null }), db)).toMatchObject({ big: "?", known: false });

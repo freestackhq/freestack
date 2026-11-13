@@ -89,15 +89,26 @@ export interface HeadlineParts {
   known: boolean;
 }
 
+/**
+ * The big number and the words under it, from the aisle's label and unit.
+ * "transfer" + "GB a month" gives "100 GB" over "transfer a month";
+ * "monthly users" + "users a month" gives "50k" over "monthly users", not "users users".
+ */
+export function metricParts(n: string, aisle: Aisle): { big: string; sub: string | null } {
+  const [first = "", ...rest] = aisle.unit.split(" ");
+  if (INLINE_UNITS.has(first)) return { big: `${n} ${first}`.trim(), sub: rest.length ? [aisle.label, ...rest].join(" ") : null };
+  if (first && aisle.label.split(" ").includes(first)) return { big: n, sub: aisle.label };
+  return { big: n, sub: [aisle.label, aisle.unit].filter(Boolean).join(" ") || null };
+}
+
 export function headline(tool: Tool, aisle: Aisle): HeadlineParts {
   if (tool.source === "imported") return { big: "?", sub: null, known: false };
   if (tool.program) return { big: tool.program.lasts_big, sub: tool.program.lasts_sub, known: true };
   if (isUnlimited(tool)) return { big: "No limit", sub: tool.metric_note ?? null, known: true };
   if (tool.metric === null) return { big: "?", sub: "Not listed", known: false };
   const n = compactNumber(tool.metric);
-  if (INLINE_UNITS.has(aisle.unit)) return { big: `${n} ${aisle.unit}`, sub: tool.metric_note ?? null, known: true };
-  const sub = [aisle.label, aisle.unit].filter(Boolean).join(" ");
-  return { big: n, sub: sub || null, known: true };
+  const { big, sub } = metricParts(n, aisle);
+  return { big, sub: sub ?? tool.metric_note ?? null, known: true };
 }
 
 export function strings(tool: Tool, now: Date) {

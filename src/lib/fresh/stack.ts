@@ -3,7 +3,7 @@
  * dialog. Pure functions over plain data: no catalog import, so the browser
  * bundles stay small and the same code runs at build time.
  */
-import { headline, isUnlimited, labelState, strings } from "./label";
+import { headline, isUnlimited, labelState, metricParts, strings } from "./label";
 import type { RuleTool } from "./rules";
 import type { Aisle, LabelState, Part, SituationId, Tool } from "./types";
 
@@ -31,7 +31,7 @@ export function limitsLine(t: Tool, a: Aisle): string {
   let first: string;
   if (isUnlimited(t)) first = t.metric_note ?? "No limit";
   else if (t.metric === null && t.metric_note && !/^not listed$/i.test(t.metric_note)) first = t.metric_note;
-  else if (!h.known) first = `${cap([a.label, /^[MGT]B$/.test(a.unit) ? "" : a.unit].filter(Boolean).join(" "))}: unknown`;
+  else if (!h.known) first = `${cap(metricParts("", a).sub ?? a.label)}: unknown`;
   else if (h.sub && h.sub !== t.metric_note) first = `${h.big} ${h.sub}`;
   else first = /^\d/.test(h.big) && a.unit && h.big.endsWith(a.unit) ? `${h.big} ${a.label}` : h.big;
   const rest = t.limits.filter((l) => !t.catches.includes(l));

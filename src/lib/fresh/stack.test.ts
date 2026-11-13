@@ -51,6 +51,9 @@ describe("limitsLine", () => {
   });
   it("says unknown instead of guessing", () => {
     expect(limitsLine(make({ metric: null, metric_note: "Not listed" }), hosting)).toBe("Requests a day: unknown");
+    const transfer = { ...hosting, unit: "GB a month", label: "transfer" };
+    expect(limitsLine(make({ metric: 100 }), transfer)).toBe("100 GB transfer a month");
+    expect(limitsLine(make({ metric: null, metric_note: "Not listed" }), transfer)).toBe("Transfer a month: unknown");
     expect(limitsLine(make({ metric: null }), db)).toBe("Free storage: unknown");
   });
   it("uses the vendor's own wording when the metric does not apply", () => {
