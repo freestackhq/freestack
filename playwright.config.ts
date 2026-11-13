@@ -1,6 +1,7 @@
 import { defineConfig, devices } from "@playwright/test";
 
-const PORT = 4321;
+// PORT lets parallel worktrees run their own preview server.
+const PORT = Number(process.env.PORT ?? 4321);
 const BASE = `http://localhost:${PORT}`;
 
 export default defineConfig({
@@ -16,6 +17,7 @@ export default defineConfig({
   projects: [{ name: "chromium", use: { ...devices["Desktop Chrome"] } }],
   webServer: {
     command: "pnpm build && node scripts/preview-wrapper.mjs",
+    env: { PORT: String(PORT) },
     url: BASE,
     reuseExistingServer: !process.env.CI,
     timeout: 180_000,
