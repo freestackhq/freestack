@@ -17,10 +17,11 @@ The canvas is laid out the same way as this file: main pages, side pages and sec
 | Aisles menu | header "Aisles" button | `AislesMenu.dc.html` | `PhoneMenu.dc.html` |
 
 ### Home
-- Situation picker: Student with school email, Student, Indie builder, Startup. Default: Student. Choice goes in the URL (`?as=`).
-- Stack panel: one row per part with limits, catch, can sell, card. Total `$0.00`. "Copy this stack" copies the stack (Markdown) and opens the Copy dialog, to switch to the link or the agent prompt. Each copy button says "✓ Copied" on its own label for 2 seconds; a blocked clipboard shows a visible message and selects the text. "Swap parts in Build a stack" opens `/build` with the same picks.
-- Presets come from data, not from the page. Only checked tools can be presets.
-- States: a preset tool goes overdue (show it, drop it from presets at the next build). Situation has no valid preset (show the aisle list instead of an empty panel).
+- Situation picker: Student with school email, Student, Indie builder, Startup. Default: Student. Choice goes in the URL (`?as=`) and is applied on the server too, so a shared link works without JavaScript. Chips at every width. One line under the picker says why the stack fits (`situations.yaml` `note`). Switching is announced to screen readers, and rows new to the situation fade in once.
+- Stack panel: one row per part: job, tool, its headline limit (condensed), the catch, then can sell, card and the check state on one line. Total `$0.00`. "Copy this stack" is the yellow main action and copies right away. "Hand it to my coding agent" copies the agent prompt for this stack. "Swap parts in Build a stack" opens `/build` with the same picks.
+- Presets come from data, not from the page. A preset may include parts nobody has checked: the panel is then a "Starter stack" and says "N of M parts checked"; every part checked makes it a "Ready-made stack". Copied text marks each unchecked part "(not checked yet)".
+- Under the headline: how many labels were checked against the vendor's page in the last 90 days, with a link to "Reading a label". The sample label there is a checked one when there is one.
+- States: a preset tool goes overdue (its row says so inline). Situation has no preset: its Claim Once aisles first (`situations.yaml` `claim`), then each core part linked to its aisle, and "Start one in Build a stack" as the main action.
 
 ### Aisle
 - Headline metric from `aisles.yaml`. Labels sorted: Suggested, then checked, then the rest, by metric.

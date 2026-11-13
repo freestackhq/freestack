@@ -21,17 +21,21 @@ import {
   aislesByGroup,
   checkHref,
   defaultSituation,
+  isSituation,
   now,
   partForJob,
   parts,
   preset,
+  presetIsValid,
   situations,
   toolHref,
+  tools,
   toolsInAisle,
   totalTools,
 } from "../lib/fresh/catalog";
 import { legacyHomeRedirect } from "../lib/catalog";
-import { cardNote, limitsLine, rowState, stackSearch, type CopyStackData } from "../lib/fresh/stack";
+import { labelState, strings } from "../lib/fresh/label";
+import { cardNote, headlineText, limitsLine, stackSearch, type CopyStackData } from "../lib/fresh/stack";
 
 export const prerender = false;
 
@@ -42,25 +46,63 @@ const at = now();
 const total = totalTools();
 const groups = aislesByGroup().filter((g) => g.aisles.length > 0);
 
+// The situation is read on the server too, so ?as= works without JavaScript.
+const asked = Astro.url.searchParams.get("as");
+const current = isSituation(asked) ? asked : defaultSituation;
+
+// How many labels someone checked against the vendor's page lately.
+const labeled = tools().filter((t) => t.source !== "imported");
+const checkedCount = labeled.filter((t) => labelState(t, at) === "checked").length;
+
 const panels = situations().map((s) => {
-  const rows = preset(s.id).map((r) => ({
-    job: r.job,
-    t: r.t,
-    part: partForJob(r.job),
-    limits: limitsLine(r.t, getAisle(r.t.aisle)!),
-    state: rowState(r.t, at),
-  }));
+  const entries = preset(s.id);
+  const rows = entries.map((r) => {
+    const a = getAisle(r.t.aisle)!;
+    const st = strings(r.t, at);
+    return {
+      job: r.job,
+      t: r.t,
+      part: partForJob(r.job),
+      headline: headlineText(r.t, a),
+      limits: limitsLine(r.t, a),
+      state: st,
+      checked: st.state === "checked",
+    };
+  });
+  const checked = rows.filter((r) => r.checked).length;
+  const ready = presetIsValid(entries, at);
   const picks = Object.fromEntries(rows.filter((r) => r.part).map((r) => [r.part!.key, r.t.id]));
   const buildHref = `/build${stackSearch(s.id, picks, parts())}`;
   const copy: Omit<CopyStackData, "url"> & { path: string } = {
     situation: s.label,
     path: buildHref,
-    rows: rows.map((r) => ({ job: r.job, name: r.t.name, limits: r.limits, catch: r.t.catches[0] ?? null })),
+    rows: rows.map((r) => ({
+      job: r.job,
+      name: r.t.name,
+      limits: r.limits,
+      catch: r.t.catches[0] ?? null,
+      checked: r.checked,
+    })),
   };
-  return { s, rows, buildHref, copy, note: cardNote(rows.map((r) => r.t)) };
+  // No stack: the Claim Once aisles this situation should look at, then the core parts.
+  const claim = (s.claim ?? []).map((id) => getAisle(id)).filter((a) => a !== undefined);
+  const core = parts()
+    .filter((p) => p.core)
+    .map((p) => ({ p, a: getAisle(p.aisle)! }));
+  return { s, rows, checked, ready, buildHref, copy, note: cardNote(rows.map((r) => r.t)), claim, core };
 });
+const announce = (p: (typeof panels)[number]) =>
+  p.rows.length
+    ? `${p.s.label}: ${p.rows.length} parts, ${p.checked} checked.`
+    : `${p.s.label}: no ready-made stack yet.`;
 
-const sample = toolsInAisle("databases", at)[0];
+// The sample label: a checked one if there is one, else the fullest.
+const dbTools = toolsInAisle("databases", at);
+const sample =
+  dbTools.find((t) => labelState(t, at) === "checked") ??
+  [...dbTools].sort(
+    (a, b) => Number(b.metric !== null) - Number(a.metric !== null) || b.limits.length - a.limits.length,
+  )[0];
 ---
 
 <Shell title="freestack: pick a free stack">
@@ -69,6 +111,13 @@ const sample = toolsInAisle("databases", at)[0];
       <div class="intro">
         <h1 id="hero-h">Pick a stack and start building.</h1>
         <p class="lede">{total} free tools, student perks and APIs. Limits and catches up front.</p>
+        <p class="trust">
+          <Icon name="check" size={18} />
+          <span>
+            {checkedCount} of {labeled.length} labels checked against the vendor's page in the last 90 days.{" "}
+            <a href="#label-h">How to read a label</a>
+          </span>
+        </p>
       </div>
 
       <section class="basket panel-raised" aria-labelledby="basket-h" data-home-stack>
@@ -76,42 +125,40 @@ const sample = toolsInAisle("databases", at)[0];
           <h2 id="basket-h">I'm building as</h2>
           <div class="chips" role="group" aria-labelledby="basket-h">
             {situations().map((s) => (
-              <button
-                type="button"
-                class="chip"
-                data-sit={s.id}
-                aria-pressed={s.id === defaultSituation ? "true" : "false"}
-              >
+              <button type="button" class="chip" data-sit={s.id} aria-pressed={s.id === current ? "true" : "false"}>
                 {s.label}
               </button>
             ))}
           </div>
-          <label class="select">
-            <span class="sr-only">I'm building as</span>
-            <select data-sit-select>
-              {situations().map((s) => (
-                <option value={s.id} selected={s.id === defaultSituation}>
-                  {s.label}
-                </option>
-              ))}
-            </select>
-            <Icon name="chevron-down" size={16} class="caret" />
-          </label>
         </div>
+        <p class="sr-only" role="status" data-announce>
+          {announce(panels.find((p) => p.s.id === current)!)}
+        </p>
 
         {panels.map((p) => (
-          <div class="stack" data-panel={p.s.id} hidden={p.s.id !== defaultSituation}>
+          <div class="stack" data-panel={p.s.id} data-announce-text={announce(p)} hidden={p.s.id !== current}>
+            {p.s.note && <p class="sit-note">{p.s.note}</p>}
             {p.rows.length > 0 ? (
               <>
+                <p class="stack-head">
+                  <strong>{p.ready ? "Ready-made stack" : "Starter stack"}</strong>
+                  <span>
+                    {p.ready
+                      ? "Every part checked against the vendor's page."
+                      : `${p.checked} of ${p.rows.length} parts checked. The rest are from the catalog, not checked yet.`}
+                  </span>
+                </p>
                 <ul class="rows" aria-label={`Stack for ${p.s.label}`}>
                   {p.rows.map((r) => (
-                    <li class:list={["row", r.state && `row-${r.state.state}`]} data-tool={r.t.id}>
+                    <li class="row" data-tool={r.t.id}>
                       <span class="job">{r.job}</span>
                       <span class="body">
-                        <a class="tool" href={toolHref(r.t)}>
-                          {r.t.name}
-                        </a>
-                        <span class="limits">{r.limits}</span>
+                        <span class="line">
+                          <a class="tool" href={toolHref(r.t)}>
+                            {r.t.name}
+                          </a>
+                          <span class="headline">{r.headline}</span>
+                        </span>
                         {r.t.catches[0] && (
                           <span class="catch">
                             <Icon name="wrench" />
@@ -119,9 +166,10 @@ const sample = toolsInAisle("databases", at)[0];
                             {r.t.catches[0]}
                           </span>
                         )}
-                        <Facts tool={r.t} hideWho class="facts" />
-                        {r.state && (
+                        <span class="meta">
+                          <Facts tool={r.t} hideWho class="facts" />
                           <span class="state" data-state={r.state.state}>
+                            {r.checked && <Icon name="check" size={16} />}
                             <span>{r.state.text}</span>
                             {r.state.link && (
                               <a href={checkHref(r.t)}>
@@ -130,7 +178,7 @@ const sample = toolsInAisle("databases", at)[0];
                               </a>
                             )}
                           </span>
-                        )}
+                        </span>
                       </span>
                     </li>
                   ))}
@@ -143,13 +191,13 @@ const sample = toolsInAisle("databases", at)[0];
                   <p class="price">$0.00</p>
                 </div>
                 <div class="actions">
-                  <button type="button" class="btn copy-btn" data-copy-stack={JSON.stringify(p.copy)}>
+                  <button type="button" class="btn btn-promo copy-btn" data-copy-stack={JSON.stringify(p.copy)}>
                     Copy this stack
                   </button>
-                  <a class="btn btn-outline" href="/agents">
+                  <button type="button" class="link-btn" data-copy-stack={JSON.stringify(p.copy)} data-format="agent">
                     Hand it to my coding agent
-                  </a>
-                  <a class="swap" href={p.buildHref}>
+                  </button>
+                  <a class="link-btn" href={p.buildHref}>
                     Swap parts in Build a stack
                   </a>
                 </div>
@@ -157,20 +205,36 @@ const sample = toolsInAisle("databases", at)[0];
             ) : (
               <div class="empty" data-empty>
                 <p class="empty-title">No ready-made stack here yet.</p>
-                <p class="empty-sub">Pick each part from its aisle instead.</p>
-                <ul class="empty-aisles">
-                  {groups
-                    .flatMap((g) => g.aisles)
-                    .filter((a) => a.group === "Build")
-                    .map((a) => (
-                      <li>
-                        <a href={`/${a.id}`}>
-                          {a.name} <span class="count">{aisleCount(a.id)}</span>
-                        </a>
-                      </li>
-                    ))}
+                {p.claim.length > 0 && (
+                  <>
+                    <h3 class="empty-h">Claim these first</h3>
+                    <ul class="pick-list">
+                      {p.claim.map((a) => (
+                        <li>
+                          <a href={`/${a.id}`}>
+                            <span>{a.name}</span>
+                            <span class="count">{aisleCount(a.id)}</span>
+                          </a>
+                        </li>
+                      ))}
+                    </ul>
+                  </>
+                )}
+                <h3 class="empty-h">Then pick each part</h3>
+                <ul class="pick-list">
+                  {p.core.map(({ p: part, a }) => (
+                    <li>
+                      <a href={`/${a.id}`}>
+                        <span>
+                          {part.label}
+                          <span class="via"> in {a.name}</span>
+                        </span>
+                        <span class="count">{aisleCount(a.id)}</span>
+                      </a>
+                    </li>
+                  ))}
                 </ul>
-                <a class="btn empty-cta" href={p.buildHref}>
+                <a class="btn btn-promo empty-cta" href={p.buildHref}>
                   Start one in Build a stack
                 </a>
               </div>
@@ -257,37 +321,46 @@ const sample = toolsInAisle("databases", at)[0];
 </Shell>
 
 <script>
-  import { openCopyStack } from "../lib/fresh/copy-stack";
+  import { openCopyStack, type CopyFormat } from "../lib/fresh/copy-stack";
 
   const root = document.querySelector<HTMLElement>("[data-home-stack]")!;
   const chips = [...root.querySelectorAll<HTMLButtonElement>("[data-sit]")];
-  const select = root.querySelector<HTMLSelectElement>("[data-sit-select]")!;
   const panels = [...root.querySelectorAll<HTMLElement>("[data-panel]")];
+  const announcer = root.querySelector<HTMLElement>("[data-announce]")!;
   const ids = panels.map((p) => p.dataset.panel!);
+  const reduceMotion = matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-  function pick(id: string, push: boolean) {
+  // Switch the visible stack, say what changed, and mark rows that are new to it.
+  function pick(id: string, fromUser: boolean) {
     if (!ids.includes(id)) return;
+    const before = panels.find((p) => !p.hidden);
+    const was = new Set([...(before?.querySelectorAll<HTMLElement>("[data-tool]") ?? [])].map((r) => r.dataset.tool));
     for (const c of chips) c.setAttribute("aria-pressed", String(c.dataset.sit === id));
-    select.value = id;
     for (const p of panels) p.hidden = p.dataset.panel !== id;
-    if (push) {
-      const url = new URL(location.href);
-      url.searchParams.set("as", id);
-      history.replaceState(null, "", url);
+    if (!fromUser) return;
+    const now = panels.find((p) => p.dataset.panel === id)!;
+    announcer.textContent = now.dataset.announceText ?? "";
+    if (before && before !== now && !reduceMotion) {
+      for (const r of now.querySelectorAll<HTMLElement>("[data-tool]")) {
+        if (was.has(r.dataset.tool)) continue;
+        r.classList.remove("is-new");
+        void r.offsetWidth; // restart the animation
+        r.classList.add("is-new");
+      }
     }
+    const url = new URL(location.href);
+    url.searchParams.set("as", id);
+    history.replaceState(null, "", url);
   }
 
-  const fromUrl = new URLSearchParams(location.search).get("as");
-  if (fromUrl) pick(fromUrl, false);
-
   for (const c of chips) c.addEventListener("click", () => pick(c.dataset.sit!, true));
-  select.addEventListener("change", () => pick(select.value, true));
 
   root.addEventListener("click", (e) => {
     const btn = (e.target as HTMLElement).closest<HTMLButtonElement>("[data-copy-stack]");
     if (!btn) return;
     const { path, ...rest } = JSON.parse(btn.dataset.copyStack!);
-    openCopyStack({ ...rest, url: new URL(path, location.origin).href }, "md", btn);
+    const format = (btn.dataset.format as CopyFormat | undefined) ?? "md";
+    openCopyStack({ ...rest, url: new URL(path, location.origin).href }, format, btn);
   });
 </script>
 
@@ -300,27 +373,46 @@ const sample = toolsInAisle("databases", at)[0];
     align-items: flex-start;
   }
   .intro {
-    flex: 1 1 420px;
+    flex: 1 1 400px;
     min-width: 0;
     padding-top: 24px;
   }
+  /* Three lines at most beside the panel, so the total stays near the fold. */
   h1 {
     margin: 0;
     font-weight: 900;
     font-stretch: 62%;
-    font-size: clamp(48px, 9vw, 132px);
+    font-size: clamp(48px, 6.4vw, 92px);
     line-height: 1;
     letter-spacing: -0.01em;
+    text-wrap: balance;
   }
   .lede {
-    margin: 28px 0 0;
+    margin: 24px 0 0;
     max-width: 34ch;
     font-size: 20px;
     font-weight: 500;
   }
+  .trust {
+    margin: 20px 0 0;
+    max-width: 40ch;
+    display: flex;
+    gap: 10px;
+    align-items: baseline;
+    font-size: 15px;
+    color: var(--muted);
+  }
+  .trust :global(svg) {
+    flex: none;
+    align-self: center;
+    color: var(--ink);
+  }
+  .trust a {
+    font-weight: 700;
+  }
 
   .basket {
-    flex: 1 1 560px;
+    flex: 1 1 600px;
     min-width: 0;
   }
   .picker {
@@ -337,27 +429,25 @@ const sample = toolsInAisle("databases", at)[0];
     flex-wrap: wrap;
     gap: 8px;
   }
-  .select {
-    display: none;
-    position: relative;
+  .sit-note {
+    margin: 0;
+    padding: 14px 28px 0;
+    font-size: 15px;
+    font-weight: 600;
   }
-  .select select {
-    width: 100%;
-    min-height: var(--target);
-    padding: 10px 40px 10px 12px;
-    appearance: none;
-    background: var(--label);
-    border: 2px solid var(--ink);
-    border-radius: 0;
-    font: 700 16px var(--font);
+  .stack-head {
+    margin: 0;
+    padding: 6px 28px 4px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2px 8px;
+    align-items: baseline;
+    font-size: 14px;
+    color: var(--muted);
+  }
+  .stack-head strong {
     color: var(--ink);
-  }
-  .select :global(.caret) {
-    position: absolute;
-    right: 14px;
-    top: 50%;
-    transform: translateY(-50%);
-    pointer-events: none;
+    font-size: 15px;
   }
 
   .rows {
@@ -367,11 +457,20 @@ const sample = toolsInAisle("databases", at)[0];
   }
   .row {
     display: grid;
-    grid-template-columns: 110px minmax(0, 1fr);
+    grid-template-columns: 96px minmax(0, 1fr);
     gap: 4px 16px;
     align-items: baseline;
-    padding: 16px 0;
+    padding: 14px 0;
     border-bottom: 1px dashed var(--rule);
+  }
+  /* A row that is new to this situation fades from the fill color once. */
+  .row.is-new {
+    animation: row-new 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  @keyframes row-new {
+    from {
+      background: var(--fill);
+    }
   }
   .job {
     font-size: 14px;
@@ -382,8 +481,14 @@ const sample = toolsInAisle("databases", at)[0];
     gap: 6px;
     min-width: 0;
   }
+  .line {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 2px 16px;
+  }
   .tool {
-    justify-self: start;
     min-width: var(--target);
     /* 44px tap target without moving the row */
     padding-block: 10px;
@@ -395,10 +500,15 @@ const sample = toolsInAisle("databases", at)[0];
   .tool:hover {
     text-decoration: underline;
   }
-  .limits {
-    margin-top: -4px;
-    font-size: 14px;
-    color: var(--muted);
+  /* The headline limit speaks in the label's condensed voice. */
+  .headline {
+    font-weight: 900;
+    font-stretch: 62%;
+    font-size: 22px;
+    line-height: 1.1;
+    /* Condensed spaces nearly vanish; give the words room. */
+    word-spacing: 0.18em;
+    text-align: right;
   }
   .catch {
     display: flex;
@@ -407,27 +517,44 @@ const sample = toolsInAisle("databases", at)[0];
     font-size: 14px;
     font-weight: 700;
   }
-  .state {
+  .meta {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-    gap: 0 12px;
-    min-height: var(--target);
-    padding: 0 12px;
-    background: var(--fill);
+    gap: 2px 16px;
     font-size: 14px;
+  }
+  .meta :global(.facts) {
+    margin: 0;
+  }
+  .state {
+    display: inline-flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0 8px;
     color: var(--muted);
   }
-  .state a {
-    font-weight: 700;
+  .state[data-state="checked"] {
+    color: var(--ink);
+    font-weight: 600;
   }
-  .state[data-state="overdue"] {
+  .state[data-state="overdue"] span {
+    padding: 0 6px;
     background: var(--recheck);
+    color: var(--ink);
+  }
+  .state a {
+    /* 44px tap target inside a one-line row */
+    display: inline-flex;
+    align-items: center;
+    min-height: var(--target);
+    margin-block: -12px;
+    font-weight: 700;
     color: var(--ink);
   }
 
   .total {
-    padding: 18px 28px 24px;
+    padding: 18px 28px 20px;
     display: flex;
     flex-wrap: wrap;
     align-items: flex-end;
@@ -451,60 +578,78 @@ const sample = toolsInAisle("databases", at)[0];
     line-height: 1;
   }
   .actions {
-    padding: 0 28px 28px;
+    padding: 0 28px 24px;
     display: flex;
     flex-wrap: wrap;
-    gap: 10px;
+    align-items: center;
+    gap: 4px 24px;
   }
-  .actions .btn {
-    flex: 1 1 180px;
-    min-height: 52px;
-    font-size: 16px;
-  }
-  .swap {
+  .copy-btn {
     flex: 1 1 100%;
+    min-height: 56px;
+    font-size: 17px;
+  }
+  .link-btn {
     display: inline-flex;
     align-items: center;
-    justify-content: center;
     min-height: var(--target);
-    font-size: 15px;
-    font-weight: 700;
+    padding: 0;
+    background: none;
+    border: 0;
+    font: 700 15px var(--font);
+    color: var(--ink);
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 3px;
+    cursor: pointer;
+  }
+  .link-btn:hover {
+    text-decoration-thickness: 2px;
   }
 
   .empty {
-    padding: 24px 28px 28px;
+    padding: 16px 28px 28px;
   }
   .empty-title {
     margin: 0;
     font-size: 20px;
     font-weight: 800;
   }
-  .empty-sub {
+  .empty-h {
+    margin: 20px 0 4px;
+    font-size: 14px;
+    font-weight: 700;
     color: var(--muted);
-    margin: 4px 0 16px;
   }
-  .empty-aisles {
+  .pick-list {
     list-style: none;
-    margin: 0 0 12px;
+    margin: 0;
     padding: 0;
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-    gap: 0 16px;
   }
-  .empty-aisles a {
+  .pick-list li + li {
+    border-top: 1px solid var(--shelf);
+  }
+  .pick-list a {
     display: flex;
     justify-content: space-between;
-    min-height: var(--target);
     align-items: center;
-    border-bottom: 1px solid var(--shelf);
-    font-weight: 600;
+    gap: 16px;
+    min-height: var(--target);
+    font-weight: 700;
     text-decoration: none;
   }
-  /* The only action when there is no preset: a real button, not a link. */
+  .pick-list a:hover {
+    text-decoration: underline;
+  }
+  .via {
+    font-weight: 500;
+    color: var(--muted);
+  }
   .empty-cta {
-    margin-top: 8px;
-    min-height: 52px;
-    font-size: 16px;
+    margin-top: 20px;
+    width: 100%;
+    min-height: 56px;
+    font-size: 17px;
   }
 
   .h2 {
@@ -642,6 +787,12 @@ const sample = toolsInAisle("databases", at)[0];
     white-space: nowrap;
   }
 
+  @media (prefers-reduced-motion: reduce) {
+    .row.is-new {
+      animation: none;
+    }
+  }
+
   @media (max-width: 640px) {
     .hero {
       padding: 20px 0 48px;
@@ -655,6 +806,10 @@ const sample = toolsInAisle("databases", at)[0];
       margin-top: 14px;
       font-size: 17px;
     }
+    .trust {
+      margin-top: 12px;
+      font-size: 14px;
+    }
     .basket {
       flex-basis: 100%;
     }
@@ -663,13 +818,11 @@ const sample = toolsInAisle("databases", at)[0];
     }
     .picker h2 {
       font-size: 15px;
-      margin-bottom: 6px;
+      margin-bottom: 10px;
     }
-    .chips {
-      display: none;
-    }
-    .select {
-      display: block;
+    .sit-note,
+    .stack-head {
+      padding-inline: 16px;
     }
     .rows {
       padding: 0 16px;
@@ -685,11 +838,16 @@ const sample = toolsInAisle("databases", at)[0];
     .tool {
       font-size: 17px;
     }
-    .limits,
-    .row :global(.facts) {
-      display: none;
+    .line {
+      justify-content: flex-start;
     }
-    .catch {
+    .headline {
+      font-size: 20px;
+      text-align: left;
+      flex-basis: 100%;
+    }
+    .catch,
+    .meta {
       font-size: 13px;
     }
     .total {
@@ -700,15 +858,13 @@ const sample = toolsInAisle("databases", at)[0];
     }
     .actions {
       padding: 0 16px 16px;
-      display: grid;
-      gap: 8px;
+      gap: 0 20px;
     }
-    .actions .btn {
-      min-height: var(--target);
-      font-size: 15px;
+    .copy-btn {
+      min-height: 52px;
     }
     .empty {
-      padding: 16px;
+      padding: 12px 16px 16px;
     }
     .agents {
       padding: 24px 16px;

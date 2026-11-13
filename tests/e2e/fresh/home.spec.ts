@@ -23,13 +23,15 @@ test.describe("Home (Home.dc.html)", () => {
     await expect(p).toHaveCount(1);
     const rows = p.locator(".row");
     expect(await rows.count()).toBeGreaterThan(0);
-    // Every row: job, tool link, limits and the sell + card facts (no "Open to all").
+    // Every row: job, tool link, its headline limit, the sell + card facts
+    // (no "Open to all") and its check state on the same line.
     for (let i = 0; i < (await rows.count()); i++) {
       const r = rows.nth(i);
       await expect(r.locator(".job")).not.toBeEmpty();
       await expect(r.locator("a.tool")).toHaveAttribute("href", /^\/[a-z-]+\/[a-z0-9-]+$/);
-      await expect(r.locator(".limits")).not.toBeEmpty();
+      await expect(r.locator(".headline")).not.toBeEmpty();
       await expect(r.locator("[data-fact]")).toHaveCount(2);
+      await expect(r.locator(".state")).not.toBeEmpty();
       await expect(r).not.toContainText("Open to all");
     }
     // A catch shows with its wrench and a text label for screen readers.
@@ -64,34 +66,89 @@ test.describe("Home (Home.dc.html)", () => {
     const href = await panel(page).getByRole("link", { name: "Swap parts in Build a stack" }).getAttribute("href");
     expect(href).toMatch(/^\/build\?as=indie&/);
     for (const id of ids) expect(href).toContain(`=${id}`);
-    await expect(panel(page).getByRole("link", { name: "Hand it to my coding agent" })).toHaveAttribute(
-      "href",
-      "/agents",
+  });
+
+  test("Hand it to my coding agent opens the agent prompt for this stack", async ({ page, context }) => {
+    await context.grantPermissions(["clipboard-read", "clipboard-write"]);
+    await page.goto("/?as=indie");
+    await panel(page).getByRole("button", { name: "Hand it to my coding agent" }).click();
+    const dialog = page.getByRole("dialog", { name: "Copy your stack" });
+    await expect(dialog.getByRole("tab", { name: "For your coding agent" })).toHaveAttribute("aria-selected", "true");
+    expect(await page.evaluate(() => navigator.clipboard.readText())).toContain(
+      "Set up this project on these free tiers:",
     );
   });
 
-  test("a preset tool that is not freshly checked shows its state", async ({ page }) => {
+  test("a stack with unchecked parts says so, once for the panel and inline per row", async ({ page }) => {
     await page.goto("/?as=school");
-    const state = panel(page).locator(".state");
-    await expect(state.first()).toBeVisible();
-    await expect(state.first()).toContainText(
+    const p = panel(page);
+    const states = await p
+      .locator(".row .state")
+      .evaluateAll((els) => els.map((e) => (e as HTMLElement).dataset.state));
+    const checked = states.filter((s) => s === "checked").length;
+    const head = p.locator(".stack-head");
+    if (checked === states.length) {
+      await expect(head).toContainText("Ready-made stack");
+    } else {
+      await expect(head).toContainText("Starter stack");
+      await expect(head).toContainText(`${checked} of ${states.length} parts checked`);
+    }
+    // Unchecked rows link to their check page; checked rows say who and when.
+    const unchecked = p.locator('.row .state:not([data-state="checked"])').first();
+    await expect(unchecked).toContainText(
       /Not checked yet|Due for a recheck|waiting for review|changed its pricing page/,
     );
-    await expect(state.first().getByRole("link")).toHaveAttribute("href", /\/check$/);
-    // Checked rows stay quiet.
-    await expect(panel(page).locator('.row:not([class*="row-"]) .state')).toHaveCount(0);
+    await expect(unchecked.getByRole("link")).toHaveAttribute("href", /\/check$/);
+    await expect(p.locator('.row .state[data-state="checked"]').first()).toContainText(/^Checked /);
+    // No gray strip per row any more.
+    await expect(p.locator(".row-unchecked, .row-overdue")).toHaveCount(0);
+    await expect(p.locator(".sit-note")).toHaveText("Unlocks the GitHub Student Pack and other edu perks.");
   });
 
-  test("no valid preset shows the aisle list instead of an empty panel", async ({ page }) => {
+  test("copied text marks the parts nobody has checked", async ({ page, context }) => {
+    await context.grantPermissions(["clipboard-read", "clipboard-write"]);
+    await page.goto("/?as=school");
+    const unchecked = await panel(page)
+      .locator(".row")
+      .evaluateAll((els) =>
+        els
+          .filter((e) => e.querySelector(".state")?.getAttribute("data-state") !== "checked")
+          .map((e) => e.querySelector("a.tool")!.textContent!.trim()),
+      );
+    await panel(page).getByRole("button", { name: "Copy this stack" }).click();
+    const text = await page.evaluate(() => navigator.clipboard.readText());
+    for (const name of unchecked) expect(text).toContain(`${name} (not checked yet)`);
+  });
+
+  test("the situation is chosen on the server, so ?as= works without JavaScript", async ({ browser }) => {
+    const ctx = await browser.newContext({ javaScriptEnabled: false });
+    const page = await ctx.newPage();
+    await page.goto("/?as=startup");
+    await expect(page.locator("[data-panel]:visible")).toHaveAttribute("data-panel", "startup");
+    await expect(page.getByRole("button", { name: "Startup" })).toHaveAttribute("aria-pressed", "true");
+    await ctx.close();
+  });
+
+  test("switching situation is announced", async ({ page }) => {
+    await page.goto("/");
+    await page.getByRole("button", { name: "Indie builder" }).click();
+    await expect(page.locator("[data-announce]")).toContainText(/^Indie builder: /);
+  });
+
+  test("no stack: Claim Once aisles for this situation, then each core part", async ({ page }) => {
     await page.goto("/?as=startup");
     const p = panel(page);
     await expect(p.locator(".row")).toHaveCount(0);
     await expect(p.locator("[data-empty]")).toContainText("No ready-made stack here yet.");
-    await expect(p.getByRole("link", { name: /Databases/ })).toHaveAttribute("href", "/databases");
+    await expect(p.locator(".sit-note")).toHaveText("Free now. Claim cloud credits once you have users.");
+    await expect(p.getByRole("heading", { name: "Claim these first" })).toBeVisible();
+    await expect(p.getByRole("link", { name: /Student programs/ })).toHaveAttribute("href", "/student-programs");
+    await expect(p.getByRole("heading", { name: "Then pick each part" })).toBeVisible();
+    await expect(p.getByRole("link", { name: /^Database in Databases/ })).toHaveAttribute("href", "/databases");
     const start = p.getByRole("link", { name: "Start one in Build a stack" });
     await expect(start).toHaveAttribute("href", "/build?as=startup");
-    // The only action here, so it looks like one.
-    await expect(start).toHaveClass(/\bbtn\b/);
+    // The only action here, so it is the main one.
+    await expect(start).toHaveClass(/\bbtn-promo\b/);
     expect((await start.boundingBox())!.height).toBeGreaterThanOrEqual(44);
     await expect(p.getByRole("button", { name: "Copy this stack" })).toHaveCount(0);
   });
@@ -143,7 +200,7 @@ test.describe("Copy this stack (CopyStack.dc.html)", () => {
     const copyText = dialog.locator("[data-copy]");
     await expect(copyText).toHaveText("Copied");
     // Found by attribute: while it says "Copied" its accessible name changes.
-    const openerBtn = panel(page).locator("[data-copy-stack]");
+    const openerBtn = panel(page).locator(".copy-btn");
     await expect(openerBtn).toHaveText("Copied");
     await expect(dialog.locator("[data-status]")).toHaveClass(/sr-only/);
     await expect(copyText).toHaveText("Copy text", { timeout: 4000 });
@@ -200,26 +257,26 @@ test.describe("Copy this stack (CopyStack.dc.html)", () => {
 test.describe("Home on a phone (PhoneHome.dc.html)", () => {
   test.use({ viewport: PHONE });
 
-  test("select picks the situation, nothing scrolls sideways", async ({ page }) => {
+  test("chips pick the situation, rows keep their number, nothing scrolls sideways", async ({ page }) => {
     await page.goto("/");
     await expectNoSideScroll(page);
-    await expect(page.getByRole("group", { name: "I'm building as" })).toBeHidden();
-    const select = page.getByRole("combobox", { name: "I'm building as" });
-    await expect(select).toHaveValue("student");
-    await select.selectOption("indie");
+    const group = page.getByRole("group", { name: "I'm building as" });
+    await expect(group).toBeVisible();
+    await group.getByRole("button", { name: "Indie builder" }).click();
     await expect(page).toHaveURL(/\?as=indie$/);
     await expect(panel(page)).toHaveAttribute("data-panel", "indie");
     await expectNoSideScroll(page);
+    // "Limits up front" holds on a phone: each row shows its headline limit.
+    for (const h of await panel(page).locator(".headline").all()) await expect(h).toBeVisible();
 
     // Targets are at least 44px.
     for (const name of ["Copy this stack", "Hand it to my coding agent"]) {
-      const box = await panel(page)
-        .getByRole(name.startsWith("Copy") ? "button" : "link", { name })
-        .boundingBox();
+      const box = await panel(page).getByRole("button", { name }).boundingBox();
       expect(box!.height).toBeGreaterThanOrEqual(44);
     }
-    const sbox = await select.boundingBox();
-    expect(sbox!.height).toBeGreaterThanOrEqual(44);
+    for (const chip of await group.getByRole("button").all()) {
+      expect((await chip.boundingBox())!.height).toBeGreaterThanOrEqual(44);
+    }
   });
 
   test("copy dialog fits the phone", async ({ page }) => {
