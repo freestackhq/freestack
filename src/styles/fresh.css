@@ -105,8 +105,9 @@ svg {
 
 /* ---------- Layout ---------- */
 
+/* Boards use content-box max-width 1240px plus side padding. */
 .wrap {
-  max-width: var(--wrap);
+  max-width: calc(var(--wrap) + 2 * var(--gutter));
   margin-inline: auto;
   padding-inline: var(--gutter);
 }
