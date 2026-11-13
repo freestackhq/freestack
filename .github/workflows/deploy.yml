@@ -1,0 +1,89 @@
+# Production deploy to Cloudflare Workers on the domain in SITE_URL.
+#
+# Runs when CI passes on the default branch, when a trust-loop workflow
+# dispatches it after a data commit (GITHUB_TOKEN pushes start no workflows),
+# by hand, and once a day: label ages ("Checked 3 days ago", overdue) are
+# computed at build time, so a daily build keeps them true.
+#
+# Needs, in the "production" environment or the repo:
+#   secrets  CLOUDFLARE_API_TOKEN (Workers Scripts: Edit), CLOUDFLARE_ACCOUNT_ID
+#   vars     SITE_URL (required), PUBLIC_GITHUB_REPO, PUBLIC_CF_ANALYTICS_TOKEN (optional)
+name: Deploy
+
+on:
+  workflow_run:
+    workflows: [CI]
+    types: [completed]
+  workflow_dispatch:
+  schedule:
+    - cron: "41 4 * * *"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: deploy-production
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    # From CI: only a green push run on the default branch. Schedule and
+    # dispatch already run on the default branch.
+    if: >-
+      github.event_name != 'workflow_run' ||
+      (github.event.workflow_run.conclusion == 'success' &&
+       github.event.workflow_run.event == 'push' &&
+       github.event.workflow_run.head_branch == github.event.repository.default_branch)
+    runs-on: ubuntu-latest
+    environment:
+      name: production
+      url: ${{ vars.SITE_URL }}
+    env:
+      SITE_URL: ${{ vars.SITE_URL }}
+      PUBLIC_GITHUB_REPO: ${{ vars.PUBLIC_GITHUB_REPO || github.repository }}
+      PUBLIC_CF_ANALYTICS_TOKEN: ${{ vars.PUBLIC_CF_ANALYTICS_TOKEN }}
+      CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+      CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+    steps:
+      - name: Check configuration
+        run: |
+          missing=""
+          [ -n "$SITE_URL" ] || missing="$missing vars.SITE_URL"
+          [ -n "$CLOUDFLARE_API_TOKEN" ] || missing="$missing secrets.CLOUDFLARE_API_TOKEN"
+          [ -n "$CLOUDFLARE_ACCOUNT_ID" ] || missing="$missing secrets.CLOUDFLARE_ACCOUNT_ID"
+          if [ -n "$missing" ]; then
+            echo "::error::Deploy is not configured. Missing:$missing (see .github/workflows/deploy.yml)"
+            exit 1
+          fi
+      - uses: actions/checkout@v4
+        with:
+          # The commit CI tested, not whatever landed since.
+          ref: ${{ github.event.workflow_run.head_sha || github.sha }}
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10.33.0
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      # The committed snapshot must match data/ (CI checks this too; a
+      # dispatched data commit skipped CI).
+      - name: Snapshot is up to date
+        run: |
+          pnpm catalog:generate
+          git diff --exit-code -I '"generatedAt"' -- src/data/catalog.generated.json \
+            || { echo "::error::src/data/catalog.generated.json is stale. Run pnpm catalog:generate and commit it."; exit 1; }
+      - name: Plugin files match SITE_URL
+        run: pnpm plugin:build --check
+      - name: Build and deploy
+        run: pnpm deploy:cf
+      - name: Smoke test
+        run: |
+          base="${SITE_URL%/}"
+          for i in 1 2 3 4 5 6; do
+            curl -fsS --max-time 10 "$base/api/health" && exit 0
+            sleep 10
+          done
+          echo "::error::$base/api/health did not answer after deploy"
+          exit 1

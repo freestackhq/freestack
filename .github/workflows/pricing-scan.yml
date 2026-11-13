@@ -30,19 +30,24 @@ jobs:
           version: 10.33.0
       - uses: actions/setup-node@v4
         with:
-          node-version: 22
+          node-version-file: .nvmrc
           cache: pnpm
       - run: pnpm install --frozen-lockfile
       - id: scan
         run: pnpm ops:pricing-scan
         env:
           PRICING_SCAN_REPORT: ${{ runner.temp }}/pricing-report.md
+      # The snapshot carries vendor_changed_at; CI rejects a stale one.
+      - if: steps.scan.outputs.changes == 'true'
+        run: pnpm catalog:generate
       - if: steps.scan.outputs.changes == 'true'
         uses: peter-evans/create-pull-request@v7
         with:
           branch: ops/pricing-scan
           delete-branch: true
-          add-paths: data/state/pricing.yaml
+          add-paths: |
+            data/state/pricing.yaml
+            src/data/catalog.generated.json
           commit-message: "chore(data): record pricing-page scan"
           title: Pricing pages changed
           body-path: ${{ runner.temp }}/pricing-report.md

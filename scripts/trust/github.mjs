@@ -26,12 +26,22 @@ function run(cmd, args, input) {
 const git = (...args) => run("git", args);
 const gh = (args, input) => run("gh", args, input);
 
+export const SNAPSHOT = "src/data/catalog.generated.json";
+export const touchesData = (paths) => paths.some((p) => p.startsWith("data/"));
+
 export function createGitHub({ defaultBranch }) {
   git("config", "user.name", "github-actions[bot]");
   git("config", "user.email", "41898282+github-actions[bot]@users.noreply.github.com");
 
-  /** True when the commit had changes. */
+  /**
+   * True when the commit had changes. A change under data/ also rebuilds the
+   * committed snapshot (CI rejects a stale one, and the site reads it).
+   */
   function commit(paths, message) {
+    if (touchesData(paths)) {
+      run("node", ["scripts/generate.mjs"]);
+      paths = [...paths, SNAPSHOT];
+    }
     git("add", "--", ...paths);
     if (!git("status", "--porcelain", "--", ...paths)) return false;
     git("commit", "-m", message);
@@ -62,6 +72,15 @@ export function createGitHub({ defaultBranch }) {
       for (let tries = 1; ; tries++) {
         try {
           git("push", "origin", `HEAD:${defaultBranch}`);
+          // Pushes made with GITHUB_TOKEN start no workflows, except a dispatch:
+          // ask the deploy workflow to ship the new data.
+          if (touchesData(paths)) {
+            try {
+              gh(["workflow", "run", "deploy.yml", "--ref", defaultBranch]);
+            } catch {
+              console.warn("deploy.yml could not be dispatched; the daily deploy will pick this up.");
+            }
+          }
           return true;
         } catch (e) {
           if (tries >= 4) throw e;
