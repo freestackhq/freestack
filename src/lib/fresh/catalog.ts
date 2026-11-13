@@ -8,6 +8,7 @@ import {
   sampleAisles,
   sampleData,
   samplePresets,
+  sampleRemovedTools,
   sampleSituations,
 } from "../../data/sample";
 import { aisleMax, labelState, sortForAisle } from "./label";
@@ -122,4 +123,9 @@ export function catches(): Catch[] {
 
 export function catchBySlug(slug: string): Catch | undefined {
   return data().catches.find((c) => c.slug === slug);
+}
+
+/** Tools taken out of the catalog. Their pages 301 to the aisle. */
+export function removedTools(): { id: string; aisle: string }[] {
+  return sampleRemovedTools;
 }
