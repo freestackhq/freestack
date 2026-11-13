@@ -114,7 +114,7 @@ export const LISTS = [
         match: /instance|container|docker|app hosting|never sleeps|run(s)? your code|deploy .*apps|python app/i,
         skip: /payment|kubernetes|IDE/i,
       },
-      { section: "For Students", aisle: "student", match: /student|education/i },
+      { section: "For Students", aisle: "student-programs", match: /student|education/i },
     ],
   },
   {
