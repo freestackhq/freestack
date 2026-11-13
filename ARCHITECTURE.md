@@ -68,6 +68,8 @@ The site holds no secrets and stores nothing. People send checks and new tools a
 
 - **Skill:** `skills/pick-free-stack/SKILL.md`, installed with `npx skills add` or the plugin marketplace. It tells the agent to check freestack before reaching for paid tools and to state the limits and catches it found.
 - **MCP:** a remote server at `<SITE_URL>/mcp` on the same Worker, read-only and public. Tools: `search_tools`, `compare`, `suggest_stack` (rules engine), `claim_order`. It returns structured fields only for imported entries (no free text), to avoid prompt injection.
+  - Hand-written, stateless Streamable HTTP in `src/lib/mcp/` (no SDK): JSON responses, no sessions or SSE. Serves 2026-07-28 per-request metadata and the older `initialize` handshake.
+- **Plugin:** `.claude-plugin/marketplace.json` and `plugins/freestack/` hold the real address, so `pnpm plugin:build` regenerates them from `SITE_URL` (`--check` fails on drift). Rerun and commit it whenever `SITE_URL` changes. `/skills/pick-free-stack/SKILL.md` serves the skill with the address filled in at build time.
 - `llms.txt`, `llms-full.txt` and `/api/*` stay as they are.
 
 ## Migration and compatibility

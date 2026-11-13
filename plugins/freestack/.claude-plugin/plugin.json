@@ -1,0 +1,19 @@
+{
+  "name": "freestack",
+  "description": "Check free-tier labels (limits, catches, can you sell, card needed) before your agent adds anything paid.",
+  "version": "0.0.1",
+  "author": {
+    "name": "freestack",
+    "url": "https://github.com/freestackhq/freestack"
+  },
+  "homepage": "https://freestack.example.com/agents",
+  "repository": "https://github.com/freestackhq/freestack",
+  "license": "MIT",
+  "keywords": [
+    "free tier",
+    "stack",
+    "hosting",
+    "database",
+    "mcp"
+  ]
+}

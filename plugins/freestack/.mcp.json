@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "freestack": {
+      "type": "http",
+      "url": "https://freestack.example.com/mcp"
+    }
+  }
+}
