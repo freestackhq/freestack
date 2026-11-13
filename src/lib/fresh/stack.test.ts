@@ -58,6 +58,10 @@ describe("limitsLine", () => {
   });
   it("uses the vendor's own wording when the metric does not apply", () => {
     expect(limitsLine(make({ metric: null, metric_note: "750 hours a month" }), hosting)).toBe("750 hours a month");
+    // The note is often also the first limit; say it once.
+    expect(limitsLine(make({ metric: null, metric_note: "100k requests a day", limits: ["100k requests a day", "Static unlimited"] }), hosting)).toBe(
+      "100k requests a day, Static unlimited",
+    );
     expect(limitsLine(make({ metric: null, metric_note: "No limit. Your own disk" }), db)).toBe("No limit. Your own disk");
   });
 });

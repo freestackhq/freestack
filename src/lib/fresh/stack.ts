@@ -34,7 +34,7 @@ export function limitsLine(t: Tool, a: Aisle): string {
   else if (!h.known) first = `${cap(metricParts("", a).sub ?? a.label)}: unknown`;
   else if (h.sub && h.sub !== t.metric_note) first = `${h.big} ${h.sub}`;
   else first = /^\d/.test(h.big) && a.unit && h.big.endsWith(a.unit) ? `${h.big} ${a.label}` : h.big;
-  const rest = t.limits.filter((l) => !t.catches.includes(l));
+  const rest = t.limits.filter((l) => !t.catches.includes(l) && l.toLowerCase() !== first.toLowerCase());
   return [first, ...rest].join(", ");
 }
 
