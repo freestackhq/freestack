@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generatedAt": "2026-11-13T00:00:00.000Z",
+  "generatedAt": "2026-11-14T00:00:00.000Z",
   "aisles": [
     {
       "id": "databases",
@@ -720,8 +720,8 @@
         }
       ],
       "pricing_url": "https://neon.tech",
-      "verified_at": null,
-      "verified_by": null,
+      "verified_at": "2026-11-14",
+      "verified_by": "Karlo",
       "source": "catalog",
       "tagline": "Postgres that sleeps when nobody is using it.",
       "about": "Serverless Postgres that scales to zero.",
@@ -1520,7 +1520,7 @@
       "metric_note": "100k requests a day",
       "limits": [
         "100k requests a day",
-        "Static unlimited"
+        "Unlimited static requests"
       ],
       "who": [
         "anyone"
@@ -1540,8 +1540,8 @@
         }
       ],
       "pricing_url": "https://workers.cloudflare.com",
-      "verified_at": null,
-      "verified_by": null,
+      "verified_at": "2026-11-14",
+      "verified_by": "Karlo",
       "source": "catalog",
       "tagline": "Static sites plus API routes. No cold starts.",
       "about": "Edge functions + unlimited static hosting.",
@@ -12225,19 +12225,35 @@
   "situations": [
     {
       "id": "school",
-      "label": "Student with school email"
+      "label": "Student with school email",
+      "note": "Unlocks the GitHub Student Pack and other edu perks.",
+      "claim": [
+        "student-programs",
+        "learning"
+      ]
     },
     {
       "id": "student",
-      "label": "Student"
+      "label": "Student",
+      "note": "No school email needed. Everything here is open to anyone.",
+      "claim": [
+        "student-programs"
+      ]
     },
     {
       "id": "indie",
-      "label": "Indie builder"
+      "label": "Indie builder",
+      "note": "Free tiers you can keep once it earns money. Vercel Hobby left out.",
+      "claim": []
     },
     {
       "id": "startup",
-      "label": "Startup"
+      "label": "Startup",
+      "note": "Free now. Claim cloud credits once you have users.",
+      "claim": [
+        "startup-programs",
+        "cloud-credits"
+      ]
     }
   ],
   "defaultSituation": "student",

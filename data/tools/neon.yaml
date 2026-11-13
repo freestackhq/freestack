@@ -30,8 +30,8 @@ skip_if:
   - reason: You will have tons of data, like logs.
     use: turso
 pricing_url: https://neon.tech
-verified_at: null
-verified_by: null
+verified_at: "2026-11-14"
+verified_by: Karlo
 source: catalog
 tagline: Postgres that sleeps when nobody is using it.
 about: Serverless Postgres that scales to zero.
