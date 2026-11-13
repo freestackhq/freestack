@@ -1,0 +1,347 @@
+---
+/**
+ * Catch page (Trap.dc.html). One per question, answer first, then free
+ * tools that avoid the catch.
+ */
+import Shell from "../../layouts/Shell.astro";
+import Icon from "../../components/fresh/Icon.astro";
+import Facts from "../../components/fresh/Facts.astro";
+import { aisle as getAisle, catchAlternatives, catchBySlug, catches, tool as getTool, toolHref } from "../../lib/fresh/catalog";
+import { headline, longDate } from "../../lib/fresh/label";
+
+export function getStaticPaths() {
+  return catches().map((c) => ({ params: { slug: c.slug } }));
+}
+
+const c = catchBySlug(Astro.params.slug!)!;
+const aisle = getAisle(c.aisle);
+const subject = getTool(c.tool);
+const plan = c.plan ?? subject?.name ?? "this plan";
+const vendor = c.vendor ?? subject?.name ?? "the vendor";
+const alternatives = catchAlternatives(c);
+const altHeading = c.avoid_heading ?? `Free ${aisle?.noun ?? "tools"} without this catch`;
+---
+
+<Shell title={`${c.question} · freestack`} description={`${c.answer} ${c.detail}`} aisle={c.aisle}>
+  <div class="wrap page">
+    <p class="crumbs">
+      <a href="/">All aisles</a>{" "}
+      {
+        aisle && (
+          <>
+            <span aria-hidden="true">/</span> <a href={`/${aisle.id}`}>{aisle.name}</a>{" "}
+          </>
+        )
+      }
+      <span aria-hidden="true">/</span> Catches
+    </p>
+    <h1 class="question">{c.question}</h1>
+
+    <div class="top">
+      <section class="card" aria-labelledby="ans-h" data-answer>
+        <div class="lead">
+          <p id="ans-h" class="answer">{c.answer}</p>
+          <p class="detail">{c.detail}</p>
+        </div>
+        <div class="body">
+          {
+            c.includes.length > 0 && (
+              <>
+                <h2 id="inc-h">That includes</h2>
+                <ul aria-labelledby="inc-h">
+                  {c.includes.map((i) => (
+                    <li>
+                      <Icon name="cross" size={18} />
+                      <span>{i}</span>
+                    </li>
+                  ))}
+                </ul>
+              </>
+            )
+          }
+          {
+            c.still_fine && (
+              <>
+                <h2 id="fine-h">Still fine</h2>
+                <ul aria-labelledby="fine-h">
+                  <li>
+                    <Icon name="check" size={18} />
+                    <span>{c.still_fine}</span>
+                  </li>
+                </ul>
+              </>
+            )
+          }
+        </div>
+        <p class="source" data-source>
+          <span>From {c.source_name}</span>
+          <a href={c.source_url} target="_blank" rel="noopener">
+            Read the source<span class="sr-only">, opens in a new tab</span>
+          </a>
+          <span class="when">{c.checked_at ? `Checked ${longDate(c.checked_at)}` : "Not checked yet"}</span>
+        </p>
+      </section>
+
+      <aside class="side">
+        <div class="on-ink cta">
+          <h2>Already on {plan}?</h2>
+          <p>Paste your stack and we flag every catch like this one.</p>
+          <a class="btn btn-promo" href="/check">Check my stack</a>
+        </div>
+        <p class="legal">Not legal advice. When in doubt, ask {vendor}.</p>
+      </aside>
+    </div>
+
+    {
+      alternatives.length > 0 && (
+        <section class="alts" aria-labelledby="alt-h">
+          <h2 id="alt-h" class="title-md">{altHeading}</h2>
+          <div class="grid">
+            {alternatives.map((t) => {
+              const a = getAisle(t.aisle);
+              const h = a ? headline(t, a) : { big: "?", sub: "Not listed", known: false };
+              return (
+                <article class="mini" data-tool={t.id}>
+                  <div class="name">
+                    <h3>
+                      <a href={toolHref(t)}>{t.name}</a>
+                    </h3>
+                    <span class="kind">{t.kind}</span>
+                  </div>
+                  <p class:list={["big", { unknown: !h.known }]}>{h.big}</p>
+                  {h.sub && <p class="sub">{h.sub}</p>}
+                  <Facts tool={t} hideWho class="facts" />
+                  {t.catches[0] && (
+                    <p class="catch">
+                      <Icon name="wrench" />
+                      {t.catches[0]}
+                    </p>
+                  )}
+                  {t.tagline && <p class="tagline">{t.tagline}</p>}
+                </article>
+              );
+            })}
+          </div>
+        </section>
+      )
+    }
+  </div>
+</Shell>
+
+<style>
+  .page {
+    padding-block: 40px 96px;
+  }
+  .question {
+    margin: 0;
+    font-weight: 900;
+    font-stretch: 62%;
+    line-height: 1;
+    font-size: clamp(48px, 7vw, 88px);
+    max-width: 16ch;
+    overflow-wrap: break-word;
+  }
+  .top {
+    margin-top: 32px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 32px;
+    align-items: flex-start;
+  }
+  .card {
+    flex: 999 1 520px;
+    max-width: 760px;
+    min-width: 0;
+    background: var(--label);
+    border: 2px solid var(--ink);
+  }
+  .lead {
+    padding: 24px 28px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    border-bottom: 2px solid var(--ink);
+  }
+  .answer {
+    margin: 0;
+    font-weight: 900;
+    font-stretch: 62%;
+    line-height: 1;
+    font-size: 112px;
+  }
+  .detail {
+    margin: 0;
+    font-size: 20px;
+    line-height: 1.4;
+    font-weight: 500;
+  }
+  .body {
+    padding: 22px 28px;
+  }
+  .body h2 {
+    margin: 0 0 12px;
+    font-size: 18px;
+    font-weight: 800;
+  }
+  .body ul + h2 {
+    margin-top: 22px;
+  }
+  .body ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: grid;
+    gap: 10px;
+  }
+  .body li {
+    display: flex;
+    gap: 10px;
+  }
+  .body li :global(svg) {
+    flex: 0 0 auto;
+    margin-top: 3px;
+  }
+  .source {
+    margin: 0;
+    padding: 14px 28px;
+    border-top: 1px solid var(--rule);
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px 16px;
+    font-size: 14px;
+    color: var(--muted);
+  }
+  .source a {
+    display: inline-flex;
+    align-items: center;
+    min-height: var(--target);
+  }
+  .when {
+    margin-left: auto;
+  }
+  .side {
+    flex: 1 1 300px;
+    display: grid;
+    gap: 12px;
+  }
+  .cta {
+    background: var(--ink);
+    color: var(--label);
+    padding: 22px 24px;
+  }
+  .cta h2 {
+    margin: 0 0 8px;
+    font-size: 18px;
+    font-weight: 800;
+  }
+  .cta p {
+    margin: 0 0 16px;
+    font-size: 15px;
+    line-height: 1.5;
+    color: var(--on-ink-muted);
+  }
+  .legal {
+    margin: 0;
+    font-size: 14px;
+    color: var(--muted);
+  }
+  .alts {
+    margin-top: 56px;
+  }
+  .alts h2 {
+    margin-bottom: 20px;
+  }
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(280px, 100%), 1fr));
+    gap: 20px;
+  }
+  .mini {
+    background: var(--label);
+    border-top: 8px solid var(--ink);
+    padding: 18px 20px;
+    display: grid;
+    gap: 8px;
+    align-content: start;
+  }
+  .name {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 4px 10px;
+  }
+  .name h3 {
+    margin: 0;
+    font-size: 19px;
+    font-weight: 800;
+  }
+  .name a {
+    text-decoration: none;
+  }
+  .name a:hover {
+    text-decoration: underline;
+  }
+  .kind {
+    font-size: 13px;
+    color: var(--muted);
+  }
+  .big {
+    margin: 0;
+    font-weight: 900;
+    font-stretch: 62%;
+    font-size: 56px;
+    line-height: 1;
+  }
+  .big.unknown {
+    color: var(--muted);
+  }
+  .sub {
+    margin: 0;
+    font-size: 14px;
+    color: var(--muted);
+  }
+  .mini :global(.facts) {
+    margin-top: 6px;
+    font-size: 14px;
+  }
+  .catch {
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+    font-weight: 700;
+  }
+  .tagline {
+    margin: 0;
+    font-size: 15px;
+  }
+  @media (max-width: 640px) {
+    .page {
+      padding-block: 28px 64px;
+    }
+    .lead {
+      padding: 20px;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 10px;
+    }
+    .answer {
+      font-size: 88px;
+    }
+    .detail {
+      font-size: 18px;
+    }
+    .body {
+      padding: 20px;
+    }
+    .source {
+      padding: 10px 20px;
+    }
+    .when {
+      margin-left: 0;
+    }
+  }
+</style>
