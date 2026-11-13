@@ -1,0 +1,44 @@
+# Check a label issues (ARCHITECTURE.md "Trust loop"). The logic lives in
+# scripts/trust/label-check.mjs; this file only runs it. Issue text is
+# read from the event file by the script, never pasted into a shell here.
+name: label-check
+
+on:
+  issues:
+    types: [opened, edited, closed]
+
+permissions:
+  contents: write
+  issues: write
+  pull-requests: write
+
+concurrency:
+  group: label-check-${{ github.event.issue.number }}
+  cancel-in-progress: false
+
+jobs:
+  process:
+    # Issue-form issues carry the label; a pasted "too long" body carries the marker.
+    if: >-
+      !github.event.issue.pull_request &&
+      (contains(github.event.issue.labels.*.name, 'label-check') ||
+       contains(github.event.issue.body, '<!-- freestack:label-check -->'))
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Add the label to a pasted issue
+        if: ${{ !contains(github.event.issue.labels.*.name, 'label-check') && github.event.action != 'closed' }}
+        run: gh issue edit "$NUMBER" --add-label label-check
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          NUMBER: ${{ github.event.issue.number }}
+      - run: node scripts/trust/label-check.mjs
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
