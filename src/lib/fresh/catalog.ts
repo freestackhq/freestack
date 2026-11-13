@@ -123,3 +123,26 @@ export function catches(): Catch[] {
 export function catchBySlug(slug: string): Catch | undefined {
   return data().catches.find((c) => c.slug === slug);
 }
+
+// ---------- Stack parts (Home, Build a stack, Check my stack) ----------
+import { sampleParts } from "../../data/sample";
+import type { Part } from "./types";
+
+export function parts(): Part[] {
+  return sampleParts;
+}
+
+/** The part a preset job fills ("Sign-in" -> auth). */
+export function partForJob(job: string): Part | undefined {
+  return sampleParts.find((p) => p.label === job);
+}
+
+/** Labeled tools that can fill a part, in aisle order. */
+export function partOptions(p: Part, at = now()): Tool[] {
+  return toolsInAisle(p.aisle, at).filter((t) => !p.kinds || p.kinds.includes(t.kind));
+}
+
+/** Catch pages about a tool. */
+export function catchesForTool(toolId: string): Catch[] {
+  return data().catches.filter((c) => c.tool === toolId);
+}
