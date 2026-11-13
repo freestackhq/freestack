@@ -30,26 +30,35 @@ function run(cmd, args, env = {}) {
   }
 }
 
-// 1. Fixture snapshot + build (dist/).
-run("node", ["scripts/generate.mjs"], { FREESTACK_DATA: FIXTURES });
-run("pnpm", ["astro", "build"], { FREESTACK_DATA: FIXTURES, ASTRO_OUT_DIR: "" });
+// A preview daemon left over from an earlier run would keep serving old files.
+spawnSync("pnpm", ["astro", "preview", "stop"], { stdio: "inherit" });
 
-// 2. Real build (dist-real/), from the committed snapshot.
+// 1. Real build (dist-real/), from the committed snapshot.
 const realEnv = { ...process.env, ASTRO_OUT_DIR: REAL_OUT };
 delete realEnv.FREESTACK_DATA;
 const real = spawnSync("pnpm", ["astro", "build"], { stdio: "inherit", env: realEnv });
 if (real.status !== 0) process.exit(real.status ?? 1);
 
+// 2. Fixture snapshot + build (dist/). Last, because `astro preview` serves
+//    the most recent build (.wrangler/deploy/config.json points at it).
+run("node", ["scripts/generate.mjs"], { FREESTACK_DATA: FIXTURES });
+run("pnpm", ["astro", "build"], { FREESTACK_DATA: FIXTURES, ASTRO_OUT_DIR: "" });
+
 // 3. Fixture site on PORT (astro preview daemonizes; wait for it).
 spawnSync("pnpm", ["astro", "preview", "--port", PORT], { stdio: "inherit", env: { ...process.env, ASTRO_OUT_DIR: "" } });
 const deadline = Date.now() + 90_000;
-while (Date.now() < deadline) {
+let up = false;
+while (!up && Date.now() < deadline) {
   try {
-    if ((await fetch(`http://127.0.0.1:${PORT}/api/health`)).ok) break;
+    up = (await fetch(`http://localhost:${PORT}/api/health`)).ok;
   } catch {
     /* not up yet */
   }
-  await new Promise((r) => setTimeout(r, 500));
+  if (!up) await new Promise((r) => setTimeout(r, 500));
+}
+if (!up) {
+  console.error(`e2e-server: preview did not answer on :${PORT}`);
+  process.exit(1);
 }
 
 // 4. Real prerendered pages on REAL_PORT.
@@ -73,3 +82,4 @@ const stop = () => {
 };
 process.on("SIGINT", stop);
 process.on("SIGTERM", stop);
+process.on("SIGHUP", stop);

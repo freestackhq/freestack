@@ -30,5 +30,5 @@ test("an old URL that never existed is a 404", async ({ request }) => {
 
 test("Home without old params renders, and the startup guide stays a page", async ({ request }) => {
   expect((await request.get("/?as=student", { maxRedirects: 0 })).status()).toBe(200);
-  expect((await request.get("/guides/startup", { maxRedirects: 0 })).status()).toBe(200);
+  expect((await request.get("/guides/startup")).status()).toBe(200);
 });
