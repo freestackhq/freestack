@@ -10,7 +10,7 @@ export const SHARE_EVENT = "copy-stack:share";
 
 export type CopyFormat = "md" | "link" | "agent";
 
-/** Open the dialog with this stack. */
+/** Open the dialog with this stack and copy it in that format right away. */
 export function openCopyStack(data: CopyStackData, format: CopyFormat = "md"): void {
   document.dispatchEvent(new CustomEvent(OPEN_EVENT, { detail: { data, format } }));
 }

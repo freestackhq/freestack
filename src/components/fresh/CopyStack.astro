@@ -146,7 +146,8 @@ import Icon from "./Icon.astro";
     });
   });
 
-  copyBtn.addEventListener("click", async () => {
+  // Copies what the dialog shows. Blocked clipboard: say so and select it.
+  async function copyShown() {
     const ok = await writeClipboard(pre.textContent ?? "");
     if (ok) {
       status.textContent = "Copied";
@@ -155,7 +156,9 @@ import Icon from "./Icon.astro";
       status.textContent = "Could not copy. The text is selected: press Ctrl C (or ⌘ C) to copy it.";
       selectText();
     }
-  });
+  }
+
+  copyBtn.addEventListener("click", copyShown);
 
   dialog.querySelector("[data-close]")!.addEventListener("click", () => dialog.close());
   // Click on the backdrop closes it.
@@ -169,6 +172,9 @@ import Icon from "./Icon.astro";
     data = d.data;
     show(d.format);
     if (!dialog.open) dialog.showModal();
+    // Every opener is a "Copy ..." button: copy right away, still in the
+    // click, and keep the dialog open to switch format.
+    void copyShown();
   });
 
   document.addEventListener(SHARE_EVENT, async (e) => {

@@ -149,6 +149,14 @@ test.describe("Build a stack (Builder.dc.html)", () => {
     const dialog = page.getByRole("dialog", { name: "Copy your stack" });
     await expect(dialog.locator("pre")).toContainText("- Database: Neon");
     await expect(dialog.locator("pre")).toContainText("For: Indie builder");
+    await expect(dialog.getByRole("status")).toHaveText("Copied");
+    expect(await page.evaluate(() => navigator.clipboard.readText())).toContain("- Database: Neon");
+    // The dialog's own button copies without the page reopening the dialog.
+    await dialog.getByRole("tab", { name: "Link" }).click();
+    await dialog.getByRole("button", { name: "Copy link" }).click();
+    await expect(dialog.getByRole("tab", { name: "Link" })).toHaveAttribute("aria-selected", "true");
+    expect(await page.evaluate(() => navigator.clipboard.readText())).toMatch(/\/build\?as=indie&/);
+    await page.keyboard.press("Escape");
     expect(await page.locator(".btn-promo:visible").count()).toBeLessThanOrEqual(1);
   });
 });

@@ -136,6 +136,12 @@ test.describe("Copy this stack (CopyStack.dc.html)", () => {
     await expect(text).toContainText("## My free stack (from freestack)");
     await expect(text).toContainText("For: Indie builder");
 
+    // The button does what it says: the stack is already copied.
+    await expect(dialog.getByRole("status")).toHaveText("Copied");
+    expect(await page.evaluate(() => navigator.clipboard.readText())).toContain("For: Indie builder");
+
+    // Copying again from the dialog still works.
+    await page.evaluate(() => navigator.clipboard.writeText(""));
     await dialog.getByRole("button", { name: "Copy text" }).click();
     await expect(dialog.getByRole("status")).toHaveText("Copied");
     expect(await page.evaluate(() => navigator.clipboard.readText())).toContain("For: Indie builder");
@@ -172,7 +178,7 @@ test.describe("Copy this stack (CopyStack.dc.html)", () => {
     await page.goto("/");
     await panel(page).getByRole("button", { name: "Copy this stack" }).click();
     const dialog = page.getByRole("dialog", { name: "Copy your stack" });
-    await dialog.getByRole("button", { name: "Copy text" }).click();
+    // The copy on open fails the same way as the button.
     await expect(dialog.getByRole("status")).toContainText("Could not copy");
     expect(await page.evaluate(() => window.getSelection()?.toString() ?? "")).toContain("My free stack");
     await dialog.getByRole("button", { name: "Close" }).click();
