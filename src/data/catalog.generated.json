@@ -10996,13 +10996,13 @@
       "program": {
         "order": 4,
         "lasts_big": "?",
-        "lasts_sub": "lasts while you study",
+        "lasts_sub": "Not listed",
         "perks": [
           "Figma Professional plan",
           "Team files"
         ],
         "needs": "Higher-ed verification",
-        "lasts": "While enrolled",
+        "lasts": "Not listed",
         "claim_url": "https://www.figma.com/education/apply"
       },
       "scale": {
@@ -11338,13 +11338,13 @@
       "program": {
         "order": 5,
         "lasts_big": "?",
-        "lasts_sub": "lasts while you study",
+        "lasts_sub": "Not listed",
         "perks": [
           "MATLAB and Simulink",
           "100+ academic toolboxes"
         ],
         "needs": "Your school must have it",
-        "lasts": "While enrolled",
+        "lasts": "Not listed",
         "claim_url": "https://matlab.mathworks.com"
       },
       "scale": {
@@ -11719,12 +11719,12 @@
       "program": {
         "order": 7,
         "lasts_big": "?",
-        "lasts_sub": "lasts while verified",
+        "lasts_sub": "Not listed",
         "perks": [
           "Unity Pro editor"
         ],
         "needs": "Proof you are a student",
-        "lasts": "While verified",
+        "lasts": "Not listed",
         "claim_url": "https://unity.com/products/unity-student"
       },
       "scale": {

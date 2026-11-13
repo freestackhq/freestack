@@ -678,7 +678,10 @@ function programFor(tool, srcs, head, s) {
   const whileSeg = head.metric === null && /^while/i.test(head.metric_note ?? "") ? head.metric_note : null;
   const big =
     months !== null ? (months % 12 === 0 ? `${months / 12} ${months === 12 ? "yr" : "yrs"}` : `${months} mo`) : whileSeg ? "Enrolled" : "?";
-  const sub = (fallback) => (sp && guard(fallback.sample, srcs) ? fallback.sample : fallback.own);
+  // Sample duration words ("lasts while verified") only stand next to a duration the catalog states.
+  const known = months !== null || Boolean(whileSeg);
+  const sub = (fallback, timing = false) =>
+    sp && guard(fallback.sample, srcs) && (known || !timing) ? fallback.sample : fallback.own;
   const needs = tool.who.includes("startup_proof")
     ? "An application as a startup"
     : tool.who.includes("student_any_id")
@@ -694,10 +697,10 @@ function programFor(tool, srcs, head, s) {
     lasts_sub: sub({
       sample: sp?.lasts_sub ?? "",
       own: months !== null ? plain(usedSeg) : whileSeg ? "lasts while you study" : "Not listed",
-    }),
+    }, true),
     perks: perks.length ? perks : ownPerks.length ? ownPerks : [tool.tagline ?? tool.kind],
     needs: sub({ sample: sp?.needs ?? "", own: needs }),
-    lasts: sub({ sample: sp?.lasts ?? "", own: months !== null ? plain(usedSeg) : whileSeg ?? "Not listed" }),
+    lasts: sub({ sample: sp?.lasts ?? "", own: months !== null ? plain(usedSeg) : whileSeg ?? "Not listed" }, true),
     claim_url: tool.url,
   };
 }

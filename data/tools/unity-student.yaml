@@ -31,9 +31,9 @@ about: |-
 program:
   order: 7
   lasts_big: "?"
-  lasts_sub: lasts while verified
+  lasts_sub: Not listed
   perks:
     - Unity Pro editor
   needs: Proof you are a student
-  lasts: While verified
+  lasts: Not listed
   claim_url: https://unity.com/products/unity-student

@@ -33,10 +33,10 @@ tags:
 program:
   order: 4
   lasts_big: "?"
-  lasts_sub: lasts while you study
+  lasts_sub: Not listed
   perks:
     - Figma Professional plan
     - Team files
   needs: Higher-ed verification
-  lasts: While enrolled
+  lasts: Not listed
   claim_url: https://www.figma.com/education/apply

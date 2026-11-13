@@ -31,10 +31,10 @@ about: |-
 program:
   order: 5
   lasts_big: "?"
-  lasts_sub: lasts while you study
+  lasts_sub: Not listed
   perks:
     - MATLAB and Simulink
     - 100+ academic toolboxes
   needs: Your school must have it
-  lasts: While enrolled
+  lasts: Not listed
   claim_url: https://matlab.mathworks.com
