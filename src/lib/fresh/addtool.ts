@@ -112,8 +112,8 @@ function looksLikeUrl(s: string): boolean {
 
 export interface ToolDraft {
   tool: Tool;
+  /** The big number as the vendor writes it, for the reviewer. */
   figure: string;
-  credit: string;
 }
 
 export type DraftErrors = Partial<Record<"name" | "url" | "aisle" | "figure" | "pricing_url" | "who", string>>;
@@ -210,5 +210,5 @@ export function readDraft(
   };
   if (aisle.metric === "duration" && figure.kind === "text") tool.metric_note = figure.display;
 
-  return { draft: { tool, figure: figureRaw, credit: str("credit") }, errors };
+  return { draft: { tool, figure: figureRaw }, errors };
 }

@@ -101,7 +101,6 @@ function form(over: Record<string, string | string[]> = {}): FormData {
     use_if: ["", ""],
     skip_if: ["You need logins", ""],
     use_instead: ["Supabase", ""],
-    credit: "Ada",
   };
   const fd = new FormData();
   for (const [k, v] of Object.entries({ ...base, ...over })) for (const x of [v].flat()) fd.append(k, x);
@@ -129,7 +128,6 @@ describe("readDraft", () => {
       verified_at: null,
     });
     expect(r.draft!.figure).toBe("512 MB");
-    expect(r.draft!.credit).toBe("Ada");
   });
 
   it("accepts an aisle by name when the script did not run", () => {

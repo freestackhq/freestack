@@ -1,6 +1,8 @@
 import { expect, test, type Page } from "@playwright/test";
 import { DESKTOP, PHONE, expectNoSideScroll } from "./helpers";
 
+const REPO = process.env.PUBLIC_GITHUB_REPO || "freestackhq/freestack";
+
 async function pickAisle(page: Page, typed: string, name: string) {
   const box = page.getByRole("combobox", { name: "Aisle" });
   await box.fill(typed);
@@ -116,24 +118,48 @@ test.describe("add a tool (AddTool.dc.html)", () => {
     await expect(page.getByRole("textbox", { name: "Use instead, for reason 3" })).toBeVisible();
   });
 
-  test("sending shows the pending label and a placeholder PR link", async ({ page }) => {
+  test("sending shows the pending label and a prefilled Send on GitHub link", async ({ page }) => {
     await page.goto("/add");
     await fillValid(page);
-    await page.getByLabel("Your name for credit").fill("Ada");
     await page.getByRole("button", { name: "Send for review" }).click();
 
     await expect(page).toHaveURL(/\/add\/sent\/?$/);
-    const status = page.getByRole("status").filter({ hasText: "Sent. Thanks." });
-    await expect(status.getByRole("heading", { level: 1 })).toHaveText("Sent. Thanks.");
-    await expect(status).toContainText("Your label for Fresh Base is waiting for review.");
+    const status = page.getByRole("status").filter({ hasText: "One step left." });
+    await expect(status.getByRole("heading", { level: 1 })).toHaveText("One step left.");
+    await expect(status).toContainText("Your label for Fresh Base is ready. Send it on GitHub");
+    await expect(status).toContainText("You submit the issue on GitHub.");
     await expect(status).toContainText("A maintainer compares it with freshbase.example/pricing.");
     await expect(status).toContainText("It goes live in the Databases aisle.");
-    await expect(status).toContainText("You left a name, so it shows.");
+    await expect(status).toContainText('Marked "Not checked yet"');
     await expect(status.getByRole("link", { name: "Add another tool" })).toHaveAttribute("href", "/add");
     await expect(status.getByRole("link", { name: "Back to Databases" })).toHaveAttribute("href", "/databases");
-    const pr = status.getByRole("link", { name: /Follow it on GitHub/ });
-    await expect(pr).toHaveAttribute("data-placeholder", "true");
-    await expect(status).toContainText("Placeholder");
+
+    const send = status.getByRole("link", { name: /Send on GitHub/ });
+    await expect(send).toHaveAttribute("target", "_blank");
+    const url = new URL((await send.getAttribute("href"))!);
+    expect(`${url.origin}${url.pathname}`).toBe(`https://github.com/${REPO}/issues/new`);
+    const q = url.searchParams;
+    expect(q.get("template")).toBe("add-tool.yml");
+    expect(q.get("title")).toBe("Add: Fresh Base");
+    expect(Object.fromEntries(q)).toMatchObject({
+      name: "Fresh Base",
+      id: "fresh-base",
+      url: "https://freshbase.example",
+      kind: "Serverless SQLite",
+      aisle: "databases",
+      figure: "512 MB",
+      metric: "0.5",
+      pricing_url: "https://freshbase.example/pricing",
+      limits: "1 database\n100 writes a second",
+      who: "anyone",
+      sell: "unknown",
+      card: "unknown",
+      catches: "Deletes idle databases",
+    });
+
+    const follow = status.getByRole("link", { name: /Follow it on GitHub/ });
+    await expect(follow).toHaveAttribute("href", `https://github.com/${REPO}/pulls?q=is%3Apr%20is%3Aopen%20label%3Aadd-tool`);
+    await expect(page.locator("[data-placeholder]")).toHaveCount(0);
 
     const label = page.locator('article[data-tool="fresh-base"]');
     await expect(label).toContainText("Fresh Base");
@@ -145,11 +171,35 @@ test.describe("add a tool (AddTool.dc.html)", () => {
     await expect(label.getByRole("link")).toHaveCount(0);
   });
 
-  test("no name for credit stays anonymous", async ({ page }) => {
+  test("too long for a GitHub link: the body to copy and a plain new-issue link", async ({ page }) => {
     await page.goto("/add");
     await fillValid(page);
+    await page.getByLabel("Other limits").fill(Array.from({ length: 700 }, (_, i) => `Limit number ${i}`).join("\n"));
     await page.getByRole("button", { name: "Send for review" }).click();
-    await expect(page.getByRole("status").filter({ hasText: "Sent. Thanks." })).toContainText("It stays anonymous.");
+
+    const status = page.getByRole("status").filter({ hasText: "One step left." });
+    await expect(status).toContainText("Too long for a GitHub link");
+    await expect(status.getByRole("link", { name: /Send on GitHub/ })).toHaveCount(0);
+    const body = status.getByLabel("Issue description");
+    await expect(body).toHaveValue(/^<!-- freestack:add-tool -->\n\n### Tool name\n\nFresh Base\n/);
+    await expect(body).toHaveValue(/Limit number 699/);
+    await expect(status.getByRole("button", { name: "Copy" })).toBeVisible();
+    const issue = new URL((await status.getByRole("link", { name: /Open a new issue/ }).getAttribute("href"))!);
+    expect(issue.pathname).toBe(`/${REPO}/issues/new`);
+    expect(issue.searchParams.get("labels")).toBe("add-tool");
+    expect(issue.searchParams.get("title")).toBe("Add: Fresh Base");
+  });
+
+  test("works without JavaScript", async ({ browser }) => {
+    const context = await browser.newContext({ javaScriptEnabled: false, viewport: DESKTOP });
+    const page = await context.newPage();
+    await page.goto("/add?name=Fresh%20Base&url=https%3A%2F%2Ffreshbase.example&aisle=databases");
+    await page.getByLabel("Free storage").fill("512 MB");
+    await page.getByLabel("Pricing page").fill("https://freshbase.example/pricing");
+    await page.getByRole("button", { name: "Send for review" }).click();
+    await expect(page.getByRole("heading", { level: 1 })).toHaveText("One step left.");
+    await expect(page.getByRole("link", { name: /Send on GitHub/ })).toHaveAttribute("href", /template=add-tool\.yml/);
+    await context.close();
   });
 
   test("opening the sent page directly goes back to the form", async ({ page }) => {
