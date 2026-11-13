@@ -1,0 +1,10 @@
+---
+/**
+ * Test-only route: always throws, so Playwright can check the real 500 path
+ * (route error -> src/pages/500.astro) in the built preview. Not linked from
+ * the site. On demand, so the build does not fail on it.
+ */
+export const prerender = false;
+
+throw new Error("test-only failure");
+---
