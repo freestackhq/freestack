@@ -7,6 +7,7 @@ import "../styles/fresh.css";
 import SiteHeader from "../components/fresh/SiteHeader.astro";
 import SiteFooter from "../components/fresh/SiteFooter.astro";
 import SearchDialog from "../components/fresh/SearchDialog.astro";
+import Analytics from "../components/Analytics.astro";
 
 interface Props {
   title: string;
@@ -44,6 +45,7 @@ const {
     />
     <title>{title}</title>
     <slot name="head" />
+    <Analytics />
   </head>
   <body>
     <SiteHeader current={aisle} />

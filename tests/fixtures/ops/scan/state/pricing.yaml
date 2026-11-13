@@ -1,0 +1,13 @@
+# Pricing-page scan: { <tool id>: { hash, checked_at, changed_at } }. Written by the weekly scan.
+alpha:
+  hash: old-alpha-hash
+  checked_at: 2026-11-06
+  changed_at: null
+gamma:
+  hash: old-gamma-hash
+  checked_at: 2026-11-06
+  changed_at: 2026-10-01
+removed:
+  hash: old-removed-hash
+  checked_at: 2026-11-06
+  changed_at: null

@@ -1,0 +1,48 @@
+# Weekly pricing-page scan (trust loop: "Vendor changed").
+# Hashes each curated tool's pricing page into data/state/pricing.yaml and
+# opens or updates one PR, "Pricing pages changed", when a hash moves, a new
+# tool is seen or a tool drops out. checked_at-only churn opens nothing.
+# Needs "Allow GitHub Actions to create and approve pull requests" in repo settings.
+name: Pricing scan
+
+on:
+  schedule:
+    - cron: "17 6 * * 1" # Mondays 06:17 UTC
+  workflow_dispatch:
+
+permissions: {}
+
+concurrency:
+  group: pricing-scan
+  cancel-in-progress: false
+
+jobs:
+  scan:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10.33.0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - id: scan
+        run: pnpm ops:pricing-scan
+        env:
+          PRICING_SCAN_REPORT: ${{ runner.temp }}/pricing-report.md
+      - if: steps.scan.outputs.changes == 'true'
+        uses: peter-evans/create-pull-request@v7
+        with:
+          branch: ops/pricing-scan
+          delete-branch: true
+          add-paths: data/state/pricing.yaml
+          commit-message: "chore(data): record pricing-page scan"
+          title: Pricing pages changed
+          body-path: ${{ runner.temp }}/pricing-report.md

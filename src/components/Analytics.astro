@@ -1,0 +1,8 @@
+---
+/** Cloudflare Web Analytics beacon; renders nothing unless PUBLIC_CF_ANALYTICS_TOKEN is set. */
+import { analyticsBeacon } from "../lib/analytics";
+
+const beacon = analyticsBeacon(import.meta.env.PUBLIC_CF_ANALYTICS_TOKEN);
+---
+
+{beacon && <script is:inline defer src={beacon.src} data-cf-beacon={beacon.config}></script>}
