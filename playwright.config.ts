@@ -21,8 +21,8 @@ export default defineConfig({
     trace: "on-first-retry",
   },
   projects: [
-    { name: "chromium", use: { ...devices["Desktop Chrome"] }, testIgnore: /real-data\.spec\.ts/ },
-    { name: "real-data", use: { ...devices["Desktop Chrome"], baseURL: REAL_BASE }, testMatch: /real-data\.spec\.ts/ },
+    { name: "chromium", use: { ...devices["Desktop Chrome"] }, testIgnore: /real-data[^/]*\.spec\.ts/ },
+    { name: "real-data", use: { ...devices["Desktop Chrome"], baseURL: REAL_BASE }, testMatch: /real-data[^/]*\.spec\.ts/ },
   ],
   webServer: {
     // Fixture build on PORT, real build on REAL_PORT (scripts/e2e-server.mjs).
