@@ -10,6 +10,8 @@ data/
   rules.yaml           # compatibility rules for Build a stack, Check my stack, MCP
   tools/<id>.yaml      # one file per tool (curated)
   imported/<list>.yaml # entries pulled from awesome lists (unlabeled)
+  state/reviews.yaml   # open "Changed" reports: [{ tool, issue, opened }]; written by the label-check workflow
+  state/pricing.yaml   # pricing-page scan: { <tool id>: { hash, checked_at, changed_at } }; written by the weekly scan
 schema/
   tool.schema.json     # CI validates every tools/*.yaml against this
 ```
@@ -50,17 +52,22 @@ Tool fields (see `schema/tool.schema.json` and `data/tools/neon.yaml`):
 - Catch pages are generated from `catches` and `skip_if`, one per question people search for ("Can I sell on Vercel Hobby?").
 - Search uses **Pagefind**: a static index built at deploy, with no server and no cost.
 
-## Trust loop
+## Trust loop (decided: GitHub issues, no Worker, D1, Turnstile or GitHub App)
 
-- **Check a label:** a Worker endpoint stores checks in **D1**, protected by **Turnstile**. A "still true" check sets `verified_at`. A "changed" check opens a review item. One more confirmation, or a maintainer, applies it.
-- **Add a tool:** the form posts to a Worker, and a GitHub App opens a PR adding `data/tools/<id>.yaml` (so no GitHub account is needed). CI validates it.
-- **Vendor changed:** a weekly **Cron Trigger** fetches each `pricing_url`, hashes the relevant text, and flags the label when it changes.
-- **Staleness:** CI fails the build if any Suggested tool is past 90 days.
+The site holds no secrets and stores nothing. People send checks and new tools as **GitHub issues from the repo's issue forms**, so GitHub is the sign-in, the spam filter and the review queue.
+
+- **Check a label:** the page collects Still true / Changed per line, then "Send on GitHub" opens `.github/ISSUE_TEMPLATE/label-check.yml` prefilled through the URL (`?template=…&title=…&<field id>=…`). The `label-check` workflow parses the submitted form:
+  - every line "Still true": it sets `verified_at` (today) and `verified_by` (the GitHub login) in `data/tools/<id>.yaml`, commits, and closes the issue.
+  - any line "Changed": it adds `{ tool, issue, opened }` to `data/state/reviews.yaml` (the label shows "A change is waiting for review") and opens a PR that applies the new values and removes that entry, with `Closes #<issue>`. Closing the issue without merging also removes the entry.
+- **Add a tool:** same pattern with `add-tool.yml`. The `add-tool` workflow writes `data/tools/<id>.yaml` from the form and opens a PR. CI validates it against the schema.
+- **Vendor changed:** a weekly GitHub Actions cron fetches each `pricing_url`, hashes the visible text, and records `changed_at` in `data/state/pricing.yaml` when the hash moves. A recheck that lands after `changed_at` clears the state.
+- **Staleness:** CI fails if any Suggested tool's `verified_at` is past 90 days.
+- If the prefilled URL is too long for GitHub, the page shows the issue body to copy and a plain "New issue" link instead.
 
 ## Agents
 
 - **Skill:** `skills/pick-free-stack/SKILL.md`, installed with `npx skills add` or the plugin marketplace. It tells the agent to check freestack before reaching for paid tools and to state the limits and catches it found.
-- **MCP:** a remote server at `[domain]/mcp` on the same Worker, read-only and public. Tools: `search_tools`, `compare`, `suggest_stack` (rules engine), `claim_order`. It returns structured fields only for imported entries (no free text), to avoid prompt injection.
+- **MCP:** a remote server at `<SITE_URL>/mcp` on the same Worker, read-only and public. Tools: `search_tools`, `compare`, `suggest_stack` (rules engine), `claim_order`. It returns structured fields only for imported entries (no free text), to avoid prompt injection.
 - `llms.txt`, `llms-full.txt` and `/api/*` stay as they are.
 
 ## Migration and compatibility
@@ -72,8 +79,15 @@ Tool fields (see `schema/tool.schema.json` and `data/tools/neon.yaml`):
 - **Delete:** the old warm-dark design system, `Directory.astro`, and the archived `freestackhq/saas`, `apis` and `llm-ai` fetch config.
 - **Analytics:** Cloudflare Web Analytics (free, no cookies), added in the first deploy.
 
-## Open decisions
+## Configuration
 
-1. The domain. The MCP URL and share links depend on it.
-2. Check a label: anonymous with Turnstile, or GitHub sign-in?
-3. Which awesome lists to import first, and their licenses.
+- `SITE_URL`: the public origin. Astro's `site`, share links, `llms.txt`, the API docs, the MCP URL and the Workers custom domain (`pnpm deploy:cf`) all come from it. Read it through `src/lib/site.ts`.
+- `PUBLIC_GITHUB_REPO`: `owner/name` for issue forms and source links. Default `freestackhq/freestack`.
+- `PUBLIC_CF_ANALYTICS_TOKEN`: Cloudflare Web Analytics beacon. Empty ships no analytics.
+
+## Decisions
+
+1. Domain: an env var (`SITE_URL`), not code.
+2. Check a label and Add a tool: GitHub issue forms (sign-in by GitHub), processed by workflows.
+3. Awesome lists: every candidate list is checked; only lists whose license allows reuse are imported, with the license recorded in `data/imported/<list>.yaml`.
+4. Aisle metrics: each aisle measures what its tools list. Hosting is split into Sites and functions (`bandwidth_gb_month`) and Always-on servers (`ram_gb`); Email uses `emails_per_day`; Inference uses `requests_per_day`.
