@@ -96,8 +96,15 @@ const catchLine = tool.catches[0];
             </ul>
             <p class="fine-line">{tool.limits.join(", ")}</p>
           </>
-        ) : (
+        ) : imported ? (
           <div class="fine-spacer" />
+        ) : (
+          <>
+            <ul class="fine">
+              <li class="none">No other ceilings listed</li>
+            </ul>
+            <p class="fine-line none">No other ceilings listed</p>
+          </>
         )}
         {!imported && <Facts tool={tool} class="facts-row" />}
         {catchLine && !imported && (
@@ -211,6 +218,22 @@ const catchLine = tool.catches[0];
   }
   .big.long {
     font-size: 60px;
+  }
+  /* Narrow grid cells (4 across, or 3 on a small laptop): shrink the number
+     instead of wrapping "0.5 GB" onto two lines. */
+  .label.full {
+    container: label / inline-size;
+  }
+  @container label (max-width: 360px) {
+    .big {
+      font-size: 60px;
+    }
+    .big.long {
+      font-size: 46px;
+    }
+  }
+  .none {
+    color: var(--muted);
   }
   .fine-spacer {
     flex: 1;

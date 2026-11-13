@@ -8,20 +8,17 @@ interface Props {
   bar?: number;
 }
 const { scale, bar = 12 } = Astro.props;
-const filled = scale.kind === "step" ? scale.step : scale.kind === "unlimited" ? 5 : 0;
-const aria =
-  scale.kind === "step"
-    ? `${scale.word}: ${scale.step} of 5 on this aisle's scale`
-    : scale.kind === "unlimited"
-      ? "No limit. Your own disk"
-      : "Not listed";
+const filled = scale.kind === "step" ? scale.step : 0;
+const aria = scale.kind === "step" ? `${scale.word}: ${scale.step} of 5 on this aisle's scale` : null;
+// Odd cases (Aisle.dc.html): "Not listed" or "Your own disk" as a small word, no steps.
+const odd = scale.kind !== "step";
 ---
 
 <div class="scale" data-scale={scale.kind === "step" ? scale.step : scale.kind}>
-  <p aria-hidden="true" class:list={["word", { muted: scale.kind !== "step" }]}>{scale.word}</p>
+  <p aria-hidden="true" class:list={["word", { odd, muted: scale.kind === "unknown" }]}>{scale.word}</p>
   {
-    scale.kind === "unknown" ? (
-      <span class="sr-only">Not listed</span>
+    odd ? (
+      <span class="sr-only">{scale.kind === "unknown" ? "Not listed" : `No limit. ${scale.word}`}</span>
     ) : (
       <span role="img" aria-label={aria} class="steps">
         {[1, 2, 3, 4, 5].map((i) => (
@@ -43,9 +40,14 @@ const aria =
     line-height: 1.1;
     white-space: nowrap;
   }
+  .word.odd {
+    margin: 0;
+    font-size: 13px;
+    font-weight: 600;
+    white-space: normal;
+  }
   .word.muted {
     color: var(--muted);
-    font-weight: 700;
   }
   .steps {
     display: flex;
