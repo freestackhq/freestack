@@ -2,10 +2,10 @@
 
 Directory of free developer tools, student unlocks, free public APIs, and AI models — with hard limits, eligibility, and commercial permissions. Numbers first.
 
-* **Live**: [freestack.kuyacarlo.dev](https://freestack.kuyacarlo.dev)
-* **Coverage**: 222 entries across 28 categories in 3 catalogs
-* **GEO & AI**: [`/llms.txt`](https://freestack.kuyacarlo.dev/llms.txt) · [`/llms-full.txt`](https://freestack.kuyacarlo.dev/llms-full.txt)
-* **Stack**: Astro, Tailwind CSS v4, Cloudflare Workers runtime
+* **Domain**: set by `SITE_URL` (see [`.env.example`](.env.example)); nothing in the code names it
+* **Coverage**: 205 labeled tools in 31 aisles, plus 120 unlabeled entries from 7 awesome lists
+* **GEO & AI**: `/llms.txt`, `/llms-full.txt`, a read-only MCP server at `/mcp`, and the `pick-free-stack` skill
+* **Stack**: Astro 7, Cloudflare Workers runtime
 
 ---
 
@@ -16,8 +16,10 @@ pnpm install
 pnpm dev              # local workerd runtime
 pnpm test             # run unit test suite (Vitest)
 pnpm build            # build static assets + server bundle
-pnpm deploy:cf        # build and deploy to Cloudflare Workers
+SITE_URL=https://your.domain pnpm deploy:cf   # build and deploy on that custom domain
 ```
+
+Before the first deploy: set `SITE_URL`, run `pnpm plugin:build` so the Claude Code plugin points at it, and in the GitHub repo create the `label-check` and `add-tool` labels and allow GitHub Actions to create pull requests (the trust loop needs both; see `ARCHITECTURE.md`).
 
 ---
 
@@ -34,7 +36,7 @@ Data lives in [`data/`](data/): one YAML file per tool in [`data/tools/`](data/t
 
 ## API & AI Endpoints
 
-Base URL: `https://freestack.kuyacarlo.dev` (CORS open).
+Base URL: your `SITE_URL` (CORS open).
 
 | Endpoint | Method | Purpose |
 |---|---|---|
@@ -45,7 +47,8 @@ Base URL: `https://freestack.kuyacarlo.dev` (CORS open).
 | `/api/entries` | `GET, POST` | Filter and search tools (`aisle`, `group`, `q`, fields, `limit`; old `catalog`/`category` ids still work) |
 | `/api/tools`, `/api/tools/<id>`, `/api/claim` | `GET` | Flat tool list, one tool, and a claim plan (used by the CLI) |
 | `/api/openapi.json` | `GET` | OpenAPI 3.1.0 specification |
-| [`/docs`](https://freestack.kuyacarlo.dev/docs) | `GET` | Interactive Scalar API documentation |
+| `/mcp` | `POST` | Remote MCP server (read-only): `search_tools`, `compare`, `suggest_stack`, `claim_order` |
+| `/docs` | `GET` | Interactive Scalar API documentation |
 
 ---
 
@@ -61,7 +64,7 @@ pnpm catalog:generate   # data/ -> src/data/catalog.generated.json (fails on bad
 
 ## CLI
 
-Package: [`packages/cli`](packages/cli) → `@kuyacarlo/freestack`
+Package: [`packages/cli`](packages/cli) → `@kuyacarlo/freestack`. Point it at your deploy with `FREESTACK_API=<SITE_URL>`.
 
 ```bash
 pnpm dlx @kuyacarlo/freestack claim --student --commercial

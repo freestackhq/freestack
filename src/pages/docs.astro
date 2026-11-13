@@ -1,41 +1,54 @@
 ---
-import Layout from "../layouts/Layout.astro";
+/**
+ * API docs: the Scalar reference for /api/openapi.json, inside the fresh shell.
+ */
+import Shell from "../layouts/Shell.astro";
 ---
 
-<Layout
-  title="API docs · freestack."
-  description="Interactive OpenAPI reference for freestack claim and tools endpoints."
->
-  <section class="border-b border-b1 bg-bg">
-    <div class="ds-wrap flex flex-wrap items-end justify-between gap-4 py-8">
-      <div>
-        <p class="font-mono text-[0.68rem] tracking-wide text-ink-3 uppercase">API</p>
-        <h1 class="mt-1 text-2xl font-bold tracking-tight text-ink">freestack API</h1>
-        <p class="mt-2 max-w-xl text-[0.92rem] text-ink-2">
-          Public JSON. Spec:{" "}
-          <a class="text-sand underline-offset-2 hover:underline" href="/api/openapi.json"
-            >/api/openapi.json</a
-          >
-        </p>
-      </div>
-      <a href="/guides/claim-order" class="ds-btn ds-btn-outline">Claim order →</a>
-    </div>
-  </section>
+<Shell title="API docs · freestack" description="Interactive reference for the freestack JSON API.">
+  <div class="wrap head">
+    <p class="crumbs muted">API</p>
+    <h1 class="title-md">freestack API</h1>
+    <p class="lede">
+      Public JSON, CORS open. Spec: <a href="/api/openapi.json">/api/openapi.json</a>. Coding agents can also use the{" "}
+      <a href="/agents">MCP server</a>.
+    </p>
+  </div>
 
-  <div id="scalar-root" class="min-h-[75vh] border-t border-b1"></div>
+  <div id="scalar-root" class="scalar"></div>
 
   <script
     is:inline
     src="https://cdn.jsdelivr.net/npm/@scalar/api-reference@1.28.11/dist/browser/standalone.js"
-  ></script>
-  <script is:inline>
+    slot="end"></script>
+  <script is:inline slot="end">
     window.Scalar.createApiReference("#scalar-root", {
       url: "/api/openapi.json",
-      theme: "deepSpace",
-      darkMode: true,
+      theme: "default",
+      darkMode: false,
       hideDarkModeToggle: true,
       layout: "modern",
       defaultHttpClient: { targetKey: "shell", clientKey: "curl" },
     });
   </script>
-</Layout>
+</Shell>
+
+<style>
+  .head {
+    padding-block: 40px 24px;
+  }
+  .lede {
+    margin: 12px 0 0;
+    max-width: 60ch;
+    font-size: 18px;
+  }
+  .lede a {
+    color: var(--ink);
+    font-weight: 700;
+  }
+  .scalar {
+    min-height: 75vh;
+    background: var(--label);
+    border-top: 1px solid var(--rule);
+  }
+</style>
