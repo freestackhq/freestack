@@ -43,6 +43,7 @@ const total = totalTools();
         aria-haspopup="true"
         aria-expanded="false"
         aria-controls="aisles-menu"
+        aria-current={current ? "page" : undefined}
         data-aisles-open
       >
         Aisles<Icon name="chevron-down" size={14} />
@@ -185,7 +186,8 @@ const total = totalTools();
     font: 600 15px var(--font);
     cursor: pointer;
   }
-  .aisles-btn[aria-expanded="true"] {
+  .aisles-btn[aria-expanded="true"],
+  .aisles-btn[aria-current="page"] {
     box-shadow: inset 0 -4px 0 var(--promo);
   }
   .add {
