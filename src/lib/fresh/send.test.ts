@@ -62,11 +62,30 @@ describe("labelCheckLink", () => {
     });
   });
 
-  it("the limit is on the whole link", () => {
+  it("carries the answers as the body too, for when the form is missing on GitHub", () => {
+    const link = labelCheckLink(REPO, { tool: neon, lines, answers: [{ id: "line-1", verdict: "holds" }] });
+    const q = new URL(link.url).searchParams;
+    expect(q.get("labels")).toBe("label-check");
+    const body = q.get("body") ?? "";
+    expect(body.startsWith(LABEL_CHECK.marker)).toBe(true);
+    // The workflow reads the blank-issue body exactly like a submitted form.
+    expect(parseIssueForm(body, LABEL_CHECK)).toEqual({
+      tool: "neon",
+      answers: "- metric | Free storage: 0.5 GB | Still true",
+      source: "https://neon.tech/pricing",
+      note: "",
+    });
+  });
+
+  it("the limit is on the whole link: drops the body first, then falls back to copy", () => {
     const args = { tool: neon, lines, answers: [{ id: "line-1", verdict: "holds" as const }] };
-    const len = labelCheckLink(REPO, args).url.length;
-    expect(labelCheckLink(REPO, args, len).kind).toBe("url");
-    expect(labelCheckLink(REPO, args, len - 1).kind).toBe("copy");
+    const full = labelCheckLink(REPO, args).url;
+    expect(labelCheckLink(REPO, args, full.length).url).toBe(full);
+    const formOnly = labelCheckLink(REPO, args, full.length - 1);
+    expect(formOnly.kind).toBe("url");
+    expect(new URL(formOnly.url).searchParams.has("body")).toBe(false);
+    expect(new URL(formOnly.url).searchParams.get("answers")).toBe("- metric | Free storage: 0.5 GB | Still true");
+    expect(labelCheckLink(REPO, args, formOnly.url.length - 1).kind).toBe("copy");
   });
 });
 

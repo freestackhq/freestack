@@ -98,6 +98,11 @@ export function issueBody(form, values) {
 /**
  * The prefilled issue-form link, or, when it would be too long for GitHub,
  * the body to copy plus a plain "new issue" link.
+ *
+ * The link also carries the answers as `body` (with the marker the workflows
+ * look for). GitHub ignores it when the form exists, but when the form is
+ * missing from the default branch it opens the blank issue, and the answers
+ * land there instead of being lost. Dropped first when the link is too long.
  * @param {string} repo owner/name
  * @param {IssueForm} form
  * @param {string} title
@@ -106,15 +111,20 @@ export function issueBody(form, values) {
  */
 export function issueLink(repo, form, title, values, max = MAX_URL) {
   const base = `https://github.com/${repo}/issues/new`;
+  const body = `${form.marker}\n\n${issueBody(form, values)}\n`;
   const q = new URLSearchParams({ template: form.template, title });
   for (const f of form.fields) {
     const v = String(values[f.id] ?? "").trim();
     if (v) q.set(f.id, v);
   }
-  const url = `${base}?${q}`;
-  if (url.length <= max) return { kind: "url", url };
+  const withBody = new URLSearchParams(q);
+  withBody.set("labels", form.label);
+  withBody.set("body", body);
+  for (const url of [`${base}?${withBody}`, `${base}?${q}`]) {
+    if (url.length <= max) return { kind: "url", url };
+  }
   const plain = `${base}?${new URLSearchParams({ title, labels: form.label })}`;
-  return { kind: "copy", url: plain, body: `${form.marker}\n\n${issueBody(form, values)}\n` };
+  return { kind: "copy", url: plain, body };
 }
 
 // ---------- Reading an issue (workflow side) ----------
