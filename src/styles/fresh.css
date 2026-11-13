@@ -86,6 +86,51 @@ header :focus-visible {
   outline-color: var(--promo);
 }
 
+/*
+ * Scrollbars: a muted thumb on whatever surface it sits on (shelf, white
+ * label/dialog, or navy). Declared on every element so each area's colors
+ * apply to its own scroll box.
+ */
+:root {
+  --scroll-thumb: var(--muted);
+  --scroll-track: var(--shelf);
+}
+
+dialog,
+.panel,
+.field,
+textarea {
+  --scroll-track: var(--label);
+}
+
+.on-ink,
+header {
+  --scroll-thumb: var(--on-ink-muted);
+  --scroll-track: var(--ink);
+}
+
+* {
+  scrollbar-color: var(--scroll-thumb) var(--scroll-track);
+}
+
+/* Safari still styles scrollbars only through the -webkit- pseudo-elements. */
+@supports not (scrollbar-color: auto) {
+  ::-webkit-scrollbar {
+    width: 12px;
+    height: 12px;
+  }
+  ::-webkit-scrollbar-track {
+    background: var(--scroll-track);
+  }
+  ::-webkit-scrollbar-thumb {
+    background: var(--scroll-thumb);
+    border: 3px solid var(--scroll-track);
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--ink);
+  }
+}
+
 button,
 input,
 select,
