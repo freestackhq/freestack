@@ -10,7 +10,7 @@
  *
  * The Markdown snapshot and src/data/sample.ts were deleted after this ran.
  * To re-run, restore them from git first:
- *   git checkout <migration commit> -- catalogs src/data/sample.ts
+ *   git checkout a6928f4 -- catalogs src/data/sample.ts
  */
 import { existsSync, mkdirSync, readFileSync, readdirSync, rmSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
