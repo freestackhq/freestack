@@ -20,6 +20,8 @@
     "import:lists": "node scripts/import-lists.mjs",
     "test": "vitest run",
     "test:e2e": "playwright test",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
     "review:shots": "node scripts/review/screenshots.mjs",
     "dns:freestack": "bash scripts/dns-freestack.sh",
     "cli": "node packages/cli/bin/freestack.js",

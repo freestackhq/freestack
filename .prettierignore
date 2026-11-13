@@ -1,0 +1,36 @@
+# Build output, caches and lockfiles
+dist/
+dist-*/
+.astro/
+.wrangler/
+node_modules/
+.catalogs/
+pnpm-lock.yaml
+**/pnpm-lock.yaml
+
+# Generated: pnpm catalog:generate, pnpm plugin:build, fixture snapshots
+src/data/*.generated.json
+**/.generated/
+.claude-plugin/marketplace.json
+plugins/
+
+# Data YAML is written by workflows and scripts (add-tool, label-check, import:lists,
+# the weekly scans) in their own layout, with hand-aligned comments. Schema tests guard it.
+data/
+
+# Workflows are linted by actionlint (pnpm lint:workflows)
+.github/workflows/
+
+# Prose: docs and skills keep their hand layout (skills/ also feeds plugins/)
+*.md
+
+# Separate project with its own toolchain
+talks/
+
+# Reference boards (never reformat), review output, test artifacts and fixtures
+design/fresh/
+review/
+test-results/
+playwright-report/
+blob-report/
+tests/**/fixtures/
