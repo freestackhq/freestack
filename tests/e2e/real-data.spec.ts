@@ -34,3 +34,19 @@ test("covers every aisle and tool", () => {
   expect(snap.aisles.length).toBeGreaterThanOrEqual(31);
   expect(pages.length).toBe(snap.aisles.length + snap.tools.length);
 });
+
+test("Claim Once aisles offer only 'I have' choices with programs under them", async ({ page }) => {
+  for (const a of snap.aisles.filter((x: { group: string }) => x.group === "Claim Once")) {
+    await page.goto(`/${a.id}/`);
+    const chips = page.locator("[data-have]");
+    const n = await chips.count();
+    expect(n === 0 || n > 1, `${a.id}: a filter with one choice is no choice`).toBe(true);
+    for (let i = 0; i < n; i++) {
+      await chips.nth(i).click();
+      expect(
+        await page.locator("[data-program]:visible").count(),
+        `${a.id} ${await chips.nth(i).innerText()}`,
+      ).toBeGreaterThan(0);
+    }
+  }
+});

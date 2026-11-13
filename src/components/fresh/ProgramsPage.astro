@@ -20,8 +20,10 @@ interface Props {
 const { aisle } = Astro.props;
 const AISLE = aisle.id;
 const programs = programsInAisle(AISLE);
-// The "I have" filter only matters when some program needs proof you are a student.
-const forStudents = programs.some((p) => p.who.some((w) => w.startsWith("student")));
+// The "I have" filter offers only the answers some program here accepts, and
+// only shows when that leaves a real choice (two or more).
+const haveOptions = HAVE_OPTIONS.filter((o) => programs.some((p) => canClaim(p.who, o.id)));
+const forStudents = haveOptions.length > 1 && programs.some((p) => p.who.some((w) => w.startsWith("student")));
 const intro =
   aisle.intro ??
   "Bundles you claim once with a school email. They are numbered in the order worth claiming. The big number is how long it lasts.";
@@ -48,7 +50,7 @@ const countText = (n: number) => `${n} ${n === 1 ? "program" : "programs"} you c
         <span id="have-label" class="have">
           I have
         </span>
-        {HAVE_OPTIONS.map((o) => (
+        {haveOptions.map((o) => (
           <button type="button" class="chip" data-have={o.id} aria-pressed={o.id === DEFAULT_HAVE ? "true" : "false"}>
             {o.label}
           </button>
@@ -173,8 +175,12 @@ const countText = (n: number) => `${n} ${n === 1 ? "program" : "programs"} you c
     }),
   );
 
-  // Aisles with no student-only program have no filter: show every card.
-  if (document.querySelector("[data-have-filter]")) apply(parseHave(new URLSearchParams(location.search).get("have")));
+  // Aisles without a real choice have no filter: show every card. A ?have=
+  // this aisle doesn't offer (an old link) falls back to the default.
+  if (document.querySelector("[data-have-filter]")) {
+    const asked = parseHave(new URLSearchParams(location.search).get("have"));
+    apply(buttons.some((b) => b.dataset.have === asked) ? asked : parseHave(null));
+  }
 </script>
 
 <style>

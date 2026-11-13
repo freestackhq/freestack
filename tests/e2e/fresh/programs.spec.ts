@@ -44,7 +44,8 @@ test.describe("Claim Once aisle (Programs.dc.html)", () => {
   test("I have defaults to a school email", async ({ page }) => {
     await page.goto(URL);
     await expect(page.getByRole("button", { name: "A school email" })).toHaveAttribute("aria-pressed", "true");
-    await expect(page.getByRole("button", { name: "Neither" })).toHaveAttribute("aria-pressed", "false");
+    // No program here is open to everyone, so "Neither" is not offered.
+    await expect(page.getByRole("button", { name: "Neither" })).toHaveCount(0);
   });
 
   test("A student ID only hides school-email programs and goes in the URL", async ({ page }) => {
@@ -67,24 +68,28 @@ test.describe("Claim Once aisle (Programs.dc.html)", () => {
     await expect(page.locator('[data-program="github-student-pack"]')).toBeVisible();
   });
 
-  test("Neither with no matching programs shows an empty state, not a blank grid", async ({ page }) => {
-    await page.goto(`${URL}?have=none`);
-    await expect(page.getByRole("button", { name: "Neither" })).toHaveAttribute("aria-pressed", "true");
-    const n = await visible(page).count();
-    const empty = page.locator("[data-empty]");
-    if (n === 0) {
-      await expect(empty).toBeVisible();
-      await expect(empty.getByRole("button", { name: /school email/i })).toBeVisible();
-    } else {
-      await expect(empty).toBeHidden();
+  test("every choice offered has programs under it", async ({ page }) => {
+    await page.goto(URL);
+    const chips = page.locator("[data-have]");
+    const n = await chips.count();
+    if (n === 0) return; // no real choice: no filter, every program shows
+    expect(n).toBeGreaterThan(1);
+    for (let i = 0; i < n; i++) {
+      await chips.nth(i).click();
+      expect(await visible(page).count(), await chips.nth(i).innerText()).toBeGreaterThan(0);
+      await expect(page.locator("[data-empty]")).toBeHidden();
     }
   });
 
-  test("empty state button brings programs back", async ({ page }) => {
-    await page.goto(`${URL}?have=none`);
-    test.skip((await visible(page).count()) > 0, "sample data has a program open to anyone");
-    await page.locator("[data-empty]").getByRole("button").click();
-    await expect(page).toHaveURL(/\?have=school$/);
+  test("a link to a choice this aisle doesn't offer falls back to the default", async ({ page }) => {
+    await page.goto(URL);
+    const offered = await page
+      .locator("[data-have]")
+      .evaluateAll((els) => els.map((e) => (e as HTMLElement).dataset.have));
+    const missing = ["school", "id", "none"].find((h) => !offered.includes(h));
+    test.skip(!missing, "this aisle offers every choice");
+    await page.goto(`${URL}?have=${missing}`);
+    await expect(page.getByRole("button", { name: "A school email" })).toHaveAttribute("aria-pressed", "true");
     expect(await visible(page).count()).toBeGreaterThan(0);
   });
 
@@ -107,9 +112,10 @@ test.describe("Claim Once aisle (Programs.dc.html)", () => {
 
   test("filter buttons are 44px targets", async ({ page }) => {
     await page.goto(URL);
-    for (const name of ["A school email", "A student ID only", "Neither"]) {
-      const box = await page.getByRole("button", { name }).boundingBox();
-      expect(box!.height).toBeGreaterThanOrEqual(44);
+    const chips = page.locator("[data-have]");
+    expect(await chips.count()).toBeGreaterThan(1);
+    for (const box of await chips.evaluateAll((els) => els.map((e) => e.getBoundingClientRect().height))) {
+      expect(box).toBeGreaterThanOrEqual(44);
     }
   });
 });
