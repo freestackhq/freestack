@@ -112,6 +112,7 @@ const total = totalTools();
         <a href="/agents">For coding agents</a>
         <span class="esc muted"><kbd>Esc</kbd> close</span>
       </div>
+      <a href="/add" class="btn btn-on-ink btn-block phone-add">Add a tool</a>
     </nav>
   </div>
 </header>
@@ -236,6 +237,9 @@ const total = totalTools();
     background: var(--label);
     color: var(--ink);
     box-shadow: 0 30px 60px -20px rgba(0, 0, 0, 0.45);
+    /* Real data has 14+ Build aisles: scroll inside on short laptop screens. */
+    max-height: calc(100vh - var(--header-h, 68px));
+    overflow-y: auto;
   }
   .menu-inner {
     padding-block: 28px 24px;
@@ -281,25 +285,41 @@ const total = totalTools();
     color: var(--muted);
     font-size: 15px;
   }
+  /* AislesMenu.dc.html: ink rule, bold question, the three pages as outline buttons. */
   .menu-foot {
     margin-top: 24px;
-    padding-top: 16px;
-    border-top: 1px solid var(--shelf);
+    padding-top: 20px;
+    border-top: 2px solid var(--ink);
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-    gap: 8px 20px;
+    gap: 8px 10px;
     font-size: 15px;
+  }
+  .menu-foot .know {
+    margin-right: 8px;
+    color: var(--ink);
+    font-weight: 700;
   }
   .menu-foot a {
     display: inline-flex;
     align-items: center;
     min-height: var(--target);
+    padding: 0 16px;
+    border: 2px solid var(--ink);
     font-weight: 700;
+    text-decoration: none;
+  }
+  .menu-foot a:hover {
+    text-decoration: underline;
   }
   .esc {
     margin-left: auto;
     font-size: 14px;
+  }
+  /* The phone header has no "Add a tool", so the full-screen menu carries it. */
+  .phone-add {
+    display: none;
   }
 
   /* ----- Phone ----- */
@@ -327,6 +347,7 @@ const total = totalTools();
     .menu {
       position: fixed;
       inset: 0;
+      max-height: none;
       overflow-y: auto;
       background: var(--ink);
       color: var(--label);
@@ -412,12 +433,19 @@ const total = totalTools();
       gap: 2px;
     }
     .menu-foot a {
+      padding: 0;
+      border: 0;
       color: var(--label);
       font-size: 16px;
+      text-decoration: underline;
     }
     .know,
     .esc {
       display: none;
+    }
+    .phone-add {
+      display: flex;
+      margin-top: 32px;
     }
     .menu :focus-visible {
       outline-color: var(--promo);
