@@ -351,11 +351,13 @@ const addToCompare = compareHref([t.id]);
   }
 
   /* The tool page shows the label's number bigger than the grid does. */
+  /* Sized to keep "0.5 GB" on one line beside the scale. */
   .label-wrap :global(.label .headline .big) {
-    font-size: 160px;
+    font-size: clamp(80px, 8.5vw, 124px);
+    white-space: nowrap;
   }
   .label-wrap :global(.label .headline .big.long) {
-    font-size: 112px;
+    font-size: clamp(60px, 6vw, 88px);
   }
   .add-compare {
     display: flex;
