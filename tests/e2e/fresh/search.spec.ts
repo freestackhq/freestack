@@ -96,7 +96,7 @@ test.describe("search overlay (Search.dc.html)", () => {
     await expect(options.last()).toHaveAttribute("aria-selected", "true");
 
     await input(page).press("ArrowDown");
-    const href = await options.first().locator("a").getAttribute("href");
+    const href = await options.first().getAttribute("href");
     await input(page).press("Enter");
     await expect(page).toHaveURL(new RegExp(`${href!.replace(/\//g, "\\/")}/?$`));
   });
