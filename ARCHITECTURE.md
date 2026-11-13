@@ -12,6 +12,7 @@ data/
   imported/<list>.yaml # entries pulled from awesome lists (unlabeled)
   state/reviews.yaml   # open "Changed" reports: [{ tool, issue, opened }]; written by the label-check workflow
   state/pricing.yaml   # pricing-page scan: { <tool id>: { hash, checked_at, changed_at } }; written by the weekly scan
+  state/links.yaml     # link check: { <id>: { url_status, pricing_status, final_url, checked_at, failing_since, dead_since } }; written by the weekly link check
 schema/
   tool.schema.json     # CI validates every tools/*.yaml against this
 ```
@@ -61,6 +62,7 @@ The site holds no secrets and stores nothing. People send checks and new tools a
   - any line "Changed": it adds `{ tool, issue, opened }` to `data/state/reviews.yaml` (the label shows "A change is waiting for review") and opens a PR that applies the new values and removes that entry, with `Closes #<issue>`. Closing the issue without merging also removes the entry.
 - **Add a tool:** same pattern with `add-tool.yml`. The `add-tool` workflow writes `data/tools/<id>.yaml` from the form and opens a PR. CI validates it against the schema.
 - **Vendor changed:** a weekly GitHub Actions cron fetches each `pricing_url`, hashes the visible text, and records `changed_at` in `data/state/pricing.yaml` when the hash moves. A recheck that lands after `changed_at` clears the state.
+- **Dead links:** a weekly cron (`pnpm ops:link-check`, Thursdays) checks every `url`, `pricing_url` and imported url. 404, 410 and DNS failures are dead; 401, 403, 429 and Cloudflare challenges are unknown, never dead. `dead_since` needs a failure on two runs on different days. The generator drops imported entries with `dead_since` and flags labeled tools with `link_dead` (a person decides what to do; see `docs/link-report.md`).
 - **Staleness:** CI fails if any Suggested tool's `verified_at` is past 90 days.
 - If the prefilled URL is too long for GitHub, the page shows the issue body to copy and a plain "New issue" link instead.
 

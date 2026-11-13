@@ -50,7 +50,8 @@ describe("every tool fits its aisle", () => {
 
 describe("data/imported/*.yaml", () => {
   const dir = join(process.cwd(), "data/imported");
-  const files = readdirSync(dir).filter((f) => f.endsWith(".yaml"));
+  // denylist.yaml is the importer's skip list, not a list of entries.
+  const files = readdirSync(dir).filter((f) => f.endsWith(".yaml") && f !== "denylist.yaml");
   for (const f of files) {
     it(`${f}: every entry is in a known aisle`, () => {
       const list = data(`imported/${f}`);

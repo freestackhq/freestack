@@ -33,6 +33,8 @@ Decision #3 in `ARCHITECTURE.md`: check every candidate list, and import only th
 - Only entries in a section mapped to an aisle that exists in `data/aisles.yaml`. The mapping is the rules table in `scripts/import-lists.mjs`. A rule can also require (`match`) or reject (`skip`) words in the entry's description, so mixed sections (Email has temp-mail and validators) only yield real fits.
 - Only structured fields: `id`, `name`, `url`, `aisle`. Descriptions are read to classify, then dropped. Names are cut to letters, digits and light punctuation (max 60 chars), and URLs must be `http(s)`. This keeps free text away from the MCP server.
 - Deduped against the curated catalog (`catalogs/**/*.md` and `data/tools/*.yaml`) and against lists earlier in `LISTS`. Two entries are the same when the normalized names match ("Supabase Postgres" = "Supabase") or the domains match. Big vendors (Google, AWS, Cloudflare and others) are matched per product, not per domain.
+- Links to a pricing page or an API-key console are pointed at the product: a console goes to the vendor's root domain, a pricing page to its site root (for shared vendors like `aws.amazon.com/cognito/pricing/`, the page above it).
+- Dead vendors are kept out by `data/imported/denylist.yaml` (`id`, `url`, `reason`, `date`), matched on the id slug or the exact listed URL. Add a line when the weekly link check and a look at the page show the vendor is gone.
 - Ids are `a-z0-9-` slugs, unique across all imported files and never the same as a catalog tool id.
 - New aisles (search, observability, open data...) land in another lane. Add rules for them to `LISTS` once they exist in `data/aisles.yaml`. Rules for missing aisles are ignored.
 

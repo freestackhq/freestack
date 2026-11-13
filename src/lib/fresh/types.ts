@@ -79,6 +79,8 @@ export interface Tool {
   review_pending?: boolean;
   /** Set by the weekly pricing-page scan (ISO date). UI-only. */
   vendor_changed_at?: string | null;
+  /** Set by the weekly link check when the tool's url failed on two runs. Generated. */
+  link_dead?: boolean;
   /** Awesome list it came from, for imported entries. UI-only. */
   imported_from?: string;
 

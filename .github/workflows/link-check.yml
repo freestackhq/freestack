@@ -1,0 +1,57 @@
+# Weekly link check (dead vendors and broken links).
+# Checks every curated url and pricing_url and every imported entry's url into
+# data/state/links.yaml, and opens or updates one PR, "Link check", when a
+# status, a strike (failing_since / dead_since) or the set of ids changes.
+# checked_at and final_url churn alone opens nothing.
+# The two-strike rule reads the committed state, so merge the PR to let a
+# first strike count next week. The generator hides imported entries with
+# dead_since; labeled tools only get a link_dead flag.
+# Needs "Allow GitHub Actions to create and approve pull requests" in repo settings.
+name: Link check
+
+on:
+  schedule:
+    - cron: "41 6 * * 4" # Thursdays 06:41 UTC (pricing scan runs Mondays)
+  workflow_dispatch:
+
+permissions: {}
+
+concurrency:
+  group: link-check
+  cancel-in-progress: false
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10.33.0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - id: check
+        run: pnpm ops:link-check
+        env:
+          LINK_CHECK_REPORT: ${{ runner.temp }}/link-report.md
+      # Keep the snapshot in step so CI's "snapshot is up to date" check passes on the PR.
+      - if: steps.check.outputs.changes == 'true'
+        run: pnpm catalog:generate
+      - if: steps.check.outputs.changes == 'true'
+        uses: peter-evans/create-pull-request@v7
+        with:
+          branch: ops/link-check
+          delete-branch: true
+          add-paths: |
+            data/state/links.yaml
+            src/data/catalog.generated.json
+          commit-message: "chore(data): record link check"
+          title: Link check
+          body-path: ${{ runner.temp }}/link-report.md

@@ -30,7 +30,7 @@ list:
   license: "MIT"
   license_url: "https://github.com/marcelscruz/public-apis/blob/38b654cb00a4b42e54b5e2a85b193a4ad3eff989/LICENSE"
   commit: "38b654cb00a4b42e54b5e2a85b193a4ad3eff989"
-  fetched_at: "2026-11-13T07:26:23.471Z"
+  fetched_at: "2026-11-13T12:18:29.668Z"
 entries:
   - id: "corbado"
     name: "Corbado"

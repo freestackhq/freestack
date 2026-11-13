@@ -111,6 +111,40 @@ describe("generator", () => {
     expect(r.stderr).toContain("metric is null without a metric_note");
   });
 
+  it("reads state/links.yaml: drops dead imported entries, flags dead labeled tools", () => {
+    const d = copyFixtures();
+    writeFileSync(
+      join(d, "state/links.yaml"),
+      [
+        "xata-lite: { url_status: dns, pricing_status: null, final_url: null, checked_at: 2026-11-20, failing_since: 2026-11-13, dead_since: 2026-11-20 }",
+        "neon: { url_status: client_error:404, pricing_status: null, final_url: null, checked_at: 2026-11-20, failing_since: 2026-11-13, dead_since: 2026-11-20 }",
+        "turso: { url_status: client_error:404, pricing_status: null, final_url: null, checked_at: 2026-11-13, failing_since: 2026-11-13, dead_since: null }",
+        "no-such-tool: { url_status: dns, dead_since: 2026-11-20 }",
+      ].join("\n") + "\n",
+    );
+    const s = generate(d);
+    const ids = s.tools.map((x: Tool) => x.id);
+    expect(ids).not.toContain("xata-lite");
+    expect(s.lists[0].count).toBe(0);
+    expect(s.tools.find((x: Tool) => x.id === "neon").link_dead).toBe(true);
+    // First strike only: still listed, no flag.
+    expect(s.tools.find((x: Tool) => x.id === "turso").link_dead).toBeUndefined();
+  });
+
+  it("tolerates a missing or empty links.yaml", () => {
+    expect(t("xata-lite")).toBeTruthy();
+    expect(snap.tools.some((x: Tool) => x.link_dead)).toBe(false);
+    const d = copyFixtures();
+    writeFileSync(join(d, "state/links.yaml"), "# nothing yet\n");
+    expect(generate(d).tools.map((x: Tool) => x.id)).toContain("xata-lite");
+  });
+
+  it("ignores data/imported/denylist.yaml", () => {
+    const d = copyFixtures();
+    writeFileSync(join(d, "imported/denylist.yaml"), "- id: gone\n  reason: test\n  date: 2026-11-13\n");
+    expect(generate(d).lists.map((l: { id: string }) => l.id)).toEqual(["free-for-dev"]);
+  });
+
   it("real data never uses fixture-only relative dates", () => {
     const r = spawnSync("grep", ["-rl", "_days_ago", join(root, "data")], { encoding: "utf8" });
     expect(r.stdout.trim()).toBe("");

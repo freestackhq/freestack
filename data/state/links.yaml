@@ -1,0 +1,2220 @@
+# Link check: { <id>: { url_status, pricing_status, final_url, checked_at, failing_since, dead_since } }. Written by the weekly link check.
+1password-pack:
+  url_status: ok
+  pricing_status: ok
+  final_url: https://1password.com/
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+abakada:
+  url_status: client_error:404
+  pricing_status: client_error:404
+  final_url: https://github.com/Abakada-org/abakada
+  checked_at: 2026-11-13
+  failing_since: 2026-11-13
+  dead_since: null
+adobe-creative-cloud-student:
+  url_status: ok
+  pricing_status: ok
+  final_url: https://www.adobe.com/creativecloud/plans.html
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+agnes-ai:
+  url_status: ok
+  pricing_status: null
+  final_url: https://agnes-ai.com/
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+ai21-labs:
+  url_status: ok
+  pricing_status: null
+  final_url: https://www.ai21.com/
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+aion-labs:
+  url_status: ok
+  pricing_status: null
+  final_url: https://www.aionlabs.ai/
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+aiven:
+  url_status: ok
+  pricing_status: null
+  final_url: https://aiven.io/free-mysql-database-retired
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+algolia-docsearch:
+  url_status: ok
+  pricing_status: ok
+  final_url: https://docsearch.algolia.com/
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+alibaba-cloud-model-studio:
+  url_status: ok
+  pricing_status: null
+  final_url: https://www.alibabacloud.com/
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+alpha-vantage:
+  url_status: ok
+  pricing_status: ok
+  final_url: https://www.alphavantage.co/documentation/
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+alwaysdata:
+  url_status: timeout
+  pricing_status: null
+  final_url: null
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+amazon-q-developer:
+  url_status: ok
+  pricing_status: ok
+  final_url: https://aws.amazon.com/q/developer/
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+anthropic-api:
+  url_status: redirected
+  pricing_status: redirected
+  final_url: https://platform.claude.com/
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+anyapi:
+  url_status: ok
+  pricing_status: null
+  final_url: https://anyapi.ai/
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+api-airforce:
+  url_status: ok
+  pricing_status: null
+  final_url: https://api.airforce/
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+appwrite:
+  url_status: ok
+  pricing_status: ok
+  final_url: https://appwrite.io/
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+aserto:
+  url_status: ok
+  pricing_status: null
+  final_url: https://www.aserto.com/
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+atomic-mail:
+  url_status: redirected
+  pricing_status: null
+  final_url: http://docs.atomicmail.ai/
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+auth0:
+  url_status: ok
+  pricing_status: null
+  final_url: https://auth0.com/
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+autodesk-education:
+  url_status: ok
+  pricing_status: ok
+  final_url: https://www.autodesk.com/education/home
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+awesome-ph-edtech:
+  url_status: ok
+  pricing_status: ok
+  final_url: https://github.com/smmariquit/awesome-ph-edtech
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+awesome-ph-student-life:
+  url_status: ok
+  pricing_status: ok
+  final_url: https://github.com/smmariquit/awesomeph-studentlife
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+aws-activate:
+  url_status: ok
+  pricing_status: ok
+  final_url: https://aws.amazon.com/startups/
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+aws-cognito:
+  url_status: ok
+  pricing_status: null
+  final_url: https://aws.amazon.com/cognito/
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+aws-dynamodb:
+  url_status: ok
+  pricing_status: null
+  final_url: https://aws.amazon.com/dynamodb/
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+aws-ec2:
+  url_status: ok
+  pricing_status: null
+  final_url: https://aws.amazon.com/free/
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+aws-educate:
+  url_status: ok
+  pricing_status: ok
+  final_url: https://aws.amazon.com/education/awseducate/
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+aws-lambda:
+  url_status: ok
+  pricing_status: null
+  final_url: https://aws.amazon.com/lambda/
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+aws-s3:
+  url_status: ok
+  pricing_status: null
+  final_url: https://aws.amazon.com/s3/
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+axiom:
+  url_status: ok
+  pricing_status: ok
+  final_url: https://axiom.co/
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+azure-for-students-starter:
+  url_status: ok
+  pricing_status: ok
+  final_url: https://azure.microsoft.com/en-us/pricing/offers/ms-azr-0170p/
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+azure-students:
+  url_status: ok
+  pricing_status: ok
+  final_url: https://azure.microsoft.com/en-us/free/students/
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+backblaze-b2:
+  url_status: ok
+  pricing_status: ok
+  final_url: https://www.backblaze.com/cloud-storage
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+backendless:
+  url_status: ok
+  pricing_status: null
+  final_url: https://backendless.com/
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+better-auth:
+  url_status: ok
+  pricing_status: ok
+  final_url: https://better-auth.com/
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+better-stack:
+  url_status: ok
+  pricing_status: ok
+  final_url: https://betterstack.com/
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+bitwarden:
+  url_status: ok
+  pricing_status: ok
+  final_url: https://bitwarden.com/
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+boot-dev-pack:
+  url_status: ok
+  pricing_status: ok
+  final_url: https://www.boot.dev/
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+brevo:
+  url_status: ok
+  pricing_status: ok
+  final_url: https://www.brevo.com/
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+brewpage:
+  url_status: timeout
+  pricing_status: null
+  final_url: null
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+browserbase:
+  url_status: ok
+  pricing_status: ok
+  final_url: https://www.browserbase.com/
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+browserless:
+  url_status: ok
+  pricing_status: ok
+  final_url: https://www.browserless.io/
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+cal-com:
+  url_status: ok
+  pricing_status: ok
+  final_url: https://cal.com/
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+canva-education:
+  url_status: ok
+  pricing_status: ok
+  final_url: https://www.canva.com/education/
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+catalyst-appsail:
+  url_status: ok
+  pricing_status: null
+  final_url: https://catalyst.zoho.com/free-tier/
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+cerebras:
+  url_status: ok
+  pricing_status: ok
+  final_url: https://chat.cerebras.ai/
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+cf-workers:
+  url_status: ok
+  pricing_status: ok
+  final_url: https://www.cloudflare.com/products/workers/
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+chroma:
+  url_status: ok
+  pricing_status: ok
+  final_url: https://www.trychroma.com/
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+chutes-ai:
+  url_status: ok
+  pricing_status: null
+  final_url: https://chutes.ai/
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+clerk:
+  url_status: ok
+  pricing_status: ok
+  final_url: https://clerk.com/
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+clickhouse-cloud:
+  url_status: ok
+  pricing_status: ok
+  final_url: https://clickhouse.com/cloud
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+cloudamqp:
+  url_status: ok
+  pricing_status: null
+  final_url: https://www.cloudamqp.com/
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+cloudant-couchdb:
+  url_status: ok
+  pricing_status: null
+  final_url: https://www.ibm.com/products/cloudant
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+cloudflare-turnstile:
+  url_status: ok
+  pricing_status: ok
+  final_url: https://www.cloudflare.com/products/turnstile/
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+cloudflare-workers-ai:
+  url_status: ok
+  pricing_status: ok
+  final_url: https://developers.cloudflare.com/workers-ai/
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+cloudinary:
+  url_status: ok
+  pricing_status: ok
+  final_url: https://cloudinary.com/
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+cloudkarafka:
+  url_status: ok
+  pricing_status: null
+  final_url: https://www.cloudkarafka.com/
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+cockroachdb:
+  url_status: ok
+  pricing_status: null
+  final_url: https://www.cockroachlabs.com/
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+codechum:
+  url_status: ok
+  pricing_status: ok
+  final_url: https://www.codechum.com/
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+cohere:
+  url_status: ok
+  pricing_status: ok
+  final_url: https://cohere.com/
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+coincap:
+  url_status: ok
+  pricing_status: ok
+  final_url: https://pro.coincap.io/api-docs
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+coingecko:
+  url_status: ok
+  pricing_status: ok
+  final_url: https://docs.coingecko.com/
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+continue-dev:
+  url_status: ok
+  pricing_status: ok
+  final_url: https://continue.dev/
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+convex:
+  url_status: ok
+  pricing_status: ok
+  final_url: https://www.convex.dev/
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+coolify:
+  url_status: ok
+  pricing_status: ok
+  final_url: https://coolify.io/
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+corbado:
+  url_status: ok
+  pricing_status: null
+  final_url: https://www.corbado.com/
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+crisp-chatwoot:
+  url_status: ok
+  pricing_status: ok
+  final_url: https://www.chatwoot.com/
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+cron-job-org:
+  url_status: ok
+  pricing_status: ok
+  final_url: https://cron-job.org/en/
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+crowdsec:
+  url_status: ok
+  pricing_status: ok
+  final_url: https://www.crowdsec.net/
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+cryptocompare:
+  url_status: blocked
+  pricing_status: blocked
+  final_url: https://min-api.cryptocompare.com/documentation
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+cursor:
+  url_status: ok
+  pricing_status: ok
+  final_url: https://cursor.com/
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+d1:
+  url_status: ok
+  pricing_status: ok
+  final_url: https://developers.cloudflare.com/d1/
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+datacamp-pack:
+  url_status: ok
+  pricing_status: ok
+  final_url: https://www.datacamp.com/
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+datadog-pack:
+  url_status: ok
+  pricing_status: ok
+  final_url: https://www.datadoghq.com/
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+datastax-astra-cassandra:
+  url_status: redirected
+  pricing_status: null
+  final_url: https://www.ibm.com/products/datastax
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+deed-page:
+  url_status: ok
+  pricing_status: null
+  final_url: https://deed.page/
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+deepseek:
+  url_status: ok
+  pricing_status: ok
+  final_url: https://platform.deepseek.com/
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+deno-deploy:
+  url_status: ok
+  pricing_status: ok
+  final_url: https://deno.com/deploy
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+deped-commons:
+  url_status: dns
+  pricing_status: dns
+  final_url: null
+  checked_at: 2026-11-13
+  failing_since: 2026-11-13
+  dead_since: null
+descope:
+  url_status: ok
+  pricing_status: null
+  final_url: https://www.descope.com/
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+digitalocean-pack:
+  url_status: ok
+  pricing_status: ok
+  final_url: https://www.digitalocean.com/
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+doppler:
+  url_status: ok
+  pricing_status: ok
+  final_url: https://www.doppler.com/
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+dub-co:
+  url_status: ok
+  pricing_status: ok
+  final_url: https://dub.co/
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+duckdb:
+  url_status: ok
+  pricing_status: ok
+  final_url: https://duckdb.org/
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+dydra:
+  url_status: ok
+  pricing_status: null
+  final_url: https://dydra.com/home
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+educative-pack:
+  url_status: ok
+  pricing_status: ok
+  final_url: https://www.educative.io/
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+elastic-email:
+  url_status: ok
+  pricing_status: null
+  final_url: https://elasticemail.com/email-api-pricing
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+elbi-gradesim:
+  url_status: redirected
+  pricing_status: redirected
+  final_url: https://gradesim.uplb.tools/
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+elevenlabs:
+  url_status: ok
+  pricing_status: ok
+  final_url: https://elevenlabs.io/
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+emailjs:
+  url_status: ok
+  pricing_status: null
+  final_url: https://www.emailjs.com/
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+emaillabs:
+  url_status: ok
+  pricing_status: null
+  final_url: https://emaillabs.io/
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+exa:
+  url_status: ok
+  pricing_status: ok
+  final_url: https://exa.ai/
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+exchangerate-api:
+  url_status: ok
+  pricing_status: ok
+  final_url: https://www.exchangerate-api.com/docs/overview
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+faable:
+  url_status: ok
+  pricing_status: null
+  final_url: https://faable.com/
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+figma-education:
+  url_status: ok
+  pricing_status: ok
+  final_url: https://www.figma.com/login
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+figma-starter:
+  url_status: ok
+  pricing_status: ok
+  final_url: https://www.figma.com/
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+fil-one:
+  url_status: ok
+  pricing_status: null
+  final_url: https://docs.fil.one/
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+firebase-database:
+  url_status: ok
+  pricing_status: null
+  final_url: https://firebase.google.com/
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+fireworks-ai:
+  url_status: ok
+  pricing_status: ok
+  final_url: https://fireworks.ai/
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+flowise:
+  url_status: ok
+  pricing_status: ok
+  final_url: https://flowiseai.com/
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+fly-io:
+  url_status: ok
+  pricing_status: ok
+  final_url: https://fly.io/
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+formspree:
+  url_status: ok
+  pricing_status: ok
+  final_url: https://formspree.io/
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+forward-email:
+  url_status: ok
+  pricing_status: ok
+  final_url: https://forwardemail.net/
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+frankfurter:
+  url_status: redirected
+  pricing_status: redirected
+  final_url: https://frankfurter.dev/
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+frontend-masters-pack:
+  url_status: redirected
+  pricing_status: redirected
+  final_url: https://master.dev/
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+gcore-storage:
+  url_status: ok
+  pricing_status: null
+  final_url: https://docs.gcore.com/storage
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+gearhost:
+  url_status: ok
+  pricing_status: null
+  final_url: https://www.gearhost.com/
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+getotp:
+  url_status: ok
+  pricing_status: null
+  final_url: https://otp.dev/en/docs/
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+github-codespaces:
+  url_status: ok
+  pricing_status: ok
+  final_url: https://github.com/features/codespaces
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+github-copilot-free:
+  url_status: ok
+  pricing_status: ok
+  final_url: https://github.com/features/copilot
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+github-copilot-student:
+  url_status: ok
+  pricing_status: ok
+  final_url: https://docs.github.com/en/copilot
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+github-models:
+  url_status: client_error:404
+  pricing_status: null
+  final_url: https://github.com/marketplace/models
+  checked_at: 2026-11-13
+  failing_since: 2026-11-13
+  dead_since: null
+github-pages:
+  url_status: ok
+  pricing_status: null
+  final_url: https://pages.github.com/
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+github-pro-education:
+  url_status: ok
+  pricing_status: ok
+  final_url: https://github.com/education
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+github-student-pack:
+  url_status: ok
+  pricing_status: ok
+  final_url: https://education.github.com/pack
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+gitlab-pages:
+  url_status: ok
+  pricing_status: null
+  final_url: https://pages.gitlab.io/
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+gitleaks:
+  url_status: ok
+  pricing_status: ok
+  final_url: https://gitleaks.io/
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+glhf-chat:
+  url_status: server_error
+  pricing_status: null
+  final_url: https://glhf.chat/
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+gnews:
+  url_status: ok
+  pricing_status: ok
+  final_url: https://docs.gnews.io/
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+godot:
+  url_status: ok
+  pricing_status: ok
+  final_url: https://godotengine.org/
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+gonka-broker:
+  url_status: ok
+  pricing_status: null
+  final_url: https://gonkabroker.com/
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+google-ai-studio:
+  url_status: ok
+  pricing_status: ok
+  final_url: https://aistudio.google.com/welcome
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+google-app-engine:
+  url_status: ok
+  pricing_status: null
+  final_url: https://cloud.google.com/appengine
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+google-cloud-datastore:
+  url_status: ok
+  pricing_status: null
+  final_url: https://cloud.google.com/products/firestore
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+google-cloud-functions:
+  url_status: ok
+  pricing_status: null
+  final_url: https://cloud.google.com/functions
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+google-cloud-pub-sub:
+  url_status: ok
+  pricing_status: null
+  final_url: https://cloud.google.com/pubsub
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+google-compute-engine:
+  url_status: ok
+  pricing_status: null
+  final_url: https://cloud.google.com/products/compute
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+google-for-startups-cloud:
+  url_status: ok
+  pricing_status: ok
+  final_url: https://cloud.google.com/startup
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+groq:
+  url_status: ok
+  pricing_status: ok
+  final_url: https://console.groq.com/home
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+hacker-news:
+  url_status: ok
+  pricing_status: ok
+  final_url: https://github.com/HackerNews/API
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+have-i-been-pwned-api:
+  url_status: ok
+  pricing_status: ok
+  final_url: https://haveibeenpwned.com/Dashboard/SignIn?ReturnUrl=%2FDashboard
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+helicone:
+  url_status: ok
+  pricing_status: ok
+  final_url: https://www.helicone.ai/
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+heroku-pack:
+  url_status: ok
+  pricing_status: ok
+  final_url: https://www.heroku.com/
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+hookdeck:
+  url_status: ok
+  pricing_status: ok
+  final_url: https://hookdeck.com/
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+htmx-go-python-ssr:
+  url_status: ok
+  pricing_status: ok
+  final_url: https://htmx.org/
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+hugging-face-inference:
+  url_status: ok
+  pricing_status: ok
+  final_url: https://huggingface.co/docs/inference-providers/index
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+hugging-face-spaces:
+  url_status: ok
+  pricing_status: ok
+  final_url: https://huggingface.co/spaces
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+ibm-cloud:
+  url_status: ok
+  pricing_status: null
+  final_url: https://cloud.ibm.com/login
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+infisical:
+  url_status: ok
+  pricing_status: ok
+  final_url: https://infisical.com/
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+influxdb-cloud:
+  url_status: ok
+  pricing_status: null
+  final_url: https://www.influxdata.com/products/influxdb-overview/
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+inngest:
+  url_status: ok
+  pricing_status: ok
+  final_url: https://www.inngest.com/
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+intercom:
+  url_status: ok
+  pricing_status: ok
+  final_url: https://www.intercom.com/
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+ionic-auth:
+  url_status: ok
+  pricing_status: null
+  final_url: https://ionic.io/
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+ip-api:
+  url_status: ok
+  pricing_status: ok
+  final_url: https://ip-api.com/docs
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+ipinfo-io:
+  url_status: ok
+  pricing_status: ok
+  final_url: https://ipinfo.io/developers
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+jetbrains-edu:
+  url_status: ok
+  pricing_status: ok
+  final_url: https://www.jetbrains.com/academy/student-pack/
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+kilo-code:
+  url_status: ok
+  pricing_status: null
+  final_url: https://kilo.ai/
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+kinde:
+  url_status: ok
+  pricing_status: ok
+  final_url: https://www.kinde.com/
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+kinsta-static-site-hosting:
+  url_status: redirected
+  pricing_status: null
+  final_url: https://sevalla.com/static-site-hosting/
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+kiro:
+  url_status: ok
+  pricing_status: ok
+  final_url: https://kiro.dev/
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+koyeb:
+  url_status: ok
+  pricing_status: ok
+  final_url: https://www.koyeb.com/
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+langfuse:
+  url_status: ok
+  pricing_status: ok
+  final_url: https://langfuse.com/
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+langsmith:
+  url_status: ok
+  pricing_status: ok
+  final_url: https://www.langchain.com/langsmith/observability
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+layerbase:
+  url_status: ok
+  pricing_status: null
+  final_url: https://layerbase.com/
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+leancloud:
+  url_status: ok
+  pricing_status: null
+  final_url: https://leancloud.app/
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+lets-encrypt:
+  url_status: ok
+  pricing_status: ok
+  final_url: https://letsencrypt.org/
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+linear:
+  url_status: ok
+  pricing_status: ok
+  final_url: https://linear.app/
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+livekit-cloud:
+  url_status: redirected
+  pricing_status: redirected
+  final_url: https://livekit.com/
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+llama-cpp:
+  url_status: ok
+  pricing_status: ok
+  final_url: https://github.com/ggml-org/llama.cpp
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+llamaindex:
+  url_status: ok
+  pricing_status: ok
+  final_url: https://www.llamaindex.ai/
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+llm7-io:
+  url_status: ok
+  pricing_status: null
+  final_url: https://llm7.io/
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+lm-studio:
+  url_status: ok
+  pricing_status: ok
+  final_url: https://lmstudio.ai/
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+localstack-pack:
+  url_status: ok
+  pricing_status: ok
+  final_url: https://www.localstack.cloud/
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+loginradius:
+  url_status: ok
+  pricing_status: null
+  final_url: https://www.loginradius.com/
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+loom-screen-studio-lite-paths:
+  url_status: ok
+  pricing_status: ok
+  final_url: https://www.loom.com/
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+loops:
+  url_status: ok
+  pricing_status: ok
+  final_url: https://loops.so/
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+mailazy:
+  url_status: ok
+  pricing_status: null
+  final_url: https://mailazy.com/
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+mailchannels:
+  url_status: ok
+  pricing_status: null
+  final_url: https://www.mailchannels.com/email-api/
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+mailchimp:
+  url_status: ok
+  pricing_status: null
+  final_url: https://mailchimp.com/
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+mailerlite:
+  url_status: ok
+  pricing_status: null
+  final_url: https://www.mailerlite.com/
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+mailersend:
+  url_status: ok
+  pricing_status: null
+  final_url: https://www.mailersend.com/
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+mailjet:
+  url_status: ok
+  pricing_status: null
+  final_url: https://www.mailjet.com/
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+mailtrap:
+  url_status: ok
+  pricing_status: null
+  final_url: https://mailtrap.io/
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+matlab-campus:
+  url_status: ok
+  pricing_status: ok
+  final_url: https://matlab.mathworks.com/
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+meilisearch-cloud:
+  url_status: ok
+  pricing_status: ok
+  final_url: https://www.meilisearch.com/
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+mem0:
+  url_status: ok
+  pricing_status: ok
+  final_url: https://mem0.ai/
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+microsoft-365:
+  url_status: ok
+  pricing_status: null
+  final_url: https://www.microsoft.com/en/education/products/office
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+microsoft-for-startups:
+  url_status: ok
+  pricing_status: ok
+  final_url: https://www.microsoft.com/en-us/startups
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+milvus:
+  url_status: error
+  pricing_status: error
+  final_url: null
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+mistral:
+  url_status: blocked
+  pricing_status: blocked
+  final_url: https://console.mistral.ai/
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+modal:
+  url_status: ok
+  pricing_status: ok
+  final_url: https://modal.com/
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+modelscope:
+  url_status: ok
+  pricing_status: null
+  final_url: https://modelscope.cn/home
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+mogenius:
+  url_status: ok
+  pricing_status: null
+  final_url: https://mogenius.com/
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+mojoauth:
+  url_status: ok
+  pricing_status: null
+  final_url: https://mojoauth.com/
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+mongo-atlas:
+  url_status: ok
+  pricing_status: ok
+  final_url: https://www.mongodb.com/products/platform/atlas-database
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+mongodb-atlas-credits-pack:
+  url_status: ok
+  pricing_status: ok
+  final_url: https://www.mongodb.com/products/platform/atlas-database
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+motherduck:
+  url_status: ok
+  pricing_status: ok
+  final_url: https://motherduck.com/
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+n8n-self-host:
+  url_status: ok
+  pricing_status: ok
+  final_url: https://n8n.io/
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+name-com-pack:
+  url_status: ok
+  pricing_status: ok
+  final_url: https://www.name.com/partner/github-students
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+namecheap-me-pack:
+  url_status: blocked
+  pricing_status: blocked
+  final_url: https://www.namecheap.com/
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+nebius:
+  url_status: ok
+  pricing_status: null
+  final_url: https://nebius.com/
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+neon:
+  url_status: redirected
+  pricing_status: redirected
+  final_url: https://neon.com/
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+netlify:
+  url_status: ok
+  pricing_status: ok
+  final_url: https://www.netlify.com/
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+new-relic:
+  url_status: ok
+  pricing_status: ok
+  final_url: https://newrelic.com/
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+newsapi:
+  url_status: ok
+  pricing_status: ok
+  final_url: https://newsapi.org/docs
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+nhost:
+  url_status: ok
+  pricing_status: null
+  final_url: https://nhost.io/
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+nile:
+  url_status: ok
+  pricing_status: null
+  final_url: https://www.thenile.dev/
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+nitrosend:
+  url_status: ok
+  pricing_status: null
+  final_url: https://docs.nitrosend.com/api
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+nominatim:
+  url_status: ok
+  pricing_status: ok
+  final_url: https://nominatim.org/release-docs/latest/
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+notion-education:
+  url_status: ok
+  pricing_status: ok
+  final_url: https://www.notion.so/product/notion-for-education
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+notion-team:
+  url_status: ok
+  pricing_status: ok
+  final_url: https://www.notion.so/
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+nscale:
+  url_status: ok
+  pricing_status: null
+  final_url: https://www.nscale.com/
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+nvidia-nim:
+  url_status: ok
+  pricing_status: ok
+  final_url: https://build.nvidia.com/
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+okta:
+  url_status: ok
+  pricing_status: null
+  final_url: https://developer.okta.com/
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+ollama:
+  url_status: ok
+  pricing_status: ok
+  final_url: https://ollama.com/
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+onomeo:
+  url_status: ok
+  pricing_status: null
+  final_url: https://onomeo.com/integrations
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+open-library:
+  url_status: ok
+  pricing_status: ok
+  final_url: https://openlibrary.org/developers/api
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+open-meteo:
+  url_status: ok
+  pricing_status: ok
+  final_url: https://open-meteo.com/en/docs
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+openai-api:
+  url_status: ok
+  pricing_status: ok
+  final_url: https://platform.openai.com/
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+openclaw-ai:
+  url_status: timeout
+  pricing_status: null
+  final_url: null
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+opencode-zen:
+  url_status: ok
+  pricing_status: null
+  final_url: https://opencode.ai/console/login
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+openrouter:
+  url_status: ok
+  pricing_status: ok
+  final_url: https://openrouter.ai/
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+openweathermap:
+  url_status: ok
+  pricing_status: ok
+  final_url: https://openweathermap.org/api
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+opper:
+  url_status: ok
+  pricing_status: null
+  final_url: https://docs.opper.ai/build/gateway/drop-in-sdks
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+oracle-cloud-always-free:
+  url_status: ok
+  pricing_status: ok
+  final_url: https://www.oracle.com/cloud/free/
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+ory:
+  url_status: redirected
+  pricing_status: null
+  final_url: https://www.ory.com/
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+overleaf:
+  url_status: ok
+  pricing_status: ok
+  final_url: https://www.overleaf.com/
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+ovhcloud-ai-endpoints:
+  url_status: ok
+  pricing_status: null
+  final_url: https://www.ovhcloud.com/en/public-cloud/ai-endpoints/catalog/
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+paddle-lemon-squeezy:
+  url_status: ok
+  pricing_status: ok
+  final_url: https://www.lemonsqueezy.com/
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+para:
+  url_status: redirected
+  pricing_status: null
+  final_url: https://paraio.org/cloud-hosting/
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+parquet-arrow:
+  url_status: ok
+  pricing_status: ok
+  final_url: https://parquet.apache.org/
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+perplexity-pro-student:
+  url_status: blocked
+  pricing_status: blocked
+  final_url: https://www.perplexity.ai/hub/student-discount
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+pgvector:
+  url_status: ok
+  pricing_status: ok
+  final_url: https://github.com/pgvector/pgvector
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+phplist:
+  url_status: ok
+  pricing_status: null
+  final_url: https://www.phplist.com/
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+pinata:
+  url_status: ok
+  pricing_status: null
+  final_url: https://docs.pinata.cloud/quickstart
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+pinecone:
+  url_status: ok
+  pricing_status: ok
+  final_url: https://www.pinecone.io/
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+pipedream-n8n-cloud:
+  url_status: ok
+  pricing_status: ok
+  final_url: https://pipedream.com/
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+plain-freshdesk-lite:
+  url_status: ok
+  pricing_status: ok
+  final_url: https://www.plain.com/
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+plausible-umami:
+  url_status: ok
+  pricing_status: ok
+  final_url: https://umami.is/
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+pocketbase:
+  url_status: ok
+  pricing_status: ok
+  final_url: https://pocketbase.io/
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+pollinations-ai:
+  url_status: ok
+  pricing_status: null
+  final_url: https://enter.pollinations.ai/
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+posthog:
+  url_status: ok
+  pricing_status: ok
+  final_url: https://posthog.com/
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+postmark:
+  url_status: ok
+  pricing_status: ok
+  final_url: https://postmarkapp.com/
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+poststack:
+  url_status: ok
+  pricing_status: null
+  final_url: https://poststack.dev/docs
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+prisma-postgres:
+  url_status: ok
+  pricing_status: null
+  final_url: https://www.prisma.io/
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+qdrant:
+  url_status: ok
+  pricing_status: ok
+  final_url: https://qdrant.tech/
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+qoddi:
+  url_status: ok
+  pricing_status: null
+  final_url: https://qoddi.com/
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+r2:
+  url_status: ok
+  pricing_status: ok
+  final_url: https://www.cloudflare.com/products/r2/
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+railway:
+  url_status: redirected
+  pricing_status: redirected
+  final_url: https://railway.com/
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+redis-cloud:
+  url_status: ok
+  pricing_status: null
+  final_url: https://redis.io/
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+reliant:
+  url_status: ok
+  pricing_status: null
+  final_url: https://reliantlabs.io/
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+render:
+  url_status: ok
+  pricing_status: ok
+  final_url: https://render.com/
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+replicate:
+  url_status: ok
+  pricing_status: ok
+  final_url: https://replicate.com/
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+reqkey:
+  url_status: ok
+  pricing_status: null
+  final_url: https://www.reqkey.com/
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+requesty:
+  url_status: ok
+  pricing_status: null
+  final_url: https://www.requesty.ai/
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+resend:
+  url_status: ok
+  pricing_status: ok
+  final_url: https://resend.com/
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+rest-countries:
+  url_status: ok
+  pricing_status: ok
+  final_url: https://restcountries.com/
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+room-tba:
+  url_status: redirected
+  pricing_status: redirected
+  final_url: https://room-tba.uplb.tools/
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+sambanova:
+  url_status: ok
+  pricing_status: null
+  final_url: https://cloud.sambanova.ai/apis
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+sendinblue:
+  url_status: client_error:404
+  pricing_status: null
+  final_url: https://developers.brevo.com/docs
+  checked_at: 2026-11-13
+  failing_since: 2026-11-13
+  dead_since: null
+sendraven:
+  url_status: ok
+  pricing_status: null
+  final_url: https://sendraven.ai/docs/api
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+sentry:
+  url_status: ok
+  pricing_status: ok
+  final_url: https://sentry.io/welcome/
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+sequin:
+  url_status: ok
+  pricing_status: ok
+  final_url: https://sequinstream.com/
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+shipvela:
+  url_status: ok
+  pricing_status: null
+  final_url: https://shipvela.com/
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+signops:
+  url_status: ok
+  pricing_status: null
+  final_url: https://signops.dev/docs/
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+siliconflow:
+  url_status: ok
+  pricing_status: null
+  final_url: https://www.siliconflow.cn/
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+simple-analytics-pack:
+  url_status: ok
+  pricing_status: ok
+  final_url: https://www.simpleanalytics.com/
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+smtp-senpai:
+  url_status: ok
+  pricing_status: null
+  final_url: https://en.mailsenpai.com/smtp-senpai/
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+smtpfast:
+  url_status: ok
+  pricing_status: null
+  final_url: https://smtpfa.st/docs
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+snyk:
+  url_status: ok
+  pricing_status: ok
+  final_url: https://snyk.io/
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+socket-dev:
+  url_status: ok
+  pricing_status: ok
+  final_url: https://socket.dev/
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+sparkpost:
+  url_status: redirected
+  pricing_status: null
+  final_url: https://bird.com/email-api?sp=true
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+stability-ai:
+  url_status: ok
+  pricing_status: ok
+  final_url: https://stability.ai/
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+storj:
+  url_status: redirected
+  pricing_status: null
+  final_url: https://storj.dev/
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+stripe-atlas:
+  url_status: ok
+  pricing_status: ok
+  final_url: https://stripe.com/atlas
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+stripe-pack-fee-waiver:
+  url_status: ok
+  pricing_status: ok
+  final_url: https://stripe.com/
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+stytch:
+  url_status: ok
+  pricing_status: null
+  final_url: https://stytch.com/
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+supabase:
+  url_status: ok
+  pricing_status: ok
+  final_url: https://supabase.com/
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+supertokens:
+  url_status: ok
+  pricing_status: ok
+  final_url: https://supertokens.com/
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+surge:
+  url_status: ok
+  pricing_status: null
+  final_url: https://surge.sh/
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+svix:
+  url_status: ok
+  pricing_status: ok
+  final_url: https://www.svix.com/
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+sweego:
+  url_status: ok
+  pricing_status: null
+  final_url: https://learn.sweego.io/docs/api-intro
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+synadia:
+  url_status: ok
+  pricing_status: null
+  final_url: https://www.synadia.com/cloud
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+tailscale:
+  url_status: ok
+  pricing_status: ok
+  final_url: https://tailscale.com/
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+takeout:
+  url_status: error
+  pricing_status: null
+  final_url: null
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+tally-formspark:
+  url_status: ok
+  pricing_status: ok
+  final_url: https://tally.so/
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+tavily:
+  url_status: ok
+  pricing_status: ok
+  final_url: https://www.tavily.com/
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+termius-premium-pack:
+  url_status: ok
+  pricing_status: ok
+  final_url: https://termius.com/
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+the-vibe-hosting:
+  url_status: ok
+  pricing_status: null
+  final_url: https://thevibehosting.com/
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+tigris:
+  url_status: ok
+  pricing_status: ok
+  final_url: https://www.tigrisdata.com/
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+tinybird:
+  url_status: ok
+  pricing_status: ok
+  final_url: https://www.tinybird.co/
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+together-ai:
+  url_status: ok
+  pricing_status: ok
+  final_url: https://www.together.ai/
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+together-embeddings:
+  url_status: ok
+  pricing_status: ok
+  final_url: https://www.together.ai/
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+trigger-dev:
+  url_status: ok
+  pricing_status: ok
+  final_url: https://trigger.dev/
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+trufflehog:
+  url_status: ok
+  pricing_status: ok
+  final_url: https://trufflesecurity.com/trufflehog
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+turso:
+  url_status: ok
+  pricing_status: ok
+  final_url: https://turso.tech/
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+twilio-sendgrid:
+  url_status: redirected
+  pricing_status: redirected
+  final_url: https://www.twilio.com/en-us/sendgrid
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+twilio-trial:
+  url_status: ok
+  pricing_status: ok
+  final_url: https://www.twilio.com/en-us
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+typesense-cloud:
+  url_status: ok
+  pricing_status: ok
+  final_url: https://typesense.org/
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+unity-student:
+  url_status: ok
+  pricing_status: ok
+  final_url: https://unity.com/products/unity-student
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+university-edu-email:
+  url_status: ok
+  pricing_status: ok
+  final_url: https://education.github.com/pack
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+unorouter:
+  url_status: ok
+  pricing_status: null
+  final_url: https://unorouter.com/en
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+unsloth:
+  url_status: ok
+  pricing_status: ok
+  final_url: https://unsloth.ai/
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+uplb-tools:
+  url_status: ok
+  pricing_status: ok
+  final_url: https://www.uplb.tools/
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+uploadthing:
+  url_status: ok
+  pricing_status: ok
+  final_url: https://uploadthing.com/
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+upstash-qstash:
+  url_status: ok
+  pricing_status: ok
+  final_url: https://upstash.com/qstash
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+upstash-redis:
+  url_status: ok
+  pricing_status: ok
+  final_url: https://upstash.com/
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+uptimerobot:
+  url_status: ok
+  pricing_status: ok
+  final_url: https://uptimerobot.com/
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+val-town:
+  url_status: ok
+  pricing_status: ok
+  final_url: https://www.val.town/
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+vercel-ai-sdk:
+  url_status: redirected
+  pricing_status: redirected
+  final_url: https://ai-sdk.dev/
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+vercel-hobby:
+  url_status: ok
+  pricing_status: ok
+  final_url: https://vercel.com/
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+vonage-nexmo:
+  url_status: ok
+  pricing_status: ok
+  final_url: https://www.vonage.com/communications-apis/
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+voxell-forge:
+  url_status: ok
+  pricing_status: null
+  final_url: https://voxell.ai/docs/
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+voyage-ai:
+  url_status: ok
+  pricing_status: ok
+  final_url: https://www.voyageai.com/
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+warrant:
+  url_status: ok
+  pricing_status: null
+  final_url: https://warrant.dev/
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+weatherapi:
+  url_status: ok
+  pricing_status: ok
+  final_url: https://www.weatherapi.com/docs/
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+weaviate:
+  url_status: ok
+  pricing_status: ok
+  final_url: https://weaviate.io/
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+wikipedia-rest:
+  url_status: ok
+  pricing_status: ok
+  final_url: https://en.wikipedia.org/wiki/Special:RestSandbox/wmf-rest
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+windsurf:
+  url_status: redirected
+  pricing_status: redirected
+  final_url: https://devin.ai/desktop
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+workers-ai-embeddings:
+  url_status: ok
+  pricing_status: ok
+  final_url: https://developers.cloudflare.com/workers-ai/models/
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+working-copy-pack:
+  url_status: ok
+  pricing_status: ok
+  final_url: https://workingcopy.app/
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+workos:
+  url_status: ok
+  pricing_status: ok
+  final_url: https://workos.com/
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+xai:
+  url_status: ok
+  pricing_status: null
+  final_url: https://x.ai/
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+z-ai-zhipu-ai:
+  url_status: ok
+  pricing_status: null
+  final_url: https://bigmodel.cn/
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+zilliz-cloud:
+  url_status: ok
+  pricing_status: ok
+  final_url: https://zilliz.com/cloud
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+zitadel:
+  url_status: ok
+  pricing_status: ok
+  final_url: https://zitadel.com/
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
+zyte-scrapy-cloud-pack:
+  url_status: ok
+  pricing_status: ok
+  final_url: https://www.zyte.com/
+  checked_at: 2026-11-13
+  failing_since: null
+  dead_since: null
