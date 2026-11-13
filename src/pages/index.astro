@@ -1,35 +1,704 @@
 ---
-import Layout from "../layouts/Layout.astro";
-import Directory from "../components/Directory.astro";
+/**
+ * Home (Home.dc.html, PhoneHome.dc.html).
+ *
+ * Static page. Every situation's stack panel is rendered at build time; a
+ * small script reads ?as= on load and shows the matching one, so the choice
+ * stays in the URL. Presets come from catalog.preset().
+ */
+import Shell from "../layouts/Shell.astro";
+import Facts from "../components/fresh/Facts.astro";
+import Icon from "../components/fresh/Icon.astro";
+import Label from "../components/fresh/Label.astro";
+import CopyStack from "../components/fresh/CopyStack.astro";
+import {
+  aisle as getAisle,
+  aisleCount,
+  aislesByGroup,
+  checkHref,
+  defaultSituation,
+  now,
+  partForJob,
+  parts,
+  preset,
+  situations,
+  toolHref,
+  toolsInAisle,
+  totalTools,
+} from "../lib/fresh/catalog";
+import { cardNote, limitsLine, rowState, stackSearch, type CopyStackData } from "../lib/fresh/stack";
+
+const at = now();
+const total = totalTools();
+const groups = aislesByGroup().filter((g) => g.aisles.length > 0);
+
+const panels = situations().map((s) => {
+  const rows = preset(s.id).map((r) => ({
+    job: r.job,
+    t: r.t,
+    part: partForJob(r.job),
+    limits: limitsLine(r.t, getAisle(r.t.aisle)!),
+    state: rowState(r.t, at),
+  }));
+  const picks = Object.fromEntries(rows.filter((r) => r.part).map((r) => [r.part!.key, r.t.id]));
+  const buildHref = `/build${stackSearch(s.id, picks, parts())}`;
+  const copy: Omit<CopyStackData, "url"> & { path: string } = {
+    situation: s.label,
+    path: buildHref,
+    rows: rows.map((r) => ({ job: r.job, name: r.t.name, limits: r.limits, catch: r.t.catches[0] ?? null })),
+  };
+  return { s, rows, buildHref, copy, note: cardNote(rows.map((r) => r.t)) };
+});
+
+const sample = toolsInAisle("databases", at)[0];
 ---
 
-<Layout>
-  <section class="ds-wrap pb-16 pt-[88px] sm:pt-[120px]">
-    <h1
-      class="mb-7 text-[clamp(3.2rem,9vw,7.5rem)] leading-[0.9] font-bold tracking-[-0.045em] text-ink"
-    >
-      freestack<span class="text-ink-3">.</span>
-    </h1>
-
-    <div class="flex flex-wrap items-center justify-between gap-x-8 gap-y-4">
-      <p class="max-w-xl text-[clamp(0.9rem,1.5vw,1.05rem)] leading-[1.75] text-ink-2">
-        Free developer tools, student unlocks, and self-hosted software.
-        Each listing states the{" "}
-        <strong class="font-medium text-ink">hard limits</strong>, who can claim it, and
-        whether commercial use is allowed — for builders tired of “generous free tier”
-        without numbers.
-      </p>
-      <div class="flex flex-wrap gap-2">
-        <a href="/guides/claim-order" class="ds-btn ds-btn-filled">Claim order →</a>
-        <a
-          href="https://github.com/freestackhq/saas"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="ds-btn ds-btn-outline">catalog repo ↗</a
-        >
+<Shell title="freestack: pick a free stack">
+  <div class="wrap">
+    <section class="hero" aria-labelledby="hero-h">
+      <div class="intro">
+        <h1 id="hero-h">Pick a stack and start building.</h1>
+        <p class="lede">{total} free tools, student perks and APIs. Limits and catches up front.</p>
       </div>
-    </div>
-  </section>
 
-  <Directory defaultCatalog="saas" />
-</Layout>
+      <section class="basket panel-raised" aria-labelledby="basket-h" data-home-stack>
+        <div class="picker">
+          <h2 id="basket-h">I'm building as</h2>
+          <div class="chips" role="group" aria-labelledby="basket-h">
+            {
+              situations().map((s) => (
+                <button type="button" class="chip" data-sit={s.id} aria-pressed={String(s.id === defaultSituation)}>
+                  {s.label}
+                </button>
+              ))
+            }
+          </div>
+          <label class="select">
+            <span class="sr-only">I'm building as</span>
+            <select data-sit-select>
+              {
+                situations().map((s) => (
+                  <option value={s.id} selected={s.id === defaultSituation}>
+                    {s.label}
+                  </option>
+                ))
+              }
+            </select>
+            <Icon name="chevron-down" size={16} class="caret" />
+          </label>
+        </div>
+
+        {
+          panels.map((p) => (
+            <div class="stack" data-panel={p.s.id} hidden={p.s.id !== defaultSituation}>
+              {p.rows.length > 0 ? (
+                <>
+                  <ul class="rows" aria-label={`Stack for ${p.s.label}`}>
+                    {p.rows.map((r) => (
+                      <li class:list={["row", r.state && `row-${r.state.state}`]} data-tool={r.t.id}>
+                        <span class="job">{r.job}</span>
+                        <span class="body">
+                          <a class="tool" href={toolHref(r.t)}>
+                            {r.t.name}
+                          </a>
+                          <span class="limits">{r.limits}</span>
+                          {r.t.catches[0] && (
+                            <span class="catch">
+                              <Icon name="wrench" />
+                              <span class="sr-only">Catch: </span>
+                              {r.t.catches[0]}
+                            </span>
+                          )}
+                          <Facts tool={r.t} hideWho class="facts" />
+                          {r.state && (
+                            <span class="state" data-state={r.state.state}>
+                              <span>{r.state.text}</span>
+                              {r.state.link && (
+                                <a href={checkHref(r.t)}>
+                                  {r.state.link}
+                                  <span class="sr-only"> {r.t.name}</span>
+                                </a>
+                              )}
+                            </span>
+                          )}
+                        </span>
+                      </li>
+                    ))}
+                  </ul>
+                  <div class="total">
+                    <div>
+                      <p class="total-label">Total per month</p>
+                      {p.note && <p class="total-note">{p.note}</p>}
+                    </div>
+                    <p class="price">$0.00</p>
+                  </div>
+                  <div class="actions">
+                    <button type="button" class="btn copy-btn" data-copy-stack={JSON.stringify(p.copy)}>
+                      Copy this stack
+                    </button>
+                    <a class="btn btn-outline" href="/agents">
+                      Hand it to my coding agent
+                    </a>
+                    <a class="swap" href={p.buildHref}>
+                      Swap parts in Build a stack
+                    </a>
+                  </div>
+                </>
+              ) : (
+                <div class="empty" data-empty>
+                  <p class="empty-title">No ready-made stack here yet.</p>
+                  <p class="empty-sub">Pick each part from its aisle instead.</p>
+                  <ul class="empty-aisles">
+                    {groups
+                      .flatMap((g) => g.aisles)
+                      .filter((a) => a.group === "Build")
+                      .map((a) => (
+                        <li>
+                          <a href={`/${a.id}`}>
+                            {a.name} <span class="count">{aisleCount(a.id)}</span>
+                          </a>
+                        </li>
+                      ))}
+                  </ul>
+                  <a class="swap" href={p.buildHref}>
+                    Start one in Build a stack
+                  </a>
+                </div>
+              )}
+            </div>
+          ))
+        }
+      </section>
+    </section>
+
+    <section class="aisles" aria-labelledby="aisles-h">
+      <h2 id="aisles-h" class="h2">Or walk the aisles</h2>
+      <p class="sub">Grouped by what you need. Numbers show how many tools have a label.</p>
+      <div class="groups">
+        {
+          groups.map((g) => (
+            <div>
+              <h3 class="group">{g.group}</h3>
+              <ul class="aisle-list">
+                {g.aisles.map((a) => (
+                  <li>
+                    <a href={`/${a.id}`}>
+                      {a.name} <span class="count">{aisleCount(a.id)}</span>
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))
+        }
+      </div>
+    </section>
+
+    {
+      sample && (
+        <section class="reading" aria-labelledby="label-h">
+          <div class="reading-text">
+            <h2 id="label-h" class="h2">Reading a label</h2>
+            <ol>
+              <li>
+                <strong>The big number</strong> is the one limit that aisle is about, like storage for databases. The
+                5-step scale beside it compares it with the biggest in the aisle.
+              </li>
+              <li>
+                <strong>The fine print</strong> lists the exact limits.
+              </li>
+              <li>
+                <strong>The bottom line</strong> covers who can claim it, whether you can sell with it, and whether signup
+                needs a credit card. A check means yes, a cross means no, and a dashed icon means nobody knows yet. The
+                card shows crossed out when you can sign up without one.
+              </li>
+              <li>
+                <strong>The date</strong> is when someone last checked the vendor's page. No date means nobody has.
+              </li>
+            </ol>
+          </div>
+          <figure>
+            <Label tool={sample} compare={false} />
+            <figcaption>Limits as listed in the catalog. Always confirm on the vendor's page before you launch.</figcaption>
+          </figure>
+        </section>
+      )
+    }
+
+    <section id="agents" class="agents on-ink" aria-labelledby="agents-h">
+      <div>
+        <h2 id="agents-h">Let your coding agent shop for you</h2>
+        <p>
+          Install the freestack skill and your agent checks these labels before it reaches for anything paid. It tells
+          you the limits it found.
+        </p>
+      </div>
+      <div class="agents-cmd">
+        <code>npx skills add https://github.com/freestackhq/freestack</code>
+        <p>Also available as a remote MCP server and a plain JSON API. <a href="/agents">Set it up</a></p>
+      </div>
+    </section>
+  </div>
+
+  <CopyStack slot="end" />
+</Shell>
+
+<script>
+  import { openCopyStack } from "../lib/fresh/copy-stack";
+
+  const root = document.querySelector<HTMLElement>("[data-home-stack]")!;
+  const chips = [...root.querySelectorAll<HTMLButtonElement>("[data-sit]")];
+  const select = root.querySelector<HTMLSelectElement>("[data-sit-select]")!;
+  const panels = [...root.querySelectorAll<HTMLElement>("[data-panel]")];
+  const ids = panels.map((p) => p.dataset.panel!);
+
+  function pick(id: string, push: boolean) {
+    if (!ids.includes(id)) return;
+    for (const c of chips) c.setAttribute("aria-pressed", String(c.dataset.sit === id));
+    select.value = id;
+    for (const p of panels) p.hidden = p.dataset.panel !== id;
+    if (push) {
+      const url = new URL(location.href);
+      url.searchParams.set("as", id);
+      history.replaceState(null, "", url);
+    }
+  }
+
+  const fromUrl = new URLSearchParams(location.search).get("as");
+  if (fromUrl) pick(fromUrl, false);
+
+  for (const c of chips) c.addEventListener("click", () => pick(c.dataset.sit!, true));
+  select.addEventListener("change", () => pick(select.value, true));
+
+  root.addEventListener("click", (e) => {
+    const btn = (e.target as HTMLElement).closest<HTMLButtonElement>("[data-copy-stack]");
+    if (!btn) return;
+    const { path, ...rest } = JSON.parse(btn.dataset.copyStack!);
+    openCopyStack({ ...rest, url: new URL(path, location.origin).href });
+  });
+</script>
+
+<style>
+  .hero {
+    padding: 56px 0 72px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 48px;
+    align-items: flex-start;
+  }
+  .intro {
+    flex: 1 1 420px;
+    min-width: 0;
+    padding-top: 24px;
+  }
+  h1 {
+    margin: 0;
+    font-weight: 900;
+    font-stretch: 62%;
+    font-size: clamp(48px, 9vw, 132px);
+    line-height: 1;
+    letter-spacing: -0.01em;
+  }
+  .lede {
+    margin: 28px 0 0;
+    max-width: 34ch;
+    font-size: 20px;
+    font-weight: 500;
+  }
+
+  .basket {
+    flex: 1 1 560px;
+    min-width: 0;
+  }
+  .picker {
+    padding: 24px 28px 20px;
+    border-bottom: 2px solid var(--ink);
+  }
+  .picker h2 {
+    margin: 0 0 14px;
+    font-size: 18px;
+    font-weight: 700;
+  }
+  .chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .select {
+    display: none;
+    position: relative;
+  }
+  .select select {
+    width: 100%;
+    min-height: var(--target);
+    padding: 10px 40px 10px 12px;
+    appearance: none;
+    background: var(--label);
+    border: 2px solid var(--ink);
+    border-radius: 0;
+    font: 700 16px var(--font);
+    color: var(--ink);
+  }
+  .select :global(.caret) {
+    position: absolute;
+    right: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    pointer-events: none;
+  }
+
+  .rows {
+    list-style: none;
+    margin: 0;
+    padding: 0 28px;
+  }
+  .row {
+    display: grid;
+    grid-template-columns: 110px minmax(0, 1fr);
+    gap: 4px 16px;
+    align-items: baseline;
+    padding: 16px 0;
+    border-bottom: 1px dashed var(--rule);
+  }
+  .job {
+    font-size: 14px;
+    color: var(--muted);
+  }
+  .body {
+    display: grid;
+    gap: 6px;
+    min-width: 0;
+  }
+  .tool {
+    justify-self: start;
+    font-size: 18px;
+    font-weight: 700;
+    text-decoration: none;
+  }
+  .tool:hover {
+    text-decoration: underline;
+  }
+  .limits {
+    margin-top: -4px;
+    font-size: 14px;
+    color: var(--muted);
+  }
+  .catch {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 14px;
+    font-weight: 700;
+  }
+  .state {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0 12px;
+    min-height: var(--target);
+    padding: 0 12px;
+    background: var(--fill);
+    font-size: 14px;
+    color: var(--muted);
+  }
+  .state a {
+    font-weight: 700;
+  }
+  .state[data-state="overdue"] {
+    background: var(--recheck);
+    color: var(--ink);
+  }
+
+  .total {
+    padding: 18px 28px 24px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    gap: 16px;
+  }
+  .total-label {
+    margin: 0;
+    font-size: 15px;
+    font-weight: 700;
+  }
+  .total-note {
+    margin: 2px 0 0;
+    font-size: 13px;
+    color: var(--muted);
+  }
+  .price {
+    margin: 0 0 0 auto;
+    font-weight: 900;
+    font-stretch: 62%;
+    font-size: 76px;
+    line-height: 1;
+  }
+  .actions {
+    padding: 0 28px 28px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .actions .btn {
+    flex: 1 1 180px;
+    min-height: 52px;
+    font-size: 16px;
+  }
+  .swap {
+    flex: 1 1 100%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: var(--target);
+    font-size: 15px;
+    font-weight: 700;
+  }
+
+  .empty {
+    padding: 24px 28px 28px;
+  }
+  .empty-title {
+    margin: 0;
+    font-size: 20px;
+    font-weight: 800;
+  }
+  .empty-sub {
+    color: var(--muted);
+    margin: 4px 0 16px;
+  }
+  .empty-aisles {
+    list-style: none;
+    margin: 0 0 12px;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 0 16px;
+  }
+  .empty-aisles a {
+    display: flex;
+    justify-content: space-between;
+    min-height: var(--target);
+    align-items: center;
+    border-bottom: 1px solid var(--shelf);
+    font-weight: 600;
+    text-decoration: none;
+  }
+  .empty .swap {
+    justify-content: flex-start;
+  }
+
+  .h2 {
+    margin: 0 0 8px;
+    font-weight: 900;
+    font-stretch: 62%;
+    font-size: clamp(40px, 5vw, 56px);
+    line-height: 1;
+  }
+  .aisles {
+    padding: 24px 0 80px;
+  }
+  .sub {
+    margin: 0 0 32px;
+    max-width: 52ch;
+    font-size: 17px;
+    color: var(--muted);
+  }
+  .groups {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(280px, 100%), 1fr));
+    gap: 32px 24px;
+  }
+  .group {
+    margin: 0;
+    padding: 10px 14px;
+    background: var(--ink);
+    color: var(--label);
+    font-size: 17px;
+    font-weight: 800;
+    font-stretch: 125%;
+  }
+  .aisle-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    background: var(--label);
+  }
+  .aisle-list li + li {
+    border-top: 1px solid var(--shelf);
+  }
+  .aisle-list a {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    min-height: var(--target);
+    padding: 10px 14px;
+    font-weight: 600;
+    text-decoration: none;
+  }
+  .aisle-list a:hover {
+    text-decoration: underline;
+  }
+  .count {
+    font-weight: 500;
+    color: var(--muted);
+  }
+
+  .reading {
+    padding: 24px 0 88px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 48px;
+    align-items: center;
+  }
+  .reading-text {
+    flex: 1 1 320px;
+  }
+  .reading ol {
+    margin: 16px 0 0;
+    padding-left: 22px;
+    display: grid;
+    gap: 14px;
+    font-size: 17px;
+    line-height: 1.5;
+    max-width: 44ch;
+  }
+  .reading figure {
+    flex: 0 1 380px;
+    margin: 0;
+    min-width: 0;
+  }
+  figcaption {
+    margin-top: 12px;
+    font-size: 14px;
+    color: var(--muted);
+  }
+
+  .agents {
+    margin-bottom: 88px;
+    padding: 40px;
+    background: var(--ink);
+    color: var(--label);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 32px;
+    align-items: center;
+  }
+  .agents > div {
+    flex: 1 1 380px;
+    min-width: 0;
+  }
+  .agents h2 {
+    margin: 0 0 12px;
+    font-weight: 900;
+    font-stretch: 62%;
+    font-size: 48px;
+    line-height: 1;
+  }
+  .agents p {
+    margin: 0;
+    max-width: 46ch;
+    font-size: 17px;
+    color: var(--on-ink-muted);
+  }
+  .agents a {
+    color: var(--label);
+    font-weight: 700;
+  }
+  .agents-cmd {
+    display: grid;
+    gap: 10px;
+  }
+  .agents-cmd p {
+    font-size: 14px;
+  }
+  code {
+    display: block;
+    padding: 16px 18px;
+    background: var(--label);
+    color: var(--ink);
+    font: 600 15px var(--font);
+    font-stretch: 87%;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+
+  @media (max-width: 640px) {
+    .hero {
+      padding: 20px 0 48px;
+      gap: 18px;
+    }
+    .intro {
+      padding-top: 0;
+      flex-basis: 100%;
+    }
+    .lede {
+      margin-top: 14px;
+      font-size: 17px;
+    }
+    .basket {
+      flex-basis: 100%;
+    }
+    .picker {
+      padding: 16px;
+    }
+    .picker h2 {
+      font-size: 15px;
+      margin-bottom: 6px;
+    }
+    .chips {
+      display: none;
+    }
+    .select {
+      display: block;
+    }
+    .rows {
+      padding: 0 16px;
+    }
+    .row {
+      grid-template-columns: minmax(0, 1fr);
+      padding: 12px 0;
+      gap: 2px;
+    }
+    .job {
+      font-size: 13px;
+    }
+    .tool {
+      font-size: 17px;
+    }
+    .limits,
+    .row :global(.facts) {
+      display: none;
+    }
+    .catch {
+      font-size: 13px;
+    }
+    .total {
+      padding: 10px 16px 14px;
+    }
+    .price {
+      font-size: 48px;
+    }
+    .actions {
+      padding: 0 16px 16px;
+      display: grid;
+      gap: 8px;
+    }
+    .actions .btn {
+      min-height: var(--target);
+      font-size: 15px;
+    }
+    .empty {
+      padding: 16px;
+    }
+    .agents {
+      padding: 24px 16px;
+    }
+    .agents h2 {
+      font-size: 40px;
+    }
+    code {
+      white-space: normal;
+      overflow-wrap: anywhere;
+    }
+  }
+</style>

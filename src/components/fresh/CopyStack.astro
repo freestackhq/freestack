@@ -1,0 +1,305 @@
+---
+/**
+ * Copy this stack (CopyStack.dc.html) plus the "Link copied" toast
+ * (Edges.dc.html). Render once per page; open it from a script with
+ * openCopyStack() or shareStack() from src/lib/fresh/copy-stack.ts.
+ *
+ * Three formats: Markdown for notes, the share link, and a prompt for a
+ * coding agent. If the clipboard is blocked, the text is selected and the
+ * dialog says so, so people can copy it by hand.
+ */
+import Icon from "./Icon.astro";
+---
+
+<dialog id="copy-stack" class="copy" aria-labelledby="copy-h">
+  <div class="head">
+    <h2 id="copy-h">Copy your stack</h2>
+    <button type="button" class="close" aria-label="Close" data-close>
+      <Icon name="close" size={20} />
+    </button>
+  </div>
+  <div class="tabs" role="tablist" aria-label="Format">
+    <button type="button" role="tab" id="copy-tab-md" aria-controls="copy-panel" aria-selected="true" data-format="md">
+      For your notes
+    </button>
+    <button type="button" role="tab" id="copy-tab-link" aria-controls="copy-panel" aria-selected="false" tabindex="-1" data-format="link">
+      Link
+    </button>
+    <button type="button" role="tab" id="copy-tab-agent" aria-controls="copy-panel" aria-selected="false" tabindex="-1" data-format="agent">
+      For your coding agent
+    </button>
+  </div>
+  <div class="panel" role="tabpanel" id="copy-panel" aria-labelledby="copy-tab-md">
+    <p class="hint" data-hint>Markdown. Paste it into a README, Notion or your group chat.</p>
+    <pre data-text tabindex="0"></pre>
+    <div class="actions">
+      <button type="button" class="btn" data-copy>Copy text</button>
+      <span class="status" role="status" data-status></span>
+    </div>
+  </div>
+</dialog>
+
+<div class="toast-region" role="status" data-toast-region>
+  <div class="toast on-ink" data-toast hidden>
+    <span class="tick"><Icon name="check" size={18} /></span>
+    <span class="t">Link copied</span>
+    <span class="s">Anyone with it sees this stack.</span>
+    <button type="button" class="dismiss" aria-label="Dismiss" data-dismiss>
+      <Icon name="close" size={18} />
+    </button>
+  </div>
+</div>
+
+<script>
+  import { OPEN_EVENT, SHARE_EVENT, writeClipboard, type CopyFormat } from "../../lib/fresh/copy-stack";
+  import { stackMarkdown, stackPrompt, type CopyStackData } from "../../lib/fresh/stack";
+
+  const FORMATS: Record<CopyFormat, { hint: string; btn: string; text: (d: CopyStackData) => string }> = {
+    md: { hint: "Markdown. Paste it into a README, Notion or your group chat.", btn: "Copy text", text: stackMarkdown },
+    link: { hint: "Anyone with the link sees this stack with live limits.", btn: "Copy link", text: (d) => d.url },
+    agent: { hint: "Paste into Claude Code, Cursor or Kiro before it scaffolds.", btn: "Copy prompt", text: stackPrompt },
+  };
+
+  const dialog = document.getElementById("copy-stack") as HTMLDialogElement;
+  const tabs = [...dialog.querySelectorAll<HTMLButtonElement>('[role="tab"]')];
+  const panel = dialog.querySelector<HTMLElement>('[role="tabpanel"]')!;
+  const hint = dialog.querySelector<HTMLElement>("[data-hint]")!;
+  const pre = dialog.querySelector<HTMLElement>("[data-text]")!;
+  const copyBtn = dialog.querySelector<HTMLButtonElement>("[data-copy]")!;
+  const status = dialog.querySelector<HTMLElement>("[data-status]")!;
+  const toast = document.querySelector<HTMLElement>("[data-toast]")!;
+  let data: CopyStackData | null = null;
+  let format: CopyFormat = "md";
+  let toastTimer = 0;
+
+  function show(f: CopyFormat) {
+    format = f;
+    for (const t of tabs) {
+      const on = t.dataset.format === f;
+      t.setAttribute("aria-selected", String(on));
+      t.tabIndex = on ? 0 : -1;
+      if (on) panel.setAttribute("aria-labelledby", t.id);
+    }
+    hint.textContent = FORMATS[f].hint;
+    copyBtn.textContent = FORMATS[f].btn;
+    pre.textContent = data ? FORMATS[f].text(data) : "";
+    status.textContent = "";
+  }
+
+  function selectText() {
+    const range = document.createRange();
+    range.selectNodeContents(pre);
+    const sel = window.getSelection();
+    sel?.removeAllRanges();
+    sel?.addRange(range);
+    pre.focus();
+  }
+
+  // A modal dialog makes the rest of the page inert, so the toast lives
+  // inside the dialog while it is open and goes back to the body after.
+  const region = document.querySelector<HTMLElement>("[data-toast-region]")!;
+  const home = region.parentElement!;
+  dialog.addEventListener("close", () => home.append(region));
+
+  function showToast() {
+    if (dialog.open) dialog.append(region);
+    toast.hidden = false;
+    window.clearTimeout(toastTimer);
+    toastTimer = window.setTimeout(() => (toast.hidden = true), 6000);
+  }
+
+  tabs.forEach((t, i) => {
+    t.addEventListener("click", () => show(t.dataset.format as CopyFormat));
+    t.addEventListener("keydown", (e) => {
+      const step = e.key === "ArrowRight" ? 1 : e.key === "ArrowLeft" ? -1 : 0;
+      if (!step) return;
+      e.preventDefault();
+      const next = tabs[(i + step + tabs.length) % tabs.length];
+      next.focus();
+      show(next.dataset.format as CopyFormat);
+    });
+  });
+
+  copyBtn.addEventListener("click", async () => {
+    const ok = await writeClipboard(pre.textContent ?? "");
+    if (ok) {
+      status.textContent = "Copied";
+      if (format === "link") showToast();
+    } else {
+      status.textContent = "Could not copy. The text is selected: press Ctrl C (or ⌘ C) to copy it.";
+      selectText();
+    }
+  });
+
+  dialog.querySelector("[data-close]")!.addEventListener("click", () => dialog.close());
+  // Click on the backdrop closes it.
+  dialog.addEventListener("click", (e) => {
+    if (e.target === dialog) dialog.close();
+  });
+  toast.querySelector("[data-dismiss]")!.addEventListener("click", () => (toast.hidden = true));
+
+  document.addEventListener(OPEN_EVENT, (e) => {
+    const d = (e as CustomEvent<{ data: CopyStackData; format: CopyFormat }>).detail;
+    data = d.data;
+    show(d.format);
+    if (!dialog.open) dialog.showModal();
+  });
+
+  document.addEventListener(SHARE_EVENT, async (e) => {
+    const d = (e as CustomEvent<{ data: CopyStackData }>).detail;
+    if (await writeClipboard(d.data.url)) {
+      showToast();
+    } else {
+      // No clipboard: open the Link tab with the link selected.
+      data = d.data;
+      show("link");
+      if (!dialog.open) dialog.showModal();
+      status.textContent = "Could not copy. The link is selected: press Ctrl C (or ⌘ C) to copy it.";
+      selectText();
+    }
+  });
+</script>
+
+<style>
+  .copy {
+    width: min(680px, calc(100vw - 2 * var(--gutter)));
+    max-height: calc(100dvh - 32px);
+    margin-top: max(16px, 10vh);
+    padding: 0;
+    border: 0;
+    background: var(--label);
+    color: var(--ink);
+    box-shadow: 0 30px 60px -20px rgba(0, 0, 0, 0.5);
+  }
+  .copy::backdrop {
+    background: rgba(28, 35, 64, 0.55);
+  }
+  .head {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 18px 12px 18px 24px;
+    border-bottom: 2px solid var(--ink);
+  }
+  h2 {
+    margin: 0;
+    font-weight: 900;
+    font-stretch: 62%;
+    font-size: 40px;
+    line-height: 1;
+  }
+  .close,
+  .dismiss {
+    margin-left: auto;
+    width: var(--target);
+    height: var(--target);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    border: 0;
+    color: inherit;
+    cursor: pointer;
+  }
+  .tabs {
+    display: flex;
+    flex-wrap: wrap;
+    padding: 0 24px;
+    border-bottom: 1px solid var(--rule);
+  }
+  [role="tab"] {
+    min-height: 48px;
+    padding: 0 16px;
+    background: transparent;
+    border: 0;
+    font: 700 15px var(--font);
+    color: var(--muted);
+    cursor: pointer;
+  }
+  [role="tab"][aria-selected="true"] {
+    color: var(--ink);
+    box-shadow: inset 0 -4px 0 var(--ink);
+  }
+  .panel {
+    padding: 20px 24px 24px;
+  }
+  .hint {
+    margin: 0 0 10px;
+    font-size: 15px;
+    color: var(--muted);
+  }
+  pre {
+    margin: 0;
+    padding: 16px 18px;
+    max-height: 40vh;
+    overflow: auto;
+    background: var(--fill);
+    border: 1px solid var(--rule);
+    font: 500 15px/1.5 var(--font);
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+    color: var(--ink);
+  }
+  .actions {
+    margin-top: 16px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 12px;
+  }
+  .status {
+    font-size: 15px;
+    font-weight: 700;
+  }
+
+  .toast-region {
+    position: fixed;
+    left: 50%;
+    bottom: 24px;
+    transform: translateX(-50%);
+    width: min(520px, calc(100vw - 32px));
+    z-index: 60;
+  }
+  .toast {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 4px 12px;
+    padding: 4px 8px 4px 18px;
+    min-height: 52px;
+    background: var(--ink);
+    color: var(--label);
+    box-shadow: 0 16px 32px -16px rgba(0, 0, 0, 0.5);
+  }
+  .tick {
+    display: inline-flex;
+    color: var(--promo);
+  }
+  .t {
+    font-size: 16px;
+    font-weight: 700;
+  }
+  .s {
+    font-size: 14px;
+    color: var(--on-ink-muted);
+  }
+  @media (max-width: 640px) {
+    .head {
+      padding-left: 16px;
+    }
+    .tabs {
+      padding: 0 8px;
+    }
+    [role="tab"] {
+      padding: 0 10px;
+    }
+    .panel {
+      padding: 16px;
+    }
+    .s {
+      flex-basis: 100%;
+      order: 3;
+      padding-bottom: 8px;
+    }
+  }
+</style>

@@ -1,0 +1,1057 @@
+---
+/**
+ * Build a stack (Builder.dc.html, PhoneBuilder.dc.html).
+ *
+ * Static page, state in the URL: /build?as=indie&hosting=cf-workers&database=neon
+ * Why static: the catalog is a build-time snapshot, so every row a part can
+ * show is rendered here (with the shared Facts component), and a small script
+ * shows the picked ones. The same rules engine (src/lib/fresh/rules.ts) runs in
+ * the browser, so checks update as you pick, with no server round trip.
+ */
+import Shell from "../layouts/Shell.astro";
+import Facts from "../components/fresh/Facts.astro";
+import Icon from "../components/fresh/Icon.astro";
+import CopyStack from "../components/fresh/CopyStack.astro";
+import {
+  aisle as getAisle,
+  checkHref,
+  defaultSituation,
+  now,
+  partOptions,
+  parts,
+  situations,
+  toolHref,
+} from "../lib/fresh/catalog";
+import { rowState, toStackTool, type StackTool } from "../lib/fresh/stack";
+
+const at = now();
+const allParts = parts().map((p) => {
+  const options = partOptions(p, at).map((t) => ({
+    t,
+    s: toStackTool(t, getAisle(t.aisle)!, toolHref(t), at),
+    state: rowState(t, at),
+  }));
+  return { p, options };
+});
+
+const tools: Record<string, StackTool> = {};
+for (const { options } of allParts) for (const o of options) tools[o.t.id] = o.s;
+
+const data = {
+  tools,
+  parts: allParts.map(({ p, options }) => ({ key: p.key, label: p.label, core: !!p.core, options: options.map((o) => o.t.id) })),
+  situations: situations(),
+  fallback: defaultSituation,
+};
+const lower = (s: string) => (/^[A-Z]{2}/.test(s) ? s : s.toLowerCase());
+---
+
+<Shell title="Build a stack · freestack" description="Pick a free tool for each part. We check that they work together.">
+  <div class="wrap page" data-builder>
+    <div class="top">
+      <h1>Build a stack</h1>
+      <div class="sits" role="group" aria-labelledby="sits-l">
+        <span id="sits-l" class="sits-label">I'm building as</span>
+        {
+          situations().map((s) => (
+            <button type="button" class="chip" data-sit={s.id} aria-pressed={String(s.id === defaultSituation)}>
+              {s.label}
+            </button>
+          ))
+        }
+      </div>
+      <label class="select">
+        <span class="select-label">I'm building as</span>
+        <span class="select-box">
+          <select data-sit-select>
+            {
+              situations().map((s) => (
+                <option value={s.id} selected={s.id === defaultSituation}>
+                  {s.label}
+                </option>
+              ))
+            }
+          </select>
+          <Icon name="chevron-down" size={16} class="caret" />
+        </span>
+      </label>
+    </div>
+
+    <div class="banner" role="status" data-banner data-kind="empty">
+      <p class="banner-title" data-banner-title>No parts yet</p>
+      <ul class="banner-list" data-banner-list>
+        <li>Choose a part to start. We check each pick against the others.</li>
+      </ul>
+    </div>
+    <p class="note" role="status" data-note></p>
+
+    <div class="table-box">
+      <table class="parts">
+        <caption class="sr-only">Parts in your stack</caption>
+        <thead>
+          <tr>
+            <th scope="col" class="c-part">Part</th>
+            <th scope="col">Pick</th>
+            <th scope="col">Free limit</th>
+            <th scope="col">Catch</th>
+            <th scope="col" class="c-cost">Cost</th>
+            <th scope="col" class="c-acts"><span class="sr-only">Actions</span></th>
+          </tr>
+        </thead>
+        {
+          allParts.map(({ p, options }) => (
+            <tbody data-part={p.key} hidden={!p.core}>
+              <tr class="empty-row" data-row="">
+                <th scope="row" class="part">
+                  {p.label}
+                </th>
+                <td colspan="5" class="choose-cell">
+                  <button type="button" class="btn choose" data-choose={p.key}>
+                    + Choose {lower(p.label)}
+                  </button>
+                </td>
+              </tr>
+              {options.map((o) => (
+                <tr class="tool-row" data-row={o.t.id} hidden>
+                  <th scope="row" class="part">
+                    {p.label}
+                  </th>
+                  <td class="pick">
+                    <a class="name" href={toolHref(o.t)}>
+                      {o.t.name}
+                    </a>
+                    <span class="sr-only problem-note" hidden>
+                      {" "}
+                      Has a problem.
+                    </span>
+                    <Facts tool={o.t} hideWho class="flags" />
+                    {o.state && (
+                      <span class="state" data-state={o.state.state}>
+                        {o.state.text}
+                        {o.state.link && (
+                          <a href={checkHref(o.t)}>
+                            {o.state.link}
+                            <span class="sr-only"> {o.t.name}</span>
+                          </a>
+                        )}
+                      </span>
+                    )}
+                  </td>
+                  <td class="limit">{o.s.limits}</td>
+                  <td class="catch" data-none={o.s.catch ? undefined : ""}>
+                    {o.s.catch ? (
+                      <>
+                        <Icon name="wrench" />
+                        <span class="sr-only">Catch: </span>
+                        {o.s.catch}
+                      </>
+                    ) : (
+                      <>
+                        <span aria-hidden="true">—</span>
+                        <span class="sr-only">No catch listed</span>
+                      </>
+                    )}
+                  </td>
+                  <td class="cost">$0</td>
+                  <td class="acts">
+                    <div>
+                      <button type="button" class="btn btn-outline swap" data-choose={p.key}>
+                        Swap<span class="sr-only"> {lower(p.label)}</span>
+                      </button>
+                      <button type="button" class="remove" data-remove={p.key} aria-label={`Remove ${lower(p.label)}`}>
+                        <Icon name="close" size={18} />
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          ))
+        }
+        <tfoot>
+          <tr>
+            <th scope="row" colspan="4" class="total-label">
+              Total per month <span class="card-note" data-card-note></span>
+            </th>
+            <td class="total">$0.00</td>
+            <td></td>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+
+    <div class="more" data-more>
+      <span class="more-label">Add another part</span>
+      {
+        allParts
+          .filter(({ p }) => !p.core)
+          .map(({ p }) => (
+            <button type="button" class="btn btn-outline more-btn" data-choose={p.key} data-more-part={p.key}>
+              + {p.label}
+            </button>
+          ))
+      }
+    </div>
+
+    <div class="actions">
+      <button type="button" class="btn desk-copy" data-copy>Copy this stack</button>
+      <button type="button" class="btn btn-outline" data-share>Share link</button>
+      <a class="check-link" href="/check" data-check-link>Already have a stack? Check it</a>
+    </div>
+
+    {
+      allParts.map(({ p, options }) => (
+        <dialog class="picker" data-picker={p.key} aria-labelledby={`pick-h-${p.key}`}>
+          <div class="pick-head">
+            <h2 id={`pick-h-${p.key}`}>Choose {lower(p.label)}</h2>
+            <span class="pick-count">
+              {options.length} free {options.length === 1 ? "option" : "options"}
+            </span>
+            <button type="button" class="close" aria-label="Close" data-close>
+              <Icon name="close" size={20} />
+            </button>
+          </div>
+          {options.length === 0 ? (
+            <p class="pick-empty">
+              Nothing listed for this part yet. <a href="/add">Add a tool</a>
+            </p>
+          ) : (
+            <ul class="options">
+              {options.map((o) => (
+                <li class="option" data-option={o.t.id}>
+                  <div>
+                    <span class="o-name">{o.t.name}</span>
+                    <Facts tool={o.t} hideWho class="o-flags" />
+                  </div>
+                  <span class="o-limit">{o.s.limits}</span>
+                  <span class="o-catch">
+                    {o.s.catch ?? (
+                      <>
+                        <span aria-hidden="true">—</span>
+                        <span class="sr-only">No catch listed</span>
+                      </>
+                    )}
+                  </span>
+                  <span class="o-fit" data-fit />
+                  <button type="button" class="btn o-add" data-add={o.t.id}>
+                    Add<span class="sr-only"> {o.t.name}</span>
+                  </button>
+                </li>
+              ))}
+            </ul>
+          )}
+        </dialog>
+      ))
+    }
+
+    <div class="phone-bar on-ink">
+      <div class="phone-total">
+        <span>Total per month</span>
+        <span class="phone-price">$0.00</span>
+      </div>
+      <button type="button" class="btn btn-promo btn-block" data-copy>Copy this stack</button>
+    </div>
+  </div>
+
+  <script type="application/json" id="build-data" set:html={JSON.stringify(data)} />
+  <CopyStack slot="end" />
+</Shell>
+
+<script>
+  import { evaluate, fitFor, summary } from "../lib/fresh/rules";
+  import { cardNote, parseStack, stackSearch, type CopyStackData, type StackTool } from "../lib/fresh/stack";
+  import { openCopyStack, shareStack } from "../lib/fresh/copy-stack";
+  import type { Situation, SituationId } from "../lib/fresh/types";
+
+  interface PartData {
+    key: string;
+    label: string;
+    core: boolean;
+    options: string[];
+  }
+  const D = JSON.parse(document.getElementById("build-data")!.textContent!) as {
+    tools: Record<string, StackTool>;
+    parts: PartData[];
+    situations: Situation[];
+    fallback: SituationId;
+  };
+
+  const root = document.querySelector<HTMLElement>("[data-builder]")!;
+  const $ = <T extends Element = HTMLElement>(sel: string) => root.querySelector<T>(sel)!;
+  const $$ = <T extends Element = HTMLElement>(sel: string) => [...root.querySelectorAll<T>(sel)];
+  const lower = (s: string) => (/^[A-Z]{2}/.test(s) ? s : s.toLowerCase());
+
+  const parsed = parseStack(location.search, {
+    parts: D.parts,
+    canFill: (k, id) => D.parts.find((p) => p.key === k)?.options.includes(id) ?? false,
+    situations: D.situations.map((s) => s.id),
+    fallback: D.fallback,
+  });
+  let situation: SituationId = parsed.situation;
+  const picks: Record<string, string> = parsed.picks;
+  /** Extra parts opened with "Add another part", shown even while empty. */
+  const opened = new Set<string>();
+  let lastRemoved: { key: string; id: string } | null = null;
+
+  const note = $("[data-note]");
+  if (parsed.dropped.length) {
+    note.textContent = `This link had a tool we no longer list (${parsed.dropped.join(", ")}). We left it out.`;
+  }
+
+  function stackTools(): StackTool[] {
+    return D.parts.filter((p) => picks[p.key]).map((p) => ({ ...D.tools[picks[p.key]], part: p.label }));
+  }
+
+  function search(): string {
+    return stackSearch(situation, picks, D.parts);
+  }
+
+  function copyData(): CopyStackData {
+    const sit = D.situations.find((s) => s.id === situation)!;
+    return {
+      situation: sit.label,
+      url: new URL(`/build${search()}`, location.origin).href,
+      rows: D.parts
+        .filter((p) => picks[p.key])
+        .map((p) => {
+          const t = D.tools[picks[p.key]];
+          return { job: p.label, name: t.name, limits: t.limits, catch: t.catch };
+        }),
+    };
+  }
+
+  function render() {
+    for (const c of $$<HTMLButtonElement>("[data-sit]")) c.setAttribute("aria-pressed", String(c.dataset.sit === situation));
+    $<HTMLSelectElement>("[data-sit-select]").value = situation;
+
+    const tools = stackTools();
+    const result = evaluate({ situation, tools });
+    const problemTools = new Set(result.problems.map((f) => f.tool));
+
+    for (const p of D.parts) {
+      const body = $(`tbody[data-part="${p.key}"]`);
+      const id = picks[p.key];
+      body.hidden = !(p.core || id || opened.has(p.key));
+      for (const row of body.querySelectorAll<HTMLElement>("tr[data-row]")) {
+        const rid = row.dataset.row!;
+        row.hidden = id ? rid !== id : rid !== "";
+        const bad = !!rid && problemTools.has(rid);
+        row.classList.toggle("has-problem", bad);
+        const sr = row.querySelector<HTMLElement>(".problem-note");
+        if (sr) sr.hidden = !bad;
+      }
+      const more = root.querySelector<HTMLElement>(`[data-more-part="${p.key}"]`);
+      if (more) more.hidden = !!(id || opened.has(p.key));
+    }
+    $("[data-more]").hidden = $$("[data-more-part]").every((b) => b.hidden);
+
+    // Banner: problems first, then things to watch.
+    const banner = $("[data-banner]");
+    const list = $("[data-banner-list]");
+    list.replaceChildren();
+    if (tools.length === 0) {
+      banner.dataset.kind = "empty";
+      $("[data-banner-title]").textContent = "No parts yet";
+      const li = document.createElement("li");
+      li.textContent = "Choose a part to start. We check each pick against the others.";
+      list.append(li);
+    } else {
+      banner.dataset.kind = result.problems.length ? "problem" : "ok";
+      $("[data-banner-title]").textContent = summary(result);
+      for (const f of [...result.problems, ...result.watch]) {
+        const li = document.createElement("li");
+        li.dataset.level = f.level;
+        li.dataset.rule = f.rule;
+        const sr = document.createElement("span");
+        sr.className = "sr-only";
+        sr.textContent = f.level === "problem" ? "Problem: " : "To watch: ";
+        li.append(sr, f.text);
+        list.append(li);
+      }
+    }
+
+    $("[data-card-note]").textContent = cardNote(tools);
+    for (const b of $$<HTMLButtonElement>("[data-copy], [data-share]")) b.disabled = tools.length === 0;
+    $<HTMLAnchorElement>("[data-check-link]").href = `/check?as=${situation}`;
+
+    history.replaceState(null, "", `${location.pathname}${search()}`);
+  }
+
+  // ---------- Picker ----------
+  let picking: string | null = null;
+
+  function openPicker(key: string) {
+    const dialog = root.querySelector<HTMLDialogElement>(`[data-picker="${key}"]`)!;
+    picking = key;
+    const part = D.parts.find((p) => p.key === key)!;
+    const input = { situation, tools: stackTools() };
+    for (const li of dialog.querySelectorAll<HTMLElement>("[data-option]")) {
+      const id = li.dataset.option!;
+      const on = picks[key] === id;
+      const clash = fitFor({ ...D.tools[id], part: part.label }, input, picks[key]);
+      li.querySelector("[data-fit]")!.textContent = !clash
+        ? "Fits your stack"
+        : clash.tool === id
+          ? clash.short
+          : `Breaks ${D.tools[clash.tool].name}: ${clash.short.charAt(0).toLowerCase()}${clash.short.slice(1)}`;
+      li.classList.toggle("clash", !!clash);
+      li.classList.toggle("selected", on);
+      const btn = li.querySelector<HTMLButtonElement>("[data-add]")!;
+      btn.firstChild!.textContent = on ? "Selected" : "Add";
+      btn.classList.toggle("btn-outline", on);
+    }
+    dialog.showModal();
+  }
+
+  function focusRow(key: string) {
+    const body = $(`tbody[data-part="${key}"]`);
+    const target = picks[key]
+      ? body.querySelector<HTMLElement>(`tr[data-row="${picks[key]}"] .swap`)
+      : body.querySelector<HTMLElement>("tr.empty-row .choose");
+    target?.focus();
+  }
+
+  for (const dialog of $$<HTMLDialogElement>("dialog[data-picker]")) {
+    dialog.addEventListener("click", (e) => {
+      const el = e.target as HTMLElement;
+      if (el === dialog || el.closest("[data-close]")) dialog.close();
+      const add = el.closest<HTMLElement>("[data-add]");
+      if (add && picking) {
+        const key = picking;
+        picks[key] = add.dataset.add!;
+        opened.delete(key);
+        note.textContent = "";
+        dialog.close();
+        render();
+        focusRow(key);
+      }
+    });
+    dialog.addEventListener("close", () => {
+      if (picking && !picks[picking] && D.parts.find((p) => p.key === picking && !p.core)) {
+        // Opened an extra part and picked nothing: keep its row so it can be chosen later.
+        opened.add(picking);
+        render();
+      }
+      picking = null;
+    });
+  }
+
+  // ---------- Row actions ----------
+  root.addEventListener("click", (e) => {
+    const el = e.target as HTMLElement;
+    const choose = el.closest<HTMLElement>("[data-choose]");
+    if (choose) return openPicker(choose.dataset.choose!);
+
+    const remove = el.closest<HTMLElement>("[data-remove]");
+    if (remove) {
+      const key = remove.dataset.remove!;
+      const id = picks[key];
+      delete picks[key];
+      lastRemoved = { key, id };
+      const label = D.parts.find((p) => p.key === key)!.label;
+      if (!D.parts.find((p) => p.key === key)!.core) opened.add(key);
+      note.replaceChildren(`Removed ${D.tools[id].name} from ${lower(label)}. `);
+      const undo = document.createElement("button");
+      undo.type = "button";
+      undo.className = "undo";
+      undo.dataset.undo = "";
+      undo.textContent = "Undo";
+      note.append(undo);
+      render();
+      focusRow(key);
+      return;
+    }
+
+    if (el.closest("[data-undo]") && lastRemoved) {
+      picks[lastRemoved.key] = lastRemoved.id;
+      const key = lastRemoved.key;
+      lastRemoved = null;
+      note.textContent = "";
+      render();
+      focusRow(key);
+      return;
+    }
+
+    if (el.closest("[data-copy]")) return openCopyStack(copyData());
+    if (el.closest("[data-share]")) return shareStack(copyData());
+
+    const sit = el.closest<HTMLElement>("[data-sit]");
+    if (sit) {
+      situation = sit.dataset.sit as SituationId;
+      render();
+    }
+  });
+
+  $<HTMLSelectElement>("[data-sit-select]").addEventListener("change", (e) => {
+    situation = (e.target as HTMLSelectElement).value as SituationId;
+    render();
+  });
+
+  render();
+</script>
+
+<style>
+  .page {
+    padding-block: 40px 96px;
+  }
+  .top {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    gap: 16px 32px;
+  }
+  h1 {
+    margin: 0;
+    font-weight: 900;
+    font-stretch: 62%;
+    line-height: 1;
+    font-size: clamp(52px, 7vw, 96px);
+  }
+  .sits {
+    margin-left: auto;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 6px;
+  }
+  .sits-label {
+    font-size: 15px;
+    font-weight: 700;
+    margin-right: 6px;
+  }
+  .select {
+    display: none;
+    width: 100%;
+  }
+  .select-label {
+    display: block;
+    margin-bottom: 6px;
+    font-size: 14px;
+    font-weight: 700;
+  }
+  .select-box {
+    position: relative;
+    display: block;
+  }
+  .select select {
+    width: 100%;
+    min-height: var(--target);
+    padding: 0 36px 0 12px;
+    appearance: none;
+    background: var(--label);
+    border: 2px solid var(--ink);
+    border-radius: 0;
+    font: 700 16px var(--font);
+    color: var(--ink);
+  }
+  .select :global(.caret) {
+    position: absolute;
+    right: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    pointer-events: none;
+  }
+
+  .banner {
+    margin-top: 28px;
+    padding: 16px 20px;
+    display: grid;
+    gap: 6px;
+    background: var(--label);
+    border: 2px solid var(--ink);
+  }
+  .banner[data-kind="problem"] {
+    background: var(--recheck);
+    border-color: var(--recheck);
+  }
+  .banner[data-kind="ok"] {
+    background: var(--ink);
+    border-color: var(--ink);
+    color: var(--label);
+  }
+  .banner-title {
+    margin: 0;
+    font-weight: 800;
+    font-size: 17px;
+  }
+  .banner-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 4px;
+    font-size: 15px;
+    line-height: 1.4;
+  }
+  .note {
+    margin: 10px 0 0;
+    font-size: 15px;
+  }
+  .note:empty {
+    display: none;
+  }
+  .note :global(.undo) {
+    min-height: var(--target);
+    padding: 0 6px;
+    background: transparent;
+    border: 0;
+    font: 700 15px var(--font);
+    color: var(--ink);
+    text-decoration: underline;
+    cursor: pointer;
+  }
+
+  .table-box {
+    margin-top: 16px;
+    background: var(--label);
+  }
+  .parts {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
+  }
+  thead tr {
+    text-align: left;
+    font-size: 14px;
+    color: var(--muted);
+    border-bottom: 2px solid var(--ink);
+  }
+  thead th {
+    padding: 14px 12px;
+    font-weight: 700;
+  }
+  .c-part {
+    width: 15%;
+    padding-left: 18px;
+  }
+  .c-cost {
+    width: 7%;
+    text-align: right;
+  }
+  .c-acts {
+    width: 150px;
+  }
+  tbody tr {
+    border-top: 1px solid var(--shelf);
+    vertical-align: middle;
+  }
+  .part {
+    padding: 16px 18px;
+    text-align: left;
+    font-size: 16px;
+    font-weight: 800;
+  }
+  .has-problem .part {
+    box-shadow: inset 6px 0 0 var(--recheck);
+  }
+  td {
+    padding: 16px 12px;
+  }
+  .name {
+    font-size: 17px;
+    font-weight: 700;
+    text-decoration: none;
+  }
+  .name:hover {
+    text-decoration: underline;
+  }
+  .pick :global(.flags) {
+    margin-top: 4px;
+    color: var(--muted);
+  }
+  .state {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0 10px;
+    margin-top: 6px;
+    font-size: 13px;
+    color: var(--muted);
+  }
+  .state[data-state="overdue"] {
+    color: var(--ink);
+    box-shadow: inset 4px 0 0 var(--recheck);
+    padding-left: 10px;
+  }
+  .state a {
+    font-weight: 700;
+  }
+  .limit {
+    font-size: 15px;
+  }
+  .catch {
+    font-size: 14px;
+    font-weight: 700;
+  }
+  .catch :global(svg) {
+    vertical-align: -2px;
+    margin-right: 4px;
+  }
+  .cost {
+    text-align: right;
+    font-weight: 900;
+    font-stretch: 62%;
+    font-size: 26px;
+  }
+  .acts {
+    padding: 12px 18px;
+  }
+  .acts div {
+    display: flex;
+    justify-content: flex-end;
+    gap: 4px;
+  }
+  .swap {
+    padding: 0 12px;
+    font-size: 14px;
+  }
+  .remove,
+  .close {
+    width: var(--target);
+    height: var(--target);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    border: 0;
+    color: var(--ink);
+    cursor: pointer;
+  }
+  .choose-cell {
+    padding: 12px 18px 12px 12px;
+  }
+  tfoot tr {
+    border-top: 2px solid var(--ink);
+  }
+  .total-label {
+    padding: 16px 18px;
+    text-align: left;
+    font-size: 16px;
+    font-weight: 800;
+  }
+  .card-note {
+    font-weight: 500;
+    font-size: 14px;
+    color: var(--muted);
+  }
+  .total {
+    padding: 12px;
+    text-align: right;
+    font-weight: 900;
+    font-stretch: 62%;
+    font-size: 44px;
+    line-height: 1;
+  }
+
+  .more {
+    margin-top: 12px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+  }
+  .more-label {
+    font-size: 15px;
+    font-weight: 700;
+    margin-right: 4px;
+  }
+  .more-btn {
+    font-size: 14px;
+    padding: 0 12px;
+  }
+
+  .actions {
+    margin-top: 14px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px;
+  }
+  .actions .btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+  .check-link {
+    margin-left: auto;
+    display: inline-flex;
+    align-items: center;
+    min-height: var(--target);
+    font-size: 15px;
+    font-weight: 700;
+  }
+
+  .picker {
+    width: min(1100px, calc(100vw - 2 * var(--gutter)));
+    max-height: calc(100dvh - 32px);
+    padding: 0;
+    border: 2px solid var(--ink);
+    background: var(--label);
+    color: var(--ink);
+  }
+  .picker::backdrop {
+    background: rgba(28, 35, 64, 0.55);
+  }
+  .pick-head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 4px 12px;
+    padding: 16px 12px 16px 24px;
+    border-bottom: 2px solid var(--ink);
+  }
+  .pick-head h2 {
+    margin: 0;
+    font-weight: 900;
+    font-stretch: 62%;
+    font-size: 44px;
+    line-height: 1;
+  }
+  .pick-count {
+    font-size: 15px;
+    color: var(--muted);
+  }
+  .close {
+    margin-left: auto;
+  }
+  .pick-empty {
+    margin: 0;
+    padding: 24px;
+  }
+  .options {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .option {
+    display: grid;
+    grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr) minmax(0, 1fr) 190px 120px;
+    gap: 12px;
+    align-items: center;
+    padding: 14px 24px;
+    border-top: 1px solid var(--shelf);
+  }
+  .option.selected {
+    background: var(--fill);
+  }
+  .o-name {
+    display: block;
+    font-size: 17px;
+    font-weight: 800;
+  }
+  .option :global(.o-flags) {
+    margin-top: 2px;
+    color: var(--muted);
+  }
+  .o-limit {
+    font-size: 15px;
+  }
+  .o-catch,
+  .o-fit {
+    font-size: 14px;
+    font-weight: 700;
+  }
+  .option.clash .o-fit {
+    box-shadow: inset 4px 0 0 var(--recheck);
+    padding-left: 10px;
+  }
+
+  .phone-bar {
+    display: none;
+  }
+
+  @media (max-width: 720px) {
+    .page {
+      padding-block: 16px 0;
+    }
+    .sits {
+      display: none;
+    }
+    .select {
+      display: block;
+    }
+    .top {
+      gap: 12px;
+    }
+    .banner {
+      margin-top: 14px;
+      padding: 12px 14px;
+    }
+    .banner-title {
+      font-size: 16px;
+    }
+    .banner-list {
+      font-size: 14px;
+    }
+    .table-box {
+      margin-top: 12px;
+      background: transparent;
+    }
+    .parts,
+    .parts tbody,
+    .parts tr,
+    .parts th,
+    .parts td {
+      display: block;
+    }
+    .parts [hidden] {
+      display: none;
+    }
+    .parts thead {
+      display: none;
+    }
+    .parts tbody {
+      margin-bottom: 6px;
+    }
+    .tool-row {
+      display: grid !important;
+      grid-template-columns: minmax(0, 1fr) auto;
+      grid-template-areas: "part acts" "pick acts" "limit acts" "catch acts";
+      align-items: center;
+      padding: 10px 6px 10px 14px;
+      background: var(--label);
+      border: 0;
+    }
+    .tool-row[hidden] {
+      display: none !important;
+    }
+    .tool-row.has-problem {
+      box-shadow: inset 6px 0 0 var(--recheck);
+    }
+    .has-problem .part {
+      box-shadow: none;
+    }
+    .tool-row .part {
+      grid-area: part;
+      padding: 0;
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--muted);
+    }
+    .tool-row .pick {
+      grid-area: pick;
+      padding: 0;
+    }
+    .tool-row .pick :global(.flags) {
+      display: none;
+    }
+    .tool-row .limit {
+      grid-area: limit;
+      padding: 0;
+      font-size: 14px;
+    }
+    .tool-row .catch {
+      grid-area: catch;
+      padding: 4px 0 0;
+      font-size: 13px;
+    }
+    .tool-row .catch[data-none] {
+      display: none;
+    }
+    .tool-row .cost {
+      display: none;
+    }
+    .tool-row .acts {
+      grid-area: acts;
+      padding: 0;
+    }
+    .empty-row {
+      border: 0;
+    }
+    .empty-row .part {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      clip: rect(0 0 0 0);
+    }
+    .choose-cell {
+      padding: 0;
+    }
+    .choose {
+      width: 100%;
+      justify-content: flex-start;
+      min-height: 52px;
+      padding: 0 14px;
+      background: transparent;
+      color: var(--ink);
+      border: 2px dashed var(--ink);
+    }
+    .parts tfoot {
+      display: none;
+    }
+    .actions {
+      margin-top: 12px;
+    }
+    .desk-copy {
+      display: none;
+    }
+    .check-link {
+      margin-left: 0;
+    }
+    .phone-bar {
+      display: block;
+      position: sticky;
+      bottom: 0;
+      z-index: 5;
+      margin: 16px calc(-1 * var(--gutter)) 0;
+      padding: 10px var(--gutter) calc(16px + env(safe-area-inset-bottom, 0px));
+      background: var(--ink);
+      color: var(--label);
+    }
+    .phone-total {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      font-size: 15px;
+      font-weight: 700;
+    }
+    .phone-price {
+      font-weight: 900;
+      font-stretch: 62%;
+      font-size: 40px;
+      line-height: 1;
+    }
+    .phone-bar .btn {
+      margin-top: 8px;
+    }
+    .phone-bar .btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+    .picker {
+      width: 100vw;
+      max-width: 100vw;
+      margin: auto 0 0;
+      max-height: 90dvh;
+    }
+    .pick-head {
+      padding-left: 16px;
+    }
+    .pick-head h2 {
+      font-size: 36px;
+    }
+    .option {
+      grid-template-columns: minmax(0, 1fr) auto;
+      grid-template-areas: "name add" "limit add" "catch add" "fit add";
+      gap: 2px 12px;
+      padding: 12px 16px;
+    }
+    .option > div {
+      grid-area: name;
+    }
+    .o-limit {
+      grid-area: limit;
+      font-size: 14px;
+    }
+    .o-catch {
+      grid-area: catch;
+      font-size: 13px;
+    }
+    .o-fit {
+      grid-area: fit;
+      font-size: 13px;
+    }
+    .o-add {
+      grid-area: add;
+    }
+  }
+</style>

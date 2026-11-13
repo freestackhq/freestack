@@ -131,3 +131,17 @@ export type LabelState =
   | "review"
   | "vendor-changed"
   | "imported";
+
+/** A job in a stack (Build a stack rows, Home preset rows). UI-only. */
+export interface Part {
+  /** URL key: /build?hosting=cf-workers */
+  key: string;
+  /** Shown name; matches PresetRow.job ("Sign-in"). */
+  label: string;
+  /** Aisle its tools come from. */
+  aisle: string;
+  /** Only tools of these kinds, when one aisle holds more than one job. */
+  kinds?: string[];
+  /** Always shown in Build a stack, even when empty. */
+  core?: boolean;
+}

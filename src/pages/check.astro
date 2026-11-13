@@ -1,0 +1,608 @@
+---
+/**
+ * Check my stack (CheckStack.dc.html; unknown tool from Edges.dc.html).
+ *
+ * Static page, state in the URL: /check?as=indie&tools=vercel-hobby,supabase,Fauna
+ * Listed tools are stored by id, anything else as typed. Same rules engine
+ * as Build a stack, run in the browser. Tools we don't list stay as dashed
+ * chips with "Add it"; the rest still get checked.
+ */
+import Shell from "../layouts/Shell.astro";
+import Icon from "../components/fresh/Icon.astro";
+import CopyStack from "../components/fresh/CopyStack.astro";
+import {
+  aisle as getAisle,
+  aisles,
+  catchesForTool,
+  defaultSituation,
+  now,
+  parts,
+  situations,
+  toolHref,
+  tools as allTools,
+  toolsInAisle,
+  writeLabelHref,
+} from "../lib/fresh/catalog";
+import { toStackTool, type StackTool } from "../lib/fresh/stack";
+
+const at = now();
+const partLabel = (aisleId: string, kind: string) =>
+  parts().find((p) => p.aisle === aisleId && (!p.kinds || p.kinds.includes(kind)))?.label ?? getAisle(aisleId)?.name ?? aisleId;
+
+// Labeled tools, in aisle order so swaps prefer suggested and checked ones.
+const labeled: StackTool[] = aisles().flatMap((a) =>
+  toolsInAisle(a.id, at).map((t) => toStackTool(t, a, toolHref(t), at, partLabel(t.aisle, t.kind))),
+);
+// Imported entries are on freestack but have no label: they can't be checked yet.
+const unlabeled = allTools()
+  .filter((t) => t.source === "imported")
+  .map((t) => ({ id: t.id, name: t.name, href: writeLabelHref(t) }));
+const catchPages = Object.fromEntries(
+  labeled.flatMap((t) => catchesForTool(t.id).slice(0, 1).map((c) => [t.id, `/catches/${c.slug}`])),
+);
+
+const data = { labeled, unlabeled, catchPages, situations: situations(), fallback: defaultSituation };
+---
+
+<Shell title="Check my stack · freestack" description="Type the tools you use. We flag the catches for your situation.">
+  <div class="wrap page" data-checker>
+    <h1>Check my stack</h1>
+    <p class="lede">Type what you use now. We flag the catches for your situation.</p>
+
+    <form class="box" data-form>
+      <div>
+        <label for="stack-in" class="field-label">Your tools</label>
+        <div class="field-box" data-field>
+          <ul class="chips" aria-label="Your stack" data-chips></ul>
+          <input
+            id="stack-in"
+            type="text"
+            autocomplete="off"
+            placeholder="Add another, like Neon"
+            aria-describedby="stack-hint"
+            data-input
+          />
+        </div>
+        <p id="stack-hint" class="hint">Press Enter or type a comma after each one. You can paste a list.</p>
+      </div>
+      <div class="controls">
+        <div class="sits" role="group" aria-labelledby="sits-l">
+          <span id="sits-l" class="sits-label">I'm building as</span>
+          {
+            situations().map((s) => (
+              <button type="button" class="chip" data-sit={s.id} aria-pressed={String(s.id === defaultSituation)}>
+                {s.label}
+              </button>
+            ))
+          }
+        </div>
+        <button type="submit" class="btn btn-promo check-btn">Check it</button>
+      </div>
+    </form>
+
+    <p class="unknown" role="status" data-unknown></p>
+
+    <section class="results" aria-labelledby="res-h" data-results hidden>
+      <div class="res-head">
+        <h2 id="res-h" tabindex="-1" data-summary></h2>
+        <span class="for" data-for></span>
+      </div>
+      <ul class="verdicts" data-verdicts></ul>
+      <div class="res-foot" data-foot>
+        <a class="why" href="#" data-why hidden></a>
+        <button type="button" class="btn copy-fixed" data-copy-fixed>Copy the fixed stack</button>
+      </div>
+    </section>
+    <p class="empty" data-empty>Add a tool above to check it.</p>
+    <p class="small">Based on each tool's label. Not legal advice.</p>
+
+    <template data-icon="problem"><Icon name="cross" size={16} /></template>
+    <template data-icon="watch"><Icon name="wrench" size={16} /></template>
+    <template data-icon="fine"><Icon name="check" size={16} /></template>
+    <template data-icon="remove"><Icon name="close" size={16} /></template>
+  </div>
+
+  <script type="application/json" id="check-data" set:html={JSON.stringify(data)} />
+  <CopyStack slot="end" />
+</Shell>
+
+<script>
+  import { bestSwap, evaluate, summary, type Finding } from "../lib/fresh/rules";
+  import { matchTool, splitTools, type StackTool } from "../lib/fresh/stack";
+  import { openCopyStack } from "../lib/fresh/copy-stack";
+  import type { Situation, SituationId } from "../lib/fresh/types";
+
+  const D = JSON.parse(document.getElementById("check-data")!.textContent!) as {
+    labeled: StackTool[];
+    unlabeled: { id: string; name: string; href: string }[];
+    catchPages: Record<string, string>;
+    situations: Situation[];
+    fallback: SituationId;
+  };
+
+  const root = document.querySelector<HTMLElement>("[data-checker]")!;
+  const $ = <T extends Element = HTMLElement>(sel: string) => root.querySelector<T>(sel)!;
+  const input = $<HTMLInputElement>("[data-input]");
+  const byId = new Map(D.labeled.map((t) => [t.id, t]));
+
+  type Entry =
+    | { kind: "tool"; t: StackTool }
+    | { kind: "unlabeled"; id: string; name: string; href: string }
+    | { kind: "unknown"; name: string };
+
+  const FOR: Record<SituationId, string> = {
+    school: "For a student with a school email",
+    student: "For a student",
+    indie: "For an indie builder who may sell",
+    startup: "For a startup that sells",
+  };
+
+  function resolve(text: string): Entry {
+    const t = matchTool(text, D.labeled);
+    if (t) return { kind: "tool", t };
+    const u = matchTool(text, D.unlabeled);
+    if (u) return { kind: "unlabeled", ...u };
+    return { kind: "unknown", name: text.trim() };
+  }
+
+  const key = (e: Entry) => (e.kind === "unknown" ? `?${e.name.toLowerCase()}` : e.kind === "tool" ? e.t.id : e.id);
+  const nameOf = (e: Entry) => (e.kind === "tool" ? e.t.name : e.name);
+
+  const q = new URLSearchParams(location.search);
+  let situation: SituationId = D.situations.some((s) => s.id === q.get("as")) ? (q.get("as") as SituationId) : D.fallback;
+  let entries: Entry[] = [];
+  addAll(splitTools(q.get("tools") ?? ""), false);
+
+  function addAll(names: string[], doRender = true) {
+    for (const n of names) {
+      const e = resolve(n);
+      if (!entries.some((x) => key(x) === key(e))) entries.push(e);
+    }
+    if (doRender) render();
+  }
+
+  function icon(name: string): DocumentFragment {
+    return (root.querySelector<HTMLTemplateElement>(`template[data-icon="${name}"]`)!.content.cloneNode(true) as DocumentFragment);
+  }
+
+  function el<K extends keyof HTMLElementTagNameMap>(tag: K, cls?: string, text?: string): HTMLElementTagNameMap[K] {
+    const n = document.createElement(tag);
+    if (cls) n.className = cls;
+    if (text !== undefined) n.textContent = text;
+    return n;
+  }
+
+  function sellSentence(t: StackTool): string {
+    return t.sell === "yes" ? "Selling is allowed." : t.sell === "no" ? "Selling is not allowed." : "Check the terms before selling.";
+  }
+
+  function render() {
+    for (const c of root.querySelectorAll<HTMLButtonElement>("[data-sit]")) c.setAttribute("aria-pressed", String(c.dataset.sit === situation));
+
+    // Chips
+    const chips = $("[data-chips]");
+    chips.replaceChildren();
+    for (const e of entries) {
+      const li = el("li", `chip stack-chip${e.kind === "tool" ? "" : " chip-dashed"}`);
+      li.dataset.entry = key(e);
+      li.append(el("span", "chip-name", nameOf(e)));
+      if (e.kind !== "tool") li.append(el("span", "sr-only", e.kind === "unknown" ? " (not on freestack)" : " (no label yet)"));
+      const rm = el("button", "chip-remove");
+      rm.type = "button";
+      rm.setAttribute("aria-label", `Remove ${nameOf(e)}`);
+      rm.dataset.remove = key(e);
+      rm.append(icon("remove"));
+      li.append(rm);
+      chips.append(li);
+    }
+
+    const known = entries.filter((e): e is Extract<Entry, { kind: "tool" }> => e.kind === "tool");
+    const others = entries.filter((e) => e.kind !== "tool");
+
+    // Tools we can't check
+    const unknown = $("[data-unknown]");
+    unknown.replaceChildren();
+    for (const e of others) {
+      const line = el("span", "unknown-line");
+      const strong = el("strong", undefined, e.kind === "unknown" ? `${e.name} isn't on freestack` : `${e.name} has no label yet`);
+      const rest =
+        known.length > 0
+          ? `, so we checked the other ${known.length} without it.`
+          : ", so there is nothing to check yet.";
+      line.append(strong, rest, " ");
+      const a = el("a", "add-link", e.kind === "unknown" ? `Add ${e.name}` : "Write its label");
+      a.href = e.kind === "unknown" ? `/add?name=${encodeURIComponent(e.name)}` : e.href;
+      line.append(a);
+      unknown.append(line);
+    }
+
+    // Results
+    const results = $("[data-results]");
+    $("[data-empty]").hidden = entries.length > 0;
+    results.hidden = known.length === 0;
+    const stack = { situation, tools: known.map((e) => e.t) };
+    const r = evaluate(stack);
+    $("[data-summary]").textContent = summary(r);
+    $("[data-for]").textContent = FOR[situation];
+
+    const list = $("[data-verdicts]");
+    list.replaceChildren();
+    const swaps = new Map<string, StackTool>();
+    for (const { t } of known) {
+      const mine = (fs: Finding[]) => fs.filter((f) => f.tool === t.id);
+      const problems = mine(r.problems);
+      const watch = mine(r.watch);
+      const level = problems.length ? "problem" : watch.length ? "watch" : "fine";
+      const li = el("li", `verdict v-${level}`);
+      li.dataset.tool = t.id;
+      li.dataset.level = level;
+      const name = el("a", "v-name", t.name);
+      name.href = t.href;
+      const status = el("span", "v-status");
+      status.append(icon(level), level === "problem" ? "Problem" : level === "watch" ? "Watch out" : "Fine");
+      const text = el("span", "v-text");
+      if (level === "fine") {
+        text.append(el("strong", undefined, "No catch for you."), ` ${t.limits}. ${sellSentence(t)}`);
+      } else {
+        const fs = [...problems, ...watch];
+        text.append(el("strong", undefined, fs[0].text));
+        for (const f of fs.slice(1)) text.append(` ${f.text}`);
+      }
+      li.append(name, status, text);
+      if (problems.length) {
+        const swap = bestSwap(t.id, stack, D.labeled);
+        if (swap) {
+          swaps.set(t.id, swap);
+          const a = el("a", "btn btn-outline v-swap", `Switch to ${swap.name}`);
+          a.href = swap.href;
+          li.append(a);
+        }
+      }
+      list.append(li);
+    }
+
+    // Footer: why the first problem is a problem, and the fixed stack.
+    const why = $<HTMLAnchorElement>("[data-why]");
+    const firstWithPage = r.problems.find((f) => D.catchPages[f.tool]);
+    why.hidden = !firstWithPage;
+    if (firstWithPage) {
+      why.href = D.catchPages[firstWithPage.tool];
+      why.textContent = `Why ${byId.get(firstWithPage.tool)!.name} is a problem`;
+    }
+    $("[data-copy-fixed]").textContent = swaps.size ? "Copy the fixed stack" : "Copy this stack";
+    fixed = known.map((e) => swaps.get(e.t.id) ?? e.t);
+
+    const url = new URL(location.href);
+    url.search = "";
+    url.searchParams.set("as", situation);
+    if (entries.length) url.searchParams.set("tools", entries.map((e) => (e.kind === "unknown" ? e.name : key(e))).join(","));
+    history.replaceState(null, "", url);
+  }
+
+  let fixed: StackTool[] = [];
+
+  function commitInput() {
+    const names = splitTools(input.value);
+    input.value = "";
+    if (names.length) addAll(names);
+  }
+
+  input.addEventListener("keydown", (e) => {
+    if (e.key === "Enter" || e.key === ",") {
+      if (input.value.trim()) {
+        e.preventDefault();
+        commitInput();
+      } else if (e.key === ",") e.preventDefault();
+    } else if (e.key === "Backspace" && !input.value && entries.length) {
+      entries.pop();
+      render();
+    }
+  });
+  input.addEventListener("paste", (e) => {
+    const text = e.clipboardData?.getData("text") ?? "";
+    if (splitTools(text).length > 1) {
+      e.preventDefault();
+      addAll(splitTools(input.value + text));
+      input.value = "";
+    }
+  });
+
+  $("[data-field]").addEventListener("click", (e) => {
+    if (e.target === e.currentTarget) input.focus();
+  });
+
+  $("[data-form]").addEventListener("submit", (e) => {
+    e.preventDefault();
+    commitInput();
+    if (!$("[data-results]").hidden) $("[data-summary]").focus();
+  });
+
+  root.addEventListener("click", (e) => {
+    const t = e.target as HTMLElement;
+    const rm = t.closest<HTMLElement>("[data-remove]");
+    if (rm) {
+      const i = entries.findIndex((x) => key(x) === rm.dataset.remove);
+      entries = entries.filter((x) => key(x) !== rm.dataset.remove);
+      render();
+      // Keep focus in the field: the next chip's remove button, or the input.
+      const next = root.querySelectorAll<HTMLElement>("[data-remove]")[i];
+      (next ?? input).focus();
+      return;
+    }
+    const sit = t.closest<HTMLElement>("[data-sit]");
+    if (sit) {
+      situation = sit.dataset.sit as SituationId;
+      render();
+      return;
+    }
+    if (t.closest("[data-copy-fixed]")) {
+      const sitLabel = D.situations.find((s) => s.id === situation)!.label;
+      const url = new URL("/check", location.origin);
+      url.searchParams.set("as", situation);
+      url.searchParams.set("tools", fixed.map((f) => f.id).join(","));
+      openCopyStack({
+        situation: sitLabel,
+        url: url.href,
+        rows: fixed.map((f) => ({ job: f.part ?? f.aisle, name: f.name, limits: f.limits, catch: f.catch })),
+      });
+    }
+  });
+
+  render();
+</script>
+
+<style>
+  .page {
+    padding-block: 48px 96px;
+  }
+  h1 {
+    margin: 0;
+    font-weight: 900;
+    font-stretch: 62%;
+    line-height: 1;
+    font-size: clamp(56px, 8vw, 104px);
+  }
+  .lede {
+    margin: 14px 0 0;
+    max-width: 46ch;
+    font-size: 19px;
+  }
+  .box {
+    margin-top: 32px;
+    padding: 22px 24px;
+    display: grid;
+    gap: 18px;
+    background: var(--label);
+    border: 2px solid var(--ink);
+  }
+  .field-label {
+    display: block;
+    margin: 0 0 6px;
+    font-size: 15px;
+    font-weight: 700;
+  }
+  .field-box {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 6px;
+    padding: 6px;
+    border: 2px solid var(--ink);
+    cursor: text;
+  }
+  .field-box:focus-within {
+    outline: 3px solid var(--focus);
+    outline-offset: 2px;
+  }
+  .chips {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+  .chips:empty {
+    display: none;
+  }
+  .chips :global(.stack-chip) {
+    padding: 0 0 0 12px;
+    gap: 2px;
+    font-weight: 700;
+    cursor: default;
+  }
+  .chips :global(.chip-remove) {
+    width: var(--target);
+    height: var(--target);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    border: 0;
+    color: inherit;
+    cursor: pointer;
+  }
+  input {
+    flex: 1 1 200px;
+    min-width: 0;
+    min-height: 40px;
+    padding: 0 6px;
+    border: 0;
+    outline: none;
+    background: transparent;
+    font: 500 16px var(--font);
+    color: var(--ink);
+  }
+  .hint {
+    margin: 6px 0 0;
+    font-size: 14px;
+    color: var(--muted);
+  }
+  .controls {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    gap: 16px;
+  }
+  .sits {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 6px;
+  }
+  .sits-label {
+    font-size: 15px;
+    font-weight: 700;
+    margin-right: 6px;
+  }
+  .check-btn {
+    margin-left: auto;
+  }
+
+  .unknown {
+    margin: 16px 0 0;
+    display: grid;
+    gap: 6px;
+    font-size: 15px;
+  }
+  .unknown:empty {
+    display: none;
+  }
+  .unknown :global(.unknown-line) {
+    padding: 12px 16px;
+    background: var(--label);
+    border: 2px dashed var(--ink);
+  }
+  .unknown :global(.add-link) {
+    font-weight: 700;
+    display: inline-flex;
+    align-items: center;
+    min-height: var(--target);
+  }
+
+  .results {
+    margin-top: 32px;
+    background: var(--label);
+  }
+  .res-head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 8px 20px;
+    padding: 20px 24px;
+  }
+  .res-head h2 {
+    margin: 0;
+    font-weight: 900;
+    font-stretch: 62%;
+    line-height: 1;
+    font-size: 44px;
+  }
+  .for {
+    font-size: 15px;
+    color: var(--muted);
+  }
+  .verdicts {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .verdicts :global(.verdict) {
+    display: grid;
+    grid-template-columns: 200px 140px minmax(0, 1fr) auto;
+    gap: 8px 20px;
+    align-items: center;
+    padding: 18px 24px;
+    border-top: 1px solid var(--rule);
+  }
+  .verdicts :global(.v-problem) {
+    box-shadow: inset 6px 0 0 var(--recheck);
+  }
+  .verdicts :global(.v-name) {
+    font-size: 18px;
+    font-weight: 800;
+    text-decoration: none;
+  }
+  .verdicts :global(.v-name:hover) {
+    text-decoration: underline;
+  }
+  .verdicts :global(.v-status) {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 15px;
+    font-weight: 700;
+  }
+  .verdicts :global(.v-text) {
+    font-size: 16px;
+    line-height: 1.45;
+  }
+  .verdicts :global(.v-swap) {
+    white-space: nowrap;
+  }
+  .res-foot {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 12px;
+    padding: 18px 24px;
+    border-top: 2px solid var(--ink);
+  }
+  .why {
+    font-weight: 700;
+    display: inline-flex;
+    align-items: center;
+    min-height: var(--target);
+  }
+  .copy-fixed {
+    margin-left: auto;
+  }
+  .empty {
+    margin: 24px 0 0;
+    font-size: 16px;
+    color: var(--muted);
+  }
+  .small {
+    margin: 14px 0 0;
+    font-size: 14px;
+    color: var(--muted);
+  }
+
+  @media (max-width: 760px) {
+    .page {
+      padding-block: 24px 64px;
+    }
+    .box {
+      padding: 16px;
+    }
+    .check-btn {
+      margin-left: 0;
+      width: 100%;
+    }
+    .res-head {
+      padding: 16px;
+    }
+    .res-head h2 {
+      font-size: 36px;
+    }
+    .verdicts :global(.verdict) {
+      grid-template-columns: minmax(0, 1fr) auto;
+      padding: 14px 16px;
+    }
+    .verdicts :global(.v-text),
+    .verdicts :global(.v-swap) {
+      grid-column: 1 / -1;
+    }
+    .verdicts :global(.v-swap) {
+      white-space: normal;
+      justify-self: start;
+    }
+    .res-foot {
+      padding: 16px;
+    }
+    .copy-fixed {
+      margin-left: 0;
+      width: 100%;
+    }
+  }
+</style>

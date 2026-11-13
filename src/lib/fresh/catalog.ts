@@ -8,11 +8,12 @@ import {
   sampleAisles,
   sampleData,
   samplePresets,
+  sampleParts,
   sampleRemovedTools,
   sampleSituations,
 } from "../../data/sample";
 import { aisleMax, labelState, sortForAisle } from "./label";
-import type { Aisle, AisleGroup, Catch, PresetRow, Situation, SituationId, Tool } from "./types";
+import type { Aisle, AisleGroup, Catch, Part, PresetRow, Situation, SituationId, Tool } from "./types";
 
 export const GROUPS: AisleGroup[] = ["Build", "AI", "Free and Open Data", "Claim Once"];
 
@@ -140,4 +141,24 @@ export function catchAlternatives(c: Catch): Tool[] {
 /** Tools taken out of the catalog. Their pages 301 to the aisle. */
 export function removedTools(): { id: string; aisle: string }[] {
   return sampleRemovedTools;
+}
+
+// ---------- Stack parts (Home, Build a stack, Check my stack) ----------
+export function parts(): Part[] {
+  return sampleParts;
+}
+
+/** The part a preset job fills ("Sign-in" -> auth). */
+export function partForJob(job: string): Part | undefined {
+  return sampleParts.find((p) => p.label === job);
+}
+
+/** Labeled tools that can fill a part, in aisle order. */
+export function partOptions(p: Part, at = now()): Tool[] {
+  return toolsInAisle(p.aisle, at).filter((t) => !p.kinds || p.kinds.includes(t.kind));
+}
+
+/** Catch pages about a tool. */
+export function catchesForTool(toolId: string): Catch[] {
+  return data().catches.filter((c) => c.tool === toolId);
 }

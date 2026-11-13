@@ -621,3 +621,15 @@ export function sampleData(now: Date): { tools: Tool[]; catches: Catch[] } {
 
 /** Tools taken out of the catalog. Their old URLs 301 to the aisle. */
 export const sampleRemovedTools: { id: string; aisle: string }[] = [{ id: "fauna", aisle: "databases" }];
+
+/** Jobs in a stack, in Build a stack order. Labels match samplePresets jobs. */
+export const sampleParts: import("../lib/fresh/types").Part[] = [
+  { key: "hosting", label: "Hosting", aisle: "hosting", core: true },
+  { key: "database", label: "Database", aisle: "databases", core: true },
+  { key: "auth", label: "Sign-in", aisle: "auth", kinds: ["Sign-in"], core: true },
+  { key: "secrets", label: "Secrets", aisle: "auth", kinds: ["Secrets"], core: true },
+  { key: "cache", label: "Cache", aisle: "cache" },
+  { key: "email", label: "Email", aisle: "email" },
+  { key: "storage", label: "Storage", aisle: "storage" },
+  { key: "ai", label: "AI", aisle: "inference" },
+];
