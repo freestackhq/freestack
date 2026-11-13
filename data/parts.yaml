@@ -1,0 +1,10 @@
+# Jobs in a stack, in Build a stack order. label matches the job names in presets.yaml.
+# kinds: only tools of these kinds, when one aisle holds more than one job.
+- { key: hosting, label: Hosting, aisle: hosting, core: true }
+- { key: database, label: Database, aisle: databases, core: true }
+- { key: auth, label: Sign-in, aisle: auth, kinds: [Sign-in], core: true }
+- { key: secrets, label: Secrets, aisle: auth, kinds: [Secrets], core: true }
+- { key: cache, label: Cache, aisle: cache }
+- { key: email, label: Email, aisle: email }
+- { key: storage, label: Storage, aisle: storage }
+- { key: ai, label: AI, aisle: inference }

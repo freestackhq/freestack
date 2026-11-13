@@ -1,0 +1,18 @@
+# Home stack presets per situation. Only checked tools count: a preset with
+# any tool that is not checked (within 90 days) is not shown, and Home lists
+# the aisles instead. job matches a label in parts.yaml.
+school:
+  - { job: Hosting, tool: cf-workers }
+  - { job: Database, tool: neon }
+  - { job: Sign-in, tool: clerk }
+  - { job: Secrets, tool: doppler }
+student:
+  - { job: Hosting, tool: cf-workers }
+  - { job: Database, tool: neon }
+  - { job: Sign-in, tool: clerk }
+  - { job: Cache, tool: upstash-redis }
+indie:
+  - { job: Hosting, tool: cf-workers }
+  - { job: Database, tool: neon }
+  - { job: Sign-in, tool: clerk }
+startup: []

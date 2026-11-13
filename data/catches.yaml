@@ -1,0 +1,20 @@
+# Catch pages (/catches/<slug>): one question people search for, answered
+# first, then free tools that avoid the catch (avoid_with).
+- slug: can-i-sell-on-vercel-hobby
+  aisle: hosting
+  tool: vercel-hobby
+  question: Can I sell things on Vercel Hobby?
+  answer: No.
+  detail: Hobby is for personal projects only. Anything that makes money for anyone needs a paid plan.
+  includes:
+    - Taking payments, even a tip button
+    - A site for your business or your services
+    - Client work you are paid for
+  still_fine: Portfolios, school projects, side projects that earn nothing
+  source_name: Vercel's Fair Use Guidelines
+  source_url: https://vercel.com/docs/limits/fair-use-guidelines
+  checked_at: null
+  avoid_with: [cf-workers, koyeb]
+  plan: Hobby
+  vendor: Vercel
+  avoid_heading: Free hosts that let you sell
