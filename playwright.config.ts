@@ -2,7 +2,13 @@ import { defineConfig, devices } from "@playwright/test";
 
 // PORT lets parallel worktrees run their own preview server.
 const PORT = Number(process.env.PORT ?? 4321);
+const REAL_PORT = Number(process.env.REAL_PORT ?? PORT + 1);
 const BASE = `http://localhost:${PORT}`;
+const REAL_BASE = `http://localhost:${REAL_PORT}`;
+
+// Specs (and the catalog.ts they import) read the fixture data, not data/.
+// Set here so Playwright's worker processes inherit it.
+process.env.FREESTACK_DATA = "tests/fixtures/data";
 
 export default defineConfig({
   testDir: "tests/e2e",
@@ -14,12 +20,16 @@ export default defineConfig({
     baseURL: BASE,
     trace: "on-first-retry",
   },
-  projects: [{ name: "chromium", use: { ...devices["Desktop Chrome"] } }],
+  projects: [
+    { name: "chromium", use: { ...devices["Desktop Chrome"] }, testIgnore: /real-data\.spec\.ts/ },
+    { name: "real-data", use: { ...devices["Desktop Chrome"], baseURL: REAL_BASE }, testMatch: /real-data\.spec\.ts/ },
+  ],
   webServer: {
-    command: "pnpm build && node scripts/preview-wrapper.mjs",
-    env: { PORT: String(PORT) },
-    url: BASE,
+    // Fixture build on PORT, real build on REAL_PORT (scripts/e2e-server.mjs).
+    command: "node scripts/e2e-server.mjs",
+    env: { PORT: String(PORT), REAL_PORT: String(REAL_PORT) },
+    url: `${REAL_BASE}/__ready`,
     reuseExistingServer: !process.env.CI,
-    timeout: 180_000,
+    timeout: 420_000,
   },
 });
