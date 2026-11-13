@@ -36,10 +36,7 @@ const lines = (s) =>
     .map((l) => l.replace(/^\s*[-*]\s+/, "").trim())
     .filter(Boolean);
 
-/**
- * Builds the tool from the form, or says what is wrong with it.
- * @returns {{ tool: object, errors: string[] }}
- */
+/** Builds the tool from the form, or says what is wrong with it. Returns { tool, errors }. */
 export function buildTool(form, aisles) {
   const errors = [];
   const name = form.name.trim();
@@ -109,7 +106,7 @@ export function buildTool(form, aisles) {
  * Decides what an Add a tool issue means.
  * @returns {{ kind: "reject", reasons: string[] }
  *   | { kind: "listed", id: string, aisle: string }
- *   | { kind: "add", tool: object, yaml: string }}
+ *   | { kind: "add", tool: ReturnType<typeof buildTool>["tool"], yaml: string }}
  */
 export function planAddTool({ body, aislesText, schema, readTool }) {
   const form = parseIssueForm(body, ADD_TOOL);
@@ -125,7 +122,10 @@ export function planAddTool({ body, aislesText, schema, readTool }) {
 
 // ---------- Messages ----------
 
-/** Where a listed tool's label lives: the site when SITE_URL is set, else its data file. */
+/**
+ * Where a listed tool's label lives: the site when SITE_URL is set, else its data file.
+ * @param {{ siteUrl: string, repo: string, branch: string, id: string, aisle?: string }} where
+ */
 export function labelUrl({ siteUrl, repo, branch, id, aisle }) {
   if (siteUrl && aisle) return `${siteUrl.replace(/\/+$/, "")}/${aisle}/${id}`;
   return `https://github.com/${repo}/blob/${branch}/${toolPath(id)}`;

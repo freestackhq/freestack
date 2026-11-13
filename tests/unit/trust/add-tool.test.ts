@@ -70,6 +70,7 @@ describe("planAddTool", () => {
   it("a tool already listed links to its label instead", () => {
     const p = plan(fx("add-tool.md"), (id) => (id === "fresh-base" ? "id: fresh-base\naisle: databases\n" : null));
     expect(p).toEqual({ kind: "listed", id: "fresh-base", aisle: "databases" });
+    if (p.kind !== "listed") return;
     expect(labelUrl({ siteUrl: "https://shelf.example/", repo: "a/b", branch: "main", ...p })).toBe(
       "https://shelf.example/databases/fresh-base",
     );

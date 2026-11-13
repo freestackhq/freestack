@@ -36,8 +36,8 @@ describe("planLabelCheck", () => {
     const plan = planLabelCheck({ ...base, body: fx("label-check-changed.md") });
     expect(plan.kind).toBe("review");
     if (plan.kind !== "review") return;
-    expect(plan.applied.map((a: { field: string }) => a.field)).toEqual(["metric", "limits.1", "who", "card"]);
-    expect(plan.manual.map((a: { field: string }) => a.field)).toEqual(["sell"]);
+    expect(plan.applied.map((a) => a.field)).toEqual(["metric", "limits.1", "who", "card"]);
+    expect(plan.manual.map((a) => a.field)).toEqual(["sell"]);
     const t = plan.toolText;
     expect(t).toContain("metric: 1          # storage_gb, the Databases aisle metric\n");
     expect(t).toContain("  - Sleeps after 10 minutes idle   # since 2024\n");

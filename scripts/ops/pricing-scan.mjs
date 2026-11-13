@@ -89,6 +89,17 @@ export function scannable(tools) {
   return tools.filter((t) => t.pricing_url && t.source !== "imported");
 }
 
+/**
+ * The slice of fetch the scan uses, so tests can pass a stand-in.
+ * @typedef {{ headers: Record<string, string>, redirect: "follow", signal: AbortSignal }} FetchInit
+ * @typedef {(url: string, init: FetchInit) => Promise<Pick<Response, "ok" | "status" | "text">>} FetchLike
+ * @typedef {{ hash: string, checked_at: string, changed_at: string | null }} PricingEntry
+ */
+
+/**
+ * @param {string} url
+ * @param {{ fetchImpl?: FetchLike, timeoutMs?: number }} [opts]
+ */
 export async function fetchText(url, { fetchImpl = fetch, timeoutMs = TIMEOUT_MS } = {}) {
   const res = await fetchImpl(url, {
     headers: { "user-agent": USER_AGENT, accept: "text/html,application/xhtml+xml" },
@@ -113,10 +124,16 @@ async function pool(items, size, fn) {
  * Scan every tool and return the new state plus a report. Entries for tools
  * that are gone (or lost their pricing_url) are dropped so the generator
  * never sees an unknown id.
+ * @param {{
+ *   tools: { id: string, pricing_url?: string | null, source?: string }[], state: Record<string, PricingEntry>,
+ *   day: string, fetchImpl?: FetchLike, concurrency?: number, timeoutMs?: number
+ * }} opts
  */
 export async function scan({ tools, state, day, fetchImpl = fetch, concurrency = CONCURRENCY, timeoutMs }) {
   const targets = scannable(tools);
+  /** @type {Record<string, PricingEntry>} */
   const next = {};
+  /** @type {{ changed: string[], added: string[], unchanged: string[], failed: { id: string, url: string, error: string }[], dropped: string[] }} */
   const report = { changed: [], added: [], unchanged: [], failed: [], dropped: [] };
   await pool(targets, concurrency, async (t) => {
     const prev = state[t.id];

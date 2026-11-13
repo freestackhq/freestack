@@ -46,7 +46,7 @@ const countText = (n: number) => `${n} ${n === 1 ? "program" : "programs"} you c
         <div class="filter" role="group" aria-labelledby="have-label" data-have-filter>
           <span id="have-label" class="have">I have</span>
           {HAVE_OPTIONS.map((o) => (
-            <button type="button" class="chip" data-have={o.id} aria-pressed={String(o.id === DEFAULT_HAVE)}>
+            <button type="button" class="chip" data-have={o.id} aria-pressed={o.id === DEFAULT_HAVE ? "true" : "false"}>
               {o.label}
             </button>
           ))}

@@ -5,6 +5,7 @@ import { join } from "node:path";
 import { describe, expect, it, vi } from "vitest";
 import { parse } from "yaml";
 import {
+  type FetchInit,
   USER_AGENT,
   hashText,
   nextEntry,
@@ -21,7 +22,7 @@ const DAY = "2026-11-13";
 
 /** A fetch stand-in that serves fixed bodies per URL; anything else 404s. */
 function fakeFetch(pages: Record<string, string | Error | number>) {
-  return vi.fn(async (url: string) => {
+  return vi.fn(async (url: string, _init: FetchInit) => {
     const page = pages[url];
     if (page instanceof Error) throw page;
     if (typeof page === "number") return new Response("nope", { status: page });
@@ -127,13 +128,13 @@ describe("scan", () => {
   });
 
   it("treats HTTP errors, empty pages and timeouts as failures", async () => {
-    const fetchImpl = vi.fn(async (url: string, init: RequestInit) => {
+    const fetchImpl = vi.fn(async (url: string, init: FetchInit) => {
       if (url.startsWith("https://alpha")) return new Response("x", { status: 503 });
       if (url.startsWith("https://beta")) return new Response("<script>app()</script>", { status: 200 });
-      return new Promise<Response>((_, reject) => init.signal!.addEventListener("abort", () => reject(init.signal!.reason)));
+      return new Promise<Response>((_, reject) => init.signal.addEventListener("abort", () => reject(init.signal.reason)));
     });
     const { state: next, report } = await scan({ tools, state, day: DAY, fetchImpl, timeoutMs: 20 });
-    expect(report.failed.map((f: { id: string; error: string }) => [f.id, f.error])).toEqual([
+    expect(report.failed.map((f) => [f.id, f.error])).toEqual([
       ["alpha", "HTTP 503"],
       ["beta", "no visible text"],
       ["gamma", "timed out"],

@@ -454,6 +454,7 @@ export class Seen {
     this.hosts = new Set();
     this.ids = new Set();
   }
+  /** @param {{ id?: string, name?: string, urls?: string[] }} tool */
   addTool({ id, name, urls = [] }) {
     if (id) this.ids.add(id);
     if (name) {

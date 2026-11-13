@@ -77,7 +77,7 @@ const sample = toolsInAisle("databases", at)[0];
           <div class="chips" role="group" aria-labelledby="basket-h">
             {
               situations().map((s) => (
-                <button type="button" class="chip" data-sit={s.id} aria-pressed={String(s.id === defaultSituation)}>
+                <button type="button" class="chip" data-sit={s.id} aria-pressed={s.id === defaultSituation ? "true" : "false"}>
                   {s.label}
                 </button>
               ))

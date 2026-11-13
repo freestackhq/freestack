@@ -11,6 +11,7 @@
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
+    "typecheck": "astro check",
     "deploy:cf": "node scripts/deploy.mjs",
     "plugin:build": "node scripts/build-plugin.mjs",
     "preview": "astro preview",

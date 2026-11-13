@@ -12,7 +12,11 @@ import { dataDir, isMain, loadTools, today } from "./tools.mjs";
 
 export { RECHECK_DAYS };
 
-/** Tools marked suggested: true whose verified_at is null or older than RECHECK_DAYS. */
+/**
+ * Tools marked suggested: true whose verified_at is null or older than RECHECK_DAYS.
+ * @param {{ id: string, file: string, suggested?: unknown, source?: string, verified_at?: string | Date | null }[]} tools
+ * @param {Date} now
+ */
 export function staleSuggested(tools, now) {
   return tools
     .filter((t) => t.suggested === true && t.source !== "imported")

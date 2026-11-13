@@ -43,6 +43,14 @@ export const DEAD = new Set(["client_error:404", "client_error:410", "dns"]);
 const ALIVE = new Set(["ok", "redirected"]);
 const RETRYABLE = new Set(["timeout", "server_error", "error", "dns"]);
 
+/**
+ * The slice of fetch the checker uses, so tests can pass a stand-in.
+ * @typedef {{ method: string, headers: Record<string, string>, redirect: "follow", signal: AbortSignal }} FetchInit
+ * @typedef {{ status: number, url: string, headers?: { get(name: string): string | null } | null, body?: { cancel(): Promise<void> } | null }} FetchResponse
+ * @typedef {(url: string, init: FetchInit) => Promise<FetchResponse>} FetchLike
+ * @typedef {{ status: string, code: number | null, final_url: string | null, error?: string }} LinkResult
+ */
+
 // ---------- Classification ----------
 export function registrable(url) {
   try {
@@ -81,6 +89,12 @@ export const deadKey = (r) => (r?.status === "client_error" ? `client_error:${r.
 export const isDead = (r) => DEAD.has(deadKey(r));
 
 // ---------- Fetch ----------
+/**
+ * @param {string} url
+ * @param {string} method
+ * @param {{ fetchImpl: FetchLike, timeoutMs: number }} opts
+ * @returns {Promise<LinkResult>}
+ */
 async function request(url, method, { fetchImpl, timeoutMs }) {
   try {
     const res = await fetchImpl(url, {
@@ -97,7 +111,12 @@ async function request(url, method, { fetchImpl, timeoutMs }) {
   }
 }
 
-/** HEAD, then GET when HEAD isn't ok (many servers answer HEAD badly). One retry for transient failures. */
+/**
+ * HEAD, then GET when HEAD isn't ok (many servers answer HEAD badly). One retry for transient failures.
+ * @param {string} url
+ * @param {{ fetchImpl?: FetchLike, timeoutMs?: number, retryDelayMs?: number }} [opts]
+ * @returns {Promise<LinkResult>}
+ */
 export async function checkUrl(url, { fetchImpl = fetch, timeoutMs = TIMEOUT_MS, retryDelayMs = RETRY_DELAY_MS } = {}) {
   const once = async () => {
     const head = await request(url, "HEAD", { fetchImpl, timeoutMs });
@@ -190,11 +209,18 @@ async function pool(items, size, fn) {
   }));
 }
 
-/** Check every target. Each distinct URL is fetched once. Returns the new state and per-id results. */
+/**
+ * Check every target. Each distinct URL is fetched once. Returns the new state and per-id results.
+ * @param {{
+ *   targets: ReturnType<typeof targets>, state: Record<string, ReturnType<typeof nextEntry>>, day: string,
+ *   fetchImpl?: FetchLike, concurrency?: number, timeoutMs?: number, retryDelayMs?: number
+ * }} opts
+ */
 export async function run({ targets: list, state, day, fetchImpl = fetch, concurrency = CONCURRENCY, timeoutMs, retryDelayMs }) {
   const urls = [...new Set(list.flatMap((t) => [t.url, t.pricing_url]).filter(Boolean))];
   const results = new Map();
   await pool(urls, concurrency, async (u) => results.set(u, await checkUrl(u, { fetchImpl, timeoutMs, retryDelayMs })));
+  /** @type {Record<string, ReturnType<typeof nextEntry>>} */
   const next = {};
   const rows = [];
   for (const t of list) {

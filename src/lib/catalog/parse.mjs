@@ -26,6 +26,18 @@
  *   **vs MariaDB** — Different layer.
  */
 
+/**
+ * @typedef {{ service: string, cells: Record<string, string> }} MatrixRow
+ * @typedef {{
+ *   name: string, slug: string, url?: string, fields: Record<string, string>, prose: string[],
+ *   pick: string, alternatives: { name: string, text: string }[], matrixCells: Record<string, string>
+ * }} CatalogEntry
+ * @typedef {{
+ *   id: string, label: string, description: string, order: number, file: string,
+ *   matrix: MatrixRow[], entries: CatalogEntry[]
+ * }} Category
+ */
+
 export function slugify(name) {
   return name
     .toLowerCase()
@@ -95,10 +107,12 @@ function isHeading(line, level) {
  * Parse a category markdown file into a category object.
  * @param {string} md raw file content
  * @param {string} file filename used as category id base
+ * @returns {Category | null}
  */
 export function parseCategoryFile(md, file) {
   const { data, body } = splitFrontmatter(md);
   const lines = body.split("\n");
+  /** @type {Category} */
   const category = {
     id: slugify(file.replace(/\.md$/, "")),
     label: data.category || slugify(file.replace(/\.md$/, "")),

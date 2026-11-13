@@ -490,7 +490,7 @@ const total = totalTools();
   openers.forEach((b) =>
     b.addEventListener("click", (e) => {
       e.stopPropagation();
-      setOpen(menu?.hidden ?? true, b);
+      setOpen(menu?.hidden !== false, b); // hidden may also be "until-found"
     }),
   );
   document.querySelector("[data-aisles-close]")?.addEventListener("click", () => setOpen(false));

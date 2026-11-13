@@ -70,7 +70,7 @@ const data = { labeled, unlabeled, catchPages, situations: situations(), fallbac
           <span id="sits-l" class="sits-label">I'm building as</span>
           {
             situations().map((s) => (
-              <button type="button" class="chip" data-sit={s.id} aria-pressed={String(s.id === defaultSituation)}>
+              <button type="button" class="chip" data-sit={s.id} aria-pressed={s.id === defaultSituation ? "true" : "false"}>
                 {s.label}
               </button>
             ))

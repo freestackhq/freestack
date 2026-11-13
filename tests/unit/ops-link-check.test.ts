@@ -5,6 +5,8 @@
 import { describe, expect, it, vi } from "vitest";
 import { parse } from "yaml";
 import {
+  type FetchInit,
+  type FetchResponse,
   USER_AGENT,
   checkUrl,
   classifyError,
@@ -28,14 +30,14 @@ function answer(status: number, url: string, headers: Record<string, string> = {
 /** Routes "METHOD url" or "url" to an answer, an Error, or a function of the call count. */
 function fakeFetch(routes: Record<string, unknown>) {
   const calls: Record<string, number> = {};
-  return vi.fn(async (url: string, init: RequestInit) => {
+  return vi.fn(async (url: string, init: FetchInit): Promise<FetchResponse> => {
     const key = `${init.method} ${url}`;
     calls[key] = (calls[key] ?? 0) + 1;
     let r = routes[key] ?? routes[url];
     if (typeof r === "function") r = r(calls[key]);
     if (r instanceof Error) throw r;
     if (typeof r === "number") return answer(r, url);
-    if (r) return r;
+    if (r) return r as FetchResponse;
     return answer(404, url);
   });
 }

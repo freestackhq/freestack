@@ -29,6 +29,8 @@ import {
   writeReviews,
 } from "./yaml.mjs";
 
+/** @typedef {import("../../src/lib/trust/forms.mjs").ParsedAnswer} ParsedAnswer */
+
 export const REVIEWS_PATH = "data/state/reviews.yaml";
 export const toolPath = (id) => `data/tools/${id}.yaml`;
 export const branchFor = (issue) => `label-check/${issue}`;
@@ -114,7 +116,7 @@ export function markChecked(text, today, login) {
  * Decides what a Check a label issue means.
  * @returns {{ kind: "reject", reasons: string[] }
  *   | { kind: "verify", tool: string, toolText: string }
- *   | { kind: "review", tool: string, toolText: string, applied: object[], manual: object[] }}
+ *   | { kind: "review", tool: string, toolText: string, applied: ParsedAnswer[], manual: ParsedAnswer[] }}
  */
 export function planLabelCheck({ body, author, today, readTool, aislesText }) {
   const form = parseIssueForm(body, LABEL_CHECK);

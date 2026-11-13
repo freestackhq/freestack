@@ -92,7 +92,10 @@ export function sameSite(a: string, b: string): boolean {
  * A labeled tool with the same name or website. Imported entries don't count:
  * "Write its label" sends people here on purpose.
  */
-export function findListed(tools: Pick<Tool, "id" | "name" | "url" | "source">[], q: { name?: string; url?: string }) {
+export function findListed<T extends Pick<Tool, "id" | "name" | "url" | "source">>(
+  tools: T[],
+  q: { name?: string; url?: string },
+): T | undefined {
   const name = normName(q.name ?? "");
   return tools.find(
     (t) => t.source !== "imported" && ((name && normName(t.name) === name) || (q.url && sameSite(t.url, q.url))),

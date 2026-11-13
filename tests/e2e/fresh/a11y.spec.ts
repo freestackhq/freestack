@@ -145,7 +145,7 @@ test.describe("keyboard", () => {
 });
 
 test.describe("reduced motion", () => {
-  test.use({ viewport: DESKTOP, reducedMotion: "reduce" });
+  test.use({ viewport: DESKTOP, contextOptions: { reducedMotion: "reduce" } });
 
   test("nothing animates", async ({ page }) => {
     for (const path of ["/", "/databases", "/compare?ids=neon,turso"]) {

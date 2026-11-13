@@ -159,7 +159,7 @@ export function fitFor(candidate: RuleTool, input: StackInput, replacing?: strin
  * A swap that clears every problem on `toolId`: the first candidate (in the
  * caller's order) from the same aisle that adds no new problem anywhere.
  */
-export function bestSwap(toolId: string, input: StackInput, candidates: RuleTool[]): RuleTool | null {
+export function bestSwap<T extends RuleTool>(toolId: string, input: StackInput, candidates: T[]): T | null {
   const current = input.tools.find((t) => t.id === toolId);
   if (!current) return null;
   const key = (f: Finding) => `${f.rule}:${f.tool}`;
