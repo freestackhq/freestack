@@ -16,10 +16,10 @@ Use the `freestack` MCP server when it is connected. Its address is the one conf
 - `suggest_stack` `{ situation, parts?, fill? }`: one pick per job, checked by freestack's rules engine. Pass `parts` (like `{ "hosting": "cf-workers", "database": "neon" }`) to check a stack the user already has. Returns problems, things to watch, swaps and a shareable `/build` link.
 - `claim_order` `{ situation }` or `{ school_email, student_id }`: student programs in the order worth claiming.
 
-No MCP server? Read the same data over HTTP from the freestack site at `https://freestack.example.com`:
+No MCP server? Read the same data over HTTP from the freestack site at `https://freestack.kuyacarlo.dev`:
 
-- `https://freestack.example.com/api/entries?q=postgres&limit=10` (JSON)
-- `https://freestack.example.com/llms.txt`, or `https://freestack.example.com/llms-full.txt` for everything
+- `https://freestack.kuyacarlo.dev/api/entries?q=postgres&limit=10` (JSON)
+- `https://freestack.kuyacarlo.dev/llms.txt`, or `https://freestack.kuyacarlo.dev/llms-full.txt` for everything
 
 ## What to do
 
