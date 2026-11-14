@@ -79,11 +79,24 @@ jobs:
       - name: Build and deploy
         run: pnpm deploy:cf
       - name: Smoke test
+        # A first-time or re-provisioned custom domain answers 403 at the
+        # Cloudflare edge for up to a few minutes while the hostname route
+        # settles, so a 403 is treated as "still propagating" and retried.
+        # ~5 min total (15 tries, 20s apart) covers that window.
         run: |
           base="${SITE_URL%/}"
-          for _ in 1 2 3 4 5 6; do
-            curl -fsS --max-time 10 "$base/api/health" && exit 0
-            sleep 10
+          url="$base/api/health"
+          last=""
+          for _ in $(seq 1 15); do
+            code=$(curl -sS -o /dev/null -w '%{http_code}' --max-time 10 "$url" || echo 000)
+            last="$code"
+            case "$code" in
+              2*) echo "health ok ($code)"; exit 0 ;;
+              000) echo "no answer yet (connection/timeout), retrying..." ;;
+              403|404|5*) echo "edge/route not ready yet (HTTP $code), retrying..." ;;
+              *) echo "::error::$url returned HTTP $code"; exit 1 ;;
+            esac
+            sleep 20
           done
-          echo "::error::$base/api/health did not answer after deploy"
+          echo "::error::$url did not become healthy after deploy (last HTTP $last)"
           exit 1
