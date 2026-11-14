@@ -7,15 +7,20 @@
 import Icon from "./Icon.astro";
 import type { Tool } from "../../lib/fresh/types";
 
+type Key = "who" | "sell" | "card";
+
 interface Props {
   tool: Tool;
   /** Hide "Open to all" (e.g. on the Home stack panel). */
   hideWho?: boolean;
+  /** Items to leave out, e.g. ones the Home panel already says once for the whole stack. */
+  omit?: Key[];
   class?: string;
 }
-const { tool, hideWho = false, class: cls } = Astro.props;
+const { tool, hideWho = false, omit = [], class: cls } = Astro.props;
 
 type Item = {
+  key?: Key;
   icon: "check" | "cross" | "unknown" | "card" | "card-none" | "card-unknown" | null;
   text: string;
   sr: string;
@@ -44,12 +49,17 @@ function card(t: Tool): Item {
   return { icon: "card-unknown", text: "Card unknown", sr: "Not known if it needs a credit card.", muted: true };
 }
 
-const items = [...(hideWho ? [] : [who(tool)]), sell(tool), card(tool)];
+const skip = new Set<Key>(hideWho ? ["who", ...omit] : omit);
+const items = [
+  { ...who(tool), key: "who" as const },
+  { ...sell(tool), key: "sell" as const },
+  { ...card(tool), key: "card" as const },
+].filter((i) => !skip.has(i.key));
 ---
 
 <p class:list={["facts", cls]}>
   {items.map((i) => (
-    <span class:list={["fact", { muted: i.muted }]} data-fact={i.text}>
+    <span class:list={["fact", { muted: i.muted }]} data-fact={i.text} data-fact-key={i.key}>
       {i.icon && <Icon name={i.icon} size={i.icon.startsWith("card") ? 15 : 14} />}
       <span aria-hidden="true">{i.text}</span>
       <span class="sr-only">{i.sr}</span>

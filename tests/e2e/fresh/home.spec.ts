@@ -23,14 +23,17 @@ test.describe("Home (Home.dc.html)", () => {
     await expect(p).toHaveCount(1);
     const rows = p.locator(".row");
     expect(await rows.count()).toBeGreaterThan(0);
-    // Every row: job, tool link, its headline limit, the sell + card facts
-    // (no "Open to all") and its check state on the same line.
+    // Facts every part shares are said once under the total; the rest stay on the row.
+    const shared = await p.locator(".shared [data-fact]").count();
+    // Every row: job, tool link, its headline limit with the aisle scale, the
+    // sell + card facts (no "Open to all") and its check state.
     for (let i = 0; i < (await rows.count()); i++) {
       const r = rows.nth(i);
       await expect(r.locator(".job")).not.toBeEmpty();
       await expect(r.locator("a.tool")).toHaveAttribute("href", /^\/[a-z-]+\/[a-z0-9-]+$/);
       await expect(r.locator(".headline")).not.toBeEmpty();
-      await expect(r.locator("[data-fact]")).toHaveCount(2);
+      await expect(r.locator(".limit [data-scale]")).toHaveCount(1);
+      expect((await r.locator("[data-fact]").count()) + shared).toBe(2);
       await expect(r.locator(".state")).not.toBeEmpty();
       await expect(r).not.toContainText("Open to all");
     }
@@ -129,6 +132,41 @@ test.describe("Home (Home.dc.html)", () => {
     await ctx.close();
   });
 
+  test("a fact every part shares is said once, under the total", async ({ page }) => {
+    for (const as of ["student", "school", "indie"]) {
+      await page.goto(`/?as=${as}`);
+      const p = panel(page);
+      const rows = p.locator(".row");
+      if ((await rows.count()) < 2) continue;
+      for (const key of ["sell", "card"] as const) {
+        const values = await rows.evaluateAll((els, k) => els.map((e) => e.getAttribute(`data-${k}`)), key);
+        const sameEverywhere = new Set(values).size === 1;
+        const rowFacts = p.locator(`.row [data-fact-key="${key}"]`);
+        const sharedFact = p.locator(`.shared [data-fact-key="${key}"]`);
+        await expect(rowFacts).toHaveCount(sameEverywhere ? 0 : values.length);
+        await expect(sharedFact).toHaveCount(sameEverywhere ? 1 : 0);
+        // A card value every part shares appears once, with no extra note repeating it.
+        if (key === "card" && sameEverywhere) {
+          expect((await p.innerText()).match(/card unknown/gi)?.length ?? 0).toBeLessThanOrEqual(1);
+          await expect(p.locator(".total-note")).toHaveCount(0);
+        }
+      }
+    }
+  });
+
+  test("the checked-labels count is not dressed as good news", async ({ page }) => {
+    await page.goto("/");
+    await expect(page.locator(".trust")).toContainText(/\d+ of \d+ labels checked/);
+    await expect(page.locator(".trust svg")).toHaveCount(0);
+  });
+
+  test("reading a label comes before the aisle list", async ({ page }) => {
+    await page.goto("/");
+    const reading = await page.locator(".reading").boundingBox();
+    const aisles = await page.locator(".aisles").boundingBox();
+    expect(reading!.y).toBeLessThan(aisles!.y);
+  });
+
   test("switching situation is announced", async ({ page }) => {
     await page.goto("/");
     await page.getByRole("button", { name: "Indie builder" }).click();
@@ -172,6 +210,8 @@ test.describe("Home (Home.dc.html)", () => {
   test("at most one yellow action", async ({ page }) => {
     await page.goto("/");
     expect(await page.locator(".btn-promo:visible").count()).toBeLessThanOrEqual(1);
+    // The phone dock never shows on a wide screen.
+    await expect(page.locator("[data-dock]")).toBeHidden();
   });
 });
 
@@ -277,6 +317,35 @@ test.describe("Home on a phone (PhoneHome.dc.html)", () => {
     for (const chip of await group.getByRole("button").all()) {
       expect((await chip.boundingBox())!.height).toBeGreaterThanOrEqual(44);
     }
+  });
+
+  test("Copy this stack is in reach on the first screen", async ({ page, context }) => {
+    await context.grantPermissions(["clipboard-read", "clipboard-write"]);
+    await page.goto("/");
+    const dock = page.locator("[data-dock]");
+    const copy = dock.locator(".dock-copy");
+    await expect(copy).toHaveText("Copy this stack");
+    await expect(copy).toBeInViewport();
+    // A touch shortcut: screen readers and Tab keep the one button in the panel.
+    await expect(page.getByRole("button", { name: "Copy this stack" })).toHaveCount(1);
+    await expect(copy).toHaveAttribute("tabindex", "-1");
+    expect((await copy.boundingBox())!.height).toBeGreaterThanOrEqual(44);
+    // Only one yellow action on screen at a time.
+    await expect(panel(page).locator(".copy-btn")).not.toBeInViewport();
+
+    await copy.click();
+    await expect(page.getByRole("dialog", { name: "Copy your stack" })).toBeVisible();
+    expect(await page.evaluate(() => navigator.clipboard.readText())).toContain("For: Student");
+    await page.keyboard.press("Escape");
+
+    // Once the panel's own actions are on screen, the dock steps aside.
+    await panel(page).locator(".actions").scrollIntoViewIfNeeded();
+    await expect(dock).toBeHidden();
+  });
+
+  test("no dock when the situation has no stack", async ({ page }) => {
+    await page.goto("/?as=startup");
+    await expect(page.locator("[data-dock]")).toBeHidden();
   });
 
   test("copy dialog fits the phone", async ({ page }) => {

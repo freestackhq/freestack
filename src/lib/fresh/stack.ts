@@ -164,6 +164,18 @@ export function matchTool<T extends { id: string; name: string }>(text: string, 
 
 // ---------- Totals and copy text ----------
 
+/**
+ * Sell and card values every part of a stack shares. The panel says those
+ * once under the total instead of on every row. One part shares nothing.
+ */
+export function sharedFacts<T extends { sell: string; card: string }>(
+  tools: T[],
+): { sell: T["sell"] | null; card: T["card"] | null } {
+  const same = (k: "sell" | "card") =>
+    tools.length > 1 && tools.every((t) => t[k] === tools[0][k]) ? tools[0][k] : null;
+  return { sell: same("sell"), card: same("card") };
+}
+
 /** Note under "Total per month", from the card facts. */
 export function cardNote(tools: { card: string }[]): string {
   if (tools.length === 0) return "";

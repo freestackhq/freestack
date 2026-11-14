@@ -14,6 +14,7 @@ import Shell from "../layouts/Shell.astro";
 import Facts from "../components/fresh/Facts.astro";
 import Icon from "../components/fresh/Icon.astro";
 import Label from "../components/fresh/Label.astro";
+import Scale from "../components/fresh/Scale.astro";
 import CopyStack from "../components/fresh/CopyStack.astro";
 import {
   aisle as getAisle,
@@ -22,6 +23,7 @@ import {
   checkHref,
   defaultSituation,
   isSituation,
+  maxForAisle,
   now,
   partForJob,
   parts,
@@ -34,8 +36,8 @@ import {
   totalTools,
 } from "../lib/fresh/catalog";
 import { legacyHomeRedirect } from "../lib/catalog";
-import { labelState, strings } from "../lib/fresh/label";
-import { cardNote, headlineText, limitsLine, stackSearch, type CopyStackData } from "../lib/fresh/stack";
+import { labelState, scaleStep, strings } from "../lib/fresh/label";
+import { cardNote, headlineText, limitsLine, sharedFacts, stackSearch, type CopyStackData } from "../lib/fresh/stack";
 
 export const prerender = false;
 
@@ -64,6 +66,10 @@ const panels = situations().map((s) => {
       t: r.t,
       part: partForJob(r.job),
       headline: headlineText(r.t, a),
+      // The label's 5-step scale against the aisle's biggest (DESIGN.md "The label").
+      scale: scaleStep(r.t, maxForAisle(r.t.aisle)),
+      // No aisle metric: say which figure is missing, so it can't read as the headline's.
+      unscaled: `${a.label.charAt(0).toUpperCase()}${a.label.slice(1)} not listed`,
       limits: limitsLine(r.t, a),
       state: st,
       checked: st.state === "checked",
@@ -89,7 +95,11 @@ const panels = situations().map((s) => {
   const core = parts()
     .filter((p) => p.core)
     .map((p) => ({ p, a: getAisle(p.aisle)! }));
-  return { s, rows, checked, ready, buildHref, copy, note: cardNote(rows.map((r) => r.t)), claim, core };
+  // Facts every part shares are said once under the total, not on each row.
+  const shared = sharedFacts(rows.map((r) => r.t));
+  const omit = (["sell", "card"] as const).filter((k) => shared[k] !== null);
+  const note = shared.card === null ? cardNote(rows.map((r) => r.t)) : "";
+  return { s, rows, checked, ready, buildHref, copy, shared, omit, note, claim, core };
 });
 const announce = (p: (typeof panels)[number]) =>
   p.rows.length
@@ -107,18 +117,9 @@ const sample =
 
 <Shell title="freestack: pick a free stack">
   <div class="wrap">
+    <!-- DOM order is the phone order: title, the stack, then the lede. Wide screens put the lede under the title. -->
     <section class="hero" aria-labelledby="hero-h">
-      <div class="intro">
-        <h1 id="hero-h">Pick a stack and start building.</h1>
-        <p class="lede">{total} free tools, student perks and APIs. Limits and catches up front.</p>
-        <p class="trust">
-          <Icon name="check" size={18} />
-          <span>
-            {checkedCount} of {labeled.length} labels checked against the vendor's page in the last 90 days.{" "}
-            <a href="#label-h">How to read a label</a>
-          </span>
-        </p>
-      </div>
+      <h1 id="hero-h">Pick a stack and start building.</h1>
 
       <section class="basket panel-raised" aria-labelledby="basket-h" data-home-stack>
         <div class="picker">
@@ -145,20 +146,18 @@ const sample =
                   <span>
                     {p.ready
                       ? "Every part checked against the vendor's page."
-                      : `${p.checked} of ${p.rows.length} parts checked. The rest are from the catalog, not checked yet.`}
+                      : `${p.checked} of ${p.rows.length} parts checked.`}
                   </span>
                 </p>
+                {/* Each row is a small shelf label: job, name, catch, check state; the limit and its scale on the right. */}
                 <ul class="rows" aria-label={`Stack for ${p.s.label}`}>
                   {p.rows.map((r) => (
-                    <li class="row" data-tool={r.t.id}>
+                    <li class="row" data-tool={r.t.id} data-sell={r.t.sell} data-card={r.t.card}>
                       <span class="job">{r.job}</span>
                       <span class="body">
-                        <span class="line">
-                          <a class="tool" href={toolHref(r.t)}>
-                            {r.t.name}
-                          </a>
-                          <span class="headline">{r.headline}</span>
-                        </span>
+                        <a class="tool" href={toolHref(r.t)}>
+                          {r.t.name}
+                        </a>
                         {r.t.catches[0] && (
                           <span class="catch">
                             <Icon name="wrench" />
@@ -167,7 +166,7 @@ const sample =
                           </span>
                         )}
                         <span class="meta">
-                          <Facts tool={r.t} hideWho class="facts" />
+                          {p.omit.length < 2 && <Facts tool={r.t} hideWho omit={[...p.omit]} class="facts" />}
                           <span class="state" data-state={r.state.state}>
                             {r.checked && <Icon name="check" size={16} />}
                             <span>{r.state.text}</span>
@@ -180,12 +179,33 @@ const sample =
                           </span>
                         </span>
                       </span>
+                      <span class="limit">
+                        <span class="headline">{r.headline}</span>
+                        {r.scale.kind === "unknown" ? (
+                          <span class="unscaled" data-scale="unknown">
+                            {r.unscaled}
+                          </span>
+                        ) : (
+                          <Scale scale={r.scale} bar={8} inline />
+                        )}
+                      </span>
                     </li>
                   ))}
                 </ul>
                 <div class="total">
                   <div>
                     <p class="total-label">Total per month</p>
+                    {p.omit.length > 0 && (
+                      <div class="shared">
+                        <span class="shared-lead">Every part:</span>
+                        <Facts
+                          tool={p.rows[0].t}
+                          hideWho
+                          omit={(["sell", "card"] as const).filter((k) => !p.omit.includes(k))}
+                          class="facts"
+                        />
+                      </div>
+                    )}
                     {p.note && <p class="total-note">{p.note}</p>}
                   </div>
                   <p class="price">$0.00</p>
@@ -241,29 +261,28 @@ const sample =
             )}
           </div>
         ))}
-      </section>
-    </section>
 
-    <section class="aisles" aria-labelledby="aisles-h">
-      <h2 id="aisles-h" class="h2">
-        Or walk the aisles
-      </h2>
-      <p class="sub">Grouped by what you need. Numbers show how many tools have a label.</p>
-      <div class="groups">
-        {groups.map((g) => (
-          <div>
-            <h3 class="group">{g.group}</h3>
-            <ul class="aisle-list">
-              {g.aisles.map((a) => (
-                <li>
-                  <a href={`/${a.id}`}>
-                    {a.name} <span class="count">{aisleCount(a.id)}</span>
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </div>
-        ))}
+        {/*
+          Phone only: keeps the main action in thumb reach until the panel's own actions scroll in.
+          A touch shortcut for the panel's button, so it stays out of the tab order and the accessibility tree.
+        */}
+        <div class="dock" data-dock hidden aria-hidden="true">
+          <p class="dock-total">
+            <span>Total per month</span>
+            <strong>$0.00</strong>
+          </p>
+          <button type="button" class="btn btn-promo dock-copy" tabindex="-1">
+            Copy this stack
+          </button>
+        </div>
+      </section>
+
+      <div class="intro">
+        <p class="lede">{total} free tools, student perks and APIs. Limits and catches up front.</p>
+        <p class="trust">
+          {checkedCount} of {labeled.length} labels checked against the vendor's page in the last 90 days.{" "}
+          <a href="#label-h">How to read a label</a>
+        </p>
       </div>
     </section>
 
@@ -299,6 +318,29 @@ const sample =
         </figure>
       </section>
     )}
+
+    <section class="aisles" aria-labelledby="aisles-h">
+      <h2 id="aisles-h" class="h2">
+        Or walk the aisles
+      </h2>
+      <p class="sub">Grouped by what you need. Numbers show how many tools have a label.</p>
+      <div class="groups">
+        {groups.map((g) => (
+          <div>
+            <h3 class="group">{g.group}</h3>
+            <ul class="aisle-list">
+              {g.aisles.map((a) => (
+                <li>
+                  <a href={`/${a.id}`}>
+                    {a.name} <span class="count">{aisleCount(a.id)}</span>
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))}
+      </div>
+    </section>
 
     <section id="agents" class="agents on-ink" aria-labelledby="agents-h">
       <div>
@@ -337,6 +379,7 @@ const sample =
     const was = new Set([...(before?.querySelectorAll<HTMLElement>("[data-tool]") ?? [])].map((r) => r.dataset.tool));
     for (const c of chips) c.setAttribute("aria-pressed", String(c.dataset.sit === id));
     for (const p of panels) p.hidden = p.dataset.panel !== id;
+    updateDock();
     if (!fromUser) return;
     const now = panels.find((p) => p.dataset.panel === id)!;
     announcer.textContent = now.dataset.announceText ?? "";
@@ -355,6 +398,28 @@ const sample =
 
   for (const c of chips) c.addEventListener("click", () => pick(c.dataset.sit!, true));
 
+  // Phone dock: shown while the visible panel's actions are still below the
+  // screen, hidden once they scroll in or past, and on wide screens.
+  const dock = root.querySelector<HTMLElement>("[data-dock]")!;
+  const narrow = matchMedia("(max-width: 640px)");
+  const DOCK_ROOM = 96; // the dock's height plus a little air
+  function updateDock() {
+    const actions = panels.find((p) => !p.hidden)?.querySelector(".actions");
+    const clear = actions ? actions.getBoundingClientRect().top < innerHeight - DOCK_ROOM : true;
+    dock.hidden = !narrow.matches || !actions || clear;
+  }
+  addEventListener("scroll", updateDock, { passive: true });
+  addEventListener("resize", updateDock);
+  narrow.addEventListener("change", updateDock);
+  updateDock();
+  // The dock stands in for the visible panel's button, so focus and "Copied" land there.
+  dock.querySelector("button")!.addEventListener("click", () => {
+    panels
+      .find((p) => !p.hidden)
+      ?.querySelector<HTMLButtonElement>(".copy-btn")
+      ?.click();
+  });
+
   root.addEventListener("click", (e) => {
     const btn = (e.target as HTMLElement).closest<HTMLButtonElement>("[data-copy-stack]");
     if (!btn) return;
@@ -365,20 +430,26 @@ const sample =
 </script>
 
 <style>
+  /* Wide: title and lede on the left, the stack on the right. Narrow: one column in DOM order. */
   .hero {
     padding: 56px 0 72px;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 48px;
-    align-items: flex-start;
+    display: grid;
+    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+    grid-template-rows: auto 1fr;
+    grid-template-areas:
+      "title basket"
+      "intro basket";
+    column-gap: 48px;
+    align-items: start;
   }
   .intro {
-    flex: 1 1 400px;
+    grid-area: intro;
     min-width: 0;
-    padding-top: 24px;
   }
   /* Three lines at most beside the panel, so the total stays near the fold. */
   h1 {
+    grid-area: title;
+    padding-top: 24px;
     margin: 0;
     font-weight: 900;
     font-stretch: 62%;
@@ -396,23 +467,16 @@ const sample =
   .trust {
     margin: 20px 0 0;
     max-width: 40ch;
-    display: flex;
-    gap: 10px;
-    align-items: baseline;
     font-size: 15px;
     color: var(--muted);
   }
-  .trust :global(svg) {
-    flex: none;
-    align-self: center;
-    color: var(--ink);
-  }
   .trust a {
     font-weight: 700;
+    color: var(--ink);
   }
 
   .basket {
-    flex: 1 1 600px;
+    grid-area: basket;
     min-width: 0;
   }
   .picker {
@@ -457,7 +521,7 @@ const sample =
   }
   .row {
     display: grid;
-    grid-template-columns: 96px minmax(0, 1fr);
+    grid-template-columns: 88px minmax(0, 1fr) auto;
     gap: 4px 16px;
     align-items: baseline;
     padding: 14px 0;
@@ -478,15 +542,9 @@ const sample =
   }
   .body {
     display: grid;
+    justify-items: start;
     gap: 6px;
     min-width: 0;
-  }
-  .line {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: baseline;
-    justify-content: space-between;
-    gap: 2px 16px;
   }
   .tool {
     min-width: var(--target);
@@ -500,7 +558,13 @@ const sample =
   .tool:hover {
     text-decoration: underline;
   }
-  /* The headline limit speaks in the label's condensed voice. */
+  /* The limit column: the headline in the label's condensed voice, its scale under it. */
+  .limit {
+    display: grid;
+    justify-items: end;
+    gap: 6px;
+    max-width: 220px;
+  }
   .headline {
     font-weight: 900;
     font-stretch: 62%;
@@ -509,6 +573,11 @@ const sample =
     /* Condensed spaces nearly vanish; give the words room. */
     word-spacing: 0.18em;
     text-align: right;
+  }
+  .unscaled {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--muted);
   }
   .catch {
     display: flex;
@@ -568,6 +637,18 @@ const sample =
   .total-note {
     margin: 2px 0 0;
     font-size: 13px;
+    color: var(--muted);
+  }
+  .shared {
+    margin-top: 6px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 4px 12px;
+    font-size: 13px;
+  }
+  .shared-lead {
+    font-weight: 600;
     color: var(--muted);
   }
   .price {
@@ -787,31 +868,88 @@ const sample =
     white-space: nowrap;
   }
 
+  /* Phone dock: fixed to the bottom edge, rises once when it appears. */
+  .dock {
+    position: fixed;
+    inset: auto 0 0;
+    z-index: 20;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 10px 16px calc(10px + env(safe-area-inset-bottom));
+    background: var(--label);
+    border-top: 2px solid var(--ink);
+    box-shadow: 0 -8px 24px -12px rgba(28, 35, 64, 0.35);
+    animation: dock-in 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .dock[hidden] {
+    display: none;
+  }
+  @keyframes dock-in {
+    from {
+      transform: translateY(100%);
+    }
+  }
+  .dock-total {
+    margin: 0;
+    display: grid;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--muted);
+    line-height: 1.2;
+  }
+  .dock-total strong {
+    font-weight: 900;
+    font-stretch: 62%;
+    font-size: 30px;
+    line-height: 1;
+    color: var(--ink);
+  }
+  .dock-copy {
+    flex: 1;
+    min-height: 52px;
+    font-size: 17px;
+  }
+
   @media (prefers-reduced-motion: reduce) {
-    .row.is-new {
+    .row.is-new,
+    .dock {
       animation: none;
     }
   }
 
+  /* Mid widths: one column, lede stays under the title. */
+  @media (max-width: 1024px) {
+    .hero {
+      grid-template-columns: minmax(0, 1fr);
+      grid-template-rows: none;
+      grid-template-areas: "title" "intro" "basket";
+      row-gap: 28px;
+    }
+    h1 {
+      padding-top: 0;
+    }
+    .intro .lede {
+      margin-top: 0;
+    }
+  }
+
   @media (max-width: 640px) {
+    /* Phone: the stack right under the title, the lede after it. */
     .hero {
       padding: 20px 0 48px;
-      gap: 18px;
+      grid-template-areas: "title" "basket" "intro";
+      row-gap: 18px;
     }
-    .intro {
-      padding-top: 0;
-      flex-basis: 100%;
+    h1 {
+      font-size: 44px;
     }
     .lede {
-      margin-top: 14px;
       font-size: 17px;
     }
     .trust {
       margin-top: 12px;
       font-size: 14px;
-    }
-    .basket {
-      flex-basis: 100%;
     }
     .picker {
       padding: 16px;
@@ -827,31 +965,64 @@ const sample =
     .rows {
       padding: 0 16px;
     }
+    /* Phone row: job and check state share the top line, then name, limit + scale, catch. */
     .row {
-      grid-template-columns: minmax(0, 1fr);
+      grid-template-columns: minmax(0, 1fr) auto;
+      grid-template-areas:
+        "job state"
+        "tool tool"
+        "limit limit"
+        "catch catch"
+        "facts facts";
       padding: 12px 0;
-      gap: 2px;
+      gap: 4px 12px;
+    }
+    .body,
+    .meta {
+      display: contents;
     }
     .job {
+      grid-area: job;
+      font-size: 13px;
+    }
+    .state {
+      grid-area: state;
+      justify-content: flex-end;
       font-size: 13px;
     }
     .tool {
+      grid-area: tool;
+      justify-self: start;
       font-size: 17px;
     }
-    .line {
-      justify-content: flex-start;
+    .limit {
+      grid-area: limit;
+      max-width: none;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 2px 12px;
     }
     .headline {
       font-size: 20px;
       text-align: left;
-      flex-basis: 100%;
     }
-    .catch,
-    .meta {
+    .catch {
+      grid-area: catch;
       font-size: 13px;
+    }
+    .meta :global(.facts) {
+      grid-area: facts;
     }
     .total {
       padding: 10px 16px 14px;
+      flex-wrap: nowrap;
+    }
+    /* The shared facts wrap inside their column so $0.00 keeps its place on the right. */
+    .total > div {
+      flex: 1 1 0;
+      min-width: 0;
     }
     .price {
       font-size: 48px;

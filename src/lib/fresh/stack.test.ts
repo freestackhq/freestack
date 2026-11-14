@@ -7,6 +7,7 @@ import {
   matchTool,
   parseStack,
   rowState,
+  sharedFacts,
   splitTools,
   stackMarkdown,
   stackPrompt,
@@ -208,6 +209,24 @@ describe("Check my stack input", () => {
 });
 
 describe("totals and copy text", () => {
+  it("shared facts: a sell or card value every part has, said once", () => {
+    expect(sharedFacts([])).toEqual({ sell: null, card: null });
+    // One part: nothing to share, the row keeps its own facts.
+    expect(sharedFacts([{ sell: "yes", card: "unknown" }])).toEqual({ sell: null, card: null });
+    expect(
+      sharedFacts([
+        { sell: "yes", card: "unknown" },
+        { sell: "yes", card: "unknown" },
+      ]),
+    ).toEqual({ sell: "yes", card: "unknown" });
+    expect(
+      sharedFacts([
+        { sell: "yes", card: "no" },
+        { sell: "no", card: "no" },
+      ]),
+    ).toEqual({ sell: null, card: "no" });
+  });
+
   it("card note", () => {
     expect(cardNote([])).toBe("");
     expect(cardNote([{ card: "no" }])).toBe("No card needed for any part");
