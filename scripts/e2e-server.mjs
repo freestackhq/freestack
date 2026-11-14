@@ -12,7 +12,7 @@
  * The fixture snapshot goes to tests/fixtures/data/.generated/, so the
  * committed src/data/catalog.generated.json is never touched.
  */
-import { spawnSync } from "node:child_process";
+import { spawn, spawnSync } from "node:child_process";
 import { createReadStream, existsSync, statSync } from "node:fs";
 import { createServer } from "node:http";
 import { extname, join, normalize } from "node:path";
@@ -44,10 +44,18 @@ if (real.status !== 0) process.exit(real.status ?? 1);
 run("node", ["scripts/generate.mjs"], { FREESTACK_DATA: FIXTURES });
 run("pnpm", ["astro", "build"], { FREESTACK_DATA: FIXTURES, ASTRO_OUT_DIR: "" });
 
-// 3. Fixture site on PORT (astro preview daemonizes; wait for it).
-spawnSync("pnpm", ["astro", "preview", "--port", PORT], {
+// 3. Fixture site on PORT. `astro preview` runs in the foreground (it does
+//    not daemonize), so start it detached and wait on its health endpoint;
+//    a blocking spawnSync here would hang and step 4 would never run.
+const preview = spawn("pnpm", ["astro", "preview", "--port", PORT], {
   stdio: "inherit",
   env: { ...process.env, ASTRO_OUT_DIR: "" },
+});
+preview.on("exit", (code) => {
+  if (code) {
+    console.error(`e2e-server: astro preview exited with code ${code}`);
+    process.exit(code);
+  }
 });
 const deadline = Date.now() + 90_000;
 let up = false;
@@ -91,6 +99,7 @@ createServer((req, res) => {
 }).listen(Number(REAL_PORT), () => console.log(`e2e-server: fixture site on :${PORT}, real pages on :${REAL_PORT}`));
 
 const stop = () => {
+  preview.kill("SIGTERM");
   spawnSync("pnpm", ["astro", "preview", "stop"], { stdio: "inherit" });
   process.exit(0);
 };
