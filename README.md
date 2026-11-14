@@ -78,7 +78,7 @@ Push to the default branch, or run **Actions → Deploy → Run workflow**. To d
 
 ## Development
 
-Node 22.18 or newer (`.nvmrc`): the scripts import `.ts` files directly.
+Node 22.23.4 or newer (`.nvmrc`): the scripts import `.ts` files directly.
 
 ```bash
 pnpm typecheck        # astro check (.astro and .ts)
