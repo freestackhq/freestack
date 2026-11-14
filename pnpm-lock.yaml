@@ -18,12 +18,12 @@ importers:
         specifier: ^7.2.1
         version: 7.2.1(@emnapi/core@1.11.3)(@emnapi/runtime@1.11.3)(@types/node@22.20.5)(@vercel/functions@3.7.5(ws@8.21.0))(jiti@2.7.0)(yaml@2.9.1)
       tailwindcss:
-        specifier: ^4.3.3
-        version: 4.3.3
+        specifier: ^4.3.5
+        version: 4.3.5
     devDependencies:
       '@astrojs/check':
         specifier: ^0.9.12
-        version: 0.9.12(@emnapi/runtime@1.11.3)(prettier-plugin-astro@1.1.2(prettier@3.10.1))(prettier@3.10.1)(typescript@6.0.3)
+        version: 0.9.12(@emnapi/runtime@1.11.3)(prettier-plugin-astro@1.1.2(prettier@3.10.0))(prettier@3.10.0)(typescript@6.0.3)
       '@axe-core/playwright':
         specifier: 4.10.2
         version: 4.10.2(playwright-core@1.58.2)
@@ -44,10 +44,10 @@ importers:
         version: 2.2.2
       prettier:
         specifier: ^3.9.10
-        version: 3.10.1
+        version: 3.10.0
       prettier-plugin-astro:
         specifier: ^1.1.2
-        version: 1.1.2(prettier@3.10.1)
+        version: 1.1.2(prettier@3.10.0)
       typescript:
         specifier: ^6.0.3
         version: 6.0.3
@@ -1989,8 +1989,8 @@ packages:
     peerDependencies:
       prettier: ^3.5.3
 
-  prettier@3.10.1:
-    resolution: {integrity: sha512-70vp3ZUYoPlFbF9uiTdXHUUCGEIp7d4+6p+8DYbkm2jP7x/3i/paXVF6dopSI3zd/CEitrZN1rc4i85xWmmXlg==}
+  prettier@3.10.0:
+    resolution: {integrity: sha512-mBi4765LgjO1PFjlEs7pUeK0nb1bw71c+N4/ItfeUWNdY5cV2pRKaFpbbFRYmDJMO+5ZwzGxHRqHxFZna7iv5w==}
     engines: {node: '>=14'}
     hasBin: true
 
@@ -2145,6 +2145,9 @@ packages:
 
   tailwindcss@4.3.3:
     resolution: {integrity: sha512-gOhV3P7ufE62QDGg1zVaTgCR+EtPv92k2nIhVcVKcLmxT1sUBsQGhnZj175j+MqRt4zLF7ic+sCYjfhxMxj7YQ==}
+
+  tailwindcss@4.3.5:
+    resolution: {integrity: sha512-FcQk9BuffmEHJP2G0XmB2SplU1aLTI7j07Kunk+U74Ny+XiWOtzXz9aujFZ/avntw1e2cOv/3PkgzflQ7gX2vQ==}
 
   tapable@2.3.3:
     resolution: {integrity: sha512-uxc/zpqFg6x7C8vOE7lh6Lbda8eEL9zmVm/PLeTPBRhh1xCgdWaQ+J1CUieGpIfm2HdtsUpRv+HshiasBMcc6A==}
@@ -2600,9 +2603,9 @@ snapshots:
     transitivePeerDependencies:
       - '@emnapi/runtime'
 
-  '@astrojs/check@0.9.12(@emnapi/runtime@1.11.3)(prettier-plugin-astro@1.1.2(prettier@3.10.1))(prettier@3.10.1)(typescript@6.0.3)':
+  '@astrojs/check@0.9.12(@emnapi/runtime@1.11.3)(prettier-plugin-astro@1.1.2(prettier@3.10.0))(prettier@3.10.0)(typescript@6.0.3)':
     dependencies:
-      '@astrojs/language-server': 2.17.3(@emnapi/runtime@1.11.3)(prettier-plugin-astro@1.1.2(prettier@3.10.1))(prettier@3.10.1)(typescript@6.0.3)
+      '@astrojs/language-server': 2.17.3(@emnapi/runtime@1.11.3)(prettier-plugin-astro@1.1.2(prettier@3.10.0))(prettier@3.10.0)(typescript@6.0.3)
       chokidar: 5.0.0
       kleur: 4.1.5
       typescript: 6.0.3
@@ -2753,7 +2756,7 @@ snapshots:
       smol-toml: 1.6.1
       unified: 11.0.5
 
-  '@astrojs/language-server@2.17.3(@emnapi/runtime@1.11.3)(prettier-plugin-astro@1.1.2(prettier@3.10.1))(prettier@3.10.1)(typescript@6.0.3)':
+  '@astrojs/language-server@2.17.3(@emnapi/runtime@1.11.3)(prettier-plugin-astro@1.1.2(prettier@3.10.0))(prettier@3.10.0)(typescript@6.0.3)':
     dependencies:
       '@astrojs/astro2tsx': 0.1.2(@emnapi/runtime@1.11.3)
       '@astrojs/yaml2ts': 0.2.4
@@ -2766,15 +2769,15 @@ snapshots:
       volar-service-css: 0.0.71(@volar/language-service@2.4.28)
       volar-service-emmet: 0.0.71(@volar/language-service@2.4.28)
       volar-service-html: 0.0.71(@volar/language-service@2.4.28)
-      volar-service-prettier: 0.0.71(@volar/language-service@2.4.28)(prettier@3.10.1)
+      volar-service-prettier: 0.0.71(@volar/language-service@2.4.28)(prettier@3.10.0)
       volar-service-typescript: 0.0.71(@volar/language-service@2.4.28)
       volar-service-typescript-twoslash-queries: 0.0.71(@volar/language-service@2.4.28)
       volar-service-yaml: 0.0.71(@volar/language-service@2.4.28)
       vscode-html-languageservice: 5.6.2
       vscode-uri: 3.2.0
     optionalDependencies:
-      prettier: 3.10.1
-      prettier-plugin-astro: 1.1.2(prettier@3.10.1)
+      prettier: 3.10.0
+      prettier-plugin-astro: 1.1.2(prettier@3.10.0)
     transitivePeerDependencies:
       - '@emnapi/runtime'
       - typescript
@@ -4352,14 +4355,14 @@ snapshots:
       picocolors: 1.1.1
       source-map-js: 1.2.1
 
-  prettier-plugin-astro@1.1.2(prettier@3.10.1):
+  prettier-plugin-astro@1.1.2(prettier@3.10.0):
     dependencies:
       '@astrojs/compiler-rs': 0.5.3
       '@prettier/parse-srcset': 3.1.0
-      prettier: 3.10.1
+      prettier: 3.10.0
       sass-formatter: 0.8.0
 
-  prettier@3.10.1: {}
+  prettier@3.10.0: {}
 
   prismjs@1.30.0: {}
 
@@ -4586,6 +4589,8 @@ snapshots:
 
   tailwindcss@4.3.3: {}
 
+  tailwindcss@4.3.5: {}
+
   tapable@2.3.3: {}
 
   tiny-inflate@1.0.3: {}
@@ -4768,12 +4773,12 @@ snapshots:
     optionalDependencies:
       '@volar/language-service': 2.4.28
 
-  volar-service-prettier@0.0.71(@volar/language-service@2.4.28)(prettier@3.10.1):
+  volar-service-prettier@0.0.71(@volar/language-service@2.4.28)(prettier@3.10.0):
     dependencies:
       vscode-uri: 3.2.0
     optionalDependencies:
       '@volar/language-service': 2.4.28
-      prettier: 3.10.1
+      prettier: 3.10.0
 
   volar-service-typescript-twoslash-queries@0.0.71(@volar/language-service@2.4.28):
     dependencies:
@@ -4914,7 +4919,7 @@ snapshots:
       ajv: 8.20.0
       ajv-draft-04: 1.0.0(ajv@8.20.0)
       ajv-i18n: 4.2.0(ajv@8.20.0)
-      prettier: 3.10.1
+      prettier: 3.10.0
       request-light: 0.5.8
       vscode-json-languageservice: 4.1.8
       vscode-languageserver: 9.0.1
