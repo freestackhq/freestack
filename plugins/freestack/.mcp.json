@@ -2,7 +2,7 @@
   "mcpServers": {
     "freestack": {
       "type": "http",
-      "url": "https://freestack.example.com/mcp"
+      "url": "https://freestack.kuyacarlo.dev/mcp"
     }
   }
 }
