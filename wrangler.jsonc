@@ -3,6 +3,13 @@
   "name": "freestack",
   "main": "@astrojs/cloudflare/entrypoints/server",
   "compatibility_date": "2025-05-21",
+  // Keep the *.workers.dev route alongside the custom domain (passed via
+  // --domain at deploy time). Without this, workers_dev defaults to false
+  // whenever a route/custom domain is configured, so no workers.dev URL is
+  // provisioned. CI smoke-tests that URL because the zone's Bot Fight Mode
+  // blocks GitHub Actions runner IPs on the custom domain (403), while the
+  // workers.dev route is not behind the zone's bot protection.
+  "workers_dev": true,
   "assets": {
     "directory": "./dist",
     "binding": "ASSETS"
