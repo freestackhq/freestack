@@ -77,14 +77,33 @@ jobs:
       - name: Plugin files match SITE_URL
         run: pnpm plugin:build --check
       - name: Build and deploy
+        id: deploy
         run: pnpm deploy:cf
       - name: Smoke test
-        # A first-time or re-provisioned custom domain answers 403 at the
-        # Cloudflare edge for up to a few minutes while the hostname route
-        # settles, so a 403 is treated as "still propagating" and retried.
-        # ~5 min total (15 tries, 20s apart) covers that window.
+        # Probe the Worker's own *.workers.dev URL, not the custom domain.
+        # The zone has Bot Fight Mode on, which blocks GitHub Actions runner
+        # IPs (datacenter ASN) on the custom domain and returns 403 to curl.
+        # Bot Fight Mode cannot be skipped with a WAF rule, but the workers.dev
+        # route sits in front of the Worker directly and is not behind the
+        # zone's bot protection, so the runner can reach it.
+        #
+        # deploy.mjs captures that URL from wrangler and exposes it as the
+        # step output workers_dev_url. If it is missing for any reason, fall
+        # back to the custom domain (which may 403 under Bot Fight Mode).
+        #
+        # A freshly created workers.dev subdomain needs a few minutes for DNS
+        # and certificates; first probes read HTTP 000, so 000 is retried.
+        # ~5 min total (15 tries, 20s apart).
+        env:
+          WORKERS_DEV_URL: ${{ steps.deploy.outputs.workers_dev_url }}
         run: |
-          base="${SITE_URL%/}"
+          if [ -n "$WORKERS_DEV_URL" ]; then
+            base="${WORKERS_DEV_URL%/}"
+            echo "smoke: using workers.dev URL $base (bypasses Bot Fight Mode)"
+          else
+            base="${SITE_URL%/}"
+            echo "::warning::no workers.dev URL captured; falling back to $base (Bot Fight Mode may 403 runner IPs)"
+          fi
           url="$base/api/health"
           last=""
           for _ in $(seq 1 15); do
@@ -92,8 +111,8 @@ jobs:
             last="$code"
             case "$code" in
               2*) echo "health ok ($code)"; exit 0 ;;
-              000) echo "no answer yet (connection/timeout), retrying..." ;;
-              403|404|5*) echo "edge/route not ready yet (HTTP $code), retrying..." ;;
+              000) echo "no answer yet (DNS/cert/connection), retrying..." ;;
+              404|5*) echo "worker not ready yet (HTTP $code), retrying..." ;;
               *) echo "::error::$url returned HTTP $code"; exit 1 ;;
             esac
             sleep 20
