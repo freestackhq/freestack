@@ -1,2 +1,741 @@
 # Pricing-page scan: { <tool id>: { hash, checked_at, changed_at } }. Written by the weekly scan.
-{}
+1password-pack:
+  hash: e2c928850e768a54de0e6846717be1d06b70f86a3a120f953752935561ccdad6
+  checked_at: 2026-11-16
+  changed_at: null
+adobe-creative-cloud-student:
+  hash: 1397017fd6639fda26ff934209c4fba6acdbe14b4a08c7a326de93e004f26fcb
+  checked_at: 2026-11-16
+  changed_at: null
+algolia-docsearch:
+  hash: 17a8692c7d130faec8bcd52c157abec91476f28f6bec283ca1b5ca4ae35dd9d5
+  checked_at: 2026-11-16
+  changed_at: null
+alpha-vantage:
+  hash: f39aabc272b65a8642a78f3d4635fbd1ee7c168a15a90662c8ef2d8060cf2b6f
+  checked_at: 2026-11-16
+  changed_at: null
+amazon-q-developer:
+  hash: 2688986ff836b5a729c06538cc353908b30f4c42816522629335bc63deb3f12b
+  checked_at: 2026-11-16
+  changed_at: null
+anthropic-api:
+  hash: 03573561ffa83525d913e5d0680a8e632be297bb473cfbfe6a51d741c665497c
+  checked_at: 2026-11-16
+  changed_at: null
+appwrite:
+  hash: 2a838b0b9a92ee49532d70ea58ddf6dfeb1fdff74ffdb22add8014f8fd5230ec
+  checked_at: 2026-11-16
+  changed_at: null
+autodesk-education:
+  hash: 7f48b645889932e67acaa0c3a0ad3cb190bc06765f1970c3d30b317058b8e00c
+  checked_at: 2026-11-16
+  changed_at: null
+awesome-ph-edtech:
+  hash: fc999f42c05d54179414ae4539063a7c2084c1a49da2cde65fe72b3e9a15765b
+  checked_at: 2026-11-16
+  changed_at: null
+awesome-ph-student-life:
+  hash: 60545eec474a8bad951460876c87c6cf55e17268a185564bcfecbc4bd9c1cc48
+  checked_at: 2026-11-16
+  changed_at: null
+aws-activate:
+  hash: 9a33898020fbbf03bd91d9d48b68bf1d6ecf329735cc3e9f2b6e38c0ce6ecd81
+  checked_at: 2026-11-16
+  changed_at: null
+aws-educate:
+  hash: b48844dd7717cc3ae4c3470188eae889e92a2bf8546c568f6af9ae16aa617377
+  checked_at: 2026-11-16
+  changed_at: null
+axiom:
+  hash: 664c2392404b20f99a71cdb574592e3eb4301f0cc08d7d00988f2d75517ad21e
+  checked_at: 2026-11-16
+  changed_at: null
+azure-for-students-starter:
+  hash: 3f49c46d4bf37241031e53e62bc68b9b06e8cf3825c2643ec83ac394a7d26705
+  checked_at: 2026-11-16
+  changed_at: null
+azure-students:
+  hash: 4567a5e3781a48571e3a6ff2ba3c157a227d232b0d166303ca32d85c7b2a5e59
+  checked_at: 2026-11-16
+  changed_at: null
+better-auth:
+  hash: 82456596459e83525e903d8787f72818cd877b1bef91af3e701bf5cfcb831baf
+  checked_at: 2026-11-16
+  changed_at: null
+better-stack:
+  hash: f68e85a534658ef57344d0164797f731d336a7e6da93b31774886b25d6610e15
+  checked_at: 2026-11-16
+  changed_at: null
+bitwarden:
+  hash: 73b9e99176c3c5759bd8ac5926ea46722d8f0fabf46cf47d8336514b2259e5fe
+  checked_at: 2026-11-16
+  changed_at: null
+boot-dev-pack:
+  hash: 732eb2e30869c287eb68d1533b505e0287270df8f5984e7219b695dd96b85e90
+  checked_at: 2026-11-16
+  changed_at: null
+brevo:
+  hash: e383c4df6436391275c1582ee3ba17c939d340b556dbbacb1482ca6686913e02
+  checked_at: 2026-11-16
+  changed_at: null
+browserbase:
+  hash: fd094f10bed14f86ba32ad6b063ae7dc30647032185e8042501cad5add6a9243
+  checked_at: 2026-11-16
+  changed_at: null
+browserless:
+  hash: 4f44b0b55dadaf0dd173c77a821b1045958bf6d02c14c2748e3642c156f2e0bf
+  checked_at: 2026-11-16
+  changed_at: null
+cal-com:
+  hash: 423c7dff2da4ac5dbdf43c13062ca40d506ea5fe28e5a28e929795d8b4718c4b
+  checked_at: 2026-11-16
+  changed_at: null
+cf-workers:
+  hash: 145a8770afa6799a325d5310cdf19a0b9cc2744744e5dd1dbed32f1665b3b683
+  checked_at: 2026-11-16
+  changed_at: null
+chroma:
+  hash: 675bd0efff89931f9542771c30564a25907e71640da838010c2d85bf3d626170
+  checked_at: 2026-11-16
+  changed_at: null
+clerk:
+  hash: cb1097c6f1be1971c5fd5f999f63b9a1998915a1413f959d708cb7859e67b830
+  checked_at: 2026-11-16
+  changed_at: null
+clickhouse-cloud:
+  hash: 33bed4622fe1ab703f749ae7c4c6ed692424d74ddfa255a6683bc3db6727ebe7
+  checked_at: 2026-11-16
+  changed_at: null
+cloudflare-turnstile:
+  hash: 469ce4a9f79a26a3b743d44b6ad71752a2c1658eac78d7cef6f6eece7702fca7
+  checked_at: 2026-11-16
+  changed_at: null
+cloudflare-workers-ai:
+  hash: cdb4a1def0288ba4c0a134a7c38906627cbfc5863dbb55bc976bb45eecbb9f44
+  checked_at: 2026-11-16
+  changed_at: null
+cloudinary:
+  hash: d98509838ed7ef961bfc320ad146b32f3863708b94e3343895f533a429c50a77
+  checked_at: 2026-11-16
+  changed_at: null
+codechum:
+  hash: 0add7e96ec00409922619577e9ba3f71d10b2bb2979d432ce1b788cd30c6b68a
+  checked_at: 2026-11-16
+  changed_at: null
+cohere:
+  hash: 3a5a798dae89461e894c4e85274c4c638cbe543d4e5aae7a969cdf107052f893
+  checked_at: 2026-11-16
+  changed_at: null
+continue-dev:
+  hash: d9228c3d79a55cff812e33bcb27509831b7c06ba8ef8b091b4e31d377f723b7f
+  checked_at: 2026-11-16
+  changed_at: null
+convex:
+  hash: 3eb5989df997ddcb2c85d07a8ebb139cdeff36175640820638ba610436cd5e7b
+  checked_at: 2026-11-16
+  changed_at: null
+coolify:
+  hash: 45706e0f6572935433bf6466c0a01ec67f10e78863615ebfe2555230b62313b9
+  checked_at: 2026-11-16
+  changed_at: null
+crisp-chatwoot:
+  hash: 0f121a1c4b8f3555b6e9aeec48a7b23afb267b423b93b33ec4968a801f0b5ae6
+  checked_at: 2026-11-16
+  changed_at: null
+cron-job-org:
+  hash: b218b6fcca8dd8aadbf2846a51719689d032be5a7caac9a8a2687858613bff8d
+  checked_at: 2026-11-16
+  changed_at: null
+crowdsec:
+  hash: 9c3e7ae58b3f36f7da04097afcf2b955bb454ea720c38da0076f11c179084cc5
+  checked_at: 2026-11-16
+  changed_at: null
+cursor:
+  hash: 6be56dc19d1b4fb636b81295dfbc31c1611d964d5d06f4f19104b6ac9db639fa
+  checked_at: 2026-11-16
+  changed_at: null
+d1:
+  hash: 7af6d3e90e323b1fa6674641b91eca52da12322c004045f1d877e86b6ae6aeba
+  checked_at: 2026-11-16
+  changed_at: null
+datadog-pack:
+  hash: ffba3fc8abe252d7d023bbbb5b44432fb67963f0cff3f666be0d558b67bff162
+  checked_at: 2026-11-16
+  changed_at: null
+deno-deploy:
+  hash: 0839c8b1f1c55aca015b872770b149b8a3da0ff907173b53d93b172b23431df1
+  checked_at: 2026-11-16
+  changed_at: null
+digitalocean-pack:
+  hash: b0a56327c24e7bbc81961b07c31294e4c3b751f063c4532b9a0dcb0c788689a4
+  checked_at: 2026-11-16
+  changed_at: null
+doppler:
+  hash: b7a65fb381f66946c895e77d14d9b8d63a8699510d1592a7f87c87ad7582c193
+  checked_at: 2026-11-16
+  changed_at: null
+dub-co:
+  hash: a82fe158d5e601ae271afd499b0532f7d96901b010eca3a690e8e13ea27a5c62
+  checked_at: 2026-11-16
+  changed_at: null
+duckdb:
+  hash: fb3047620f079ee2a6efccba7d6092e7a8db890e0552c328b4f938bc1d59ce16
+  checked_at: 2026-11-16
+  changed_at: null
+educative-pack:
+  hash: 9b9140211ce0dc1c858555963eec4ca56126366afb44b5f2fd9c432dbaae2f70
+  checked_at: 2026-11-16
+  changed_at: null
+elbi-gradesim:
+  hash: 0b0c11357778d2cfc88c6dd4140c68a9a5804a690218c7450dddb1151c21b46d
+  checked_at: 2026-11-16
+  changed_at: null
+elevenlabs:
+  hash: a1c70d9a8247730513771ca0b73d174d67677c2e9dbf9924bb9675291768daca
+  checked_at: 2026-11-16
+  changed_at: null
+exa:
+  hash: 3f8408c83f4c1f0f0f67cd08a41a4e8f707bf8a0eadcd3be1038bbb5771959ee
+  checked_at: 2026-11-16
+  changed_at: null
+exchangerate-api:
+  hash: 2f80ba8b5700268eded3317eeaebb8d6f73aaf166c920a31a0e2d1eebc3a324c
+  checked_at: 2026-11-16
+  changed_at: null
+figma-starter:
+  hash: 4ea0c8f26b97a515543a26793879925282a0a05acd7d9945f035bc7f253bbdc9
+  checked_at: 2026-11-16
+  changed_at: null
+fireworks-ai:
+  hash: 5433ea6b6d11bd1a9d0960c959ce79762f74fd7ebb9fec330ce860f98fd554eb
+  checked_at: 2026-11-16
+  changed_at: null
+flowise:
+  hash: 6d7990f410d04590bed54f188d74ed46afdc71bba2b89bdbf161054733038cb4
+  checked_at: 2026-11-16
+  changed_at: null
+fly-io:
+  hash: 3b896736e7e8677ce0431ac26acd5517ca21602e4fcac55455e0605774f284cd
+  checked_at: 2026-11-16
+  changed_at: null
+formspree:
+  hash: 874905365ba9cbc9bed16c80db23df14b8ec68609200e459a0f462591b1dc553
+  checked_at: 2026-11-16
+  changed_at: null
+forward-email:
+  hash: 4ce20e439fb8c5bafae1ee8c2411db43c1bfbadc1e6f57e76be9c9d0c21c1338
+  checked_at: 2026-11-16
+  changed_at: null
+frankfurter:
+  hash: 85e9acc7375e12e7593aa30349fdb4b20244b2d2b85829d2325ca2a9bc50f30f
+  checked_at: 2026-11-16
+  changed_at: null
+frontend-masters-pack:
+  hash: 96d1d8fcde71cdfbe7a19e7750c65bdfd21c87fa0418eb51e0ea42447dbb8316
+  checked_at: 2026-11-16
+  changed_at: null
+github-codespaces:
+  hash: be617249e54412fb8949c73a6f1d0380de6bf47dc5894f731de5ed91ac56d8f9
+  checked_at: 2026-11-16
+  changed_at: null
+github-copilot-free:
+  hash: c2b5f8fc5960ba4b4459deedf3688c6b5b685e73419c5a77343068393a740c7c
+  checked_at: 2026-11-16
+  changed_at: null
+github-copilot-student:
+  hash: 3323669cd3936b5af095e70fb99867afbba8c9d40b4f3361a956866f1c051121
+  checked_at: 2026-11-16
+  changed_at: null
+github-pro-education:
+  hash: 01ebfcdc8cde1a6f5435263d026c921c707236986188cedf47a5cf43515b2ae9
+  checked_at: 2026-11-16
+  changed_at: null
+github-student-pack:
+  hash: b45ee587e750791fcca970ad3ead7e10e8acd80c10b035b62a033dc0b97dddba
+  checked_at: 2026-11-16
+  changed_at: null
+gitleaks:
+  hash: 5a15be560331a5b9aad0388640bf5ae82dc099e19e8212c3fd209b96519f16d5
+  checked_at: 2026-11-16
+  changed_at: null
+gnews:
+  hash: e3f6eb1d9c4765bb5417c90384ca9a1bf185f038b168d6128a731d09ae4f76e8
+  checked_at: 2026-11-16
+  changed_at: null
+godot:
+  hash: 0309810bed3bd24fe1d9c90d3530093c83b61b668ffba8f94205e6a7e2c8bde7
+  checked_at: 2026-11-16
+  changed_at: null
+google-for-startups-cloud:
+  hash: 322d563c1ec6a56cdfcc0f5798e2861afe7625d0aba2a20bad0b9fad2a36ea82
+  checked_at: 2026-11-16
+  changed_at: null
+groq:
+  hash: 9ace7b217e1fdce5099da97a1a089f9761c5b6d0d9405c8f7841ce619e3975b7
+  checked_at: 2026-11-16
+  changed_at: null
+hacker-news:
+  hash: 1691c65921378488d3415a2f90acb941b2865c580462a8704e8473cbf8b18596
+  checked_at: 2026-11-16
+  changed_at: null
+have-i-been-pwned-api:
+  hash: fa8794773c3261e7f8e105018ecced2fa07db20d93ab1ed380457abdc4e432a0
+  checked_at: 2026-11-16
+  changed_at: null
+helicone:
+  hash: 83d16578e652d6599ba8e340a67b88c079cfbff902546884474c0c6f2c299e16
+  checked_at: 2026-11-16
+  changed_at: null
+heroku-pack:
+  hash: dfa69659a1ffe8827024562a1dbc91dc77bac6a5dd4cdee49ae91684cda1297b
+  checked_at: 2026-11-16
+  changed_at: null
+hookdeck:
+  hash: 0a944bd27b69c2bbc78859f061f8fb6a333326322db75c38477946ee1bfcfac6
+  checked_at: 2026-11-16
+  changed_at: null
+htmx-go-python-ssr:
+  hash: e40d373a06c8501b7054784feca0e7b868c92c84985097a30573f7b907daa3b0
+  checked_at: 2026-11-16
+  changed_at: null
+hugging-face-inference:
+  hash: 0a42af8183692479b72057e27ee18e8856e21b5a577c8d4d7fc16764d7a5d7fa
+  checked_at: 2026-11-16
+  changed_at: null
+hugging-face-spaces:
+  hash: 970492e32826ef3d5dfa0ffe65bd7170a3ac36bfc992365369071da91d429798
+  checked_at: 2026-11-16
+  changed_at: null
+infisical:
+  hash: a64cba2a3068c022c069e98c71bbd25eb6b50c48af834cdc334a132980e86bc3
+  checked_at: 2026-11-16
+  changed_at: null
+inngest:
+  hash: b12cf5addbf17726675d1a773f0de715080c359ac62ef983334560e267758d66
+  checked_at: 2026-11-16
+  changed_at: null
+intercom:
+  hash: 9105343da4a1d2b7b83f318fd5aca1a3470e6c17f9fef20b23c34e2bc5554d57
+  checked_at: 2026-11-16
+  changed_at: null
+ip-api:
+  hash: 764ec9a636c451b2393173e8e88301545b0fb863d02d80a711e9f4b4f1dac7bb
+  checked_at: 2026-11-16
+  changed_at: null
+ipinfo-io:
+  hash: 16930411c9e5625b3c98cfe804e2ab3b5a0ade2c2b2f53863a038ba3f6039402
+  checked_at: 2026-11-16
+  changed_at: null
+jetbrains-edu:
+  hash: 4b1c9f3caffd06ef38bdd1e6751d48aa303dc523b19db76ad2fde18c09f018f1
+  checked_at: 2026-11-16
+  changed_at: null
+kinde:
+  hash: 596c81eca953f91dbba3d7ee342da2432cb5d08d053ef5500950df137ca48562
+  checked_at: 2026-11-16
+  changed_at: null
+kiro:
+  hash: 449d78b25559304b09c372db10c107edeadd3142eeec95a81535a6672a153b3e
+  checked_at: 2026-11-16
+  changed_at: null
+koyeb:
+  hash: 8e5c155d5a2d88d9f967ce6d1019e5fb91d59c72a6c4bf3936e7fac909105d8f
+  checked_at: 2026-11-16
+  changed_at: null
+langfuse:
+  hash: 197882db539243580196189bdcf0509ba350f75e4fac0384219c769a59d35a84
+  checked_at: 2026-11-16
+  changed_at: null
+langsmith:
+  hash: 1bad2b88ea355f1361632436980609050b9145eab0a44c0dc152cd8e6fd2b148
+  checked_at: 2026-11-16
+  changed_at: null
+lets-encrypt:
+  hash: 55eac14877395274eb7cf47e2728bc9a8ee07137f0c3e1b0826c922990787e63
+  checked_at: 2026-11-16
+  changed_at: null
+linear:
+  hash: c4aafe5c89335a92afd06f39c12a55b0be7b5e4781d5738b3642494e1fe3630c
+  checked_at: 2026-11-16
+  changed_at: null
+livekit-cloud:
+  hash: b8e263697262dda045e9613991bab17e6e433f673ee503bb28c4d023b84dc3fb
+  checked_at: 2026-11-16
+  changed_at: null
+llama-cpp:
+  hash: 183b03c3a2337a392921cee0176ac9a6d8da4c09fc8cc2f1e7f348c356265eae
+  checked_at: 2026-11-16
+  changed_at: null
+llamaindex:
+  hash: 29ad50857501fef6bf067aced5242f293461064c67f97b216e1151c554a096cf
+  checked_at: 2026-11-16
+  changed_at: null
+lm-studio:
+  hash: 826cdc2c6c2b9704a54b97b021b7d4ce71c55fb760b67dc376408139594102dc
+  checked_at: 2026-11-16
+  changed_at: null
+localstack-pack:
+  hash: 88982ce3e8a284332b88d92d2f4bf7e7de20f7b0a2bfd2f153fd05ce07252b03
+  checked_at: 2026-11-16
+  changed_at: null
+loom-screen-studio-lite-paths:
+  hash: 5de002ab338e1949131f7d247805b2ce8071dfe7c5ceb34acd0714138f437eaa
+  checked_at: 2026-11-16
+  changed_at: null
+loops:
+  hash: d7dc5288852fad4f0cec657317d998e2ceedb649a97ba2c5f0ecd3bda8290115
+  checked_at: 2026-11-16
+  changed_at: null
+meilisearch-cloud:
+  hash: ffb90161d880cb9212749e7820308582a6db78293665372b15f44cd18fd2e71e
+  checked_at: 2026-11-16
+  changed_at: null
+mem0:
+  hash: 4a8bc395ae17cbce6063eefd47ebb0cd76138c7b5182a1973f12adb253ea345e
+  checked_at: 2026-11-16
+  changed_at: null
+microsoft-for-startups:
+  hash: d7a598206f0fb8e90c97d32dc007e0ecadf4cee24b341fb8984f5c6546c98dbf
+  checked_at: 2026-11-16
+  changed_at: null
+milvus:
+  hash: 3c3be77f8328ca1c58b2e012bb99d56bee9da69e19b1cdc9decb1e740ec1a1bf
+  checked_at: 2026-11-16
+  changed_at: null
+modal:
+  hash: 10706edd1ede1af6b23801ffa4b61f971a6ed08017ec791c8730a104aa8e92bc
+  checked_at: 2026-11-16
+  changed_at: null
+mongo-atlas:
+  hash: a544898684ae206d8e42b07fe000baeaedc9b19f01ae654c37451b7e9fff31a7
+  checked_at: 2026-11-16
+  changed_at: null
+mongodb-atlas-credits-pack:
+  hash: a544898684ae206d8e42b07fe000baeaedc9b19f01ae654c37451b7e9fff31a7
+  checked_at: 2026-11-16
+  changed_at: null
+motherduck:
+  hash: 2f6666c4c5d29ce79f3d5c6745b93c026c4bd80e77befdf604a79ce70768ba77
+  checked_at: 2026-11-16
+  changed_at: null
+n8n-self-host:
+  hash: 0f0aa5d864a97bb7f9701afedbb47a373c2b2efceabf5957cf4e77e2b8f005a2
+  checked_at: 2026-11-16
+  changed_at: null
+name-com-pack:
+  hash: 06726ae66b250a66ddddb1204ee01dcd0a1066c6820cdd5d329bfe54b23231af
+  checked_at: 2026-11-16
+  changed_at: null
+neon:
+  hash: 04b637b64cea2ca6d58c9a8815117b7bcf11434de01f1f9fff7f3e4ba7fc06b7
+  checked_at: 2026-11-16
+  changed_at: null
+netlify:
+  hash: 4596fff8ca7f9426680be3b144c1176e9903cdb20610c2d62415c6c992d29087
+  checked_at: 2026-11-16
+  changed_at: null
+new-relic:
+  hash: dc59959bfb4819f991b5586631e9a5404c11f3e85c83dc4f7ecc2a1fc8a5db17
+  checked_at: 2026-11-16
+  changed_at: null
+newsapi:
+  hash: b321cfb2bab03e003a9ae128c450366e3aef5fd88ef63254458da22f05b23c44
+  checked_at: 2026-11-16
+  changed_at: null
+nominatim:
+  hash: bc583515e9ebad379d324b6a4040ea796791be7075042a8d9bfd67ca9df2ac61
+  checked_at: 2026-11-16
+  changed_at: null
+notion-education:
+  hash: 4a643548c4521371518204a2160132b02e02b78a30ee5978c92541ea7a975446
+  checked_at: 2026-11-16
+  changed_at: null
+notion-team:
+  hash: fd88822b552e781dfd680b60c2bf007f2bc03524db69dc35ca2b6476a898f179
+  checked_at: 2026-11-16
+  changed_at: null
+nvidia-nim:
+  hash: 240114fe16e75e7cb6d1f24c6050b053f76338a945f02e26cd684dacb423c31d
+  checked_at: 2026-11-16
+  changed_at: null
+ollama:
+  hash: 261121b7ae2c0fdc933300e9cb1fbec59874f102a51a0617f08891f780108854
+  checked_at: 2026-11-16
+  changed_at: null
+open-library:
+  hash: 5c0770d1f6ed9ad5fcc8b7c108d3e044a785b04715db72347800b2a38b746743
+  checked_at: 2026-11-16
+  changed_at: null
+open-meteo:
+  hash: de50c449dfeb2e0cf490d514b20366f49fa673bc039525d854f46a73aa815bc2
+  checked_at: 2026-11-16
+  changed_at: null
+openrouter:
+  hash: 747d7f213fc3e820a66190080486db7b50dfb9a2ceb62bfdce13ef2c93a8caf6
+  checked_at: 2026-11-16
+  changed_at: null
+openweathermap:
+  hash: e90b7947011b198062a3c1c903564f18ad13e9e45108d1799b7b876d1bc52c30
+  checked_at: 2026-11-16
+  changed_at: null
+oracle-cloud-always-free:
+  hash: 0a0a4e5ab82be6ead69422682ddce4087dedba8d4569004e9e30d7934a6cebad
+  checked_at: 2026-11-16
+  changed_at: null
+overleaf:
+  hash: 992114da203bfeb46cc90abbda3451de98c07cd2bf7db02b83f6f51b36c79ed9
+  checked_at: 2026-11-16
+  changed_at: null
+paddle-lemon-squeezy:
+  hash: 356d01fe9bc31736db9cd4378223dfa252ec59212410ac2515a0db1cb6ed6434
+  checked_at: 2026-11-16
+  changed_at: null
+parquet-arrow:
+  hash: bcd4b0a62639fa38f81c1d514bb1aaf4f5eb0c4764ece27713f1368643a7a6ad
+  checked_at: 2026-11-16
+  changed_at: null
+pgvector:
+  hash: de9c9961bac58ff61dd783d95cb479cbd82bc1fc8c128098e0054a12ecfc4664
+  checked_at: 2026-11-16
+  changed_at: null
+pinecone:
+  hash: c86268a8a8ce2fa638eccba4e4e8b0b97a14580f8f4259f5f560fc431fb48dc3
+  checked_at: 2026-11-16
+  changed_at: null
+pipedream-n8n-cloud:
+  hash: 147383c855e886933f384f813f782f04dca6d14e039d4e3263078fc4f3c38b5a
+  checked_at: 2026-11-16
+  changed_at: null
+plain-freshdesk-lite:
+  hash: b8cdf5e46cea51d6c43eeb2e85c44262b916367ecba0b48f87448ea286ea46ca
+  checked_at: 2026-11-16
+  changed_at: null
+plausible-umami:
+  hash: 593dba73d655fa08dd6b86941ac2e9421d4c5180b51312546b7e6279c703134c
+  checked_at: 2026-11-16
+  changed_at: null
+pocketbase:
+  hash: 41ee3966ba0cac2fb36f7adf6258437aa9647975f4c87b38a446743b24737654
+  checked_at: 2026-11-16
+  changed_at: null
+posthog:
+  hash: 1dfb8c698c25c358666e3c358f07dd7093f1124d7c0091665cc372e4fff348d7
+  checked_at: 2026-11-16
+  changed_at: null
+postmark:
+  hash: 964f8f1eafec2cd8e5de66832a380ac0b18830a796ba9675aba749c55813a0aa
+  checked_at: 2026-11-16
+  changed_at: null
+qdrant:
+  hash: 29a43895d495fdff26c9434a3fffa92d4b4baa4ab4d9f31e0ad2b01634c4c897
+  checked_at: 2026-11-16
+  changed_at: null
+r2:
+  hash: cfa6cf5ff201aa506eb176daba073a28848234c88e0d930f2c3e5589ab7e0da1
+  checked_at: 2026-11-16
+  changed_at: null
+railway:
+  hash: dfcd4e3d6bb951158eb1a9938dc371020e2bdddf2bbb091cb14c308f217e43b6
+  checked_at: 2026-11-16
+  changed_at: null
+render:
+  hash: ede53621f8e16d8ed2d32b620f29187a573dacf1d5625789471763acd9d8085b
+  checked_at: 2026-11-16
+  changed_at: null
+replicate:
+  hash: 9d878c4d07d48ac927c5507b95200129bcc3ef8bbb611e1045c46ea233e4e433
+  checked_at: 2026-11-16
+  changed_at: null
+resend:
+  hash: e49f13678c5b601f448c18f926693679ee5c72074a508ec80c49653e8d3088e9
+  checked_at: 2026-11-16
+  changed_at: null
+rest-countries:
+  hash: 7901d35db1485cb1ae1f420b7a9cb40b5838b79874370584bbc6c59e8424169c
+  checked_at: 2026-11-16
+  changed_at: null
+room-tba:
+  hash: 8e4ca9a595eef94a9d5f0fc55fb7f961ba981c2585b0580210e002658069a307
+  checked_at: 2026-11-16
+  changed_at: null
+sentry:
+  hash: 1e8e9770c130200edf365b6e72995c6ffa08a7acadf74700b020ef668475e5a9
+  checked_at: 2026-11-16
+  changed_at: null
+sequin:
+  hash: ce2dbd0a9a68828804cf1a6453cbc58c6cce0c5c005c2994d7043dd666127571
+  checked_at: 2026-11-16
+  changed_at: null
+simple-analytics-pack:
+  hash: c752983062e4e01bc302c90c4941220f6fe0a66a45faac68728bf8f6e3dedb9c
+  checked_at: 2026-11-16
+  changed_at: null
+snyk:
+  hash: b315266a59f00e3339520751c42a24662a7ad149dc73150345b711a116a8d2e8
+  checked_at: 2026-11-16
+  changed_at: null
+stability-ai:
+  hash: 7715cd7063033263b5df9a1e8010d96704cc71f2b036c8801cd00ed72bffb194
+  checked_at: 2026-11-16
+  changed_at: null
+stripe-atlas:
+  hash: 87b733da4b4741f19e664042e17a320ec24ae37d51695ce0c991b392359d48ed
+  checked_at: 2026-11-16
+  changed_at: null
+stripe-pack-fee-waiver:
+  hash: e09eafe38f084173ef4daf533dbadb5e5fb505d19e9c64b154af38da3de58bc5
+  checked_at: 2026-11-16
+  changed_at: null
+supabase:
+  hash: 59c25955aa2743d7ed01cac89594e12b542e9b0271cf9f7e253206e759a3e04f
+  checked_at: 2026-11-16
+  changed_at: null
+supertokens:
+  hash: f0426729ecf5f563945edfd3e3c0d074a06b2511e20c0847718387b9be1363be
+  checked_at: 2026-11-16
+  changed_at: null
+svix:
+  hash: fc7d0de29800e45901c58c869c1b03fd4f772998051f3c3d7842968c267b49e5
+  checked_at: 2026-11-16
+  changed_at: null
+tailscale:
+  hash: 632476026fe8293cb5570a49a8bff8bcd381ea38b2c7a1d709154e25fbbf29d4
+  checked_at: 2026-11-16
+  changed_at: null
+tally-formspark:
+  hash: 44325f12b9292d4f1eb272dd5f4a0600e118d0e6dceb17f1f1b25d5814515c75
+  checked_at: 2026-11-16
+  changed_at: null
+tavily:
+  hash: 5645b4d7af432c9d9ea145c6adfe80c78972e13162cf68378a8fde0e712e22f0
+  checked_at: 2026-11-16
+  changed_at: null
+termius-premium-pack:
+  hash: e62290f896a33042013b94010dd972368bdf9d79ebdc20eb7df7cf2f183c87ff
+  checked_at: 2026-11-16
+  changed_at: null
+tigris:
+  hash: 191cc9af7689af7898c6b6c8a34db5f1ec6f50a67d626c202f88ec0c55b65637
+  checked_at: 2026-11-16
+  changed_at: null
+tinybird:
+  hash: 5a9ca3ac90644b71d9e616da61ee5a1b00767d97e905d82ff4e4a19105ab0823
+  checked_at: 2026-11-16
+  changed_at: null
+together-ai:
+  hash: 4196984af1a1828449b080f35e0675342dc5cfa35b0753cfcd2b4508112cf996
+  checked_at: 2026-11-16
+  changed_at: null
+together-embeddings:
+  hash: 4196984af1a1828449b080f35e0675342dc5cfa35b0753cfcd2b4508112cf996
+  checked_at: 2026-11-16
+  changed_at: null
+trigger-dev:
+  hash: 69aa8c2120d233c4b598262d45104804510cdd5cd3f890497d31af6309e45a12
+  checked_at: 2026-11-16
+  changed_at: null
+trufflehog:
+  hash: 71817411128a60fb230e711bab5cc81cdf0fb6058715372cc2c7a5bd2bdb10ca
+  checked_at: 2026-11-16
+  changed_at: null
+turso:
+  hash: e95e21658fff5d931b41aa618cd21b6face285b861ec8741ca61002374df44f3
+  checked_at: 2026-11-16
+  changed_at: null
+twilio-sendgrid:
+  hash: 985e5c5ec958e9585bcd285a62e73418325656b133df87246972f239323d6f8b
+  checked_at: 2026-11-16
+  changed_at: null
+twilio-trial:
+  hash: b36f519d0836ed77a743ac018a42444535ffd72ec61b715d0e10aec80f994757
+  checked_at: 2026-11-16
+  changed_at: null
+typesense-cloud:
+  hash: fc1c6f7c4d2e3324e8c3a5394a71a0c1249c801ba7d2bdd0753d5ccc924fb47b
+  checked_at: 2026-11-16
+  changed_at: null
+unity-student:
+  hash: 2128d143ec3f1ff04872d06a0c94eb3eeb33a6733a0dbf14a118591367f02722
+  checked_at: 2026-11-16
+  changed_at: null
+university-edu-email:
+  hash: b45ee587e750791fcca970ad3ead7e10e8acd80c10b035b62a033dc0b97dddba
+  checked_at: 2026-11-16
+  changed_at: null
+uplb-tools:
+  hash: 6d5a83b4e69763d3efb0f48ef51f414e02aa3c987e08d814547eae70526ce4c1
+  checked_at: 2026-11-16
+  changed_at: null
+uploadthing:
+  hash: 7cf883ca79331f6d78662df7e273e6011cedd2134e6a41b56a6932c09f1f16b4
+  checked_at: 2026-11-16
+  changed_at: null
+upstash-qstash:
+  hash: 088d64da659fad85762b7331394447a41f603c44f04623b4a47eebe2b303c2be
+  checked_at: 2026-11-16
+  changed_at: null
+upstash-redis:
+  hash: 73608fba36be64ad58f8bf4dfe74dcc24b17bd42ca4b7a8297a753416cf0145a
+  checked_at: 2026-11-16
+  changed_at: null
+uptimerobot:
+  hash: 05e9b978ff8f8c4f26bf07da5bfabd8399295ca6a1b1865a7be4bf3dc6e57b48
+  checked_at: 2026-11-16
+  changed_at: null
+val-town:
+  hash: cb29626983c2aca9dbd274666c55fcd6beaadd8a15ac66fe97525055e44f560e
+  checked_at: 2026-11-16
+  changed_at: null
+vercel-ai-sdk:
+  hash: c9c11fe457eb5db39efd1c9bc8c2ed5881762237f3dec7fcfc91f904fd390baf
+  checked_at: 2026-11-16
+  changed_at: null
+vercel-hobby:
+  hash: 944884879d19d78b1086be4e2e615a0971b3160333ee0cdb7ed55ee604940da2
+  checked_at: 2026-11-16
+  changed_at: null
+voyage-ai:
+  hash: 19f851d2ecc9461941ce3182a64532eb2b1aef768af746ebf931ad466746a2d1
+  checked_at: 2026-11-16
+  changed_at: null
+weatherapi:
+  hash: d812c3ba431b32a534f4b7761813f375244fa56e282b5f0b641da8a41c725bee
+  checked_at: 2026-11-16
+  changed_at: null
+weaviate:
+  hash: 253a661611604adbf2e6a7d7d2251047a275e2b4daa5a1470f99df07477c96f0
+  checked_at: 2026-11-16
+  changed_at: null
+wikipedia-rest:
+  hash: 2f5fe75ce8022fb6376d8405f2f91d7bc998744a3d6721777bd8635d9f2341cf
+  checked_at: 2026-11-16
+  changed_at: null
+windsurf:
+  hash: 90fac4d63fe2f1c0bda8476fdff1fda517ab7cd33798cc82f4c1f9bff75309d7
+  checked_at: 2026-11-16
+  changed_at: null
+workers-ai-embeddings:
+  hash: 5c2ea0db0f6fb8ce3cd57b577cef6dc2101a48541bedf0c4bcadcc9554666596
+  checked_at: 2026-11-16
+  changed_at: null
+working-copy-pack:
+  hash: 0f3b466481006040811d5a0e89cff4089ed4268e8a483ee64d66ff8a0879b72b
+  checked_at: 2026-11-16
+  changed_at: null
+workos:
+  hash: 05db1bd28546cf4b848318203267a0160902c844098c200c1ff36da529f109f5
+  checked_at: 2026-11-16
+  changed_at: null
+zilliz-cloud:
+  hash: e9f2086fbbd6fd19ed972a34e0cee6075bdb1a76fc48047f3d04733f299b883f
+  checked_at: 2026-11-16
+  changed_at: null
+zitadel:
+  hash: 23b612797c52ee5de2663964ff09aaba6af9a68a523dfa144935ce08c66d4936
+  checked_at: 2026-11-16
+  changed_at: null
+zyte-scrapy-cloud-pack:
+  hash: 9fe4694cfa6e9bad764b463267006f269a5f432c8fb9e9c9492803b34c39e7fe
+  checked_at: 2026-11-16
+  changed_at: null
