@@ -23,9 +23,4 @@ describe("new issue links", () => {
   it("opens a blank issue", () => {
     expect(newIssueUrl()).toBe("https://github.com/freestackhq/freestack/issues/new");
   });
-  it("prefills an encoded title", () => {
-    expect(newIssueUrl("Privacy request: ")).toBe(
-      "https://github.com/freestackhq/freestack/issues/new?title=Privacy+request%3A+",
-    );
-  });
 });

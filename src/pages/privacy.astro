@@ -5,7 +5,6 @@
  */
 import TextPage from "../layouts/TextPage.astro";
 import { analyticsBeacon } from "../lib/analytics";
-import { REPO_URL, newIssueUrl } from "../lib/site";
 
 const GITHUB_PRIVACY = "https://docs.github.com/en/site-policy/privacy-policies/github-general-privacy-statement";
 const analyticsOn = analyticsBeacon(import.meta.env.PUBLIC_CF_ANALYTICS_TOKEN) !== null;
@@ -38,11 +37,8 @@ const analyticsOn = analyticsBeacon(import.meta.env.PUBLIC_CF_ANALYTICS_TOKEN) !
     <li>Fonts load from this site. Search and compare picks stay in your browser.</li>
   </ul>
 
-  <h2>Removing your username</h2>
-  <p>
-    <a href={newIssueUrl("Privacy request: ")}>Open a privacy request</a> and we'll take it off the data. Older commits
-    in the <a href={REPO_URL}>public repository</a> still carry it.
-  </p>
+  <h2>What you send stays</h2>
+  <p>Checks and new tools are a permanent public record, with your GitHub username. We don't remove them on request.</p>
 
   <h2>Who runs freestack</h2>
   <p>A non-commercial, open-source project, run by its maintainers on GitHub.</p>

@@ -18,10 +18,9 @@ export const GITHUB_REPO: string = String(import.meta.env.PUBLIC_GITHUB_REPO || 
 
 export const REPO_URL = `https://github.com/${GITHUB_REPO}`;
 
-/** A new GitHub issue on the repo, with an optional prefilled title. All contact goes through issues. */
-export function newIssueUrl(title?: string): string {
-  const base = `${REPO_URL}/issues/new`;
-  return title ? `${base}?${new URLSearchParams({ title })}` : base;
+/** A new GitHub issue on the repo. All contact goes through issues. */
+export function newIssueUrl(): string {
+  return `${REPO_URL}/issues/new`;
 }
 
 /** Absolute URL on this site for a path like "/compare?ids=neon". */

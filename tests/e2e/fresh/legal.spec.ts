@@ -5,7 +5,6 @@ import { DESKTOP, PHONE, expectNoSideScroll } from "./helpers";
  * Privacy, Terms and Contact. All contact is public, on GitHub: no email
  * anywhere. The test build has no PUBLIC_CF_ANALYTICS_TOKEN.
  */
-const PRIVACY_ISSUE = "https://github.com/freestackhq/freestack/issues/new?title=Privacy+request%3A+";
 const PAGES = [
   { path: "/privacy", h1: "Privacy" },
   { path: "/terms", h1: "Terms" },
@@ -58,12 +57,12 @@ test.describe("legal and contact pages", () => {
     await expect(page.locator("[data-analytics]")).toHaveText("No analytics.");
   });
 
-  test("privacy: removing a username is a prefilled public issue", async ({ page }) => {
+  test("privacy: what you send stays, with no removal route", async ({ page }) => {
     await page.goto("/privacy");
-    await expect(page.locator("main").getByRole("link", { name: "Open a privacy request" })).toHaveAttribute(
-      "href",
-      PRIVACY_ISSUE,
-    );
+    const main = page.locator("main");
+    await expect(main.getByRole("heading", { level: 2, name: "What you send stays" })).toBeVisible();
+    await expect(main).toContainText("We don't remove them on request.");
+    await expect(main.getByRole("link", { name: /privacy request/i })).toHaveCount(0);
   });
 
   test("terms: not advice, as is, license, trademarks", async ({ page }) => {
@@ -78,6 +77,7 @@ test.describe("legal and contact pages", () => {
       "https://github.com/freestackhq/freestack/issues/new",
     );
     await expect(main.getByRole("link", { name: "Privacy" })).toHaveAttribute("href", "/privacy");
+    await expect(main).toContainText("The grant is irrevocable");
   });
 
   test("contact routes each kind of request", async ({ page }) => {
@@ -88,7 +88,7 @@ test.describe("legal and contact pages", () => {
       "href",
       "https://github.com/freestackhq/freestack/issues/new",
     );
-    await expect(main.getByRole("link", { name: "Open a privacy request" })).toHaveAttribute("href", PRIVACY_ISSUE);
+    await expect(main.getByRole("link", { name: /privacy request/i })).toHaveCount(0);
   });
 
   test("no email anywhere: every request is public on GitHub", async ({ page }) => {
