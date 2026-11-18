@@ -85,7 +85,7 @@ The canvas is laid out the same way as this file: main pages, side pages and sec
 | Contact | `/contact` | none (`src/layouts/TextPage.astro`) |
 
 - Site error (Worker or build failure): `Edges.dc.html`, "Site error".
-- Privacy, Terms, Contact: plain text pages linked from the footer. Privacy says "No analytics" when `PUBLIC_CF_ANALYTICS_TOKEN` is empty. Contact and Privacy show the support address only when `PUBLIC_CONTACT_EMAIL` is set, and never make one up. Tests: `tests/e2e/fresh/legal.spec.ts`.
+- Privacy, Terms, Contact: plain text pages linked from the footer. Privacy says "No analytics" when `PUBLIC_CF_ANALYTICS_TOKEN` is empty. No email anywhere: Contact and Privacy send every request, privacy included, to a public GitHub issue (privacy requests get a prefilled title). Tests: `tests/e2e/fresh/legal.spec.ts`.
 - Old URLs redirect with 301 (see `ARCHITECTURE.md`), so the 404 only shows for real typos.
 
 ## Label states (all screens)

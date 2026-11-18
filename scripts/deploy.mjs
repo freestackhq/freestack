@@ -58,11 +58,6 @@ function main() {
     process.exit(1);
   }
 
-  // Not fatal: without it, /contact and /privacy point to GitHub issues only.
-  if (!process.env.PUBLIC_CONTACT_EMAIL?.trim()) {
-    console.warn("deploy: PUBLIC_CONTACT_EMAIL is unset, so the site shows no support address. See .env.example.");
-  }
-
   const env = { ...process.env, SITE_URL: raw };
   run("pnpm", ["build"], env);
   const isLocal = host === "localhost" || host === "127.0.0.1";

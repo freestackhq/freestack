@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { CONTACT_EMAIL, GITHUB_REPO, MCP_URL, REPO_URL, SITE_URL, contactEmail, siteUrl } from "./site";
+import { GITHUB_REPO, MCP_URL, REPO_URL, SITE_URL, newIssueUrl, siteUrl } from "./site";
 
 describe("site address", () => {
   it("falls back to the local preview when SITE_URL is unset", () => {
@@ -19,18 +19,13 @@ describe("site address", () => {
   });
 });
 
-describe("contact email", () => {
-  it("is unset unless PUBLIC_CONTACT_EMAIL is set", () => {
-    expect(CONTACT_EMAIL).toBeNull();
+describe("new issue links", () => {
+  it("opens a blank issue", () => {
+    expect(newIssueUrl()).toBe("https://github.com/freestackhq/freestack/issues/new");
   });
-  it("accepts a plain address and trims it", () => {
-    expect(contactEmail("  support@example.com ")).toBe("support@example.com");
-  });
-  it("rejects blanks and things that are not an address", () => {
-    expect(contactEmail(undefined)).toBeNull();
-    expect(contactEmail("")).toBeNull();
-    expect(contactEmail("support")).toBeNull();
-    expect(contactEmail("a b@example.com")).toBeNull();
-    expect(contactEmail("support@localhost")).toBeNull();
+  it("prefills an encoded title", () => {
+    expect(newIssueUrl("Privacy request: ")).toBe(
+      "https://github.com/freestackhq/freestack/issues/new?title=Privacy+request%3A+",
+    );
   });
 });

@@ -88,7 +88,6 @@ The site holds no secrets and stores nothing. People send checks and new tools a
 - `SITE_URL`: the public origin. Astro's `site`, share links, `llms.txt`, the API docs, the MCP URL and the Workers custom domain (`pnpm deploy:cf`) all come from it. Read it through `src/lib/site.ts`.
 - `PUBLIC_GITHUB_REPO`: `owner/name` for issue forms and source links. Default `freestackhq/freestack`.
 - `PUBLIC_CF_ANALYTICS_TOKEN`: Cloudflare Web Analytics beacon. Empty ships no analytics.
-- `PUBLIC_CONTACT_EMAIL`: support address on `/contact` and `/privacy`. Empty points both to GitHub issues. `pnpm deploy:cf` warns when it's unset.
 
 ## CI/CD
 
@@ -101,7 +100,7 @@ The site holds no secrets and stores nothing. People send checks and new tools a
 | `pricing-scan.yml`, `link-check.yml` | weekly | open one PR each with state and snapshot |
 | Dependabot | weekly | npm (Astro/Cloudflare grouped, dev tooling grouped) and Actions |
 
-Repo setup the workflows need: secrets `CLOUDFLARE_API_TOKEN` (Workers Scripts: Edit) and `CLOUDFLARE_ACCOUNT_ID`; variables `SITE_URL` (and optionally `PUBLIC_GITHUB_REPO`, `PUBLIC_CF_ANALYTICS_TOKEN`, `PUBLIC_CONTACT_EMAIL`); a `production` environment; labels `label-check`, `add-tool`, `invalid`; "Allow GitHub Actions to create and approve pull requests"; the default branch writable by `GITHUB_TOKEN` (the label-check commit). Bot PRs (trust loop, scans) don't start CI on their own: close and reopen one, or push to it, to run CI before merging.
+Repo setup the workflows need: secrets `CLOUDFLARE_API_TOKEN` (Workers Scripts: Edit) and `CLOUDFLARE_ACCOUNT_ID`; variables `SITE_URL` (and optionally `PUBLIC_GITHUB_REPO`, `PUBLIC_CF_ANALYTICS_TOKEN`); a `production` environment; labels `label-check`, `add-tool`, `invalid`; "Allow GitHub Actions to create and approve pull requests"; the default branch writable by `GITHUB_TOKEN` (the label-check commit). Bot PRs (trust loop, scans) don't start CI on their own: close and reopen one, or push to it, to run CI before merging.
 
 Locally, lefthook runs the same checks before a commit and a push (README, "Development").
 

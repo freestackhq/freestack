@@ -1,7 +1,7 @@
 ---
 /** Terms of use. Short on purpose: free, no accounts, information only. */
 import TextPage from "../layouts/TextPage.astro";
-import { REPO_URL } from "../lib/site";
+import { REPO_URL, newIssueUrl } from "../lib/site";
 ---
 
 <TextPage
@@ -10,6 +10,12 @@ import { REPO_URL } from "../lib/site";
   lede="freestack is free to use. No account needed. By using it, you agree to these terms."
   updated="2026-11-18"
 >
+  <h2>Who runs freestack</h2>
+  <p>
+    freestack is a free, open-source project, not a business. Its maintainers run it in the open, on GitHub. Nobody pays
+    to use it, and no vendor pays to be listed.
+  </p>
+
   <h2>Not advice</h2>
   <p>
     freestack lists free tiers and student programs, with limits copied from each vendor's page. Vendors change their
@@ -42,6 +48,12 @@ import { REPO_URL } from "../lib/site";
     <li>What you send is published under the same MIT License as the rest of the data.</li>
     <li>We may edit, decline or remove anything sent, including spam.</li>
   </ul>
+
+  <h2>Names and trademarks</h2>
+  <p>
+    Vendor names and logos belong to their owners. We use them only to say which tool a label is about. A vendor who
+    wants a label fixed or removed can <a href={newIssueUrl()}>open an issue</a>.
+  </p>
 
   <h2>Other sites</h2>
   <p>Labels link to vendors' sites. Their terms and privacy policies apply there, not ours.</p>

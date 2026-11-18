@@ -18,21 +18,16 @@ export const GITHUB_REPO: string = String(import.meta.env.PUBLIC_GITHUB_REPO || 
 
 export const REPO_URL = `https://github.com/${GITHUB_REPO}`;
 
+/** A new GitHub issue on the repo, with an optional prefilled title. All contact goes through issues. */
+export function newIssueUrl(title?: string): string {
+  const base = `${REPO_URL}/issues/new`;
+  return title ? `${base}?${new URLSearchParams({ title })}` : base;
+}
+
 /** Absolute URL on this site for a path like "/compare?ids=neon". */
 export function siteUrl(path = "/"): string {
   return new URL(path.replace(/^\/*/, "/"), SITE_URL + "/").toString();
 }
-
-/**
- * The support address from PUBLIC_CONTACT_EMAIL, or null. Pages never make one
- * up: unset (or not an address), Contact and Privacy point to GitHub only.
- */
-export function contactEmail(raw: string | undefined | null): string | null {
-  const v = String(raw ?? "").trim();
-  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v) ? v : null;
-}
-
-export const CONTACT_EMAIL: string | null = contactEmail(import.meta.env.PUBLIC_CONTACT_EMAIL);
 
 /** The remote MCP server's address. */
 export const MCP_URL = siteUrl("/mcp");

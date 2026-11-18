@@ -2,9 +2,10 @@ import { expect, test } from "@playwright/test";
 import { DESKTOP, PHONE, expectNoSideScroll } from "./helpers";
 
 /*
- * Privacy, Terms and Contact. The test build sets no PUBLIC_CONTACT_EMAIL and
- * no PUBLIC_CF_ANALYTICS_TOKEN, so these cover the "not set" wording.
+ * Privacy, Terms and Contact. All contact is public, on GitHub: no email
+ * anywhere. The test build has no PUBLIC_CF_ANALYTICS_TOKEN.
  */
+const PRIVACY_ISSUE = "https://github.com/freestackhq/freestack/issues/new?title=Privacy+request%3A+";
 const PAGES = [
   { path: "/privacy", h1: "Privacy" },
   { path: "/terms", h1: "Terms" },
@@ -58,6 +59,20 @@ test.describe("legal and contact pages", () => {
     await expect(main.getByRole("link", { name: "Contact" })).toHaveAttribute("href", "/contact");
   });
 
+  test("privacy: who runs it, why, transfers, rights, children, and a public way to ask", async ({ page }) => {
+    await page.goto("/privacy");
+    const main = page.locator("main");
+    for (const h of ["Who runs freestack", "Why we handle it", "Data sent abroad", "Your rights", "Children"]) {
+      await expect(main.getByRole("heading", { level: 2, name: h })).toBeVisible();
+    }
+    await expect(main).toContainText("not a business");
+    await expect(main).toContainText("legitimate interest");
+    await expect(main).toContainText("data protection authority where you live");
+    await expect(main).toContainText("within one month");
+    await expect(main).toContainText("under 13");
+    await expect(main.getByRole("link", { name: "Open a privacy request" })).toHaveAttribute("href", PRIVACY_ISSUE);
+  });
+
   test("privacy says analytics are off when the build has no token", async ({ page }) => {
     await page.goto("/privacy");
     await expect(page.locator("[data-analytics]")).toHaveAttribute("data-analytics", "off");
@@ -71,6 +86,8 @@ test.describe("legal and contact pages", () => {
     await expect(main).toContainText("as is");
     await expect(main.getByRole("link", { name: "MIT License" })).toHaveAttribute("href", /\/blob\/main\/LICENSE$/);
     await expect(main.getByRole("link", { name: "Privacy" })).toHaveAttribute("href", "/privacy");
+    await expect(main).toContainText("not a business");
+    await expect(main.getByRole("heading", { level: 2, name: "Names and trademarks" })).toBeVisible();
   });
 
   test("contact routes each kind of request", async ({ page }) => {
@@ -83,10 +100,22 @@ test.describe("legal and contact pages", () => {
     );
   });
 
-  test("contact shows no made-up address when none is set", async ({ page }) => {
+  test("contact sends privacy requests to a prefilled public issue", async ({ page }) => {
     await page.goto("/contact");
-    await expect(page.locator("[data-contact-email]")).toHaveCount(0);
-    await expect(page.locator('main a[href^="mailto:"]')).toHaveCount(0);
+    await expect(page.locator("main").getByRole("link", { name: "Open a privacy request" })).toHaveAttribute(
+      "href",
+      PRIVACY_ISSUE,
+    );
+  });
+
+  test("no email anywhere: every request is public on GitHub", async ({ page }) => {
+    for (const path of ["/contact", "/privacy", "/terms"]) {
+      await page.goto(path);
+      await expect(page.locator('a[href^="mailto:"]')).toHaveCount(0);
+      await expect(page.locator("main")).not.toContainText("@");
+    }
+    await page.goto("/contact");
+    await expect(page.locator("main")).toContainText("There's no email");
   });
 });
 

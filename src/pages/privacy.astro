@@ -1,23 +1,31 @@
 ---
 /**
  * Privacy policy. Says only what the code does: no accounts, no cookies, no
- * stored requests. The analytics and contact lines follow the build's env, so
- * the page never claims a beacon or an address the site doesn't have.
+ * stored requests. The analytics line follows the build's env, so the page
+ * never claims a beacon the site doesn't have. Every request is a public
+ * GitHub issue: there is no email.
  */
 import TextPage from "../layouts/TextPage.astro";
 import { analyticsBeacon } from "../lib/analytics";
-import { CONTACT_EMAIL, REPO_URL } from "../lib/site";
+import { REPO_URL, newIssueUrl } from "../lib/site";
 
 const GITHUB_PRIVACY = "https://docs.github.com/en/site-policy/privacy-policies/github-general-privacy-statement";
+const PRIVACY_ISSUE = newIssueUrl("Privacy request: ");
 const analyticsOn = analyticsBeacon(import.meta.env.PUBLIC_CF_ANALYTICS_TOKEN) !== null;
 ---
 
 <TextPage
   title="Privacy"
-  description="What freestack collects, who handles it, how long it stays, and who to ask."
+  description="What freestack collects, who handles it, how long it stays, and how to ask about it."
   lede="No accounts and no cookies. freestack doesn't store anything about you. Two services see your visit, and they're listed below."
   updated="2026-11-18"
 >
+  <h2>Who runs freestack</h2>
+  <p>
+    freestack is a free, open-source project, not a business. It's run by the maintainers of the{" "}
+    <a href={REPO_URL}>freestack repository</a> on GitHub. They decide what the site collects, which is almost nothing.
+  </p>
+
   <h2>What we collect</h2>
   <ul>
     <li>No sign-up, no sign-in, no profiles. There's nothing to delete because nothing is kept.</li>
@@ -57,6 +65,18 @@ const analyticsOn = analyticsBeacon(import.meta.env.PUBLIC_CF_ANALYTICS_TOKEN) !
     and the date in the public data. See <a href={GITHUB_PRIVACY}>GitHub's privacy statement</a>.
   </p>
 
+  <h2>Why we handle it</h2>
+  <p>
+    To serve the site, keep it working and block abuse. Where a law asks for a legal reason, ours is legitimate
+    interest: running a free public site. Your username on a check is there because you chose to send it.
+  </p>
+
+  <h2>Data sent abroad</h2>
+  <p>
+    Cloudflare and GitHub are US companies with servers around the world. Your requests may be handled outside your
+    country, under the safeguards in their own policies.
+  </p>
+
   <h2>How long we keep it</h2>
   <ul>
     <li>Requests to the site, API and MCP: not kept by us.</li>
@@ -67,28 +87,24 @@ const analyticsOn = analyticsBeacon(import.meta.env.PUBLIC_CF_ANALYTICS_TOKEN) !
     <li>Cloudflare and GitHub keep what they see under their own policies.</li>
   </ul>
 
-  <h2>Removing your name</h2>
+  <h2>Your rights</h2>
+  <ul>
+    <li>Ask what we hold about you. Usually that's nothing, or your GitHub username on a label.</li>
+    <li>Ask us to fix it, remove it, or stop using it.</li>
+    <li>You can delete your own issue comments on GitHub yourself.</li>
+    <li>If you think we got it wrong, complain to the data protection authority where you live.</li>
+  </ul>
   <p>
-    Want your GitHub username off a label, or an issue you opened taken down? Ask us and we'll remove it from the
-    current data. You can also delete your own issue comments on GitHub.
+    <a href={PRIVACY_ISSUE}>Open a privacy request</a> on GitHub. It's public, like everything here, so you can see how
+    it's handled. Your GitHub username is enough: don't post anything private. We reply within one month.
   </p>
 
-  <h2>Questions</h2>
-  <p>
-    {CONTACT_EMAIL ? (
-      <>
-        Email <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a>, or see the <a href="/contact">Contact</a> page.
-      </>
-    ) : (
-      <>
-        See the <a href="/contact">Contact</a> page.
-      </>
-    )}
-  </p>
+  <h2>Children</h2>
+  <p>freestack isn't meant for children under 13. GitHub, which takes every request, needs you to be 13 too.</p>
 
   <h2>Changes</h2>
   <p>
     When this page changes, the date at the top changes too. Every edit is a public commit in the{" "}
-    <a href={REPO_URL}>source on GitHub</a>.
+    <a href={REPO_URL}>source on GitHub</a>. Questions? See <a href="/contact">Contact</a>.
   </p>
 </TextPage>

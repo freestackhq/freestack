@@ -1,18 +1,20 @@
 ---
 /**
- * Contact. Routes each kind of request to the place that handles it. The
- * support address shows only when PUBLIC_CONTACT_EMAIL is set.
+ * Contact. Routes each kind of request to the GitHub place that handles it.
+ * There is no email on purpose: every request is public, so anyone can see
+ * how it was handled.
  */
 import TextPage from "../layouts/TextPage.astro";
-import { CONTACT_EMAIL, REPO_URL } from "../lib/site";
+import { newIssueUrl } from "../lib/site";
 
-const NEW_ISSUE = `${REPO_URL}/issues/new`;
+const NEW_ISSUE = newIssueUrl();
+const PRIVACY_ISSUE = newIssueUrl("Privacy request: ");
 ---
 
 <TextPage
   title="Contact"
-  description="How to reach freestack: wrong labels, missing tools, bugs and privacy requests."
-  lede="Most requests are quickest in public, on GitHub. Pick the line that fits."
+  description="How to reach freestack: wrong labels, missing tools, bugs and privacy requests, all on GitHub."
+  lede="There's no email. Everything goes through GitHub, in public, so anyone can see how each request was handled."
 >
   <h2>A label is wrong</h2>
   <p>
@@ -25,20 +27,14 @@ const NEW_ISSUE = `${REPO_URL}/issues/new`;
     Use <a href="/add">Add a tool</a>. Have the vendor's pricing page open, so the numbers match it.
   </p>
 
-  <h2>A bug or a broken link</h2>
+  <h2>A bug, a broken link, or a vendor asking for a fix</h2>
   <p>
     <a href={NEW_ISSUE}>Open an issue on GitHub</a>. Say which page, and what you expected.
   </p>
 
-  <h2>Anything else</h2>
-  {CONTACT_EMAIL ? (
-    <p data-contact-email>
-      Email <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a>. Use it for privacy requests, removing your name, or
-      anything you'd rather not post in public.
-    </p>
-  ) : (
-    <p>
-      <a href={NEW_ISSUE}>Open an issue on GitHub</a>, including privacy requests and removing your name from a label.
-    </p>
-  )}
+  <h2>Privacy</h2>
+  <p>
+    <a href={PRIVACY_ISSUE}>Open a privacy request</a>, for example to take your GitHub username off a label. Don't post
+    anything private: your username is enough. See <a href="/privacy">Privacy</a> for what we hold.
+  </p>
 </TextPage>
