@@ -80,8 +80,12 @@ The canvas is laid out the same way as this file: main pages, side pages and sec
 | Not found | any unknown route | `NotFound.dc.html` |
 | Edge cases | reference sheet | `Edges.dc.html` |
 | Brand | reference sheet | `Brand.dc.html` |
+| Privacy | `/privacy` | none (`src/layouts/TextPage.astro`) |
+| Terms | `/terms` | none (`src/layouts/TextPage.astro`) |
+| Contact | `/contact` | none (`src/layouts/TextPage.astro`) |
 
 - Site error (Worker or build failure): `Edges.dc.html`, "Site error".
+- Privacy, Terms, Contact: plain text pages linked from the footer. Privacy says "No analytics" when `PUBLIC_CF_ANALYTICS_TOKEN` is empty. Contact and Privacy show the support address only when `PUBLIC_CONTACT_EMAIL` is set, and never make one up. Tests: `tests/e2e/fresh/legal.spec.ts`.
 - Old URLs redirect with 301 (see `ARCHITECTURE.md`), so the 404 only shows for real typos.
 
 ## Label states (all screens)
@@ -97,6 +101,6 @@ The canvas is laid out the same way as this file: main pages, side pages and sec
 
 ## Shared rules for every screen
 
-- Header: wordmark, centered search trigger with the Ctrl K hint, "Aisles" menu, "Add a tool". Footer: Check my stack, For coding agents, Source on GitHub.
+- Header: wordmark, centered search trigger with the Ctrl K hint, "Aisles" menu, "Add a tool". Footer: Check my stack, For coding agents, Source on GitHub, Privacy, Terms, Contact.
 - Every view that has choices puts them in the URL, so it can be shared.
 - Phone: 390px wide, never scrolls sideways, 44px touch targets.

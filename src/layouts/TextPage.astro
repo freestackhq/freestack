@@ -1,0 +1,103 @@
+---
+/**
+ * Plain reading page (Privacy, Terms, Contact): a condensed title, an optional
+ * "Updated" date and a narrow column of text on a white panel. No board for
+ * these; built from the shell, the tokens and the 404/500 type scale.
+ */
+import Shell from "./Shell.astro";
+
+interface Props {
+  title: string;
+  description: string;
+  lede?: string;
+  /** ISO date the text last changed, shown as "Updated 18 Nov 2026". */
+  updated?: string;
+}
+
+const { title, description, lede, updated } = Astro.props;
+const updatedText = updated
+  ? new Date(`${updated}T00:00:00Z`).toLocaleDateString("en-GB", {
+      day: "numeric",
+      month: "short",
+      year: "numeric",
+      timeZone: "UTC",
+    })
+  : null;
+---
+
+<Shell title={`${title} · freestack`} description={description}>
+  <div class="wrap page">
+    <h1 class="title-lg">{title}</h1>
+    {lede && <p class="lede">{lede}</p>}
+    {updatedText && (
+      <p class="updated">
+        Updated <time datetime={updated}>{updatedText}</time>
+      </p>
+    )}
+    <div class="text">
+      <slot />
+    </div>
+  </div>
+</Shell>
+
+<style>
+  .page {
+    padding-block: 56px 120px;
+  }
+  .lede {
+    margin: 16px 0 0;
+    max-width: 52ch;
+    font-size: 20px;
+    line-height: 1.45;
+  }
+  .updated {
+    margin: 12px 0 0;
+    font-size: 15px;
+    color: var(--muted);
+  }
+  .text {
+    margin-top: 32px;
+    max-width: 720px;
+    background: var(--label);
+    padding: 8px 28px 28px;
+    font-size: 17px;
+    line-height: 1.55;
+  }
+  /* Slotted content: headings, paragraphs, lists and links. */
+  .text :global(h2) {
+    margin: 28px 0 8px;
+    font-size: 22px;
+    font-weight: 800;
+    line-height: 1.2;
+  }
+  .text :global(h3) {
+    margin: 20px 0 4px;
+    font-size: 18px;
+    font-weight: 700;
+  }
+  .text :global(p) {
+    margin: 0 0 12px;
+  }
+  .text :global(ul) {
+    margin: 0 0 12px;
+    padding-left: 22px;
+  }
+  .text :global(li) {
+    margin-bottom: 6px;
+  }
+  .text :global(a) {
+    font-weight: 700;
+  }
+  @media (max-width: 640px) {
+    .page {
+      padding-block: 32px 72px;
+    }
+    .lede {
+      font-size: 18px;
+    }
+    .text {
+      padding: 4px 16px 20px;
+      font-size: 16px;
+    }
+  }
+</style>

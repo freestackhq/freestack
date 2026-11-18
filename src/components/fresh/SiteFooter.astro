@@ -1,5 +1,5 @@
 ---
-/** Footer: disclaimer plus For coding agents, Check my stack, Source on GitHub. */
+/** Footer: disclaimer plus For coding agents, Check my stack, Source on GitHub, Privacy, Terms, Contact. */
 import { REPO_URL } from "../../lib/site";
 ---
 
@@ -15,6 +15,12 @@ import { REPO_URL } from "../../lib/site";
       <a href="/check">Check my stack</a>
       <span aria-hidden="true">/</span>
       <a href={REPO_URL}>Source on GitHub</a>
+      <span aria-hidden="true">/</span>
+      <a href="/privacy">Privacy</a>
+      <span aria-hidden="true">/</span>
+      <a href="/terms">Terms</a>
+      <span aria-hidden="true">/</span>
+      <a href="/contact">Contact</a>
     </p>
   </div>
 </footer>
@@ -45,7 +51,10 @@ import { REPO_URL } from "../../lib/site";
   .links a {
     display: inline-flex;
     align-items: center;
+    justify-content: center;
     min-height: var(--target);
+    /* Short words ("Terms") still get a full touch target. */
+    min-width: var(--target);
   }
   @media (max-width: 640px) {
     /* No separators on a phone, so a wrapped line never ends in "/". */

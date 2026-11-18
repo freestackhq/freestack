@@ -1,0 +1,44 @@
+---
+/**
+ * Contact. Routes each kind of request to the place that handles it. The
+ * support address shows only when PUBLIC_CONTACT_EMAIL is set.
+ */
+import TextPage from "../layouts/TextPage.astro";
+import { CONTACT_EMAIL, REPO_URL } from "../lib/site";
+
+const NEW_ISSUE = `${REPO_URL}/issues/new`;
+---
+
+<TextPage
+  title="Contact"
+  description="How to reach freestack: wrong labels, missing tools, bugs and privacy requests."
+  lede="Most requests are quickest in public, on GitHub. Pick the line that fits."
+>
+  <h2>A label is wrong</h2>
+  <p>
+    Open the tool's label and choose "Check it". Mark the line that changed and send it. A maintainer reviews it, and
+    the label says a change is waiting.
+  </p>
+
+  <h2>A tool is missing</h2>
+  <p>
+    Use <a href="/add">Add a tool</a>. Have the vendor's pricing page open, so the numbers match it.
+  </p>
+
+  <h2>A bug or a broken link</h2>
+  <p>
+    <a href={NEW_ISSUE}>Open an issue on GitHub</a>. Say which page, and what you expected.
+  </p>
+
+  <h2>Anything else</h2>
+  {CONTACT_EMAIL ? (
+    <p data-contact-email>
+      Email <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a>. Use it for privacy requests, removing your name, or
+      anything you'd rather not post in public.
+    </p>
+  ) : (
+    <p>
+      <a href={NEW_ISSUE}>Open an issue on GitHub</a>, including privacy requests and removing your name from a label.
+    </p>
+  )}
+</TextPage>

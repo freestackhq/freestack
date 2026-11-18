@@ -27,6 +27,9 @@ const PAGES = [
   "/no-such-page",
   "/dev/throw",
   "/dev/states/",
+  "/privacy",
+  "/terms",
+  "/contact",
 ];
 
 for (const [name, viewport] of [

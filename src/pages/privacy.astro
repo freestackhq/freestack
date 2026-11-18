@@ -1,0 +1,98 @@
+---
+/**
+ * Privacy policy. Says only what the code does: no accounts, no cookies, no
+ * stored requests. The analytics and contact lines follow the build's env, so
+ * the page never claims a beacon or an address the site doesn't have.
+ */
+import TextPage from "../layouts/TextPage.astro";
+import { analyticsBeacon } from "../lib/analytics";
+import { CONTACT_EMAIL, REPO_URL } from "../lib/site";
+
+const GITHUB_PRIVACY = "https://docs.github.com/en/site-policy/privacy-policies/github-general-privacy-statement";
+const analyticsOn = analyticsBeacon(import.meta.env.PUBLIC_CF_ANALYTICS_TOKEN) !== null;
+---
+
+<TextPage
+  title="Privacy"
+  description="What freestack collects, who handles it, how long it stays, and who to ask."
+  lede="No accounts and no cookies. freestack doesn't store anything about you. Three services see your visit, and they're listed below."
+  updated="2026-11-18"
+>
+  <h2>What we collect</h2>
+  <ul>
+    <li>No sign-up, no sign-in, no profiles. There's nothing to delete because nothing is kept.</li>
+    <li>No cookies. Nothing tracks you across sites.</li>
+    <li>
+      The API, the MCP server and the CLI answer each request and forget it. The "student", "selling" and "Philippines"
+      answers you send to the claim plan build the reply and are not saved.
+    </li>
+    <li>
+      Search runs in your browser. Compare picks live in the page address. When you leave an aisle with picks in the
+      compare tray, your browser keeps their ids for that tab (session storage). They never reach us.
+    </li>
+    <li data-analytics={analyticsOn ? "on" : "off"}>
+      {analyticsOn ? (
+        <>
+          Page views are counted with Cloudflare Web Analytics. It sets no cookies and doesn't fingerprint your device.
+          We see totals per page, country, browser and referrer, never who you are.
+        </>
+      ) : (
+        <>No analytics. We don't count visits.</>
+      )}
+    </li>
+  </ul>
+
+  <h2>Who handles your data</h2>
+  <h3>Cloudflare</h3>
+  <p>
+    The site runs on Cloudflare Workers. Cloudflare sees each request (IP address, browser, page) to serve it and to
+    block abuse. We haven't turned on Workers logs, so we keep no request logs. See{" "}
+    <a href="https://www.cloudflare.com/privacypolicy/">Cloudflare's privacy policy</a>.
+  </p>
+  <h3>Google Fonts</h3>
+  <p>
+    The Archivo font loads from Google Fonts, so Google sees your IP address and browser when a page loads. See{" "}
+    <a href="https://policies.google.com/privacy">Google's privacy policy</a>.
+  </p>
+  <h3>GitHub</h3>
+  <p>
+    Check a label and Add a tool send you to a GitHub issue form. You sign in to GitHub, not to us. What you post is
+    public, like any GitHub issue. When every line of a check is "Still true", the label records your GitHub username
+    and the date in the public data. See <a href={GITHUB_PRIVACY}>GitHub's privacy statement</a>.
+  </p>
+
+  <h2>How long we keep it</h2>
+  <ul>
+    <li>Requests to the site, API and MCP: not kept by us.</li>
+    <li>
+      Issues, pull requests and check records: public on GitHub until they're removed. The data's history lives in the{" "}
+      <a href={REPO_URL}>public repository</a>, so a removed username can still show in older commits.
+    </li>
+    <li>Cloudflare and Google keep what they see under their own policies.</li>
+  </ul>
+
+  <h2>Removing your name</h2>
+  <p>
+    Want your GitHub username off a label, or an issue you opened taken down? Ask us and we'll remove it from the
+    current data. You can also delete your own issue comments on GitHub.
+  </p>
+
+  <h2>Questions</h2>
+  <p>
+    {CONTACT_EMAIL ? (
+      <>
+        Email <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a>, or see the <a href="/contact">Contact</a> page.
+      </>
+    ) : (
+      <>
+        See the <a href="/contact">Contact</a> page.
+      </>
+    )}
+  </p>
+
+  <h2>Changes</h2>
+  <p>
+    When this page changes, the date at the top changes too. Every edit is a public commit in the{" "}
+    <a href={REPO_URL}>source on GitHub</a>.
+  </p>
+</TextPage>
