@@ -15,7 +15,7 @@ const analyticsOn = analyticsBeacon(import.meta.env.PUBLIC_CF_ANALYTICS_TOKEN) !
 <TextPage
   title="Privacy"
   description="What freestack collects, who handles it, how long it stays, and who to ask."
-  lede="No accounts and no cookies. freestack doesn't store anything about you. Three services see your visit, and they're listed below."
+  lede="No accounts and no cookies. freestack doesn't store anything about you. Two services see your visit, and they're listed below."
   updated="2026-11-18"
 >
   <h2>What we collect</h2>
@@ -27,8 +27,9 @@ const analyticsOn = analyticsBeacon(import.meta.env.PUBLIC_CF_ANALYTICS_TOKEN) !
       answers you send to the claim plan build the reply and are not saved.
     </li>
     <li>
-      Search runs in your browser. Compare picks live in the page address. When you leave an aisle with picks in the
-      compare tray, your browser keeps their ids for that tab (session storage). They never reach us.
+      Fonts and search come from this site. Search runs in your browser. Compare picks live in the page address. When
+      you leave an aisle with picks in the compare tray, your browser keeps their ids for that tab (session storage).
+      They never reach us.
     </li>
     <li data-analytics={analyticsOn ? "on" : "off"}>
       {analyticsOn ? (
@@ -49,11 +50,6 @@ const analyticsOn = analyticsBeacon(import.meta.env.PUBLIC_CF_ANALYTICS_TOKEN) !
     block abuse. We haven't turned on Workers logs, so we keep no request logs. See{" "}
     <a href="https://www.cloudflare.com/privacypolicy/">Cloudflare's privacy policy</a>.
   </p>
-  <h3>Google Fonts</h3>
-  <p>
-    The Archivo font loads from Google Fonts, so Google sees your IP address and browser when a page loads. See{" "}
-    <a href="https://policies.google.com/privacy">Google's privacy policy</a>.
-  </p>
   <h3>GitHub</h3>
   <p>
     Check a label and Add a tool send you to a GitHub issue form. You sign in to GitHub, not to us. What you post is
@@ -68,7 +64,7 @@ const analyticsOn = analyticsBeacon(import.meta.env.PUBLIC_CF_ANALYTICS_TOKEN) !
       Issues, pull requests and check records: public on GitHub until they're removed. The data's history lives in the{" "}
       <a href={REPO_URL}>public repository</a>, so a removed username can still show in older commits.
     </li>
-    <li>Cloudflare and Google keep what they see under their own policies.</li>
+    <li>Cloudflare and GitHub keep what they see under their own policies.</li>
   </ul>
 
   <h2>Removing your name</h2>

@@ -38,22 +38,20 @@ test.describe("legal and contact pages", () => {
     const main = page.locator("main");
     await expect(main).toContainText("No accounts and no cookies");
     // Processors, each with a link to their own policy.
-    for (const name of ["Cloudflare", "Google Fonts", "GitHub"]) {
+    for (const name of ["Cloudflare", "GitHub"]) {
       await expect(main.getByRole("heading", { level: 3, name })).toBeVisible();
     }
     await expect(main.getByRole("link", { name: /Cloudflare's privacy policy/ })).toHaveAttribute(
       "href",
       /cloudflare\.com/,
     );
-    await expect(main.getByRole("link", { name: /Google's privacy policy/ })).toHaveAttribute(
-      "href",
-      /policies\.google\.com/,
-    );
     await expect(main.getByRole("link", { name: /GitHub's privacy statement/ })).toHaveAttribute("href", /github\.com/);
     // Links that start a source line keep the space before them.
-    for (const text of ["See Cloudflare's", "See Google's", "See GitHub's", "in the public repository"]) {
+    for (const text of ["See Cloudflare's", "See GitHub's", "in the public repository"]) {
       await expect(main).toContainText(text);
     }
+    // Fonts are self-hosted, so Google is not a processor.
+    await expect(main).not.toContainText("Google");
     // Public by design: a check records the GitHub username.
     await expect(main).toContainText("your GitHub username");
     await expect(main.getByRole("heading", { level: 2, name: "How long we keep it" })).toBeVisible();
