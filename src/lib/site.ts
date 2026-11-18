@@ -23,5 +23,16 @@ export function siteUrl(path = "/"): string {
   return new URL(path.replace(/^\/*/, "/"), SITE_URL + "/").toString();
 }
 
+/**
+ * The support address from PUBLIC_CONTACT_EMAIL, or null. Pages never make one
+ * up: unset (or not an address), Contact and Privacy point to GitHub only.
+ */
+export function contactEmail(raw: string | undefined | null): string | null {
+  const v = String(raw ?? "").trim();
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v) ? v : null;
+}
+
+export const CONTACT_EMAIL: string | null = contactEmail(import.meta.env.PUBLIC_CONTACT_EMAIL);
+
 /** The remote MCP server's address. */
 export const MCP_URL = siteUrl("/mcp");
