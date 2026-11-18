@@ -42,62 +42,63 @@ const updatedText = updated
 
 <style>
   .page {
-    padding-block: 56px 120px;
+    padding-block: 3.5rem 7.5rem;
   }
   .lede {
-    margin: 16px 0 0;
+    margin: 1rem 0 0;
     max-width: 52ch;
-    font-size: 20px;
+    font-size: 1.25rem;
     line-height: 1.45;
   }
   .updated {
-    margin: 12px 0 0;
-    font-size: 15px;
+    margin: 0.75rem 0 0;
+    font-size: 0.9375rem;
     color: var(--muted);
   }
   .text {
-    margin-top: 32px;
-    max-width: 720px;
+    margin-top: 2rem;
+    max-width: 45rem;
     background: var(--label);
-    padding: 8px 28px 28px;
-    font-size: 17px;
+    padding: 1.75rem;
+    font-size: 1.0625rem;
     line-height: 1.55;
   }
   /* Slotted content: headings, paragraphs, lists and links. */
   .text :global(h2) {
-    margin: 28px 0 8px;
-    font-size: 22px;
+    margin: 1.75rem 0 0.5rem;
+    font-size: 1.375rem;
     font-weight: 800;
     line-height: 1.2;
   }
-  .text :global(h3) {
-    margin: 20px 0 4px;
-    font-size: 18px;
-    font-weight: 700;
+  .text :global(h2:first-child) {
+    margin-top: 0;
   }
-  .text :global(p) {
-    margin: 0 0 12px;
+  .text :global(p),
+  .text :global(ul) {
+    margin: 0 0 0.75rem;
+  }
+  .text :global(:last-child) {
+    margin-bottom: 0;
   }
   .text :global(ul) {
-    margin: 0 0 12px;
-    padding-left: 22px;
+    padding-left: 1.375rem;
   }
   .text :global(li) {
-    margin-bottom: 6px;
+    margin-bottom: 0.5rem;
   }
   .text :global(a) {
     font-weight: 700;
   }
-  @media (max-width: 640px) {
+  @media (max-width: 40rem) {
     .page {
-      padding-block: 32px 72px;
+      padding-block: 2rem 4.5rem;
     }
     .lede {
-      font-size: 18px;
+      font-size: 1.125rem;
     }
     .text {
-      padding: 4px 16px 20px;
-      font-size: 16px;
+      padding: 1.25rem 1rem;
+      font-size: 1rem;
     }
   }
 </style>

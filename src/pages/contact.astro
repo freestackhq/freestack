@@ -1,40 +1,24 @@
 ---
-/**
- * Contact. Routes each kind of request to the GitHub place that handles it.
- * There is no email on purpose: every request is public, so anyone can see
- * how it was handled.
- */
+/** Contact. No email on purpose: every request is a public GitHub issue. */
 import TextPage from "../layouts/TextPage.astro";
 import { newIssueUrl } from "../lib/site";
-
-const NEW_ISSUE = newIssueUrl();
-const PRIVACY_ISSUE = newIssueUrl("Privacy request: ");
 ---
 
 <TextPage
   title="Contact"
-  description="How to reach freestack: wrong labels, missing tools, bugs and privacy requests, all on GitHub."
-  lede="There's no email. Everything goes through GitHub, in public, so anyone can see how each request was handled."
+  description="Reach freestack on GitHub: wrong labels, missing tools, bugs and privacy requests."
+  lede="There's no email. Everything goes through GitHub, in public."
 >
-  <h2>A label is wrong</h2>
-  <p>
-    Open the tool's label and choose "Check it". Mark the line that changed and send it. A maintainer reviews it, and
-    the label says a change is waiting.
-  </p>
-
-  <h2>A tool is missing</h2>
-  <p>
-    Use <a href="/add">Add a tool</a>. Have the vendor's pricing page open, so the numbers match it.
-  </p>
-
-  <h2>A bug, a broken link, or a vendor asking for a fix</h2>
-  <p>
-    <a href={NEW_ISSUE}>Open an issue on GitHub</a>. Say which page, and what you expected.
-  </p>
-
-  <h2>Privacy</h2>
-  <p>
-    <a href={PRIVACY_ISSUE}>Open a privacy request</a>, for example to take your GitHub username off a label. Don't post
-    anything private: your username is enough. See <a href="/privacy">Privacy</a> for what we hold.
-  </p>
+  <ul>
+    <li>Wrong label: open it and choose "Check it".</li>
+    <li>
+      Missing tool: <a href="/add">Add a tool</a>.
+    </li>
+    <li>
+      Bug, broken link or vendor fix: <a href={newIssueUrl()}>Open an issue</a>.
+    </li>
+    <li>
+      Removing your username: <a href={newIssueUrl("Privacy request: ")}>Open a privacy request</a>.
+    </li>
+  </ul>
 </TextPage>

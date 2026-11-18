@@ -1,110 +1,49 @@
 ---
 /**
- * Privacy policy. Says only what the code does: no accounts, no cookies, no
- * stored requests. The analytics line follows the build's env, so the page
- * never claims a beacon the site doesn't have. Every request is a public
- * GitHub issue: there is no email.
+ * Privacy policy. Says only what the code does. The analytics line follows the
+ * build's env, so the page never claims a beacon the site doesn't have.
  */
 import TextPage from "../layouts/TextPage.astro";
 import { analyticsBeacon } from "../lib/analytics";
 import { REPO_URL, newIssueUrl } from "../lib/site";
 
 const GITHUB_PRIVACY = "https://docs.github.com/en/site-policy/privacy-policies/github-general-privacy-statement";
-const PRIVACY_ISSUE = newIssueUrl("Privacy request: ");
 const analyticsOn = analyticsBeacon(import.meta.env.PUBLIC_CF_ANALYTICS_TOKEN) !== null;
 ---
 
 <TextPage
   title="Privacy"
-  description="What freestack collects, who handles it, how long it stays, and how to ask about it."
-  lede="No accounts and no cookies. freestack doesn't store anything about you. Two services see your visit, and they're listed below."
-  updated="2026-11-18"
+  description="What freestack collects and who handles it."
+  lede="No accounts, no cookies, nothing stored about you."
+  updated="2026-11-19"
 >
-  <h2>Who runs freestack</h2>
-  <p>
-    freestack is a free, open-source project, not a business. It's run by the maintainers of the{" "}
-    <a href={REPO_URL}>freestack repository</a> on GitHub. They decide what the site collects, which is almost nothing.
-  </p>
-
-  <h2>What we collect</h2>
+  <h2>Who sees what</h2>
   <ul>
-    <li>No sign-up, no sign-in, no profiles. There's nothing to delete because nothing is kept.</li>
-    <li>No cookies. Nothing tracks you across sites.</li>
     <li>
-      The API, the MCP server and the CLI answer each request and forget it. The "student", "selling" and "Philippines"
-      answers you send to the claim plan build the reply and are not saved.
+      <strong>Cloudflare</strong> serves the site, the API and the MCP server. It sees each request's IP address and
+      browser. Workers logs are off, so we keep none.{" "}
+      <a href="https://www.cloudflare.com/privacypolicy/">Cloudflare's privacy policy</a>
     </li>
     <li>
-      Fonts and search come from this site. Search runs in your browser. Compare picks live in the page address. When
-      you leave an aisle with picks in the compare tray, your browser keeps their ids for that tab (session storage).
-      They never reach us.
+      <strong>GitHub</strong> holds every check, new tool and request you send. All of it is public. A "Still true"
+      check adds your GitHub username to the label. <a href={GITHUB_PRIVACY}>GitHub's privacy statement</a>
     </li>
     <li data-analytics={analyticsOn ? "on" : "off"}>
       {analyticsOn ? (
-        <>
-          Page views are counted with Cloudflare Web Analytics. It sets no cookies and doesn't fingerprint your device.
-          We see totals per page, country, browser and referrer, never who you are.
-        </>
+        <>Cloudflare Web Analytics counts page views, without cookies or fingerprinting.</>
       ) : (
-        <>No analytics. We don't count visits.</>
+        <>No analytics.</>
       )}
     </li>
+    <li>Fonts load from this site. Search and compare picks stay in your browser.</li>
   </ul>
 
-  <h2>Who handles your data</h2>
-  <h3>Cloudflare</h3>
+  <h2>Removing your username</h2>
   <p>
-    The site runs on Cloudflare Workers. Cloudflare sees each request (IP address, browser, page) to serve it and to
-    block abuse. We haven't turned on Workers logs, so we keep no request logs. See{" "}
-    <a href="https://www.cloudflare.com/privacypolicy/">Cloudflare's privacy policy</a>.
-  </p>
-  <h3>GitHub</h3>
-  <p>
-    Check a label and Add a tool send you to a GitHub issue form. You sign in to GitHub, not to us. What you post is
-    public, like any GitHub issue. When every line of a check is "Still true", the label records your GitHub username
-    and the date in the public data. See <a href={GITHUB_PRIVACY}>GitHub's privacy statement</a>.
+    <a href={newIssueUrl("Privacy request: ")}>Open a privacy request</a> and we'll take it off the data. Older commits
+    in the <a href={REPO_URL}>public repository</a> still carry it.
   </p>
 
-  <h2>Why we handle it</h2>
-  <p>
-    To serve the site, keep it working and block abuse. Where a law asks for a legal reason, ours is legitimate
-    interest: running a free public site. Your username on a check is there because you chose to send it.
-  </p>
-
-  <h2>Data sent abroad</h2>
-  <p>
-    Cloudflare and GitHub are US companies with servers around the world. Your requests may be handled outside your
-    country, under the safeguards in their own policies.
-  </p>
-
-  <h2>How long we keep it</h2>
-  <ul>
-    <li>Requests to the site, API and MCP: not kept by us.</li>
-    <li>
-      Issues, pull requests and check records: public on GitHub until they're removed. The data's history lives in the{" "}
-      <a href={REPO_URL}>public repository</a>, so a removed username can still show in older commits.
-    </li>
-    <li>Cloudflare and GitHub keep what they see under their own policies.</li>
-  </ul>
-
-  <h2>Your rights</h2>
-  <ul>
-    <li>Ask what we hold about you. Usually that's nothing, or your GitHub username on a label.</li>
-    <li>Ask us to fix it, remove it, or stop using it.</li>
-    <li>You can delete your own issue comments on GitHub yourself.</li>
-    <li>If you think we got it wrong, complain to the data protection authority where you live.</li>
-  </ul>
-  <p>
-    <a href={PRIVACY_ISSUE}>Open a privacy request</a> on GitHub. It's public, like everything here, so you can see how
-    it's handled. Your GitHub username is enough: don't post anything private. We reply within one month.
-  </p>
-
-  <h2>Children</h2>
-  <p>freestack isn't meant for children under 13. GitHub, which takes every request, needs you to be 13 too.</p>
-
-  <h2>Changes</h2>
-  <p>
-    When this page changes, the date at the top changes too. Every edit is a public commit in the{" "}
-    <a href={REPO_URL}>source on GitHub</a>. Questions? See <a href="/contact">Contact</a>.
-  </p>
+  <h2>Who runs freestack</h2>
+  <p>A non-commercial, open-source project, run by its maintainers on GitHub.</p>
 </TextPage>

@@ -7,63 +7,38 @@ import { REPO_URL, newIssueUrl } from "../lib/site";
 <TextPage
   title="Terms"
   description="The terms for using freestack, its API, its MCP server and its data."
-  lede="freestack is free to use. No account needed. By using it, you agree to these terms."
-  updated="2026-11-18"
+  lede="By using freestack, you agree to these terms."
+  updated="2026-11-19"
 >
-  <h2>Who runs freestack</h2>
-  <p>
-    freestack is a free, open-source project, not a business. Its maintainers run it in the open, on GitHub. Nobody pays
-    to use it, and no vendor pays to be listed.
-  </p>
-
   <h2>Not advice</h2>
   <p>
-    freestack lists free tiers and student programs, with limits copied from each vendor's page. Vendors change their
-    plans without notice, and a label can be out of date or wrong. Read the vendor's own page and terms before you rely
-    on a tool. Nothing here is legal, financial or tax advice.
+    Labels copy each vendor's pricing page, and vendors change plans without notice. Check the vendor's own terms before
+    you rely on a tool. Nothing here is legal, financial or tax advice.
   </p>
-  <p>freestack isn't affiliated with, paid by or endorsed by any vendor it lists.</p>
 
-  <h2>Provided as is</h2>
+  <h2>As is</h2>
   <p>
-    The site, the API, the MCP server and the data are provided "as is", with no warranty. They may go down, change or
-    stop. As far as the law allows, we aren't liable for any loss from using them, such as a surprise bill, a closed
-    account or lost data with a vendor.
+    The site, the API, the MCP server and the data come with no warranty. As far as the law allows, we aren't liable for
+    any loss from using them.
   </p>
 
-  <h2>Using the API, the MCP server and the data</h2>
+  <h2>License</h2>
   <ul>
     <li>
-      The code and the data are under the <a href={`${REPO_URL}/blob/main/LICENSE`}>MIT License</a>. Reuse them, and
-      keep the notice.
+      Code and data: <a href={`${REPO_URL}/blob/main/LICENSE`}>MIT License</a>.
     </li>
-    <li>Entries imported from other lists keep their own license, recorded with each list.</li>
-    <li>Don't overload the service. We may block traffic that slows it down for others.</li>
-  </ul>
-
-  <h2>What you send us</h2>
-  <ul>
-    <li>Checks and new tools go through public GitHub issues and pull requests. GitHub's terms apply there too.</li>
-    <li>Send only what you believe is true and that you have the right to share.</li>
-    <li>What you send is published under the same MIT License as the rest of the data.</li>
-    <li>We may edit, decline or remove anything sent, including spam.</li>
+    <li>Imported entries keep their source list's license.</li>
+    <li>What you send through GitHub is published under the same MIT License. We may edit or decline it.</li>
+    <li>We may block traffic that degrades the service.</li>
   </ul>
 
   <h2>Names and trademarks</h2>
   <p>
-    Vendor names and logos belong to their owners. We use them only to say which tool a label is about. A vendor who
-    wants a label fixed or removed can <a href={newIssueUrl()}>open an issue</a>.
+    Vendor names belong to their owners. No vendor pays for or endorses a label. Vendors can{" "}
+    <a href={newIssueUrl()}>open an issue</a> to ask for a fix.
   </p>
 
-  <h2>Other sites</h2>
-  <p>Labels link to vendors' sites. Their terms and privacy policies apply there, not ours.</p>
-
-  <h2>Privacy and changes</h2>
   <p>
-    <a href="/privacy">Privacy</a> covers what's collected. When these terms change, the date at the top changes too,
-    and every edit is a public commit. Using freestack after a change means you accept it.
-  </p>
-  <p>
-    Questions? See <a href="/contact">Contact</a>.
+    See also <a href="/privacy">Privacy</a>. Changes take effect when published here.
   </p>
 </TextPage>
