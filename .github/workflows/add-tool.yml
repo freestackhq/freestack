@@ -5,7 +5,7 @@ name: add-tool
 
 on:
   issues:
-    types: [opened, edited, closed]
+    types: [opened, edited, closed, labeled]
 
 permissions:
   contents: write
@@ -13,17 +13,26 @@ permissions:
   pull-requests: write
   actions: write # dispatch deploy.yml after a data commit (GITHUB_TOKEN pushes start no workflows)
 
-concurrency:
-  group: add-tool-${{ github.event.issue.number }}
-  cancel-in-progress: false
-
 jobs:
   process:
     # Issue-form issues carry the label; a pasted "too long" body carries the marker.
+    # The form title ("Add: ") also counts: GitHub silently drops a form's label
+    # when the repo label is missing. A later "add-tool" label added by hand runs
+    # only for issues that matched none of these (the opened run handled the rest).
     if: >-
       !github.event.issue.pull_request &&
-      (contains(github.event.issue.labels.*.name, 'add-tool') ||
-       contains(github.event.issue.body, '<!-- freestack:add-tool -->'))
+      ((github.event.action != 'labeled' &&
+        (contains(github.event.issue.labels.*.name, 'add-tool') ||
+         startsWith(github.event.issue.title, 'Add: ') ||
+         contains(github.event.issue.body, '<!-- freestack:add-tool -->'))) ||
+       (github.event.action == 'labeled' &&
+        github.event.label.name == 'add-tool' &&
+        !startsWith(github.event.issue.title, 'Add: ') &&
+        !contains(github.event.issue.body, '<!-- freestack:add-tool -->')))
+    # Job-level, so skipped runs (other labels) never cancel a queued real one.
+    concurrency:
+      group: add-tool-${{ github.event.issue.number }}
+      cancel-in-progress: false
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
@@ -38,9 +47,12 @@ jobs:
           node-version-file: .nvmrc
           cache: pnpm
       - run: pnpm install --frozen-lockfile --ignore-scripts
-      - name: Add the label to a pasted issue
+      # Creates the repo label first if it is missing, so the add never fails.
+      - name: Add the label to a pasted or unlabeled issue
         if: ${{ !contains(github.event.issue.labels.*.name, 'add-tool') && github.event.action != 'closed' }}
-        run: gh issue edit "$NUMBER" --add-label add-tool
+        run: |
+          gh label create add-tool --color 0E8A16 --description "Add a tool submissions" 2>/dev/null || true
+          gh issue edit "$NUMBER" --add-label add-tool
         env:
           GH_TOKEN: ${{ github.token }}
           GH_REPO: ${{ github.repository }}

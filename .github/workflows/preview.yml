@@ -2,31 +2,39 @@
 # pr-<number> alias (no traffic moves to it) and comments its URL on the PR.
 # Fork PRs get no secrets, so they are skipped. Absolute links inside the
 # preview (share links, llms.txt, the MCP address) use SITE_URL, so they
-# point at production.
+# point at production. Trust-loop PRs (opened with GITHUB_TOKEN, so no
+# pull_request event) get it by dispatch on the PR branch with the PR number.
 name: Preview
 
 on:
   pull_request:
     types: [opened, synchronize, reopened]
+  workflow_dispatch:
+    inputs:
+      pr:
+        description: Pull request number the preview belongs to
+        required: true
+        type: number
 
 permissions:
   contents: read
   pull-requests: write
 
 concurrency:
-  group: preview-${{ github.event.pull_request.number }}
+  group: preview-${{ github.event.pull_request.number || inputs.pr }}
   cancel-in-progress: true
 
 jobs:
   preview:
-    if: github.event.pull_request.head.repo.full_name == github.repository
+    if: github.event_name == 'workflow_dispatch' || github.event.pull_request.head.repo.full_name == github.repository
     runs-on: ubuntu-latest
     env:
       SITE_URL: ${{ vars.SITE_URL }}
       PUBLIC_GITHUB_REPO: ${{ vars.PUBLIC_GITHUB_REPO || github.repository }}
       CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
       CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-      ALIAS: pr-${{ github.event.pull_request.number }}
+      PR: ${{ github.event.pull_request.number || inputs.pr }}
+      ALIAS: pr-${{ github.event.pull_request.number || inputs.pr }}
     steps:
       - name: Skip when Cloudflare is not configured
         id: configured
@@ -55,7 +63,7 @@ jobs:
         name: Upload preview version
         id: upload
         run: |
-          pnpm exec wrangler versions upload --preview-alias "$ALIAS" --message "PR #${{ github.event.pull_request.number }} ${GITHUB_SHA::7}" | tee upload.log
+          pnpm exec wrangler versions upload --preview-alias "$ALIAS" --message "PR #$PR ${GITHUB_SHA::7}" | tee upload.log
           url="$(grep -oE 'https://[^ ]*workers\.dev[^ ]*' upload.log | grep -- "$ALIAS" | head -1)"
           [ -n "$url" ] || url="$(grep -oE 'https://[^ ]*workers\.dev[^ ]*' upload.log | head -1)"
           echo "url=$url" >> "$GITHUB_OUTPUT"
@@ -64,7 +72,6 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
           GH_REPO: ${{ github.repository }}
-          PR: ${{ github.event.pull_request.number }}
           URL: ${{ steps.upload.outputs.url }}
         run: |
           body="Preview: $URL (commit ${GITHUB_SHA::7}). Updates on every push."

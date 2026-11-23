@@ -1,11 +1,11 @@
 /**
  * The side effects of the trust-loop workflows: git and the gh CLI, both
  * already on GitHub's runners and authenticated by GITHUB_TOKEN (GH_TOKEN).
- * Arguments go to execFileSync as a list, never through a shell, because
+ * Arguments go to spawnSync as a list, never through a shell, because
  * issue text is untrusted. The pure decisions live in label-check.mjs and
  * add-tool.mjs; this file only carries them out.
  */
-import { execFileSync } from "node:child_process";
+import { spawnSync } from "node:child_process";
 import { existsSync, readFileSync } from "node:fs";
 
 /** The issues event GitHub Actions hands the job. */
@@ -19,8 +19,16 @@ export function readText(path) {
   return existsSync(path) ? readFileSync(path, "utf8") : null;
 }
 
+/**
+ * Runs a command and returns its stdout. stderr is echoed to the log and, on
+ * failure, kept in the error message so callers can tell failures apart.
+ */
 function run(cmd, args, input) {
-  return execFileSync(cmd, args, { encoding: "utf8", input, stdio: ["pipe", "pipe", "inherit"] }).trim();
+  const r = spawnSync(cmd, args, { encoding: "utf8", input, maxBuffer: 16 * 1024 * 1024 });
+  if (r.stderr) process.stderr.write(r.stderr);
+  if (r.error) throw r.error;
+  if (r.status !== 0) throw new Error(`${cmd} ${args.join(" ")} failed (exit ${r.status}): ${(r.stderr ?? "").trim()}`);
+  return (r.stdout ?? "").trim();
 }
 
 const git = (...args) => run("git", args);
@@ -28,6 +36,36 @@ const gh = (args, input) => run("gh", args, input);
 
 export const SNAPSHOT = "src/data/catalog.generated.json";
 export const touchesData = (paths) => paths.some((p) => p.startsWith("data/"));
+
+/** A failure with a message meant for the maintainer, printed without a stack. */
+export class TrustLoopError extends Error {}
+
+/** Repo or org setting "Allow GitHub Actions to create and approve pull requests" is off. */
+export const isPrNotPermitted = (message) => /not permitted to create or approve pull requests/i.test(message ?? "");
+
+/** "https://github.com/o/r/pull/12" -> 12, or null. */
+export function prNumber(url) {
+  const m = /\/pull\/(\d+)/.exec(url ?? "");
+  return m ? Number(m[1]) : null;
+}
+
+/** The issue comment when the branch is pushed but Actions may not open the PR. */
+export function prBlockedComment({ repo, base, branch }) {
+  return [
+    `The change is pushed to \`${branch}\`, but GitHub Actions is not allowed to open pull requests in this repo, so no PR was opened.`,
+    "",
+    `A maintainer can open it by hand: https://github.com/${repo}/compare/${base}...${branch}?expand=1`,
+    "",
+    'Or turn on "Allow GitHub Actions to create and approve pull requests" (repo and org Settings > Actions > General), then edit this issue to run the check again.',
+  ].join("\n");
+}
+
+/** Ends a workflow script: known failures as one ::error:: line, the rest with their stack. */
+export function exitWithError(e) {
+  if (e instanceof TrustLoopError) console.log(`::error::${e.message}`);
+  else console.error(e);
+  process.exit(1);
+}
 
 export function createGitHub({ defaultBranch }) {
   git("config", "user.name", "github-actions[bot]");
@@ -105,13 +143,48 @@ export function createGitHub({ defaultBranch }) {
     openPrs: (branch) =>
       JSON.parse(gh(["pr", "list", "--head", branch, "--state", "open", "--json", "number,url"]) || "[]"),
 
-    /** Opens a PR unless one is open for the branch. Returns { url, created }. */
-    ensurePr(branch, title, body, label) {
+    /**
+     * Opens a PR unless one is open for the branch, then dispatches CI and
+     * Preview on the branch. Returns { url, created }. When Actions may not
+     * open PRs, comments on the issue and throws a TrustLoopError.
+     */
+    ensurePr(branch, title, body, label, issue) {
       const open = this.openPrs(branch);
-      if (open.length) return { url: open[0].url, created: false };
-      const args = ["pr", "create", "--base", defaultBranch, "--head", branch, "--title", title, "--body-file", "-"];
-      if (label) args.push("--label", label);
-      return { url: gh(args, body), created: true };
+      let pr = open.length ? { url: open[0].url, created: false } : null;
+      if (!pr) {
+        const args = ["pr", "create", "--base", defaultBranch, "--head", branch, "--title", title, "--body-file", "-"];
+        if (label) args.push("--label", label);
+        try {
+          pr = { url: gh(args, body), created: true };
+        } catch (e) {
+          if (!isPrNotPermitted(e.message)) throw e;
+          const repo = process.env.GH_REPO ?? "";
+          if (issue) this.comment(issue, prBlockedComment({ repo, base: defaultBranch, branch }));
+          throw new TrustLoopError(
+            `Pushed ${branch}, but GitHub Actions is not permitted to create pull requests. ` +
+              'Enable "Allow GitHub Actions to create and approve pull requests" (repo and org settings) or open the PR by hand.',
+          );
+        }
+      }
+      this.dispatchChecks(branch, prNumber(pr.url));
+      return pr;
+    },
+
+    /**
+     * A PR opened or pushed with GITHUB_TOKEN starts no pull_request workflows;
+     * a dispatch is the exception. The runs land on the branch head, so their
+     * checks show on the PR. Failure only warns: a maintainer can still run CI.
+     */
+    dispatchChecks(branch, number) {
+      const runs = [["ci.yml"]];
+      if (number) runs.push(["preview.yml", "-f", `pr=${number}`]);
+      for (const [file, ...inputs] of runs) {
+        try {
+          gh(["workflow", "run", file, "--ref", branch, ...inputs]);
+        } catch {
+          console.log(`::warning::${file} could not be dispatched on ${branch}; run it from the Actions tab.`);
+        }
+      }
     },
 
     closePrs(branch, comment) {

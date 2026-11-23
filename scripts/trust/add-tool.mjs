@@ -14,7 +14,7 @@ import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { dirname } from "node:path";
 import { pathToFileURL } from "node:url";
 import { ADD_TOOL, parseIssueForm } from "../../src/lib/trust/forms.mjs";
-import { createGitHub, readEvent, readText } from "./github.mjs";
+import { createGitHub, exitWithError, readEvent, readText } from "./github.mjs";
 import { validate } from "./schema.mjs";
 import { readAisles, readScalar, toolYaml } from "./yaml.mjs";
 
@@ -208,7 +208,7 @@ async function main() {
     [path],
     `feat(data): add ${plan.tool.id} from #${n}`,
   );
-  const pr = gh.ensurePr(branch, `feat(data): add ${plan.tool.name} (#${n})`, prBody(plan.tool, n), ADD_TOOL.label);
+  const pr = gh.ensurePr(branch, `feat(data): add ${plan.tool.name} (#${n})`, prBody(plan.tool, n), ADD_TOOL.label, n);
   if (pr.created)
     gh.comment(
       n,
@@ -217,8 +217,5 @@ async function main() {
 }
 
 if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
-  main().catch((e) => {
-    console.error(e);
-    process.exit(1);
-  });
+  main().catch(exitWithError);
 }

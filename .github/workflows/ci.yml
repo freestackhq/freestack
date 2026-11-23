@@ -4,13 +4,17 @@ on:
   push:
     branches: [main, master]
   pull_request:
+  # Trust-loop PRs are opened with GITHUB_TOKEN, which starts no pull_request
+  # runs; scripts/trust/github.mjs dispatches CI on the PR branch instead.
+  # Deploy ignores these runs (deploy.yml only follows push runs).
+  workflow_dispatch:
 
 permissions:
   contents: read
 
 concurrency:
   group: ci-${{ github.ref }}
-  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+  cancel-in-progress: ${{ github.event_name != 'push' }}
 
 jobs:
   # Types, formatting and workflow files.

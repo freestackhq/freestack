@@ -16,7 +16,7 @@ import { mkdirSync, writeFileSync } from "node:fs";
 import { dirname } from "node:path";
 import { pathToFileURL } from "node:url";
 import { LABEL_CHECK, WHO_LABELS, parseAnswers, parseIssueForm } from "../../src/lib/trust/forms.mjs";
-import { createGitHub, readEvent, readText } from "./github.mjs";
+import { createGitHub, exitWithError, readEvent, readText } from "./github.mjs";
 import {
   readAisles,
   readReviews,
@@ -271,7 +271,13 @@ async function main() {
     [toolPath(first.tool), REVIEWS_PATH],
     `fix(data): update ${first.tool} from #${n}`,
   );
-  const pr = gh.ensurePr(branch, `fix(data): update ${first.tool} label (#${n})`, prBody(first, n), LABEL_CHECK.label);
+  const pr = gh.ensurePr(
+    branch,
+    `fix(data): update ${first.tool} label (#${n})`,
+    prBody(first, n),
+    LABEL_CHECK.label,
+    n,
+  );
   if (pr.created) {
     gh.comment(
       n,
@@ -281,8 +287,5 @@ async function main() {
 }
 
 if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
-  main().catch((e) => {
-    console.error(e);
-    process.exit(1);
-  });
+  main().catch(exitWithError);
 }
