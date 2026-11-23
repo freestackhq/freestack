@@ -6,7 +6,7 @@ aisle: auth
 metric: 50000
 limits:
   - 50k MRU free
-  - Then paid
+  - "$20 / month"
 who:
   - anyone
 region: null
@@ -23,8 +23,8 @@ skip_if:
   - reason: Clerk is a managed-only service — zero ops, but you can't self-host. Zitadel gives you an OSS escape hatch and 25 k MAU free, but you build your own login UI.
     use: zitadel
 pricing_url: https://clerk.com
-verified_at: null
-verified_by: null
+verified_at: "2026-11-23"
+verified_by: kuyacarlo
 source: catalog
 tagline: Pre-built auth UI for B2B/B2C.
 about: |-
