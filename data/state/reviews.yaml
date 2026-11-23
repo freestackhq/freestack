@@ -2,3 +2,4 @@
 # "A change is waiting for review" while its tool is listed here.
 # Written by the label-check workflow (scripts/trust/label-check.mjs).
 - { tool: upstash-redis, issue: 22, opened: "2026-11-23" }
+- { tool: clerk, issue: 21, opened: "2026-11-23" }
