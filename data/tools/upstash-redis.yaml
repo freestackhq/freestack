@@ -3,9 +3,10 @@ name: Upstash Redis
 kind: Serverless Redis
 url: https://upstash.com
 aisle: cache
-metric: 10000
+metric: null
+metric_note: 500K commands a month
 limits:
-  - 256 MB
+  - 250MB
 who:
   - anyone
 region: null
@@ -19,8 +20,8 @@ skip_if:
   - reason: "Cloudflare KV/D1: Pick Upstash when you need Redis data structures (sorted sets, pub/sub, Lua scripts) or when your stack isn't on Cloudflare. Pick D1/KV when you're already on Workers and want zero-network-hop access."
   - reason: "a primary database (Neon/Turso): Upstash is a complement, not a replacement. Use it as the caching/queue layer in front of your relational store, not as your source of truth."
 pricing_url: https://upstash.com
-verified_at: null
-verified_by: null
+verified_at: "2026-11-23"
+verified_by: kuyacarlo
 source: catalog
 tagline: Serverless Redis for cache and queues.
 about: Serverless Redis for cache and queues.
