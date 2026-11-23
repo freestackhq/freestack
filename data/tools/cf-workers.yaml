@@ -22,7 +22,7 @@ skip_if:
     use: vercel-hobby
 pricing_url: https://workers.cloudflare.com
 verified_at: "2026-11-14"
-verified_by: Kuyacarlo
+verified_by: kuyacarlo
 source: catalog
 tagline: Static sites plus API routes. No cold starts.
 about: Edge functions + unlimited static hosting.
