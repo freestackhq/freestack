@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generatedAt": "2026-11-14T00:00:00.000Z",
+  "generatedAt": "2026-11-23T00:00:00.000Z",
   "aisles": [
     {
       "id": "databases",
@@ -680,9 +680,12 @@
       "kind": "Serverless Postgres",
       "url": "https://neon.tech",
       "aisle": "databases",
-      "metric": 0.5,
+      "metric": 1,
       "limits": [
-        "5 GB egress a month",
+        "1 GB storage per project, 20 GB total",
+        "100 CU-hours compute per project a month",
+        "5 GB egress per project a month",
+        "100 projects, 10 branches each",
         "Scale-to-zero after 5m"
       ],
       "who": [
@@ -719,8 +722,8 @@
           "use": "turso"
         }
       ],
-      "pricing_url": "https://neon.tech",
-      "verified_at": "2026-11-14",
+      "pricing_url": "https://neon.tech/pricing",
+      "verified_at": "2026-11-23",
       "verified_by": "Karlo",
       "source": "catalog",
       "tagline": "Postgres that sleeps when nobody is using it.",
@@ -728,7 +731,8 @@
       "catch_detail": [
         "Sleeps after 5 minutes of no traffic. The next visit is slow.",
         "Storage is small. Fine for users, posts and orders, not for files.",
-        "Heavy dashboards can burn the monthly data allowance."
+        "Heavy dashboards can burn the monthly data allowance.",
+        "Free can't turn off scale-to-zero or add extra branches; both need Launch."
       ],
       "type": "postgres",
       "fits": [
