@@ -2653,7 +2653,7 @@
       "metric": 50000,
       "limits": [
         "50k MRU free",
-        "Then paid"
+        "$20 / month"
       ],
       "who": [
         "anyone"
@@ -2678,17 +2678,14 @@
         }
       ],
       "pricing_url": "https://clerk.com",
-      "verified_at": null,
-      "verified_by": null,
+      "verified_at": "2026-11-23",
+      "verified_by": "kuyacarlo",
       "source": "catalog",
       "tagline": "Pre-built auth UI for B2B/B2C.",
       "about": "Pre-built auth UI for B2B/B2C.\n\nAuth that ships — stay on free MAU until you have users worth billing.",
       "tags": [
         "auth"
       ],
-      "review_pending": true,
-      "review_issue": 21,
-      "review_opened": "2026-11-23",
       "scale": {
         "kind": "step",
         "step": 5,
