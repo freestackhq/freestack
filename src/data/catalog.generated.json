@@ -1393,6 +1393,9 @@
       "tags": [
         "redis"
       ],
+      "review_pending": true,
+      "review_issue": 22,
+      "review_opened": "2026-11-23",
       "scale": {
         "kind": "step",
         "step": 5,
