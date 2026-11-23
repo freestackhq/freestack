@@ -43,7 +43,7 @@
       "unit": "a day",
       "label": "commands",
       "noun": "caches and queues",
-      "max": 500000
+      "max": 0
     },
     {
       "id": "hosting",
@@ -1361,7 +1361,8 @@
       "kind": "Serverless Redis",
       "url": "https://upstash.com",
       "aisle": "cache",
-      "metric": 500000,
+      "metric": null,
+      "metric_note": "500K commands a month",
       "limits": [
         "250MB"
       ],
@@ -1394,9 +1395,8 @@
         "redis"
       ],
       "scale": {
-        "kind": "step",
-        "step": 5,
-        "word": "Biggest"
+        "kind": "unknown",
+        "word": "Not listed"
       }
     },
     {
