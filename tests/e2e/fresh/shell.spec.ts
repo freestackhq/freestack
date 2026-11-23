@@ -123,6 +123,7 @@ test.describe("head meta", () => {
     // The e2e builds run without SITE_URL, so absolute URL and image stay off.
     await expect(page.locator('meta[property="og:image"]')).toHaveCount(0);
     await expect(page.locator('meta[property="og:url"]')).toHaveCount(0);
+    await expect(page.locator('meta[property="og:image:alt"]')).toHaveCount(0);
   });
 });
 
