@@ -109,6 +109,23 @@ test.describe("header and Aisles menu (AislesMenu.dc.html)", () => {
   });
 });
 
+test.describe("head meta", () => {
+  test("every page carries OpenGraph and Twitter tags", async ({ page }) => {
+    await page.goto("/agents");
+    await expect(page.locator('meta[property="og:type"]')).toHaveAttribute("content", "website");
+    await expect(page.locator('meta[property="og:site_name"]')).toHaveAttribute("content", "freestack");
+    await expect(page.locator('meta[property="og:title"]')).toHaveAttribute("content", "For coding agents · freestack");
+    await expect(page.locator('meta[property="og:description"]')).toHaveAttribute(
+      "content",
+      "Your agent checks these labels before it adds anything paid.",
+    );
+    await expect(page.locator('meta[name="twitter:card"]')).toHaveAttribute("content", "summary_large_image");
+    // The e2e builds run without SITE_URL, so absolute URL and image stay off.
+    await expect(page.locator('meta[property="og:image"]')).toHaveCount(0);
+    await expect(page.locator('meta[property="og:url"]')).toHaveCount(0);
+  });
+});
+
 test.describe("phone menu (PhoneMenu.dc.html)", () => {
   test.use({ viewport: PHONE });
 

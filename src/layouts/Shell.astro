@@ -26,6 +26,10 @@ const {
   footer = true,
   noindex = false,
 } = Astro.props;
+
+// SITE_URL is an env var; without it there is no absolute URL to share.
+const origin = Astro.site?.origin;
+const image = origin ? `${origin}/brand/og.png` : undefined;
 ---
 
 <!doctype html>
@@ -35,6 +39,18 @@ const {
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description" content={description} />
     <meta name="theme-color" content="#1C2340" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="freestack" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    {origin && <meta property="og:url" content={Astro.url} />}
+    {image && <meta property="og:image" content={image} />}
+    {image && <meta property="og:image:width" content="1200" />}
+    {image && <meta property="og:image:height" content="630" />}
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    {image && <meta name="twitter:image" content={image} />}
     {noindex && <meta name="robots" content="noindex" />}
     <link rel="icon" href="/brand/favicon.svg" type="image/svg+xml" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
