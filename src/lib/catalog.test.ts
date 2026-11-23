@@ -48,7 +48,7 @@ describe("entry shape", () => {
     expect(neon.category).toBe("databases");
     expect(neon.name).toBe("Neon");
     expect(neon.url).toMatch(/^https:/);
-    expect(neon.fields.Limits).toContain("0.5 GB");
+    expect(neon.fields.Limits).toContain("1 GB storage per project");
     expect(neon.fields.Commercial).toBe("commercial ok");
     expect(neon.fields.Cost).toBe("free forever");
     expect(Array.isArray(neon.prose)).toBe(true);
@@ -56,7 +56,7 @@ describe("entry shape", () => {
   });
 
   it("adds the label fields", () => {
-    expect(neon.metric).toBe(0.5);
+    expect(neon.metric).toBe(1);
     expect(neon.metric_key).toBe("storage_gb");
     expect(neon.href).toBe("/databases/neon");
     expect(neon.sell).toBe("yes");
