@@ -34,7 +34,7 @@ skip_if:
     use: turso
 pricing_url: https://neon.tech/pricing
 verified_at: "2026-11-23"
-verified_by: Karlo
+verified_by: Kuyacarlo
 source: catalog
 tagline: Postgres that sleeps when nobody is using it.
 about: Serverless Postgres that scales to zero.
