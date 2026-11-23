@@ -43,7 +43,7 @@
       "unit": "a day",
       "label": "commands",
       "noun": "caches and queues",
-      "max": 10000
+      "max": 500000
     },
     {
       "id": "hosting",
@@ -1361,9 +1361,9 @@
       "kind": "Serverless Redis",
       "url": "https://upstash.com",
       "aisle": "cache",
-      "metric": 10000,
+      "metric": 500000,
       "limits": [
-        "256 MB"
+        "250MB"
       ],
       "who": [
         "anyone"
@@ -1385,17 +1385,14 @@
         }
       ],
       "pricing_url": "https://upstash.com",
-      "verified_at": null,
-      "verified_by": null,
+      "verified_at": "2026-11-23",
+      "verified_by": "kuyacarlo",
       "source": "catalog",
       "tagline": "Serverless Redis for cache and queues.",
       "about": "Serverless Redis for cache and queues.",
       "tags": [
         "redis"
       ],
-      "review_pending": true,
-      "review_issue": 22,
-      "review_opened": "2026-11-23",
       "scale": {
         "kind": "step",
         "step": 5,
