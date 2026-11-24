@@ -33,9 +33,9 @@
     "prepare": "lefthook install"
   },
   "dependencies": {
-    "@astrojs/cloudflare": "^14.4.7",
+    "@astrojs/cloudflare": "^14.4.9",
     "@tailwindcss/vite": "^4.3.5",
-    "astro": "^7.4.10",
+    "astro": "^7.4.13",
     "tailwindcss": "^4.3.5"
   },
   "devDependencies": {
@@ -50,7 +50,7 @@
     "prettier-plugin-astro": "^1.1.2",
     "typescript": "^6.0.3",
     "vitest": "^4.1.2",
-    "wrangler": "^4.160.1",
+    "wrangler": "^4.166.0",
     "yaml": "^2.9.1"
   },
   "pnpm": {
