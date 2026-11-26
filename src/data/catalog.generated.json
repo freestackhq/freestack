@@ -3949,29 +3949,6 @@
       "imported_list": "public-apis"
     },
     {
-      "id": "sendinblue",
-      "name": "Sendinblue",
-      "kind": "From an awesome list",
-      "url": "https://developers.sendinblue.com/docs",
-      "aisle": "email",
-      "metric": null,
-      "metric_note": "Not listed",
-      "limits": [],
-      "who": [],
-      "region": null,
-      "sell": "unknown",
-      "card": "unknown",
-      "catches": [],
-      "use_if": [],
-      "skip_if": [],
-      "pricing_url": "https://developers.sendinblue.com/docs",
-      "verified_at": null,
-      "verified_by": null,
-      "source": "imported",
-      "imported_from": "Public APIs (community)",
-      "imported_list": "public-apis-community"
-    },
-    {
       "id": "sendraven",
       "name": "SendRaven",
       "kind": "From an awesome list",
@@ -7212,29 +7189,6 @@
       "source": "imported",
       "imported_from": "Awesome FreeLLM APIs",
       "imported_list": "awesome-freellm-apis"
-    },
-    {
-      "id": "github-models",
-      "name": "GitHub Models",
-      "kind": "From an awesome list",
-      "url": "https://github.com/marketplace/models",
-      "aisle": "inference",
-      "metric": null,
-      "metric_note": "Not listed",
-      "limits": [],
-      "who": [],
-      "region": null,
-      "sell": "unknown",
-      "card": "unknown",
-      "catches": [],
-      "use_if": [],
-      "skip_if": [],
-      "pricing_url": "https://github.com/marketplace/models",
-      "verified_at": null,
-      "verified_by": null,
-      "source": "imported",
-      "imported_from": "awesome-free-llm-apis (amardeeplakshkar)",
-      "imported_list": "awesome-free-llm-apis-amar"
     },
     {
       "id": "glhf-chat",
@@ -12163,7 +12117,7 @@
       "license_url": "https://github.com/amardeeplakshkar/awesome-free-llm-apis/blob/91863d8e7fa9a6dfe5092c7c1cd2f2cf846eccc5/LICENSE",
       "commit": "91863d8e7fa9a6dfe5092c7c1cd2f2cf846eccc5",
       "fetched_at": "2026-11-13T12:18:29.668Z",
-      "count": 7
+      "count": 6
     },
     {
       "id": "awesome-free-llm-apis",
@@ -12203,7 +12157,7 @@
       "license_url": "https://github.com/marcelscruz/public-apis/blob/38b654cb00a4b42e54b5e2a85b193a4ad3eff989/LICENSE",
       "commit": "38b654cb00a4b42e54b5e2a85b193a4ad3eff989",
       "fetched_at": "2026-11-13T12:18:29.668Z",
-      "count": 8
+      "count": 7
     },
     {
       "id": "public-apis",
